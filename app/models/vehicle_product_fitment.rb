@@ -1,0 +1,80 @@
+class VehicleProductFitment < ApplicationRecord
+  include ShopScoped
+  include Cacheable
+
+  # Associations
+  belongs_to :vehicle, optional: true
+
+  # Validations
+  validates :product_id, presence: true
+  validates :vehicle, presence: true, unless: :universal_fit?
+  validates :vehicle_id, uniqueness: {
+    scope: [:shop_id, :product_id],
+    message: "fitment already exists for this vehicle and product in your store",
+    unless: :universal_fit?
+  }
+  validates :product_id, uniqueness: {
+    scope: :shop_id,
+    message: "is already marked as universal fit",
+    if: :universal_fit?
+  }
+
+  # Scopes
+  scope :universal, -> { where(universal_fit: true) }
+  scope :specific, -> { where(universal_fit: false) }
+  scope :synced, -> { where(synced_to_metafield: true) }
+  scope :pending_sync, -> { where(synced_to_metafield: false) }
+  scope :for_product, ->(product_id) { where(product_id: product_id.to_s) }
+  scope :for_vehicle, ->(vehicle_id) { where(vehicle_id: vehicle_id) }
+
+  # Callbacks
+  after_commit :enqueue_metafield_sync, on: [:create, :update, :destroy]
+
+  def direct_fit?
+    fitment_type == 'direct_fit'
+  end
+
+  def universal_fit?
+    universal_fit == true
+  end
+
+  def formatted_vehicle_title
+    if universal_fit?
+      "Universal Fit (All Vehicles)"
+    elsif vehicle.present?
+      vehicle.display_name
+    else
+      "Unknown Vehicle"
+    end
+  end
+
+  def to_fitment_hash
+    {
+      id: id,
+      product_id: product_id,
+      product_handle: product_handle,
+      product_title: product_title,
+      sku: sku,
+      universal_fit: universal_fit,
+      fitment_type: fitment_type,
+      fitment_notes: fitment_notes,
+      position: position,
+      vehicle: vehicle&.to_h
+    }
+  end
+
+  def mark_synced!
+    update_columns(synced_to_metafield: true, last_synced_at: Time.current)
+  end
+
+  private
+
+  def enqueue_metafield_sync
+    # Only enqueue if shop is active and product_id is present
+    return unless shop&.active? && product_id.present?
+
+    Metafields::ProductMetafieldSyncJob.perform_later(shop_id, product_id)
+  rescue StandardError => e
+    Rails.logger.warn("[FitmentSyncCallback] Could not enqueue background sync: #{e.message}")
+  end
+end

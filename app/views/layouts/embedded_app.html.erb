@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vehicle Selector Pro Admin</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <!-- Polaris CSS & Tokens -->
+  <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@12.0.0/build/esm/styles.css"/>
+  <link rel="stylesheet" href="/assets/admin.css"/>
+
+  <style>
+    :root {
+      --p-color-bg: #f6f6f7;
+      --p-color-surface: #ffffff;
+      --p-color-text: #202223;
+      --p-color-primary: #008060;
+      --p-color-border: #e1e3e5;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Helvetica, sans-serif;
+      background-color: var(--p-color-bg);
+      color: var(--p-color-text);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .app-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e1e3e5;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .app-logo-badge {
+      background: #008060;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .app-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #202223;
+      margin: 0;
+    }
+    .app-subtitle {
+      font-size: 12px;
+      color: #6d7175;
+      margin: 0;
+    }
+    .app-nav {
+      display: flex;
+      gap: 8px;
+    }
+    .nav-tab {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      color: #5c5f62;
+      transition: all 0.15s ease;
+    }
+    .nav-tab:hover {
+      background: #f1f2f3;
+      color: #202223;
+    }
+    .nav-tab.active {
+      background: #e4e5e7;
+      color: #008060;
+      font-weight: 600;
+    }
+    .app-container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+    .polaris-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e1e3e5;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .polaris-banner {
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .polaris-banner-success {
+      background: #e3f1df;
+      color: #108043;
+      border: 1px solid #95d585;
+    }
+    .polaris-banner-alert {
+      background: #fed3d1;
+      color: #bf0711;
+      border: 1px solid #e0b3b2;
+    }
+    .polaris-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background 0.15s;
+    }
+    .polaris-btn-primary {
+      background: #008060;
+      color: #ffffff;
+    }
+    .polaris-btn-primary:hover {
+      background: #006e52;
+    }
+    .polaris-btn-secondary {
+      background: #ffffff;
+      color: #202223;
+      border: 1px solid #babfc3;
+    }
+    .polaris-btn-secondary:hover {
+      background: #f6f6f7;
+    }
+    .polaris-btn-danger {
+      background: #d82c0d;
+      color: #ffffff;
+    }
+    .polaris-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+    .polaris-table th {
+      padding: 12px 16px;
+      border-bottom: 2px solid #e1e3e5;
+      color: #5c5f62;
+      font-weight: 600;
+      background: #fafbfc;
+    }
+    .polaris-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f2f3;
+      vertical-align: middle;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-success { background: #e3f1df; color: #108043; }
+    .badge-warning { background: #ffea8a; color: #8a611c; }
+    .badge-info { background: #e0f5fa; color: #00748e; }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-brand">
+      <div class="app-logo-badge">VSP</div>
+      <div>
+        <h1 class="app-title">Vehicle Selector Pro</h1>
+        <p class="app-subtitle">Store: <%= current_shop&.shopify_domain %></p>
+      </div>
+    </div>
+    <nav class="app-nav">
+      <a href="<%= admin_dashboard_path %>" class="nav-tab <%= 'active' if controller_name == 'dashboard' %>">Overview</a>
+      <a href="<%= admin_product_fitments_path %>" class="nav-tab <%= 'active' if controller_name == 'product_fitments' %>">Fitment Matrix</a>
+      <a href="<%= admin_vehicles_path %>" class="nav-tab <%= 'active' if controller_name == 'vehicles' %>">Vehicle Database</a>
+      <a href="<%= admin_bulk_imports_path %>" class="nav-tab <%= 'active' if controller_name == 'bulk_imports' %>">Bulk CSV Import</a>
+      <a href="<%= admin_sync_path %>" class="nav-tab <%= 'active' if controller_name == 'sync' %>">Metafield Sync</a>
+      <a href="<%= admin_settings_path %>" class="nav-tab <%= 'active' if controller_name == 'settings' %>">Widget Settings</a>
+    </nav>
+  </header>
+
+  <main class="app-container">
+    <% if flash[:notice].present? %>
+      <div class="polaris-banner polaris-banner-success">
+        <span>✔</span>
+        <span><%= flash[:notice] %></span>
+      </div>
+    <% end %>
+
+    <% if flash[:alert].present? %>
+      <div class="polaris-banner polaris-banner-alert">
+        <span>⚠</span>
+        <span><%= flash[:alert] %></span>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </main>
+</body>
+</html>

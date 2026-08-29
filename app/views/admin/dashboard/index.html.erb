@@ -1,0 +1,115 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Dashboard Overview</h2>
+    <p style="margin: 0; color: #6d7175;">Manage vehicle fitments, sync Shopify Product Metafields, and monitor catalog coverage.</p>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <a href="<%= new_admin_product_fitment_path %>" class="polaris-btn polaris-btn-primary">+ Add New Fitment</a>
+    <a href="<%= admin_bulk_imports_path %>" class="polaris-btn polaris-btn-secondary">Bulk CSV Import</a>
+    <a href="<%= admin_sync_path %>" class="polaris-btn polaris-btn-secondary">Metafield Sync</a>
+  </div>
+</div>
+
+<!-- Metrics Cards Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+  <div class="polaris-card" style="margin-bottom: 0;">
+    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Total Fitment Rules</span>
+    <div style="font-size: 32px; font-weight: 700; color: #202223; margin-top: 8px;"><%= @total_fitments %></div>
+    <span style="font-size: 13px; color: #008060; font-weight: 500;">Active in local cache</span>
+  </div>
+
+  <div class="polaris-card" style="margin-bottom: 0;">
+    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Mapped Products</span>
+    <div style="font-size: 32px; font-weight: 700; color: #202223; margin-top: 8px;"><%= @unique_products %></div>
+    <span style="font-size: 13px; color: #6d7175;">Shopify Catalog Items</span>
+  </div>
+
+  <div class="polaris-card" style="margin-bottom: 0;">
+    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Vehicle Database</span>
+    <div style="font-size: 32px; font-weight: 700; color: #202223; margin-top: 8px;"><%= @total_vehicles %></div>
+    <span style="font-size: 13px; color: #6d7175;">YMMTE Configurations</span>
+  </div>
+
+  <div class="polaris-card" style="margin-bottom: 0;">
+    <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Universal Fit Items</span>
+    <div style="font-size: 32px; font-weight: 700; color: #202223; margin-top: 8px;"><%= @universal_products %></div>
+    <span style="font-size: 13px; color: #00748e; font-weight: 500;">Auto-included in all searches</span>
+  </div>
+</div>
+
+<!-- Sync Alert Banner if Pending -->
+<% if @pending_sync_count > 0 %>
+  <div class="polaris-card" style="background: #fff8db; border-color: #ffd600; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h3 style="margin: 0 0 4px 0; font-size: 16px; color: #8a611c;">⚡ Metafield Sync Pending (<%= @pending_sync_count %> items)</h3>
+      <p style="margin: 0; font-size: 14px; color: #6d7175;">Recent fitment changes have not yet been synchronized to Shopify Product Metafields.</p>
+    </div>
+    <%= button_to "Sync Now to Shopify", trigger_all_admin_sync_path, method: :post, class: "polaris-btn polaris-btn-primary" %>
+  </div>
+<% end %>
+
+<!-- Recent Fitments Table -->
+<div class="polaris-card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Recent Fitment Assignments</h3>
+    <a href="<%= admin_product_fitments_path %>" style="color: #008060; font-size: 14px; font-weight: 600; text-decoration: none;">View All Matrix →</a>
+  </div>
+
+  <% if @recent_fitments.any? %>
+    <table class="polaris-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>SKU</th>
+          <th>Vehicle Compatible</th>
+          <th>Type / Position</th>
+          <th>Metafield Status</th>
+          <th style="text-align: right;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_fitments.each do |fitment| %>
+          <tr>
+            <td>
+              <strong style="color: #202223;"><%= fitment.product_title.presence || fitment.product_id %></strong>
+              <% if fitment.product_handle.present? %>
+                <div style="font-size: 12px; color: #6d7175;">/<%= fitment.product_handle %></div>
+              <% end %>
+            </td>
+            <td><code><%= fitment.sku.presence || '—' %></code></td>
+            <td>
+              <% if fitment.universal_fit? %>
+                <span class="badge badge-info">Universal Fit</span>
+              <% elsif fitment.vehicle.present? %>
+                <%= fitment.vehicle.display_name %>
+              <% else %>
+                —
+              <% end %>
+            </td>
+            <td>
+              <span class="badge badge-success"><%= fitment.fitment_type.humanize %></span>
+              <% if fitment.position.present? %>
+                <div style="font-size: 12px; color: #6d7175;"><%= fitment.position %></div>
+              <% end %>
+            </td>
+            <td>
+              <% if fitment.synced_to_metafield? %>
+                <span class="badge badge-success">✔ Synced</span>
+              <% else %>
+                <span class="badge badge-warning">⌛ Pending</span>
+              <% end %>
+            </td>
+            <td style="text-align: right;">
+              <a href="<%= edit_admin_product_fitment_path(fitment) %>" class="polaris-btn polaris-btn-secondary" style="padding: 4px 10px; font-size: 12px;">Edit</a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div style="text-align: center; padding: 40px 20px;">
+      <p style="color: #6d7175; font-size: 16px; margin-bottom: 16px;">No fitments mapped yet.</p>
+      <a href="<%= new_admin_product_fitment_path %>" class="polaris-btn polaris-btn-primary">Assign Your First Fitment</a>
+    </div>
+  <% end %>
+</div>

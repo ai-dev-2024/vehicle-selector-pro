@@ -1,0 +1,77 @@
+<div style="max-width: 900px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Shopify Metafield Synchronization</h2>
+      <p style="margin: 0; color: #6d7175;">Monitor GraphQL batch synchronization to product metafields (<code>custom.vehicle_fitment</code>).</p>
+    </div>
+    <%= button_to "⚡ Trigger Full Sync", trigger_all_admin_sync_path, method: :post, class: "polaris-btn polaris-btn-primary" %>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+    <div class="polaris-card" style="margin-bottom: 0;">
+      <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Total Products with Fitment</span>
+      <div style="font-size: 28px; font-weight: 700; color: #202223; margin-top: 6px;"><%= @total_products %></div>
+    </div>
+    <div class="polaris-card" style="margin-bottom: 0;">
+      <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Synced to Shopify</span>
+      <div style="font-size: 28px; font-weight: 700; color: #108043; margin-top: 6px;"><%= @synced_count %></div>
+    </div>
+    <div class="polaris-card" style="margin-bottom: 0;">
+      <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #6d7175;">Pending Sync</span>
+      <div style="font-size: 28px; font-weight: 700; color: <%= @pending_count > 0 ? '#bf0711' : '#202223' %>; margin-top: 6px;"><%= @pending_count %></div>
+    </div>
+  </div>
+
+  <div class="polaris-card">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Sync Single Product</h3>
+    <%= form_with url: trigger_product_admin_sync_path, method: :post, local: true, style: "display: flex; gap: 12px; align-items: center;" do |f| %>
+      <div style="flex: 1;">
+        <%= f.text_field :product_id, placeholder: "Enter Shopify Product GID (e.g. gid://shopify/Product/8192019283001)", required: true, style: "width: 100%; padding: 10px 14px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; box-sizing: border-box;" %>
+      </div>
+      <%= f.submit "Sync Product", class: "polaris-btn polaris-btn-secondary" %>
+    <% end %>
+  </div>
+
+  <div class="polaris-card">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Recent Sync Job History</h3>
+    <% if @sync_logs.any? %>
+      <table class="polaris-table">
+        <thead>
+          <tr>
+            <th>Date / Time</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Products Processed</th>
+            <th>Details / Errors</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sync_logs.each do |log| %>
+            <tr>
+              <td><%= log.created_at.strftime("%b %d, %Y %H:%M:%S") %></td>
+              <td><span class="badge" style="background: #f1f2f3; color: #5c5f62;"><%= log.sync_type.upcase %></span></td>
+              <td>
+                <% case log.status %>
+                <% when 'completed' %>
+                  <span class="badge badge-success">Completed</span>
+                <% when 'in_progress' %>
+                  <span class="badge badge-warning">In Progress (<%= log.progress_percentage %>%)</span>
+                <% when 'failed' %>
+                  <span class="badge badge-alert" style="background: #fed3d1; color: #bf0711;">Failed</span>
+                <% else %>
+                  <span class="badge badge-info">Pending</span>
+                <% end %>
+              </td>
+              <td><%= log.synced_products %> / <%= log.total_products %></td>
+              <td style="font-size: 12px; color: #6d7175; max-width: 250px; overflow: hidden; text-overflow: ellipsis;">
+                <%= log.error_details.presence || 'None (Clean execution)' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p style="color: #6d7175; font-size: 14px; text-align: center; padding: 20px;">No background sync jobs recorded yet.</p>
+    <% end %>
+  </div>
+</div>

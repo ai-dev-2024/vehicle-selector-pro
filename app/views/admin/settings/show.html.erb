@@ -1,0 +1,102 @@
+<div style="max-width: 900px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Widget & Garage Configuration</h2>
+      <p style="margin: 0; color: #6d7175;">Customize how the Vehicle Selector widget and Product Fitment Badge appear on your storefront.</p>
+    </div>
+  </div>
+
+  <div class="polaris-card">
+    <%= form_with model: @settings, url: admin_settings_path, method: :put, local: true do |f| %>
+      <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">1. Widget Appearance & Labels</h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Widget Header Title</label>
+          <%= f.text_field :widget_title, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Primary Brand Color</label>
+          <div style="display: flex; gap: 8px;">
+            <%= f.color_field :primary_color, style: "height: 40px; width: 60px; border: 1px solid #c9cccf; border-radius: 6px; cursor: pointer; padding: 2px;" %>
+            <%= f.text_field :primary_color, style: "flex: 1; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px;" %>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Subtitle / Tagline</label>
+        <%= f.text_field :widget_subtitle, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Search Button Label</label>
+          <%= f.text_field :button_label, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Reset / Clear Button Label</label>
+          <%= f.text_field :reset_label, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">2. Cascading Selector Depth</h3>
+      <div style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+          <%= f.check_box :enable_trim %>
+          <strong>Enable Trim Selector</strong> (Year → Make → Model → Trim)
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+          <%= f.check_box :enable_engine %>
+          <strong>Enable Engine Selector</strong> (Year → Make → Model → Trim → Engine)
+        </label>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">3. 'My Garage' Customer Features</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; margin-top: 10px;">
+            <%= f.check_box :enable_garage %>
+            <strong>Enable Customer Garage</strong> (Saves vehicles in localStorage/cookies)
+          </label>
+        </div>
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Max Saved Vehicles in Garage</label>
+          <%= f.number_field :max_garage_vehicles, min: 1, max: 10, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">4. Product Page Fitment Guarantee Badge</h3>
+      <div style="margin-bottom: 24px;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; margin-bottom: 12px;">
+          <%= f.check_box :show_badge_on_product_page %>
+          <strong>Display Fitment Guarantee Badge on Product Detail Pages (PDP)</strong>
+        </label>
+        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Guarantee Badge Subtext</label>
+        <%= f.text_area :fitment_guarantee_text, rows: 2, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end;">
+        <%= f.submit "Save Settings", class: "polaris-btn polaris-btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Storefront Theme Extension Setup Guide Card -->
+  <div class="polaris-card">
+    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #202223;">🛠 Theme App Extension Integration Guide</h3>
+    <p style="font-size: 14px; color: #6d7175; margin-bottom: 16px;">
+      Vehicle Selector Pro uses modern Shopify Online Store 2.0 Theme App Extensions. No code editing in theme files is required.
+    </p>
+
+    <div style="background: #fafbfc; border-radius: 8px; padding: 16px; border: 1px solid #e1e3e5;">
+      <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 10px 0;">How to Add to Your Storefront:</h4>
+      <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #202223;">
+        <li>Go to <strong>Online Store → Themes</strong> in your Shopify Admin and click <strong>Customize</strong>.</li>
+        <li>On the Homepage or Header section, click <strong>Add block</strong> or <strong>Add section</strong> and choose <strong>Vehicle Selector Filter</strong> from Apps.</li>
+        <li>On your <strong>Default Product template</strong>, click <strong>Add block</strong> under Product Information and select <strong>Product Fitment Badge</strong>.</li>
+        <li>Click <strong>Save</strong> in the top right corner of the theme editor.</li>
+      </ol>
+    </div>
+  </div>
+</div>

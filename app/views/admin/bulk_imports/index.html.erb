@@ -1,0 +1,98 @@
+<div style="max-width: 900px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Bulk CSV Fitment Import</h2>
+      <p style="margin: 0; color: #6d7175;">Import thousands of vehicle-to-product compatibility mappings at once.</p>
+    </div>
+    <a href="<%= sample_template_admin_bulk_imports_path %>" class="polaris-btn polaris-btn-secondary">📥 Download CSV Template</a>
+  </div>
+
+  <% if @results.present? && @results[:errors].any? %>
+    <div class="polaris-banner polaris-banner-alert" style="display: block;">
+      <strong style="display: block; margin-bottom: 8px;">Import Encountered <%= @results[:error_count] %> Issues:</strong>
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @results[:errors].first(10).each do |err| %>
+          <li><%= err %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="polaris-card">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Option 1: Upload CSV File</h3>
+    <%= form_with url: admin_bulk_imports_path, method: :post, multipart: true, local: true do |f| %>
+      <div style="border: 2px dashed #c9cccf; border-radius: 8px; padding: 32px 20px; text-align: center; background: #fafbfc; margin-bottom: 20px;">
+        <div style="font-size: 36px; margin-bottom: 12px;">📁</div>
+        <label style="cursor: pointer; display: inline-block;">
+          <span class="polaris-btn polaris-btn-secondary">Browse CSV File</span>
+          <%= f.file_field :csv_file, accept: ".csv,text/csv", style: "display: none;", id: "csv_file_input" %>
+        </label>
+        <div id="file-name-display" style="font-size: 13px; color: #6d7175; margin-top: 8px;">No file chosen yet (supports .csv)</div>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; margin-top: 24px; border-top: 1px solid #e1e3e5; padding-top: 16px;">Option 2: Paste Raw CSV Text</h3>
+      <div style="margin-bottom: 20px;">
+        <%= f.text_area :csv_raw_text, placeholder: "product_id,product_handle,year,make,model,trim,engine,universal,notes\ngid://shopify/Product/123,intake-kit,2024,Ford,F-150,Lariat,3.5L EcoBoost,false,Front axle only\ngid://shopify/Product/456,led-bulb,,,,,,true,Universal bulb", rows: 6, style: "width: 100%; font-family: monospace; font-size: 13px; padding: 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; color: #6d7175;">Automatic background synchronization to Shopify Product Metafields will start immediately after import.</span>
+        <%= f.submit "Start Bulk Import", class: "polaris-btn polaris-btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="polaris-card">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">CSV Format & Headers Guide</h3>
+    <table class="polaris-table">
+      <thead>
+        <tr>
+          <th>Column Header</th>
+          <th>Requirement</th>
+          <th>Description & Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>product_id</code> or <code>product_handle</code></td>
+          <td><strong style="color: #bf0711;">Required</strong></td>
+          <td>Shopify Product GID (<code>gid://shopify/Product/123</code>) or URL handle.</td>
+        </tr>
+        <tr>
+          <td><code>year</code>, <code>make</code>, <code>model</code></td>
+          <td><strong style="color: #bf0711;">Required</strong> (if not universal)</td>
+          <td>e.g. <code>2024</code>, <code>Ford</code>, <code>F-150</code></td>
+        </tr>
+        <tr>
+          <td><code>trim</code>, <code>engine</code></td>
+          <td>Optional</td>
+          <td>e.g. <code>Lariat</code>, <code>3.5L EcoBoost V6</code></td>
+        </tr>
+        <tr>
+          <td><code>universal</code></td>
+          <td>Optional</td>
+          <td>Set to <code>true</code> or <code>1</code> to mark the product as universal fit.</td>
+        </tr>
+        <tr>
+          <td><code>notes</code>, <code>position</code></td>
+          <td>Optional</td>
+          <td>Fitment caveats e.g. <code>Fits 4WD models with 6-lug hubs</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const fileInput = document.getElementById("csv_file_input");
+  const nameDisplay = document.getElementById("file-name-display");
+  if (fileInput && nameDisplay) {
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files.length > 0) {
+        nameDisplay.textContent = "Selected: " + e.target.files[0].name + " (" + (e.target.files[0].size / 1024).toFixed(1) + " KB)";
+        nameDisplay.style.color = "#008060";
+        nameDisplay.style.fontWeight = "600";
+      }
+    });
+  }
+</script>

@@ -1,0 +1,159 @@
+{{ 'vehicle-selector.css' | asset_url | stylesheet_tag }}
+
+<div 
+  class="vsp-widget-container" 
+  data-layout="{{ block.settings.layout_style | default: 'horizontal' }}"
+  data-collection-handle="{{ block.settings.collection_handle | default: 'all' }}"
+  data-filter-param="{{ block.settings.filter_query_param | default: 'filter.v.m.custom.vehicle_fitment' }}"
+>
+  <div class="vsp-widget-header">
+    <div class="vsp-widget-title-area">
+      <h3 class="vsp-widget-title">
+        <span>🚗</span>
+        <span>{{ block.settings.title | default: 'Select Your Vehicle' }}</span>
+      </h3>
+      {% if block.settings.subtitle != blank %}
+        <p class="vsp-widget-subtitle">{{ block.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    {% if block.settings.enable_garage %}
+      <div class="vsp-garage-wrapper">
+        <button type="button" class="vsp-garage-btn">
+          <span>🔧</span>
+          <span>My Garage</span>
+          <span class="vsp-caret">▼</span>
+        </button>
+        <div class="vsp-garage-dropdown"></div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="vsp-filters-grid">
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Year</label>
+      <select class="vsp-select vsp-select-year">
+        <option value="">Loading Years...</option>
+      </select>
+    </div>
+
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Make</label>
+      <select class="vsp-select vsp-select-make" disabled>
+        <option value="">Select Make</option>
+      </select>
+    </div>
+
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Model</label>
+      <select class="vsp-select vsp-select-model" disabled>
+        <option value="">Select Model</option>
+      </select>
+    </div>
+
+    {% if block.settings.enable_trim %}
+      <div class="vsp-form-group">
+        <label class="vsp-form-label">Trim</label>
+        <select class="vsp-select vsp-select-trim" disabled>
+          <option value="">All Trims</option>
+        </select>
+      </div>
+    {% endif %}
+
+    {% if block.settings.enable_engine %}
+      <div class="vsp-form-group">
+        <label class="vsp-form-label">Engine</label>
+        <select class="vsp-select vsp-select-engine" disabled>
+          <option value="">All Engines</option>
+        </select>
+      </div>
+    {% endif %}
+
+    <div class="vsp-actions-group">
+      <button type="button" class="vsp-btn vsp-btn-primary vsp-btn-search" disabled>
+        {{ block.settings.button_label | default: 'Find Parts' }}
+      </button>
+      <button type="button" class="vsp-btn vsp-btn-outline vsp-btn-reset">
+        {{ block.settings.reset_label | default: 'Clear' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="vsp-active-vehicle-bar" style="display: none;">
+    <div class="vsp-active-vehicle-info">
+      <span>✔ Current Selected Vehicle:</span>
+      <span class="vsp-active-vehicle-name" style="color: #202223;"></span>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'vehicle-selector.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Vehicle Selector Filter",
+  "target": "section",
+  "stylesheet": "vehicle-selector.css",
+  "javascript": "vehicle-selector.js",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Select Your Vehicle"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Find parts guaranteed to fit your exact vehicle"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal Bar" },
+        { "value": "vertical", "label": "Vertical Sidebar" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_trim",
+      "label": "Include Trim Selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_engine",
+      "label": "Include Engine Selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_garage",
+      "label": "Enable 'My Garage' Customer Wallet",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "collection_handle",
+      "label": "Target Collection Handle",
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Search Button Text",
+      "default": "Find Parts"
+    },
+    {
+      "type": "text",
+      "id": "reset_label",
+      "label": "Reset Button Text",
+      "default": "Clear"
+    }
+  ]
+}
+{% endschema %}

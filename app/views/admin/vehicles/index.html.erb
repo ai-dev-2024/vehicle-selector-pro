@@ -1,0 +1,84 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Vehicle Database (YMMTE)</h2>
+    <p style="margin: 0; color: #6d7175;">Browse normalized automotive configurations used for cascading storefront filters.</p>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <a href="<%= ymm_tree_admin_vehicles_path %>" target="_blank" class="polaris-btn polaris-btn-secondary">Export JSON Tree</a>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="polaris-card" style="padding: 16px; margin-bottom: 16px;">
+  <%= form_with url: admin_vehicles_path, method: :get, local: true, style: "display: flex; gap: 12px; align-items: center;" do |f| %>
+    <div>
+      <%= f.select :year, [["All Years", ""]] + @distinct_years.map { |y| [y.to_s, y.to_s] }, { selected: params[:year] }, style: "padding: 10px 14px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; background: white;" %>
+    </div>
+    <div style="flex: 1;">
+      <%= f.text_field :query, value: params[:query], placeholder: "Search Make, Model, Trim, or Engine (e.g. F-150, Coyote, EcoBoost, TRD)...", style: "width: 100%; padding: 10px 14px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; box-sizing: border-box;" %>
+    </div>
+    <%= f.submit "Filter Vehicles", class: "polaris-btn polaris-btn-secondary" %>
+    <% if params[:query].present? || params[:year].present? %>
+      <a href="<%= admin_vehicles_path %>" class="polaris-btn polaris-btn-secondary" style="color: #6d7175;">Clear</a>
+    <% end %>
+  <% end %>
+</div>
+
+<!-- Vehicle Records Table -->
+<div class="polaris-card" style="padding: 0;">
+  <% if @vehicles.any? %>
+    <table class="polaris-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Trim</th>
+          <th>Engine</th>
+          <th>Drivetrain / Body</th>
+          <th>Mapped Parts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vehicles.each do |vehicle| %>
+          <% mapped_count = current_shop.vehicle_product_fitments.where(vehicle_id: vehicle.id).count %>
+          <tr>
+            <td><strong><%= vehicle.year %></strong></td>
+            <td><strong><%= vehicle.make %></strong></td>
+            <td><%= vehicle.model %></td>
+            <td><%= vehicle.trim.presence || '—' %></td>
+            <td><%= vehicle.engine.presence || '—' %></td>
+            <td>
+              <span style="font-size: 13px; color: #6d7175;">
+                <%= [vehicle.drivetrain, vehicle.body_style].compact_blank.join(' • ').presence || 'Standard' %>
+              </span>
+            </td>
+            <td>
+              <% if mapped_count > 0 %>
+                <span class="badge badge-success"><%= mapped_count %> Products</span>
+              <% else %>
+                <span class="badge" style="background: #f1f2f3; color: #8c9196;">0</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div style="padding: 16px 24px; border-top: 1px solid #e1e3e5; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13px; color: #6d7175;">Showing <%= @vehicles.size %> of <%= @total_count %> vehicle records</span>
+      <div style="display: flex; gap: 8px;">
+        <% if @page > 1 %>
+          <a href="<%= admin_vehicles_path(page: @page - 1, year: params[:year], query: params[:query]) %>" class="polaris-btn polaris-btn-secondary" style="padding: 4px 10px; font-size: 12px;">← Previous</a>
+        <% end %>
+        <% if @vehicles.size == @per_page %>
+          <a href="<%= admin_vehicles_path(page: @page + 1, year: params[:year], query: params[:query]) %>" class="polaris-btn polaris-btn-secondary" style="padding: 4px 10px; font-size: 12px;">Next →</a>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div style="text-align: center; padding: 40px 20px;">
+      <p style="color: #6d7175; font-size: 16px;">No vehicles found.</p>
+    </div>
+  <% end %>
+</div>
