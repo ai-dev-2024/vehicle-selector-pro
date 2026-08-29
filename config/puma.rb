@@ -6,4 +6,5 @@ port ENV.fetch("PORT") { 3000 }
 environment ENV.fetch("RAILS_ENV") { "development" }
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
-plugin :tmp_restart
+# tmp_restart relies on POSIX signals/exec for restart — unsupported on Windows
+plugin :tmp_restart unless Gem.win_platform?

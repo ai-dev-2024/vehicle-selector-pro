@@ -58,13 +58,13 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :storefront do
-        get 'years', to: '/app_proxy/vehicle_filters#years'
-        get 'makes', to: '/app_proxy/vehicle_filters#makes'
-        get 'models', to: '/app_proxy/vehicle_filters#models'
-        get 'trims', to: '/app_proxy/vehicle_filters#trims'
-        get 'engines', to: '/app_proxy/vehicle_filters#engines'
-        get 'search', to: '/app_proxy/vehicle_filters#search'
-        get 'check_fitment', to: '/app_proxy/fitments#check'
+        get 'years', to: 'app_proxy/vehicle_filters#years'
+        get 'makes', to: 'app_proxy/vehicle_filters#makes'
+        get 'models', to: 'app_proxy/vehicle_filters#models'
+        get 'trims', to: 'app_proxy/vehicle_filters#trims'
+        get 'engines', to: 'app_proxy/vehicle_filters#engines'
+        get 'search', to: 'app_proxy/vehicle_filters#search'
+        get 'check_fitment', to: 'app_proxy/fitments#check'
       end
     end
   end

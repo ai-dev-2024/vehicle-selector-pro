@@ -25,5 +25,3 @@ ShopifyApp.configure do |config|
   config.api_key = ENV.fetch('SHOPIFY_API_KEY') { Rails.application.credentials.dig(:shopify, :api_key) || raise('SHOPIFY_API_KEY missing') }
   config.secret = ENV.fetch('SHOPIFY_API_SECRET') { Rails.application.credentials.dig(:shopify, :api_secret) || raise('SHOPIFY_API_SECRET missing') }
 end
-
-ShopifyApp::SessionRepository.shop_storage = Shop

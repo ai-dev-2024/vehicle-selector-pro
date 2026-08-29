@@ -3,6 +3,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '>= 3.2.0'
 
+# Pin exactly to the OpenSSL version bundled with Ruby 3.2 (avoids compiling
+# the standalone openssl gem from source on Windows / machines without headers)
+gem 'openssl', '3.1.0'
+
 gem 'rails', '~> 7.1.3'
 
 # Shopify App Integration
@@ -12,8 +16,13 @@ gem 'shopify_api', '~> 14.0'
 # Multi-tenant and Identity
 gem 'jwt', '~> 2.8'
 
+# Timezone data (required on Windows & JRuby; Linux uses system zoneinfo)
+gem 'tzinfo-data', platforms: %i[windows jruby]
+
+# Environment variables (.env loading)
+gem 'dotenv-rails', '~> 3.1'
+
 # Database
-gem 'pg', '~> 1.5'
 gem 'sqlite3', '~> 1.7'
 
 # Background Processing & Queuing
@@ -41,6 +50,11 @@ gem 'puma', '~> 6.4'
 gem 'sprockets-rails', '>= 3.0.0'
 gem 'polaris_view_components', '~> 2.5'
 gem 'rack-attack', '~> 6.7'
+
+group :production do
+  # PostgreSQL driver (production database; dev/test use SQLite3)
+  gem 'pg', '~> 1.5'
+end
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows]

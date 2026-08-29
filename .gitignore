@@ -66,3 +66,7 @@ ZCODE/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Fly.io CLI binary (should never be committed)
+flyctl.zip
+flyctl.exe

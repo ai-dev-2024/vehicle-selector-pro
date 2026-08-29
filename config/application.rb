@@ -36,6 +36,19 @@ module VehicleSelectorPro
       config.cache_store = :memory_store, { size: 64.megabytes }
     end
 
+    # Active Record encryption (Shopify tokens are encrypted at rest).
+    # Production must supply these via environment (Fly secrets); dev/test
+    # fall back to stable local-only keys so encrypted data stays readable.
+    if Rails.env.local?
+      config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"] || "local_dev_primary_key"
+      config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"] || "local_dev_deterministic_key"
+      config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"] || "local_dev_key_derivation_salt"
+    else
+      config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY") { Rails.application.credentials.dig(:active_record_encryption, :primary_key) }
+      config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY") { Rails.application.credentials.dig(:active_record_encryption, :deterministic_key) }
+      config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT") { Rails.application.credentials.dig(:active_record_encryption, :key_derivation_salt) }
+    end
+
     # Shopify embedded app: allow framing by Shopify admin
     config.action_dispatch.default_headers.delete('X-Frame-Options')
     config.action_dispatch.default_headers['X-Frame-Options'] = ''
