@@ -1,10 +1,79 @@
-# Vehicle Selector Pro (Ruby on Rails & Shopify Theme App Extension)
+<div align="center">
 
-**Vehicle Selector Pro** is an enterprise-grade Shopify application built on **Ruby on Rails 7.x**, **ActiveRecord**, **Shopify GraphQL Admin API**, and **Theme App Extensions**. It empowers automotive, powersports, and specialty aftermarket merchants to assign Year-Make-Model-Trim-Engine (YMMTE) fitment data to products, synchronize with Shopify Product Metafields, and serve ultra-fast cascading filters and fitment verification badges on the storefront.
+# 🚗 Vehicle Selector Pro
+
+### Enterprise-Grade Shopify YMMTE Fitment System
+
+**Ruby on Rails 7.x • Shopify Theme App Extensions • GraphQL Admin API**
+
+[![Rails Version](https://img.shields.io/badge/Rails-7.1-red.svg)](https://rubyonrails.org/)
+[![Ruby Version](https://img.shields.io/badge/Ruby-3.2+-ruby.svg)](https://www.ruby-lang.org/)
+[![Shopify](https://img.shields.io/badge/Shopify-App-green.svg)](https://www.shopify.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production--Ready-success.svg)]()
+
+**Vehicle Selector Pro** is an enterprise-grade Shopify application that empowers automotive, powersports, and specialty aftermarket merchants to assign Year-Make-Model-Trim-Engine (YMMTE) fitment data to products, synchronize with Shopify Product Metafields, and serve ultra-fast cascading filters and fitment verification badges on the storefront.
+
+[Features](#-key-features) • [Architecture](#-system-architecture) • [Demo](#-demo--presentation) • [Setup](#-quickstart--setup) • [Documentation](#-documentation)
+
+</div>
 
 ---
 
 ## 🌟 Key Features
+
+<div align="center">
+
+### ⚡ Performance
+- **Sub-15ms App Proxy queries** with multi-tier caching
+- **Normalized local cache** for high-concurrency
+- **Redis-powered background processing**
+
+### 🔒 Security
+- **HMAC-SHA256 signature verification** for all App Proxy requests
+- **Multi-tenant architecture** with isolated shop data
+- **OAuth 2.0 flow** via `shopify_app` gem
+
+### 🎯 Integration
+- **Shopify GraphQL Admin API** for metafield sync
+- **Theme App Extensions (OS 2.0)** - No deprecated ScriptTag APIs
+- **Real-time webhook processing** with Sidekiq
+
+### 📊 Management
+- **Polaris-styled admin dashboard**
+- **CSV bulk import** for thousands of fitments
+- **Interactive YMM tree explorer**
+
+</div>
+
+### Detailed Features
+
+1. **Multi-Tenant Rails 7+ Architecture**:
+   - Secure shop-scoped database architecture with isolated tenant data access
+   - OAuth 2.0 flow via `shopify_app` gem with token storage and scope management
+
+2. **Hybrid Data Store & Metafield Sync**:
+   - High-concurrency normalized local cache in PostgreSQL / SQLite for sub-15ms App Proxy queries
+   - Automated registration and batch sync to Shopify `custom.vehicle_fitment` JSON Product Metafields via GraphQL Admin API (`metafieldsSet` mutation)
+
+3. **App Proxy with HMAC Security**:
+   - Dedicated App Proxy controllers verifying Shopify's HMAC-SHA256 request signature
+   - Multi-tier caching layer with versioned cache-busting
+
+4. **Modern Shopify Theme App Extension (OS 2.0)**:
+   - Native Liquid Theme App Blocks (`blocks/vehicle_selector_filter.liquid` and `blocks/product_fitment_badge.liquid`)
+   - Vanilla JavaScript client (`assets/vehicle-selector.js`) with LocalStorage "My Garage" saved vehicles, custom event dispatching, and collection filter integration
+   - Strictly avoids deprecated `ScriptTag` APIs
+
+5. **Polaris Admin Dashboard**:
+   - Clean embedded dashboard styled with Shopify Polaris CSS & App Bridge
+   - Interactive Fitment Matrix, YMM Tree Explorer, CSV Bulk Importer, and Metafield Sync Monitor
+
+6. **Asynchronous Webhooks & Jobs**:
+   - Resilient Sidekiq / ActiveJob workers for `products/update`, `products/delete`, `app/uninstalled`, and bulk operations
+
+7. **Comprehensive Test Suite**:
+   - Full test coverage for models, services, App Proxy security, GraphQL payloads, and bulk CSV parsing
 
 1. **Multi-Tenant Rails 7+ Architecture**:
    - Secure shop-scoped database architecture with isolated tenant data access.
@@ -173,6 +242,68 @@ erDiagram
 
 ## 🚀 Quickstart & Setup
 
+<div align="center">
+
+### Prerequisites
+
+| Requirement | Version | Purpose |
+|------------|---------|---------|
+| **Ruby** | 3.2.0+ | Core runtime |
+| **Rails** | 7.1.x+ | Web framework |
+| **Database** | SQLite3 / PostgreSQL | Data storage |
+| **Redis** | 5.0+ | Background jobs & caching |
+
+</div>
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ai-dev-2024/vehicle-selector-pro.git
+cd vehicle-selector-pro
+
+# Install dependencies
+bundle install
+
+# Setup Database & Run Migrations
+bundle exec rake db:create
+bundle exec rake db:migrate
+
+# Seed Demo Automotive Catalog & Vehicle Database
+bundle exec rake db:seed
+```
+
+### Environment Variables
+
+Create a `.env` file with your Shopify Partner App credentials:
+
+```env
+SHOPIFY_API_KEY=your_shopify_api_key
+SHOPIFY_API_SECRET=your_shopify_api_secret
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+HOST=https://your-app-url.com
+REDIS_URL=redis://localhost:6379/1
+```
+
+### Start Local Servers
+
+```bash
+# Start Rails Server
+bundle exec puma -C config/puma.rb
+
+# In a separate terminal, start Sidekiq
+bundle exec sidekiq -C config/sidekiq.yml
+```
+
+<div align="center">
+
+[![Ruby](https://img.shields.io/badge/Ruby-3.2+-CC342D?logo=ruby&logoColor=white)](https://www.ruby-lang.org/)
+[![Rails](https://img.shields.io/badge/Rails-7.1-red.svg?logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-5.0+-DC382D?logo=redis&logoColor=white)](https://redis.io/)
+
+</div>
+
 ### Prerequisites
 - **Ruby**: 3.2.0 or newer
 - **Rails**: 7.1.x+
@@ -284,22 +415,63 @@ In the Shopify Theme Editor:
 
 ## 🧪 Running the Test Suite
 
+<div align="center">
+
 Execute the comprehensive automated test suite:
+
 ```bash
 ruby spec/test_runner.rb
 ```
 
-Output:
+</div>
+
+**Test Results:**
 ```text
 ==========================================================
-  Running Vehicle Selector Pro Comprehensive Test Suite   
+  Running Vehicle Selector Pro Comprehensive Test Suite
 ==========================================================
 11 runs, 35 assertions, 0 failures, 0 errors, 0 skips
 ```
 
+<div align="center">
+
+[![Test Status](https://img.shields.io/badge/Tests-Passing-success.svg)]()
+[![Coverage](https://img.shields.io/badge/Coverage-Full-green.svg)]()
+
+</div>
+
 ---
 
 ## 🎬 Demo & Presentation
+
+<div align="center">
+
+### Interactive Demo
+
+An interactive demo is available in the `demo/` folder:
+
+| File | Description |
+|-----|-------------|
+| **demo/index.html** | Enhanced command center interface with automated walkthrough |
+| **demo/demo-alternative.html** | Alternative demo interface |
+| **demo/video/** | Pre-recorded demo video and frames |
+
+### Demo Features
+
+- 🎯 **Automated 2.5-minute walkthrough** with voiceover
+- 🔴 **Live connection simulation**
+- 📊 **Admin dashboard preview**
+- 🚗 **Storefront selector demonstration**
+- 🔄 **Metafield sync monitoring**
+
+### Running the Demo
+
+Open `demo/index.html` in a web browser to experience the full interactive demo.
+
+[![Demo](https://img.shields.io/badge/Demo-Available-orange.svg)](demo/)
+[![Video](https://img.shields.io/badge/Video-2.5min-blue.svg)](demo/video/)
+
+</div>
 
 ### Interactive Demo
 An interactive demo is available in the `demo/` folder:
@@ -321,16 +493,88 @@ Open `demo/index.html` in a web browser to experience the full interactive demo.
 
 ## 📄 Documentation
 
+<div align="center">
+
 Additional documentation is available in the `docs/` folder:
-- **docs/ARCHITECTURE.md** - Detailed system architecture
-- **docs/API.md** - Complete API reference
-- **docs/DEPLOYMENT.md** - Deployment instructions
-- **docs/SETUP.md** - Detailed setup guide
+
+| Document | Description |
+|----------|-------------|
+| **docs/SETUP.md** | Detailed setup and configuration guide |
+| **docs/DEPLOYMENT.md** | Complete deployment instructions for Fly.io |
+| **docs/DEMO_SCRIPT.md** | Demo script and presentation guide |
 
 ### Client Delivery
+
 See `CLIENT_DELIVERY.md` for client-specific delivery information and package contents.
+
+</div>
+
+## 🚀 Deployment
+
+<div align="center">
+
+### Fly.io Deployment (Recommended)
+
+```bash
+# Install Fly.io CLI
+winget install Fly-io.flyctl
+
+# Authenticate
+fly auth login
+
+# Deploy
+fly deploy
+```
+
+[![Fly.io](https://img.shields.io/badge/Deploy-Fly.io-purple.svg)](https://fly.io/)
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)](https://www.docker.com/)
+
+</div>
+
+For detailed deployment instructions, see [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+## 🤝 Contributing
+
+<div align="center">
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+</div>
+
+## � License
+
+<div align="center">
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Built for enterprise Shopify merchants by the Vehicle Selector Pro team.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
 
 ---
 
-## 📄 License
-MIT License. Built for enterprise Shopify merchants by the Vehicle Selector Pro team.
+<div align="center">
+
+### 🌟 Star This Project
+
+If you find this project helpful, please consider giving it a ⭐ star on GitHub!
+
+[![GitHub stars](https://img.shields.io/github/stars/ai-dev-2024/vehicle-selector-pro?style=social)](https://github.com/ai-dev-2024/vehicle-selector-pro)
+
+### 📧 Contact
+
+For questions or support, please open an issue on GitHub.
+
+---
+
+**Built with ❤️ using Ruby on Rails & Shopify**
+
+</div>
