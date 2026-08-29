@@ -1,0 +1,13 @@
+name = "Vehicle Selector Pro"
+type = "theme"
+api_version = "2025-07"
+
+[blocks.vehicle_selector_filter]
+name = "Vehicle Selector Filter"
+target = "section"
+template = "blocks/vehicle_selector_filter.liquid"
+
+[blocks.product_fitment_badge]
+name = "Product Fitment Badge"
+target = "block"
+template = "blocks/product_fitment_badge.liquid"

@@ -1,0 +1,66 @@
+<div class="polaris-page">
+  <div class="polaris-page__header">
+    <div class="polaris-page-header">
+      <div class="polaris-page-header__title-wrapper">
+        <h1 class="polaris-heading">Vehicle Selector Pro</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="polaris-page__content">
+    <% if @shop %>
+      <div class="polaris-layout">
+        <div class="polaris-layout__section">
+          <div class="polaris-card">
+            <div class="polaris-card__section">
+              <h2 class="polaris-heading">Welcome to Vehicle Selector Pro</h2>
+              <p>
+                Assign vehicle attributes to your products and let customers filter by Year, Make, Model, Trim, and Engine.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="polaris-layout__section">
+          <div class="polaris-card">
+            <div class="polaris-card__header">
+              <h2 class="polaris-heading">Quick Stats</h2>
+            </div>
+            <div class="polaris-card__section">
+              <div class="polaris-layout">
+                <div class="polaris-layout__section polaris-layout__section--one-third">
+                  <div class="polaris-stat-item">
+                    <span class="polaris-stat-item__label">Vehicle Attributes</span>
+                    <span class="polaris-stat-item__value"><%= @vehicle_attributes_count || 0 %></span>
+                  </div>
+                </div>
+                <div class="polaris-layout__section polaris-layout__section--one-third">
+                  <div class="polaris-stat-item">
+                    <span class="polaris-stat-item__label">Products</span>
+                    <span class="polaris-stat-item__value"><%= @products_count || 0 %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="polaris-layout__section">
+          <div class="polaris-card">
+            <div class="polaris-card__section">
+              <%= link_to "Go to Dashboard", admin_dashboard_path, class: "polaris-button polaris-button--primary" %>
+              <%= link_to "Manage Attributes", admin_vehicle_attributes_path, class: "polaris-button" %>
+              <%= link_to "Manage Products", admin_products_path, class: "polaris-button" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="polaris-card">
+        <div class="polaris-card__section">
+          <p>Please install the app to get started.</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

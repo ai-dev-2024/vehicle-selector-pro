@@ -1,0 +1,102 @@
+<div style="max-width: 800px; margin: 0 auto;">
+  <div style="margin-bottom: 20px;">
+    <a href="<%= admin_product_fitments_path %>" style="color: #008060; text-decoration: none; font-size: 14px; font-weight: 500;">← Back to Fitment Matrix</a>
+    <h2 style="margin: 8px 0 4px 0; font-size: 24px; font-weight: 700;">Assign New Vehicle Fitment</h2>
+    <p style="margin: 0; color: #6d7175;">Link a Shopify product to a specific vehicle configuration or mark as universal fit.</p>
+  </div>
+
+  <div class="cc-card">
+    <%= form_with model: [:admin, @fitment], local: true do |f| %>
+      <!-- Product Details Section -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">1. Product Information</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Product ID / GID *</label>
+            <%= f.text_field :product_id, placeholder: "gid://shopify/Product/12345678", required: true, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">SKU (Optional)</label>
+            <%= f.text_field :sku, placeholder: "e.g. BRK-F150-01", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Product Title</label>
+            <%= f.text_field :product_title, placeholder: "e.g. Severe-Duty Front Brake Kit", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Product Handle</label>
+            <%= f.text_field :product_handle, placeholder: "e.g. severe-duty-front-brake-kit", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fitment Scope Section -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">2. Vehicle Compatibility</h3>
+
+        <div style="margin-bottom: 16px; background: #fafbfc; padding: 12px 16px; border-radius: 8px; border: 1px solid #e1e3e5;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+            <%= check_box_tag :universal_fit, "1", false, id: "universal-toggle" %>
+            Universal Fitment (Fits all vehicles regardless of Year/Make/Model)
+          </label>
+        </div>
+
+        <div id="vehicle-selectors-wrapper">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Select Existing Vehicle Record</label>
+          <%= f.collection_select :vehicle_id, Vehicle.active.order(year: :desc, make: :asc, model: :asc), :id, :display_name, { prompt: "-- Choose Vehicle from Database --" }, { id: "vehicle-select-box", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; margin-bottom: 12px; background: white;" } %>
+
+          <p style="font-size: 13px; color: #6d7175;">
+            Need to add new vehicle configurations? Go to the <a href="<%= admin_vehicles_path %>" target="_blank" style="color: #008060;">Vehicle Database</a> tab or use the CSV bulk importer.
+          </p>
+        </div>
+      </div>
+
+      <!-- Notes & Installation Attributes -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; border-bottom: 1px solid #e1e3e5; padding-bottom: 8px;">3. Notes & Attributes</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Fitment Type</label>
+            <%= f.select :fitment_type, [["Direct Fit (Bolt-On)", "direct_fit"], ["Universal", "universal"], ["Modified / Custom Fit", "modified"]], {}, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; background: white;" %>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Position / Placement</label>
+            <%= f.text_field :position, placeholder: "e.g. Front Axle, Engine Bay, Left Rear", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+          </div>
+        </div>
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Fitment Notes / Special Instructions</label>
+          <%= f.text_area :fitment_notes, placeholder: "e.g. Fits 4WD models with 6-lug wheels only. Does not fit Tremor packages.", rows: 3, style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <a href="<%= admin_product_fitments_path %>" class="btn">Cancel</a>
+        <%= f.submit "Save & Sync Fitment", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("universal-toggle");
+    const wrapper = document.getElementById("vehicle-selectors-wrapper");
+    const select = document.getElementById("vehicle-select-box");
+
+    if (toggle && wrapper) {
+      toggle.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          wrapper.style.opacity = "0.4";
+          wrapper.style.pointerEvents = "none";
+          if (select) select.removeAttribute("required");
+        } else {
+          wrapper.style.opacity = "1";
+          wrapper.style.pointerEvents = "auto";
+        }
+      });
+    }
+  });
+</script>

@@ -1,0 +1,304 @@
+/**
+ * Vehicle Selector Pro - Storefront Styling
+ */
+
+:root {
+  --vsp-primary: #008060;
+  --vsp-primary-hover: #006e52;
+  --vsp-success: #108043;
+  --vsp-success-bg: #e3f1df;
+  --vsp-critical: #d82c0d;
+  --vsp-critical-bg: #fed3d1;
+  --vsp-warning: #b98900;
+  --vsp-warning-bg: #fff8db;
+  --vsp-border: #d2d5d8;
+  --vsp-radius: 8px;
+  --vsp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.vsp-widget-container {
+  font-family: var(--vsp-font);
+  background: #ffffff;
+  border: 1px solid var(--vsp-border);
+  border-radius: var(--vsp-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 20px 24px;
+  margin: 16px 0 24px 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.vsp-widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.vsp-widget-title-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.vsp-widget-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vsp-widget-subtitle {
+  font-size: 13px;
+  color: #666666;
+  margin: 4px 0 0 0;
+}
+
+/* Garage Quick Switch */
+.vsp-garage-wrapper {
+  position: relative;
+}
+
+.vsp-garage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f4f6f8;
+  border: 1px solid #c4cdd5;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #212b36;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vsp-garage-btn:hover {
+  background: #e4e9ee;
+}
+
+.vsp-garage-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--vsp-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  width: 280px;
+  z-index: 1000;
+  padding: 8px 0;
+  display: none;
+}
+
+.vsp-garage-dropdown.vsp-show {
+  display: block;
+}
+
+.vsp-garage-item {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #333333;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f2f3;
+}
+
+.vsp-garage-item:last-child {
+  border-bottom: none;
+}
+
+.vsp-garage-item:hover {
+  background: #f9fafb;
+}
+
+.vsp-garage-item.active {
+  background: #f0f8f5;
+  font-weight: 600;
+  color: var(--vsp-primary);
+}
+
+/* Dropdowns Form Grid */
+.vsp-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.vsp-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vsp-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #454f5b;
+  letter-spacing: 0.5px;
+}
+
+.vsp-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--vsp-border);
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #212b36;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.vsp-select:focus {
+  border-color: var(--vsp-primary);
+  box-shadow: 0 0 0 2px rgba(0, 128, 96, 0.2);
+}
+
+.vsp-select:disabled {
+  background-color: #f4f6f8;
+  color: #919eab;
+  cursor: not-allowed;
+}
+
+/* Action Buttons */
+.vsp-actions-group {
+  display: flex;
+  gap: 8px;
+}
+
+.vsp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.vsp-btn-primary {
+  background: var(--vsp-primary);
+  color: #ffffff;
+}
+
+.vsp-btn-primary:hover:not(:disabled) {
+  background: var(--vsp-primary-hover);
+}
+
+.vsp-btn-primary:disabled {
+  background: #c4cdd5;
+  cursor: not-allowed;
+}
+
+.vsp-btn-outline {
+  background: transparent;
+  border: 1px solid var(--vsp-border);
+  color: #5c5f62;
+}
+
+.vsp-btn-outline:hover {
+  background: #f4f6f8;
+  color: #212b36;
+}
+
+/* Active Selected Vehicle Bar */
+.vsp-active-vehicle-bar {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: #f0f8f5;
+  border: 1px solid #95d585;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.vsp-active-vehicle-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #108043;
+  font-weight: 600;
+}
+
+/* Product Detail Page Fitment Badge */
+.vsp-pdp-fitment-badge {
+  font-family: var(--vsp-font);
+  border-radius: var(--vsp-radius);
+  padding: 16px;
+  margin: 16px 0;
+  box-sizing: border-box;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+}
+
+.vsp-fit-exact {
+  background: var(--vsp-success-bg);
+  border: 1px solid #95d585;
+  color: #108043;
+}
+
+.vsp-fit-universal {
+  background: #e0f5fa;
+  border: 1px solid #b4e7f3;
+  color: #00748e;
+}
+
+.vsp-fit-none {
+  background: var(--vsp-critical-bg);
+  border: 1px solid #e0b3b2;
+  color: #bf0711;
+}
+
+.vsp-fit-unselected {
+  background: var(--vsp-warning-bg);
+  border: 1px solid #ffd600;
+  color: #8a611c;
+}
+
+.vsp-badge-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.vsp-badge-content {
+  flex: 1;
+}
+
+.vsp-badge-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.vsp-badge-description {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .vsp-filters-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,68 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+
+/public/assets
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Ignore SQLite3 databases.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore Byebug history
+.byebug_history
+
+# Ignore environment overrides
+.env
+.env.local
+.env.*.local
+
+# Ignore Fly.io token
+.fly-token
+
+# Ignore secrets folder
+secrets/
+
+# Ignore coverage
+/coverage
+
+# Ignore system artifacts
+.DS_Store
+Thumbs.db
+
+# Ignore demo video frames
+demo/video/frame-*.png
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Opencode/
+ZCODE/
+
+# Ignore OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

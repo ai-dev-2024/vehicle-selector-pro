@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VehicleSelectorPro — Fitment command center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,560&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="command-center.css">
+</head>
+<body class="cc-body">
+  <div id="virtual-cursor" class="video-cursor">
+    <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5.65 12.37H5.46l-.14.13L.5 16.88V1.2L11.78 12.37H5.65Z" fill="#111" stroke="#fff" stroke-width="1.4"/></svg>
+  </div>
+
+  <div class="video-bar" id="video-bar">
+    <div>
+      <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#f87171;font-weight:700">2.5-minute walkthrough · voiceover on</div>
+      <div id="video-caption" style="font-size:13px;margin-top:2px">Initializing demonstration…</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="video-timer" style="font-family:ui-monospace,monospace;font-size:12px;color:#94a3b8">00:00 / 02:30</span>
+      <div style="width:120px;height:4px;background:#334155;border-radius:99px;overflow:hidden"><div id="video-progress" style="height:100%;width:0;background:#60a5fa"></div></div>
+      <button class="btn" onclick="stopAutomatedDemo()">Stop</button>
+    </div>
+  </div>
+
+  <div class="cc-shell">
+    <aside class="cc-sidebar">
+      <div class="cc-brand">
+        <div class="cc-mark">VS</div>
+        <div>
+          <h1>VehicleSelectorPro</h1>
+          <p>Fitment command center</p>
+        </div>
+      </div>
+      <div class="cc-store">
+        <div class="cc-store-badge">NR</div>
+        <div>
+          <strong>North Ridge Supply</strong>
+          <span>Shopify store</span>
+        </div>
+      </div>
+      <div class="cc-nav-label">Workspace</div>
+      <nav class="cc-nav">
+        <button class="active" id="nav-overview" onclick="showPage('overview')">Overview</button>
+        <button id="nav-library" onclick="showPage('library')">Vehicle library <span class="cc-count">1,248</span></button>
+        <button id="nav-rules" onclick="showPage('rules')">Fitment rules <span class="cc-count">86</span></button>
+        <button id="nav-sync" onclick="showPage('sync')">Sync activity</button>
+      </nav>
+      <div class="cc-nav-label">Configure</div>
+      <nav class="cc-nav">
+        <button id="nav-settings" onclick="showPage('settings')">Selector settings</button>
+        <button id="nav-storefront" onclick="showPage('storefront')">Storefront preview</button>
+        <a href="https://github.com/ai-dev-2024/vehicle-selector-pro" target="_blank" rel="noreferrer">Help center</a>
+      </nav>
+      <div class="cc-sidebar-foot">
+        <div class="cc-status"><span class="cc-dot"></span><div>Shopify connected<br><span style="color:var(--muted)">Last sync 8 min ago</span></div></div>
+        <div class="cc-user"><div class="cc-avatar">AM</div><div>Alex Morgan<br><span style="color:var(--muted)">Administrator</span></div></div>
+      </div>
+    </aside>
+
+    <main class="cc-main">
+      <div class="cc-topbar">
+        <div class="cc-crumb">North Ridge Supply &nbsp;›&nbsp; <strong id="crumb-page">Overview</strong></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn" id="btn-record-demo" onclick="recordAndPlayDemo()">Record &amp; download video</button>
+          <button class="btn btn-primary" id="btn-start-video" onclick="startAutomatedDemo()">Play 2.5-min walkthrough</button>
+          <div class="cc-live"><i></i> LIVE CONNECTION</div>
+        </div>
+      </div>
+      <div class="cc-banner">All systems are operating normally. <a href="#" onclick="showPage('sync');return false;">View status ↗</a></div>
+
+      <!-- OVERVIEW -->
+      <section class="cc-page" id="page-overview">
+        <div class="cc-page-head">
+          <div>
+            <div class="cc-kicker" id="today-label">Wednesday, August 26, 2026</div>
+            <h2>Map the catalog to the road.</h2>
+            <p>Keep every product honest to the vehicle it fits — from your admin workspace to the storefront selector.</p>
+          </div>
+          <div class="cc-actions">
+            <button class="btn" onclick="showPage('storefront')">Hide preview</button>
+            <button class="btn btn-primary" onclick="showPage('rules')">+ Add fitment rule</button>
+          </div>
+        </div>
+        <div class="cc-hero">
+          <div class="cc-hero-photo"></div>
+          <div class="cc-hero-copy">
+            <div>
+              <div class="cc-kicker" style="color:#9bb6d4">Sync status / 08:42</div>
+              <h3>Good fitment is quiet confidence.</h3>
+              <p>One clean vehicle selection can turn a browse into a buy. Your catalog is currently serving a verified fitment experience.</p>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Catalog coverage</span><strong>94.6%</span></div>
+              <div class="cc-bar"><span style="width:94.6%"></span></div>
+              <div style="margin-top:8px;font-size:12px;color:#9bb6d4">+2.8% from last sync</div>
+            </div>
+          </div>
+        </div>
+        <div class="cc-metrics">
+          <div class="cc-stat"><label>Mapped products</label><b>1,248</b><em>+8.4% products with vehicle data</em></div>
+          <div class="cc-stat"><label>Vehicle coverage</label><b>94.6%</b><em>+2.8% of active catalog</em></div>
+          <div class="cc-stat"><label>Fitment checks</label><b>18,492</b><em>+14.2% this month</em></div>
+          <div class="cc-stat"><label>Needs review</label><b>07</b><em class="warn">Rules need attention</em></div>
+        </div>
+        <div class="cc-preview" id="block-vehicle-selector">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="cc-kicker">Selector in context</div>
+              <h4>Summit recovery board set</h4>
+              <p style="margin:0;color:var(--muted);font-size:13px">Cascading Year → Make → Model → Trim served over HMAC-verified App Proxy.</p>
+            </div>
+            <button class="btn" onclick="toggleGarageDropdown()" id="btn-garage-toggle">My Garage (<span id="garage-count">1</span>)</button>
+          </div>
+          <div id="garage-menu" class="hidden" style="margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:8px;background:#fff">
+            <div id="garage-list"></div>
+          </div>
+          <div class="cc-selects">
+            <div><label>Year</label><select id="sel-year" onchange="onYearChange()"></select></div>
+            <div><label>Make</label><select id="sel-make" onchange="onMakeChange()" disabled><option>Select make</option></select></div>
+            <div><label>Model</label><select id="sel-model" onchange="onModelChange()" disabled><option>Select model</option></select></div>
+            <div><label>Trim</label><select id="sel-trim" onchange="onTrimChange()" disabled><option>All trims</option></select></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div id="active-vehicle-banner" class="hidden badge badge-live"></div>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <button class="btn" onclick="resetVehicleFilter()">Clear</button>
+              <button class="btn btn-primary" id="btn-search-parts" onclick="applyVehicleFilter()">Search compatible parts</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIBRARY -->
+      <section class="cc-page hidden" id="page-library">
+        <div class="cc-page-head">
+          <div>
+            <div class="cc-kicker">1,248 total</div>
+            <h2>Vehicle library</h2>
+            <p>The normalized fitment cache behind every selector choice.</p>
+          </div>
+          <button class="btn btn-primary">Import vehicles</button>
+        </div>
+        <div class="cc-card">
+          <div class="cc-card-pad"><input class="cc-field" id="lib-search" placeholder="Search make, model, trim or engine" oninput="renderLibrary()"></div>
+          <table class="cc-table"><thead><tr><th>Year</th><th>Make</th><th>Model</th><th>Trim</th><th>Engine</th><th>Mapped parts</th></tr></thead><tbody id="library-body"></tbody></table>
+        </div>
+      </section>
+
+      <!-- RULES -->
+      <section class="cc-page hidden" id="page-rules">
+        <div class="cc-page-head">
+          <div>
+            <div class="cc-kicker">86 total</div>
+            <h2>Fitment rules</h2>
+            <p>Connect product collections to the vehicles your customers drive.</p>
+          </div>
+          <button class="btn btn-primary" onclick="simulateSync()">+ Add fitment rule</button>
+        </div>
+        <div class="cc-card" id="block-admin-matrix">
+          <div class="cc-rule"><div class="cc-idx">01</div><div><h3 style="margin:0 0 4px;font-size:16px">All-terrain roof systems</h3><div style="font-size:13px;color:var(--muted)">Toyota Tacoma · 2020–24 · 14 products</div></div><span class="badge badge-live">Live</span></div>
+          <div class="cc-rule"><div class="cc-idx">02</div><div><h3 style="margin:0 0 4px;font-size:16px">Wilderness cargo liners</h3><div style="font-size:13px;color:var(--muted)">Subaru Outback · Wilderness · 8 products</div></div><span class="badge badge-review">Review</span></div>
+          <div class="cc-rule"><div class="cc-idx">03</div><div><h3 style="margin:0 0 4px;font-size:16px">Trail recovery kits</h3><div style="font-size:13px;color:var(--muted)">Ford Bronco · 2021–24 · 19 products</div></div><span class="badge badge-live">Live</span></div>
+          <div id="admin-fitment-table-body"></div>
+        </div>
+        <div class="cc-navy-note">
+          <div><h4>Make edge cases visible.</h4><p>Rules with missing trim or engine data are held for review before they reach the storefront.</p></div>
+          <button class="btn">Review queue</button>
+        </div>
+      </section>
+
+      <!-- SYNC -->
+      <section class="cc-page hidden" id="page-sync">
+        <div class="cc-page-head">
+          <div>
+            <h2>Sync activity</h2>
+            <p>Every catalog change, webhook, and cache refresh in one place.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-admin-sync" onclick="simulateSync()">Run sync</button>
+        </div>
+        <div class="cc-navy-note" style="margin-top:0">
+          <div><h4>Everything is up to date</h4><p>The last complete sync finished 8 minutes ago with no errors.</p></div>
+          <div style="text-align:right"><div style="font-size:22px;color:#fff;font-weight:700">0</div><div style="font-size:11px;letter-spacing:.12em">ERRORS</div></div>
+        </div>
+        <div class="cc-card" style="margin-top:16px">
+          <div class="cc-card-pad" style="display:flex;justify-content:space-between"><h3 style="margin:0">Activity log</h3><span class="badge badge-live">Healthy</span></div>
+          <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Product metafields refreshed</strong><div style="font-size:12px;color:var(--muted)">1,248 products checked · custom.vehicle_fitment via metafieldsSet</div></div></div>
+          <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Vehicle cache rebuilt</strong><div style="font-size:12px;color:var(--muted)">86 fitment rules indexed for App Proxy lookups</div></div></div>
+          <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Webhook received</strong><div style="font-size:12px;color:var(--muted)">products/update · HTTP 204 · HMAC verified</div></div></div>
+          <div class="cc-log"><span class="badge badge-review">Q</span><div><strong>Review queue updated</strong><div style="font-size:12px;color:var(--muted)">7 records need attention</div></div></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="cc-page hidden" id="page-settings">
+        <div class="cc-page-head">
+          <div>
+            <h2>Selector settings</h2>
+            <p>Widget labels, garage depth, and PDP guarantee copy served to the Theme App Extension.</p>
+          </div>
+        </div>
+        <div class="cc-card" style="padding:18px;display:grid;gap:12px">
+          <div class="cc-selects">
+            <div><label>Widget title</label><input value="Find parts that fit"></div>
+            <div><label>Primary color</label><input value="#1f4ea8"></div>
+            <div><label>Search button</label><input value="Search compatible parts"></div>
+            <div><label>Garage limit</label><input type="number" value="5"></div>
+          </div>
+          <label style="font-size:13px"><input type="checkbox" checked> Enable trim selector</label>
+          <label style="font-size:13px"><input type="checkbox" checked> Enable engine selector</label>
+          <label style="font-size:13px"><input type="checkbox" checked> Enable customer garage (localStorage)</label>
+          <label style="font-size:13px"><input type="checkbox" checked> Show fitment guarantee badge on PDP</label>
+          <div><button class="btn btn-primary">Save settings</button></div>
+        </div>
+      </section>
+
+      <!-- STOREFRONT -->
+      <section class="cc-page hidden" id="page-storefront">
+        <div class="cc-page-head">
+          <div>
+            <div class="cc-kicker">Theme App Extension</div>
+            <h2>Storefront preview</h2>
+            <p>Cascading filters, My Garage, collection metafield tokens, and PDP badges — no ScriptTag APIs.</p>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.4fr .8fr;gap:16px">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <h3 style="margin:0;font-size:16px">Collection · <span id="filtered-count">7</span> items</h3>
+              <span id="filter-tag" style="font-size:11px;font-family:ui-monospace,monospace;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px">filter.v.m.custom.vehicle_fitment: all</span>
+            </div>
+            <div id="products-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+          </div>
+          <div class="cc-card" style="padding:16px" id="block-pdp-badge">
+            <div class="cc-kicker">Product detail page</div>
+            <strong id="pdp-product-title">Apex Stage-2 Cold Air Intake</strong>
+            <div id="pdp-product-sku" style="font-size:12px;color:var(--muted);margin:4px 0 12px">SKU: APX-CAI-F150-EB · $349.00</div>
+            <div id="pdp-badge"></div>
+            <button class="btn btn-primary" style="width:100%;margin-top:14px">Add to cart</button>
+          </div>
+        </div>
+        <div class="cc-card" style="margin-top:16px;padding:16px">
+          <h3 style="margin:0 0 8px">HMAC App Proxy &amp; GraphQL</h3>
+          <select id="api-endpoint-select" onchange="inspectApiEndpoint()"></select>
+          <pre id="api-response-json" style="background:#121820;color:#9fefb4;padding:12px;border-radius:10px;font-size:12px;overflow:auto;max-height:180px;margin-top:10px"></pre>
+          <pre id="graphql-payload-json" class="hidden"></pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const DB = {
+      vehicles: [
+        { id: 1, year: 2024, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L EcoBoost V6" },
+        { id: 2, year: 2024, make: "Ford", model: "F-150", trim: "XLT", engine: "2.7L EcoBoost V6" },
+        { id: 3, year: 2024, make: "Ford", model: "F-150", trim: "Raptor", engine: "3.5L High-Output EcoBoost V6" },
+        { id: 4, year: 2024, make: "Ford", model: "Mustang", trim: "GT Premium", engine: "5.0L Coyote V8" },
+        { id: 5, year: 2024, make: "Chevrolet", model: "Silverado 1500", trim: "LTZ", engine: "6.2L EcoTec3 V8" },
+        { id: 6, year: 2024, make: "Chevrolet", model: "Silverado 1500", trim: "RST", engine: "5.3L EcoTec3 V8" },
+        { id: 7, year: 2024, make: "Toyota", model: "Tacoma", trim: "TRD Off-Road", engine: "2.4L i-FORCE Turbo I4" },
+        { id: 8, year: 2024, make: "Toyota", model: "Tacoma", trim: "TRD Pro", engine: "2.4L i-FORCE MAX Hybrid" },
+        { id: 9, year: 2024, make: "Jeep", model: "Wrangler", trim: "Rubicon 392", engine: "6.4L HEMI V8" },
+        { id: 10, year: 2024, make: "BMW", model: "3 Series", trim: "M340i xDrive", engine: "3.0L Turbo B58 I6" },
+        { id: 11, year: 2023, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L EcoBoost V6" },
+        { id: 12, year: 2023, make: "Toyota", model: "Tacoma", trim: "TRD Sport", engine: "3.5L V6" }
+      ],
+      products: [
+        { id: "gid://shopify/Product/8192019283001", title: "Apex Stage-2 Cold Air Intake (F-150 EcoBoost)", sku: "APX-CAI-F150-EB", price: "$349.00", universal: false, fitment_notes: "Direct bolt-on for 2.7L & 3.5L EcoBoost.", matching_vehicle_ids: [1,2,3,11] },
+        { id: "gid://shopify/Product/8192019283002", title: "Apex Pro Severe-Duty Brake Kit", sku: "APX-BRK-HD-TRK", price: "$489.00", universal: false, fitment_notes: "Front axle 6-lug hub models only.", matching_vehicle_ids: [1,2,3,5,6,11] },
+        { id: "gid://shopify/Product/8192019283003", title: "Apex Baja 3-Inch Tacoma Lift", sku: "APX-SUSP-TACO-3IN", price: "$1,299.00", universal: false, fitment_notes: "4WD models. Clears 33-inch tires.", matching_vehicle_ids: [7,8,12] },
+        { id: "gid://shopify/Product/8192019283004", title: "Apex Stealth Cat-Back Exhaust (Mustang Coyote)", sku: "APX-EXH-MUST-V8", price: "$899.00", universal: false, fitment_notes: "5.0L Coyote V8 with active valves.", matching_vehicle_ids: [4] },
+        { id: "gid://shopify/Product/8192019283005", title: "Apex Armor Winch Bumper (Jeep JL)", sku: "APX-BMP-JL-001", price: "$649.00", universal: false, fitment_notes: "Fits all JL Wrangler models.", matching_vehicle_ids: [9] },
+        { id: "gid://shopify/Product/8192019283006", title: "Apex UltraBeam LED Fog Pods (Universal)", sku: "APX-LGT-UNIV-POD", price: "$189.00", universal: true, fitment_notes: "Universal fitment with multi-fit brackets.", matching_vehicle_ids: [] },
+        { id: "gid://shopify/Product/8192019283007", title: "Apex Carbon Strut Brace (BMW G20)", sku: "APX-STRUT-G20-CF", price: "$520.00", universal: false, fitment_notes: "G20 330i, M340i, M3.", matching_vehicle_ids: [10] }
+      ],
+      garage: [{ year: 2024, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L EcoBoost V6", display_name: "2024 Ford F-150 Lariat 3.5L EcoBoost V6" }],
+      activeVehicle: null,
+      selectedPdpProduct: null
+    };
+
+    const pageTitles = { overview: "Overview", library: "Vehicle library", rules: "Fitment rules", sync: "Sync activity", settings: "Selector settings", storefront: "Storefront preview" };
+
+    function showPage(id) {
+      ["overview","library","rules","sync","settings","storefront"].forEach(p => {
+        document.getElementById("page-" + p).classList.toggle("hidden", p !== id);
+        const nav = document.getElementById("nav-" + p);
+        if (nav) nav.classList.toggle("active", p === id);
+      });
+      document.getElementById("crumb-page").textContent = pageTitles[id];
+    }
+
+    function populateYears() {
+      const years = [...new Set(DB.vehicles.map(v => v.year))].sort((a,b) => b - a);
+      document.getElementById("sel-year").innerHTML = '<option value="">Select year</option>' + years.map(y => `<option value="${y}">${y}</option>`).join("");
+    }
+    function resetSelect(el, text) { el.innerHTML = `<option value="">${text}</option>`; el.disabled = true; }
+    function onYearChange() {
+      const year = parseInt(document.getElementById("sel-year").value);
+      const makeSel = document.getElementById("sel-make");
+      resetSelect(makeSel, "Select make");
+      resetSelect(document.getElementById("sel-model"), "Select model");
+      resetSelect(document.getElementById("sel-trim"), "All trims");
+      if (!year) return;
+      const makes = [...new Set(DB.vehicles.filter(v => v.year === year).map(v => v.make))].sort();
+      makeSel.innerHTML = '<option value="">Select make</option>' + makes.map(m => `<option>${m}</option>`).join("");
+      makeSel.disabled = false;
+    }
+    function onMakeChange() {
+      const year = parseInt(document.getElementById("sel-year").value);
+      const make = document.getElementById("sel-make").value;
+      const modelSel = document.getElementById("sel-model");
+      resetSelect(modelSel, "Select model");
+      resetSelect(document.getElementById("sel-trim"), "All trims");
+      if (!year || !make) return;
+      const models = [...new Set(DB.vehicles.filter(v => v.year === year && v.make === make).map(v => v.model))].sort();
+      modelSel.innerHTML = '<option value="">Select model</option>' + models.map(m => `<option>${m}</option>`).join("");
+      modelSel.disabled = false;
+    }
+    function onModelChange() {
+      const year = parseInt(document.getElementById("sel-year").value);
+      const make = document.getElementById("sel-make").value;
+      const model = document.getElementById("sel-model").value;
+      const trimSel = document.getElementById("sel-trim");
+      resetSelect(trimSel, "All trims");
+      if (!year || !make || !model) return;
+      const trims = [...new Set(DB.vehicles.filter(v => v.year === year && v.make === make && v.model === model).map(v => v.trim))].filter(Boolean);
+      trimSel.innerHTML = '<option value="">All trims</option>' + trims.map(t => `<option>${t}</option>`).join("");
+      trimSel.disabled = false;
+    }
+    function onTrimChange() {}
+
+    function applyVehicleFilter() {
+      const year = parseInt(document.getElementById("sel-year").value);
+      const make = document.getElementById("sel-make").value;
+      const model = document.getElementById("sel-model").value;
+      const trim = document.getElementById("sel-trim").value;
+      if (!year || !make || !model) { alert("Select at least Year, Make, and Model."); return; }
+      const veh = { year, make, model, trim, display_name: [year, make, model, trim].filter(Boolean).join(" ") };
+      DB.activeVehicle = veh;
+      saveToGarage(veh);
+      updateActiveVehicleUI();
+      renderProductsGrid();
+      evaluatePdpFitment();
+    }
+    function resetVehicleFilter() {
+      DB.activeVehicle = null;
+      document.getElementById("sel-year").value = "";
+      onYearChange();
+      updateActiveVehicleUI();
+      renderProductsGrid();
+      evaluatePdpFitment();
+    }
+    function updateActiveVehicleUI() {
+      const banner = document.getElementById("active-vehicle-banner");
+      const tag = document.getElementById("filter-tag");
+      if (DB.activeVehicle) {
+        banner.classList.remove("hidden");
+        banner.textContent = "Active vehicle: " + DB.activeVehicle.display_name;
+        tag.textContent = `filter.v.m.custom.vehicle_fitment: ${DB.activeVehicle.year}|${DB.activeVehicle.make.toLowerCase()}|${DB.activeVehicle.model.toLowerCase()}`;
+      } else {
+        banner.classList.add("hidden");
+        tag.textContent = "filter.v.m.custom.vehicle_fitment: all";
+      }
+    }
+    function saveToGarage(veh) {
+      DB.garage = DB.garage.filter(v => v.display_name !== veh.display_name);
+      DB.garage.unshift(veh);
+      if (DB.garage.length > 5) DB.garage = DB.garage.slice(0, 5);
+      renderGarageUI();
+    }
+    function renderGarageUI() {
+      document.getElementById("garage-count").textContent = DB.garage.length;
+      document.getElementById("garage-list").innerHTML = DB.garage.map((v, i) =>
+        `<div onclick="selectFromGarage(${i})" style="padding:8px;border-radius:8px;cursor:pointer">${v.display_name}</div>`
+      ).join("");
+    }
+    function selectFromGarage(i) { DB.activeVehicle = DB.garage[i]; updateActiveVehicleUI(); renderProductsGrid(); evaluatePdpFitment(); document.getElementById("garage-menu").classList.add("hidden"); }
+    function toggleGarageDropdown() { document.getElementById("garage-menu").classList.toggle("hidden"); }
+
+    function renderProductsGrid() {
+      const grid = document.getElementById("products-grid");
+      let filtered = DB.products;
+      if (DB.activeVehicle) {
+        const matchVeh = DB.vehicles.find(v => v.year === DB.activeVehicle.year && v.make === DB.activeVehicle.make && v.model === DB.activeVehicle.model);
+        filtered = DB.products.filter(p => p.universal || (matchVeh && p.matching_vehicle_ids.includes(matchVeh.id)));
+      }
+      document.getElementById("filtered-count").textContent = filtered.length;
+      grid.innerHTML = filtered.map(p => `
+        <div onclick="selectPdpProduct('${p.id}')" class="cc-card" style="padding:14px;cursor:pointer">
+          <div style="font-size:11px;color:var(--muted)">${p.sku}</div>
+          <strong style="display:block;margin:6px 0 8px">${p.title}</strong>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b>${p.price}</b>
+            ${p.universal ? '<span class="badge badge-info">Universal</span>' : (DB.activeVehicle ? '<span class="badge badge-live">Exact fit</span>' : '')}
+          </div>
+        </div>`).join("");
+    }
+    function selectPdpProduct(id) {
+      DB.selectedPdpProduct = DB.products.find(p => p.id === id);
+      document.getElementById("pdp-product-title").textContent = DB.selectedPdpProduct.title;
+      document.getElementById("pdp-product-sku").textContent = `SKU: ${DB.selectedPdpProduct.sku} · ${DB.selectedPdpProduct.price}`;
+      evaluatePdpFitment();
+      renderProductsGrid();
+    }
+    function evaluatePdpFitment() {
+      const badge = document.getElementById("pdp-badge");
+      const p = DB.selectedPdpProduct || DB.products[0];
+      if (!DB.activeVehicle) {
+        badge.innerHTML = `<div class="badge badge-review" style="display:block;padding:12px;border-radius:12px">Select your vehicle to confirm fitment.</div>`;
+        return;
+      }
+      if (p.universal) {
+        badge.innerHTML = `<div class="badge badge-info" style="display:block;padding:12px;border-radius:12px"><strong>Universal fitment guaranteed.</strong><div>${p.fitment_notes}</div></div>`;
+        return;
+      }
+      const matchVeh = DB.vehicles.find(v => v.year === DB.activeVehicle.year && v.make === DB.activeVehicle.make && v.model === DB.activeVehicle.model);
+      const fits = matchVeh && p.matching_vehicle_ids.includes(matchVeh.id);
+      badge.innerHTML = fits
+        ? `<div class="badge badge-live" style="display:block;padding:12px;border-radius:12px"><strong>Guaranteed exact fit for ${DB.activeVehicle.display_name}</strong><div>${p.fitment_notes}</div></div>`
+        : `<div style="background:#fde8e6;color:#b42318;padding:12px;border-radius:12px;font-size:13px"><strong>Does not fit ${DB.activeVehicle.display_name}</strong></div>`;
+    }
+    function renderLibrary() {
+      const q = (document.getElementById("lib-search").value || "").toLowerCase();
+      const rows = DB.vehicles.filter(v => !q || `${v.year} ${v.make} ${v.model} ${v.trim} ${v.engine}`.toLowerCase().includes(q));
+      document.getElementById("library-body").innerHTML = rows.map(v =>
+        `<tr><td><strong>${v.year}</strong></td><td>${v.make}</td><td>${v.model}</td><td>${v.trim}</td><td>${v.engine}</td><td><span class="badge badge-live">${DB.products.filter(p => p.matching_vehicle_ids.includes(v.id)).length}</span></td></tr>`
+      ).join("");
+    }
+    function renderAdminTable() {
+      document.getElementById("admin-fitment-table-body").innerHTML = DB.products.map((p, i) =>
+        `<div class="cc-rule"><div class="cc-idx">${String(i+4).padStart(2,"0")}</div><div><h3 style="margin:0 0 4px;font-size:15px">${p.title}</h3><div style="font-size:12px;color:var(--muted)">${p.sku} · ${p.universal ? "Universal" : p.matching_vehicle_ids.length + " configurations"}</div></div><span class="badge badge-live">Synced</span></div>`
+      ).join("");
+    }
+    function simulateSync() { alert("Shopify GraphQL metafieldsSet queued via Sidekiq. custom.vehicle_fitment is being written in batches."); }
+    function inspectApiEndpoint() {
+      const sel = document.getElementById("api-endpoint-select").value;
+      const payloads = {
+        years: { success: true, years: [2024, 2023], hmac: "verified" },
+        makes: { success: true, year: 2024, makes: ["BMW","Chevrolet","Ford","Jeep","Toyota"] },
+        search: { success: true, data: { vehicle: "2024 Ford F-150", numeric_product_ids: ["8192019283001","8192019283002","8192019283006"] } },
+        check: { success: true, data: { fits: true, badge_text: "Guaranteed Exact Fit", notes: "Direct bolt-on EcoBoost." } }
+      };
+      document.getElementById("api-response-json").textContent = JSON.stringify(payloads[sel] || payloads.years, null, 2);
+      document.getElementById("graphql-payload-json").textContent = JSON.stringify({ mutation: "metafieldsSet", namespace: "custom", key: "vehicle_fitment" }, null, 2);
+    }
+
+    let demoTimer = null, demoSeconds = 0, mediaRecorder = null, recordedChunks = [];
+    const totalDemoSeconds = 150;
+    const demoScript = [
+      { time: 0, caption: "Welcome to Vehicle Selector Pro — a production Rails 7 Shopify app with a Theme App Extension.", action: () => showPage("overview") },
+      { time: 12, caption: "The command center shows catalog coverage, mapped products, and rules that still need review.", action: () => showPage("overview") },
+      { time: 24, caption: "On the storefront, Year cascades into Make, Model, and Trim through the HMAC-signed App Proxy.", action: () => { showPage("overview"); document.getElementById("sel-year").value = "2024"; onYearChange(); moveCursorTo("sel-year"); } },
+      { time: 36, caption: "Selecting Ford, then F-150, then Lariat — the same tree the merchant maintains in the vehicle library.", action: () => { document.getElementById("sel-make").value = "Ford"; onMakeChange(); document.getElementById("sel-model").value = "F-150"; onModelChange(); document.getElementById("sel-trim").value = "Lariat"; moveCursorTo("sel-trim"); } },
+      { time: 50, caption: "Search compatible parts. Collection filters use native Shopify metafield tokens. Responses stay under fifteen milliseconds from cache.", action: () => { moveCursorTo("btn-search-parts"); applyVehicleFilter(); } },
+      { time: 64, caption: "My Garage stores household vehicles in localStorage so shoppers can switch without starting over.", action: () => { moveCursorTo("btn-garage-toggle"); toggleGarageDropdown(); } },
+      { time: 76, caption: "On the product page, a guaranteed exact-fit badge confirms the Apex intake for this F-150.", action: () => { document.getElementById("garage-menu").classList.add("hidden"); showPage("storefront"); selectPdpProduct("gid://shopify/Product/8192019283001"); moveCursorTo("block-pdp-badge"); } },
+      { time: 90, caption: "Incompatible parts fail loudly. This Mustang exhaust does not fit the F-150 — reducing returns.", action: () => selectPdpProduct("gid://shopify/Product/8192019283004") },
+      { time: 102, caption: "Universal accessories still sell. LED pods show a universal fitment guarantee.", action: () => selectPdpProduct("gid://shopify/Product/8192019283006") },
+      { time: 112, caption: "Merchants manage the fitment matrix here. Live rules ship. Incomplete trim data stays in review.", action: () => showPage("rules") },
+      { time: 124, caption: "The vehicle library is the normalized YMMTE cache behind every cascading dropdown.", action: () => showPage("library") },
+      { time: 134, caption: "Sidekiq batch-syncs to Shopify GraphQL using metafieldsSet. Webhooks keep the cache honest.", action: () => { showPage("sync"); moveCursorTo("btn-admin-sync"); } },
+      { time: 144, caption: "HMAC-SHA256 on every App Proxy request. Thirty-five assertions passing. Production ready.", action: () => showPage("storefront") },
+      { time: 149, caption: "Demonstration complete. Full source is on GitHub at ai-dev-2024 / vehicle-selector-pro.", action: () => { showPage("overview"); if (mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop(); } }
+    ];
+
+    // Natural voice selector - prioritizes Edge/Chrome Natural voices over robotic fallback
+    let naturalVoices = [];
+    function loadNaturalVoices(){
+      const vs = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+      // Rank: 1) Microsoft Aria/Guy/Emma Natural (Edge), 2) Google US English, 3) any en-US Natural
+      const rank = v => (/(Aria|Guy|Emma|Jenny).*Natural/i.test(v.name) ? 0 : /Google.*en-US/i.test(v.name) ? 1 : /Natural/i.test(v.name) ? 2 : /en-US/i.test(v.lang) ? 3 : 10);
+      naturalVoices = [...vs].sort((a,b)=> rank(a)-rank(b));
+    }
+    if (window.speechSynthesis) { loadNaturalVoices(); window.speechSynthesis.onvoiceschanged = loadNaturalVoices; }
+    function speakCaption(text) {
+      if (!window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/[^\w\s.,'\-]/g, " ").replace(/\s+/g," ").trim();
+        const u = new SpeechSynthesisUtterance(clean);
+        u.rate = 0.92; u.pitch = 1.02; u.volume = 1;
+        if (naturalVoices.length) u.voice = naturalVoices[0];
+        // Slight SSML-like pause for natural prosody: add 300ms break after commas already in text
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+    async function recordAndPlayDemo() {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
+        mediaRecorder.ondataavailable = e => { if (e.data.size) recordedChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(new Blob(recordedChunks, { type: "video/webm" }));
+          a.download = "vehicle-selector-pro-walkthrough.webm";
+          a.click();
+          stream.getTracks().forEach(t => t.stop());
+        };
+        mediaRecorder.start();
+      } catch (e) {}
+      startAutomatedDemo();
+    }
+    function startAutomatedDemo() {
+      stopAutomatedDemo();
+      demoSeconds = 0;
+      document.body.classList.add("demo-on");
+      demoTimer = setInterval(() => {
+        demoSeconds++;
+        updateDemoProgress();
+        const cue = demoScript.find(s => s.time === demoSeconds);
+        if (cue) { document.getElementById("video-caption").textContent = cue.caption; speakCaption(cue.caption); if (cue.action) cue.action(); }
+        if (demoSeconds >= totalDemoSeconds) stopAutomatedDemo();
+      }, 1000);
+      demoScript[0].action();
+      document.getElementById("video-caption").textContent = demoScript[0].caption;
+      speakCaption(demoScript[0].caption);
+    }
+    function stopAutomatedDemo() {
+      if (demoTimer) clearInterval(demoTimer);
+      demoTimer = null;
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      document.body.classList.remove("demo-on");
+    }
+    function updateDemoProgress() {
+      const mm = String(Math.floor(demoSeconds / 60)).padStart(2, "0");
+      const ss = String(demoSeconds % 60).padStart(2, "0");
+      document.getElementById("video-timer").textContent = `${mm}:${ss} / 02:30`;
+      document.getElementById("video-progress").style.width = `${(demoSeconds / totalDemoSeconds) * 100}%`;
+    }
+    function moveCursorTo(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const c = document.getElementById("virtual-cursor");
+      c.style.left = (r.left + r.width / 2) + "px";
+      c.style.top = (r.top + r.height / 2) + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const d = new Date();
+      document.getElementById("today-label").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+      populateYears();
+      renderGarageUI();
+      renderLibrary();
+      renderAdminTable();
+      selectPdpProduct(DB.products[0].id);
+      document.getElementById("api-endpoint-select").innerHTML = `
+        <option value="years">GET /apps/vehicle-selector/years</option>
+        <option value="makes">GET /apps/vehicle-selector/makes?year=2024</option>
+        <option value="search">GET /apps/vehicle-selector/search?year=2024&make=Ford&model=F-150</option>
+        <option value="check">GET /apps/vehicle-selector/check_fitment</option>`;
+      inspectApiEndpoint();
+    });
+  </script>
+</body>
+</html>

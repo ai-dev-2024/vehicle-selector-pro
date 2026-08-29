@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VehicleSelectorPro — Fitment command center</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,560&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/command-center.css">
+</head>
+<body class="cc-body">
+  <div class="cc-shell">
+    <aside class="cc-sidebar">
+      <div class="cc-brand">
+        <div class="cc-mark">VS</div>
+        <div>
+          <h1>VehicleSelectorPro</h1>
+          <p>Fitment command center</p>
+        </div>
+      </div>
+      <div class="cc-store">
+        <div class="cc-store-badge"><%= (current_shop&.name.presence || "NR").split.map { |w| w[0] }.first(2).join %></div>
+        <div>
+          <strong><%= current_shop&.name.presence || "North Ridge Supply" %></strong>
+          <span>Shopify store</span>
+        </div>
+      </div>
+      <div class="cc-nav-label">Workspace</div>
+      <nav class="cc-nav">
+        <a href="<%= admin_dashboard_path %>" class="<%= 'active' if controller_name == 'dashboard' %>">Overview</a>
+        <a href="<%= admin_vehicles_path %>" class="<%= 'active' if controller_name == 'vehicles' %>">Vehicle library <span class="cc-count"><%= Vehicle.active.count %></span></a>
+        <a href="<%= admin_product_fitments_path %>" class="<%= 'active' if controller_name == 'product_fitments' %>">Fitment rules <span class="cc-count"><%= current_shop&.vehicle_product_fitments&.count || 0 %></span></a>
+        <a href="<%= admin_sync_path %>" class="<%= 'active' if controller_name == 'sync' %>">Sync activity</a>
+      </nav>
+      <div class="cc-nav-label">Configure</div>
+      <nav class="cc-nav">
+        <a href="<%= admin_settings_path %>" class="<%= 'active' if controller_name == 'settings' %>">Selector settings</a>
+        <a href="<%= admin_bulk_imports_path %>" class="<%= 'active' if controller_name == 'bulk_imports' %>">Bulk CSV import</a>
+      </nav>
+      <div class="cc-sidebar-foot">
+        <div class="cc-status">
+          <span class="cc-dot"></span>
+          <div>
+            Shopify connected<br>
+            <span style="color:var(--muted)"><%= current_shop&.shopify_domain %></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="cc-main">
+      <div class="cc-topbar">
+        <div class="cc-crumb"><%= current_shop&.name.presence || "Store" %> &nbsp;›&nbsp; <strong><%= controller_name.humanize %></strong></div>
+        <div class="cc-live"><i></i> LIVE CONNECTION</div>
+      </div>
+      <div class="cc-banner">
+        <% if @pending_sync_count.to_i > 0 %>
+          <%= @pending_sync_count %> fitment changes are waiting for metafield sync.
+          <a href="<%= admin_sync_path %>">View status ↗</a>
+        <% else %>
+          All systems are operating normally. <a href="<%= admin_sync_path %>">View status ↗</a>
+        <% end %>
+      </div>
+      <section class="cc-page">
+        <% if flash[:notice].present? %><div class="flash-ok"><%= flash[:notice] %></div><% end %>
+        <% if flash[:alert].present? %><div class="flash-bad"><%= flash[:alert] %></div><% end %>
+        <%= yield %>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

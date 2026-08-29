@@ -1,0 +1,108 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Product Fitment Matrix</h2>
+    <p style="margin: 0; color: #6d7175;">Search and manage product compatibility mappings across your catalog.</p>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">+ Add New Fitment</a>
+    <a href="<%= admin_bulk_imports_path %>" class="btn">Import CSV</a>
+  </div>
+</div>
+
+<!-- Search and Filter Bar -->
+<div class="cc-card" style="padding: 16px; margin-bottom: 16px;">
+  <%= form_with url: admin_product_fitments_path, method: :get, local: true, style: "display: flex; gap: 12px; align-items: center;" do |f| %>
+    <div style="flex: 1;">
+      <%= f.text_field :query, value: params[:query], placeholder: "Search by Product Title, SKU, Make, or Model...", style: "width: 100%; padding: 10px 14px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; box-sizing: border-box;" %>
+    </div>
+    <div>
+      <%= f.select :fitment_type, [["All Fitment Types", ""], ["Specific Vehicles", "specific"], ["Universal Fit", "universal"]], { selected: params[:fitment_type] }, style: "padding: 10px 14px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; background: white;" %>
+    </div>
+    <%= f.submit "Filter", class: "btn" %>
+    <% if params[:query].present? || params[:fitment_type].present? %>
+      <a href="<%= admin_product_fitments_path %>" class="btn" style="color: #6d7175;">Clear</a>
+    <% end %>
+  <% end %>
+</div>
+
+<!-- Fitments List Card -->
+<div class="cc-card" style="padding: 0;">
+  <% if @fitments.any? %>
+    <table class="cc-table">
+      <thead>
+        <tr>
+          <th>Product / SKU</th>
+          <th>Vehicle Compatibility</th>
+          <th>Type / Notes</th>
+          <th>Sync Status</th>
+          <th>Last Synced</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @fitments.each do |fitment| %>
+          <tr>
+            <td style="max-width: 280px;">
+              <strong style="color: #202223;"><%= fitment.product_title.presence || fitment.product_id %></strong>
+              <% if fitment.sku.present? %>
+                <div style="font-size: 12px; color: #6d7175;">SKU: <code><%= fitment.sku %></code></div>
+              <% end %>
+            </td>
+            <td>
+              <% if fitment.universal_fit? %>
+                <span class="badge badge-info">Universal Fit</span>
+              <% elsif fitment.vehicle.present? %>
+                <strong><%= fitment.vehicle.display_name %></strong>
+                <% if fitment.vehicle.drivetrain.present? || fitment.vehicle.body_style.present? %>
+                  <div style="font-size: 12px; color: #6d7175;"><%= [fitment.vehicle.drivetrain, fitment.vehicle.body_style].compact_blank.join(' • ') %></div>
+                <% end %>
+              <% else %>
+                <span style="color: #bf0711;">Unassigned</span>
+              <% end %>
+            </td>
+            <td style="max-width: 250px;">
+              <span class="badge badge-success"><%= fitment.fitment_type.humanize %></span>
+              <% if fitment.position.present? %>
+                <span class="badge" style="background: #f1f2f3; color: #5c5f62;"><%= fitment.position %></span>
+              <% end %>
+              <% if fitment.fitment_notes.present? %>
+                <div style="font-size: 12px; color: #6d7175; margin-top: 4px;"><%= fitment.fitment_notes %></div>
+              <% end %>
+            </td>
+            <td>
+              <% if fitment.synced_to_metafield? %>
+                <span class="badge badge-success">✔ Metafield Synced</span>
+              <% else %>
+                <span class="badge badge-warning">⌛ Pending Sync</span>
+              <% end %>
+            </td>
+            <td style="font-size: 12px; color: #6d7175;">
+              <%= fitment.last_synced_at ? fitment.last_synced_at.strftime("%b %d, %H:%M") : "Never" %>
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <a href="<%= edit_admin_product_fitment_path(fitment) %>" class="btn" style="padding: 4px 8px; font-size: 12px;">Edit</a>
+              <%= button_to "Delete", admin_product_fitment_path(fitment), method: :delete, data: { confirm: "Remove this fitment mapping?" }, class: "btn btn-danger", style: "padding: 4px 8px; font-size: 12px; display: inline-block; margin-left: 4px;" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div style="padding: 16px 24px; border-top: 1px solid #e1e3e5; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 13px; color: #6d7175;">Showing <%= @fitments.size %> of <%= @total_count %> records</span>
+      <div style="display: flex; gap: 8px;">
+        <% if @page > 1 %>
+          <a href="<%= admin_product_fitments_path(page: @page - 1, query: params[:query], fitment_type: params[:fitment_type]) %>" class="btn" style="padding: 4px 10px; font-size: 12px;">← Previous</a>
+        <% end %>
+        <% if @fitments.size == @per_page %>
+          <a href="<%= admin_product_fitments_path(page: @page + 1, query: params[:query], fitment_type: params[:fitment_type]) %>" class="btn" style="padding: 4px 10px; font-size: 12px;">Next →</a>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div style="text-align: center; padding: 40px 20px;">
+      <p style="color: #6d7175; font-size: 16px; margin-bottom: 16px;">No fitments matched your criteria.</p>
+      <a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">Create New Fitment</a>
+    </div>
+  <% end %>
+</div>

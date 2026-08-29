@@ -1,0 +1,103 @@
+<div class="cc-page-head">
+  <div>
+    <div class="cc-kicker"><%= Time.current.strftime("%A, %B %-d, %Y") %></div>
+    <h2>Map the catalog to the road.</h2>
+    <p>Keep every product honest to the vehicle it fits — from your admin workspace to the storefront selector.</p>
+  </div>
+  <div class="cc-actions">
+    <a href="<%= admin_bulk_imports_path %>" class="btn">Bulk CSV import</a>
+    <a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">+ Add fitment rule</a>
+  </div>
+</div>
+
+<div class="cc-hero">
+  <div class="cc-hero-photo"></div>
+  <div class="cc-hero-copy">
+    <div>
+      <div class="cc-kicker" style="color:#9bb6d4">Sync status / <%= Time.current.strftime("%H:%M") %></div>
+      <h3>Good fitment is quiet confidence.</h3>
+      <p>One clean vehicle selection can turn a browse into a buy. Your catalog is currently serving a verified fitment experience.</p>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span>Catalog coverage</span><strong><%= @coverage_pct %>%</strong></div>
+      <div class="cc-bar"><span style="width:<%= @coverage_pct %>%"></span></div>
+      <div style="margin-top:8px;font-size:12px;color:#9bb6d4"><%= @synced_count %> products synced to custom.vehicle_fitment</div>
+    </div>
+  </div>
+</div>
+
+<div class="cc-metrics">
+  <div class="cc-stat">
+    <label>Mapped products</label>
+    <b><%= number_with_delimiter(@unique_products) %></b>
+    <em>Products with vehicle data</em>
+  </div>
+  <div class="cc-stat">
+    <label>Vehicle coverage</label>
+    <b><%= @coverage_pct %>%</b>
+    <em>Synced vs pending metafields</em>
+  </div>
+  <div class="cc-stat">
+    <label>Vehicle database</label>
+    <b><%= number_with_delimiter(@total_vehicles) %></b>
+    <em>YMMTE configurations</em>
+  </div>
+  <div class="cc-stat">
+    <label>Needs review</label>
+    <b><%= @pending_sync_count.to_s.rjust(2, '0') %></b>
+    <em class="<%= @pending_sync_count.to_i > 0 ? 'warn' : '' %>"><%= @pending_sync_count.to_i > 0 ? 'Rules need attention' : 'Queue clear' %></em>
+  </div>
+</div>
+
+<div class="cc-card" style="margin-top:18px">
+  <div class="cc-card-pad" style="display:flex;justify-content:space-between;align-items:center">
+    <h3 style="margin:0">Recent fitment assignments</h3>
+    <a href="<%= admin_product_fitments_path %>" class="btn">View matrix</a>
+  </div>
+  <% if @recent_fitments.any? %>
+    <table class="cc-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Vehicle</th>
+          <th>Type</th>
+          <th>Metafield</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_fitments.each do |fitment| %>
+          <tr>
+            <td>
+              <strong><%= fitment.product_title.presence || fitment.product_id %></strong>
+              <div style="font-size:12px;color:var(--muted)"><%= fitment.sku.presence || fitment.product_handle %></div>
+            </td>
+            <td>
+              <% if fitment.universal_fit? %>
+                <span class="badge badge-info">Universal</span>
+              <% elsif fitment.vehicle.present? %>
+                <%= fitment.vehicle.display_name %>
+              <% else %>
+                —
+              <% end %>
+            </td>
+            <td><span class="badge badge-live"><%= fitment.fitment_type.to_s.humanize %></span></td>
+            <td>
+              <% if fitment.synced_to_metafield? %>
+                <span class="badge badge-live">Synced</span>
+              <% else %>
+                <span class="badge badge-review">Pending</span>
+              <% end %>
+            </td>
+            <td><a href="<%= edit_admin_product_fitment_path(fitment) %>" class="btn">Edit</a></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div style="padding:32px;text-align:center;color:var(--muted)">
+      No fitments mapped yet.
+      <div style="margin-top:12px"><a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">Assign your first fitment</a></div>
+    </div>
+  <% end %>
+</div>

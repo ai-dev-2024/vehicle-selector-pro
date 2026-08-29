@@ -1,0 +1,22 @@
+{
+  "vehicle_selector": {
+    "title": "Select Your Vehicle",
+    "subtitle": "Find exact fit parts for your Year, Make, and Model",
+    "year_placeholder": "Select Year",
+    "make_placeholder": "Select Make",
+    "model_placeholder": "Select Model",
+    "trim_placeholder": "Select Trim",
+    "engine_placeholder": "Select Engine",
+    "search_button": "Find Matching Parts",
+    "reset_button": "Clear Vehicle",
+    "my_garage": "My Garage",
+    "saved_vehicles": "Saved Vehicles",
+    "add_to_garage": "Save to My Garage",
+    "current_vehicle": "Selected Vehicle",
+    "fits_vehicle": "Guaranteed Exact Fit",
+    "universal_fit": "Universal Fit",
+    "does_not_fit": "Does Not Fit",
+    "select_vehicle_to_verify": "Select your vehicle to confirm compatibility",
+    "fitment_guarantee": "100% Fitment Guarantee. Returns are always free if verified fitment fails."
+  }
+}

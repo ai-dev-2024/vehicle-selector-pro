@@ -1,0 +1,70 @@
+<div class="cc-page-head">
+  <div>
+    <h2>Sync activity</h2>
+    <p>Every catalog change, webhook, and cache refresh in one place. GraphQL <code>metafieldsSet</code> writes <code>custom.vehicle_fitment</code>.</p>
+  </div>
+  <%= button_to "Run sync", trigger_all_admin_sync_path, method: :post, class: "btn btn-primary" %>
+</div>
+
+<div class="cc-navy-note" style="margin-top:0">
+  <div>
+    <h4><%= @pending_count.to_i.zero? ? "Everything is up to date" : "#{@pending_count} products waiting" %></h4>
+    <p><%= @pending_count.to_i.zero? ? "The last complete sync finished with no blocking errors." : "Queue a full shop metafield synchronization to clear the backlog." %></p>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:22px;color:#fff;font-weight:700"><%= @pending_count %></div>
+    <div style="font-size:11px;letter-spacing:.12em">PENDING</div>
+  </div>
+</div>
+
+<div class="cc-metrics" style="margin-top:16px">
+  <div class="cc-stat"><label>Mapped products</label><b><%= @total_products %></b><em>With fitment data</em></div>
+  <div class="cc-stat"><label>Synced to Shopify</label><b><%= @synced_count %></b><em>Metafields written</em></div>
+  <div class="cc-stat"><label>Pending sync</label><b><%= @pending_count %></b><em class="<%= @pending_count.to_i > 0 ? 'warn' : '' %>">Sidekiq queue</em></div>
+  <div class="cc-stat"><label>Job history</label><b><%= @sync_logs.size %></b><em>Recent logs</em></div>
+</div>
+
+<div class="cc-card" style="margin-top:16px;padding:18px">
+  <h3 style="margin:0 0 12px">Sync single product</h3>
+  <%= form_with url: trigger_product_admin_sync_path, method: :post, local: true, style: "display:flex;gap:12px;align-items:center" do |f| %>
+    <div style="flex:1"><%= f.text_field :product_id, placeholder: "gid://shopify/Product/8192019283001", required: true %></div>
+    <%= f.submit "Sync product", class: "btn" %>
+  <% end %>
+</div>
+
+<div class="cc-card" style="margin-top:16px">
+  <div class="cc-card-pad"><h3 style="margin:0">Activity log</h3></div>
+  <% if @sync_logs.any? %>
+    <table class="cc-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Products</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sync_logs.each do |log| %>
+          <tr>
+            <td><%= log.created_at.strftime("%b %d, %Y %H:%M") %></td>
+            <td><span class="badge badge-info"><%= log.sync_type.to_s.upcase %></span></td>
+            <td>
+              <% case log.status %>
+              <% when 'completed' %><span class="badge badge-live">Completed</span>
+              <% when 'in_progress' %><span class="badge badge-review">In progress (<%= log.progress_percentage %>%)</span>
+              <% when 'failed' %><span class="badge" style="background:#fde8e6;color:var(--danger)">Failed</span>
+              <% else %><span class="badge badge-info">Pending</span>
+              <% end %>
+            </td>
+            <td><%= log.synced_products %> / <%= log.total_products %></td>
+            <td style="font-size:12px;color:var(--muted)"><%= log.error_details.presence || "Clean execution" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="color:var(--muted);text-align:center;padding:24px">No background sync jobs recorded yet.</p>
+  <% end %>
+</div>

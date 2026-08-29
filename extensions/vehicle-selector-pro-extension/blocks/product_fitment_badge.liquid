@@ -1,0 +1,37 @@
+{{ 'vehicle-selector.css' | asset_url | stylesheet_tag }}
+
+{% assign current_product_id = product.id %}
+{% assign metafield_data = product.metafields.custom.vehicle_fitment.value %}
+
+<div 
+  class="vsp-pdp-fitment-badge vsp-fit-unselected"
+  data-product-id="gid://shopify/Product/{{ current_product_id }}"
+  data-universal="{% if metafield_data.universal == true %}true{% else %}false{% endif %}"
+>
+  <div class="vsp-badge-icon">🚗</div>
+  <div class="vsp-badge-content">
+    <div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>
+    <div class="vsp-badge-description">
+      {{ block.settings.guarantee_note | default: '100% Fitment Guarantee. Returns are free if verified fitment fails.' }}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'vehicle-selector.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Product Fitment Badge",
+  "target": "block",
+  "stylesheet": "vehicle-selector.css",
+  "javascript": "vehicle-selector.js",
+  "settings": [
+    {
+      "type": "text",
+      "id": "guarantee_note",
+      "label": "Guarantee Note",
+      "default": "100% Fitment Guarantee. Free returns if verified fitment fails."
+    }
+  ]
+}
+{% endschema %}
