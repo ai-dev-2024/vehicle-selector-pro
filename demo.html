@@ -31,15 +31,6 @@
     .video-cursor.active {
       display: block;
     }
-    .pulse-ring {
-      box-shadow: 0 0 0 4px rgba(0, 128, 96, 0.4);
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(0, 128, 96, 0.6); }
-      70% { box-shadow: 0 0 0 10px rgba(0, 128, 96, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 128, 96, 0); }
-    }
   </style>
 </head>
 <body class="p-4 md:p-6 bg-slate-50 text-slate-900 antialiased min-h-screen relative">
@@ -85,27 +76,33 @@
         <div class="bg-emerald-700 text-white font-black text-sm px-3 py-1.5 rounded-lg shadow-sm">VSP</div>
         <div>
           <h1 class="text-lg font-bold text-slate-900 leading-tight">Vehicle Selector Pro</h1>
-          <p class="text-xs text-slate-500">Ruby on Rails 7.x & Shopify Theme App Extension • apex-performance-parts.myshopify.com</p>
+          <p class="text-xs text-slate-500">Production-Grade Shopify Rails Application & Theme App Extension</p>
         </div>
       </div>
       
       <!-- Right Header Actions -->
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Record Demo Button -->
+        <button id="btn-record-demo" onclick="recordAndPlayDemo()" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-sm transition">
+          <span>📹</span>
+          <span>Record & Download Video</span>
+        </button>
+
         <!-- 2.5 Min Auto Demo Button -->
-        <button id="btn-start-video" onclick="startAutomatedDemo()" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow-sm transition">
+        <button id="btn-start-video" onclick="startAutomatedDemo()" class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow-sm transition">
           <span>🎬</span>
-          <span>Play 2.5-Min Video Walkthrough</span>
+          <span>Play 2.5-Min Walkthrough</span>
         </button>
 
         <!-- Mode Tabs -->
         <nav class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 text-sm font-medium">
-          <button id="tab-storefront-btn" onclick="switchTab('storefront')" class="px-4 py-1.5 rounded-md bg-white shadow-sm text-emerald-700 font-semibold transition-all">
-            🛍️ Storefront Extension
+          <button id="tab-storefront-btn" onclick="switchTab('storefront')" class="px-3 py-1.5 rounded-md bg-white shadow-sm text-emerald-700 font-semibold transition-all">
+            🛍️ Storefront
           </button>
-          <button id="tab-admin-btn" onclick="switchTab('admin')" class="px-4 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">
+          <button id="tab-admin-btn" onclick="switchTab('admin')" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">
             ⚙️ Polaris Admin
           </button>
-          <button id="tab-api-btn" onclick="switchTab('api')" class="px-4 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">
+          <button id="tab-api-btn" onclick="switchTab('api')" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all">
             ⚡ API & GraphQL
           </button>
         </nav>
@@ -465,9 +462,9 @@
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-${t}-btn`);
         if (t === tab) {
-          btn.className = "px-4 py-1.5 rounded-md bg-white shadow-sm text-emerald-700 font-semibold transition-all";
+          btn.className = "px-3 py-1.5 rounded-md bg-white shadow-sm text-emerald-700 font-semibold transition-all";
         } else {
-          btn.className = "px-4 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all";
+          btn.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all";
         }
       });
 
@@ -543,7 +540,6 @@
       trimSel.innerHTML = '<option value="">All Trims</option>' + trims.map(t => `<option value="${t}">${t}</option>`).join('');
       trimSel.disabled = false;
 
-      // Auto populate engines
       const engines = [...new Set(DB.vehicles.filter(v => v.year === year && v.make === make && v.model === model).map(v => v.engine))].filter(Boolean).sort();
       engineSel.innerHTML = '<option value="">All Engines</option>' + engines.map(e => `<option value="${e}">${e}</option>`).join('');
       engineSel.disabled = false;
@@ -887,6 +883,8 @@
     let demoTimer = null;
     let demoSeconds = 0;
     const totalDemoSeconds = 150; // 2.5 minutes
+    let mediaRecorder = null;
+    let recordedChunks = [];
 
     const demoScript = [
       { time: 0, caption: "🚗 Welcome to Vehicle Selector Pro! Built with Ruby on Rails 7 & Shopify Theme App Extension.", action: () => switchTab('storefront') },
@@ -949,8 +947,35 @@
       }},
       { time: 148, caption: "✅ Demonstration Complete! Full production code is pushed to GitHub.", action: () => {
         switchTab('storefront');
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
       }}
     ];
+
+    async function recordAndPlayDemo() {
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+          const stream = await navigator.mediaDevices.getDisplayMedia({ video: { mediaSource: 'screen' }, audio: false });
+          recordedChunks = [];
+          mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+          mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vehicle_selector_pro_demo.webm';
+            a.click();
+            stream.getTracks().forEach(track => track.stop());
+          };
+          mediaRecorder.start();
+        }
+      } catch (err) {
+        console.warn('Direct tab recording prompt skipped or canceled, proceeding with walkthrough demo playback.');
+      }
+      startAutomatedDemo();
+    }
 
     function startAutomatedDemo() {
       stopAutomatedDemo();
@@ -973,7 +998,6 @@
         }
       }, 1000);
 
-      // Trigger first cue
       demoScript[0].action();
       document.getElementById('video-caption').textContent = demoScript[0].caption;
     }
