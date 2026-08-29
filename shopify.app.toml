@@ -1,0 +1,57 @@
+# Shopify App Configuration - Vehicle Selector Pro
+# Required for `shopify app deploy` and App Store submission
+
+name = "vehicle-selector-pro"
+client_id = { env = "SHOPIFY_API_KEY" }
+application_url = { env = "HOST" }
+embedded = true
+
+[access_scopes]
+scopes = "read_products,write_products,read_product_listings,read_customers,write_customers"
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = ["{env.HOST}/auth/shopify/callback"]
+
+[webhooks]
+api_version = "2025-07"
+
+  [[webhooks.subscriptions]]
+  topics = ["products/create"]
+  uri = "/webhooks/products_create"
+
+  [[webhooks.subscriptions]]
+  topics = ["products/update"]
+  uri = "/webhooks/products_update"
+
+  [[webhooks.subscriptions]]
+  topics = ["products/delete"]
+  uri = "/webhooks/products_delete"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/webhooks/app_uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = ["shop/update"]
+  uri = "/webhooks/shop_update"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/data_request"]
+  uri = "/webhooks/customers_data_request"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/redact"]
+  uri = "/webhooks/customers_redact"
+
+  [[webhooks.subscriptions]]
+  topics = ["shop/redact"]
+  uri = "/webhooks/shop_redact"
+
+[app_proxy]
+url = "{env.HOST}/apps/vehicle-selector"
+subpath = "vehicle-selector"
+prefix = "apps"
+
+[pos]
+embedded = false

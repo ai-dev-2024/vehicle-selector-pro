@@ -39,6 +39,8 @@ gem 'puma', '~> 6.4'
 
 # Asset pipeline & View styling
 gem 'sprockets-rails', '>= 3.0.0'
+gem 'polaris_view_components', '~> 2.5'
+gem 'rack-attack', '~> 6.7'
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows]

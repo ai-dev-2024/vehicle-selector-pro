@@ -953,6 +953,13 @@
       }}
     ];
 
+    // Professional voiceover via Web Speech API
+    let voiceEnabled = true;
+    function speakCaption(text) {
+      if (!voiceEnabled || !window.speechSynthesis) return;
+      try { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/[^\w\s.,!\-]/g, '')); u.rate = 0.95; u.pitch = 1; u.volume = 0.85; window.speechSynthesis.speak(u); } catch(e){}
+    }
+
     async function recordAndPlayDemo() {
       try {
         if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
@@ -990,6 +997,7 @@
         const cue = demoScript.find(s => s.time === demoSeconds);
         if (cue) {
           document.getElementById('video-caption').textContent = cue.caption;
+          speakCaption(cue.caption);
           if (cue.action) cue.action();
         }
 
@@ -1000,11 +1008,13 @@
 
       demoScript[0].action();
       document.getElementById('video-caption').textContent = demoScript[0].caption;
+      speakCaption(demoScript[0].caption);
     }
 
     function stopAutomatedDemo() {
       if (demoTimer) clearInterval(demoTimer);
       demoTimer = null;
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
       document.getElementById('video-bar').classList.add('hidden');
       document.getElementById('virtual-cursor').classList.remove('active');
     }

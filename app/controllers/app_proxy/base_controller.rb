@@ -34,8 +34,9 @@ module AppProxy
       shop_domain = params[:shop].presence || request.headers['X-Shopify-Shop-Domain']
       @current_shop = Shop.active.find_by(shopify_domain: shop_domain)
 
-      # Fallback for development/demo environment
-      @current_shop ||= Shop.first if Rails.env.development? || Rails.env.test?
+      if @current_shop.nil? && (Rails.env.development? || Rails.env.test?)
+        @current_shop = Shop.active.first || Shop.first
+      end
 
       unless @current_shop
         render json: { error: "Shop '#{shop_domain}' not found or inactive" }, status: :not_found

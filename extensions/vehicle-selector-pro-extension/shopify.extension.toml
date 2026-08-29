@@ -1,5 +1,6 @@
 name = "Vehicle Selector Pro"
 type = "theme"
+api_version = "2025-07"
 
 [blocks.vehicle_selector_filter]
 name = "Vehicle Selector Filter"

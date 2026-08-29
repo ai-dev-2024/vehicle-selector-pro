@@ -29,12 +29,18 @@ module VehicleSelectorPro
     # Configuration for the application, engines, and railties goes here.
     config.active_job.queue_adapter = :sidekiq
 
-    # Use memory or solid cache store for lightning fast vehicle queries
-    config.cache_store = :memory_store, { size: 64.megabytes }
+    # Cache store: SolidCache (Postgres) in production, memory for dev/test
+    if ENV['REDIS_URL'].present?
+      config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], reconnect_attempts: 1 }
+    else
+      config.cache_store = :memory_store, { size: 64.megabytes }
+    end
 
-    # Disable frame guarding on embedded Shopify admin views
-    config.action_dispatch.default_headers.merge!({
-      'X-Frame-Options' => 'ALLOWALL'
-    })
+    # Shopify embedded app: allow framing by Shopify admin
+    config.action_dispatch.default_headers.delete('X-Frame-Options')
+    config.action_dispatch.default_headers['X-Frame-Options'] = ''
+    config.content_security_policy do |policy|
+      policy.frame_ancestors :self, "https://*.myshopify.com", "https://admin.shopify.com"
+    end
   end
 end

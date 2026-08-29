@@ -1,4 +1,7 @@
 class Shop < ApplicationRecord
+  include ShopifyApp::ShopSessionStorage
+  encrypts :shopify_token, deterministic: false if respond_to?(:encrypts)
+
   # Associations
   has_many :vehicle_product_fitments, dependent: :destroy
   has_many :metafield_sync_logs, dependent: :destroy

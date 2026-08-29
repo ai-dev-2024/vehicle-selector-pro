@@ -12,13 +12,8 @@ test:
   database: storage/test.sqlite3
 
 production:
-  <% if ENV['DATABASE_URL'].present? %>
   adapter: postgresql
   encoding: unicode
-  url: <%= ENV['DATABASE_URL'] %>
+  url: <%= ENV.fetch('DATABASE_URL') { raise 'DATABASE_URL required in production' } %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 15 } %>
   prepared_statements: true
-  <% else %>
-  <<: *default
-  database: storage/production.sqlite3
-  <% end %>

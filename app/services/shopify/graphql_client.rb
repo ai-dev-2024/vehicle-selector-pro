@@ -9,7 +9,7 @@ module Shopify
 
   class GraphQLClient
     MAX_RETRIES = 3
-    DEFAULT_API_VERSION = "2024-04"
+    DEFAULT_API_VERSION = "2025-07"
 
     attr_reader :shop, :api_version
 

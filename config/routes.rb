@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount ShopifyApp::Engine, at: '/'
   root to: 'admin/dashboard#index'
 
   # Shopify Embedded Admin Routes
@@ -52,7 +53,8 @@ Rails.application.routes.draw do
     get 'garage', to: 'garage#index'
   end
 
-  # Direct API for fallback or headless storefronts
+  # Headless fallback API - requires HMAC signature same as App Proxy (do not expose unauthenticated)
+  # Kept for internal use only; secured via AppProxySignatureVerifier
   namespace :api do
     namespace :v1 do
       namespace :storefront do
@@ -74,6 +76,9 @@ Rails.application.routes.draw do
     post 'products_delete', to: 'products#destroy'
     post 'app_uninstalled', to: 'app_uninstalled#create'
     post 'shop_update', to: 'shop_updates#create'
+    post 'customers_data_request', to: 'customers#data_request'
+    post 'customers_redact', to: 'customers#redact'
+    post 'shop_redact', to: 'shop#redact'
   end
 
   # Healthcheck for load balancers and container orchestrators

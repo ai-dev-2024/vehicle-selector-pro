@@ -9,7 +9,7 @@ Rails.application.configure do
   # Ensure that assets are served in production if needed
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Cache configuration with Redis or SolidCache
+  # Cache configuration: prefer SolidCache (Postgres) or Redis if provided
   if ENV['REDIS_URL'].present?
     config.cache_store = :redis_cache_store, {
       url: ENV['REDIS_URL'],
@@ -21,6 +21,8 @@ Rails.application.configure do
         Rails.logger.error("Redis Cache error: #{exception.message}")
       }
     }
+  elsif defined?(SolidCache)
+    config.cache_store = :solid_cache_store
   else
     config.cache_store = :memory_store, { size: 128.megabytes }
   end
