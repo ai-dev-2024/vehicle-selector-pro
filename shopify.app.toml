@@ -1,57 +1,58 @@
-# Shopify App Configuration - Vehicle Selector Pro
-# Required for `shopify app deploy` and App Store submission
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "vehicle-selector-pro"
-client_id = { env = "SHOPIFY_API_KEY" }
-application_url = { env = "HOST" }
+name = "Vehicle Selector Pro"
+client_id = "1ace4dd6082915935f0901c26f37d4a0"
+application_url = "https://vehicle-selector-pro.fly.dev"
 embedded = true
 
 [access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_products,write_products,read_product_listings,read_customers,write_customers"
 use_legacy_install_flow = false
+optional_scopes = [ ]
 
 [auth]
-redirect_urls = ["{env.HOST}/auth/shopify/callback"]
+redirect_urls = [ "https://vehicle-selector-pro.fly.dev/auth/shopify/callback" ]
 
 [webhooks]
-api_version = "2025-07"
+api_version = "2026-07"
 
   [[webhooks.subscriptions]]
-  topics = ["products/create"]
   uri = "/webhooks/products_create"
+  topics = [ "products/create" ]
 
   [[webhooks.subscriptions]]
-  topics = ["products/update"]
   uri = "/webhooks/products_update"
+  topics = [ "products/update" ]
 
   [[webhooks.subscriptions]]
-  topics = ["products/delete"]
   uri = "/webhooks/products_delete"
+  topics = [ "products/delete" ]
 
   [[webhooks.subscriptions]]
-  topics = ["app/uninstalled"]
   uri = "/webhooks/app_uninstalled"
+  topics = [ "app/uninstalled" ]
 
   [[webhooks.subscriptions]]
-  topics = ["shop/update"]
   uri = "/webhooks/shop_update"
+  topics = [ "shop/update" ]
 
   [[webhooks.subscriptions]]
-  topics = ["customers/data_request"]
   uri = "/webhooks/customers_data_request"
+  topics = [ "customers/data_request" ]
 
   [[webhooks.subscriptions]]
-  topics = ["customers/redact"]
   uri = "/webhooks/customers_redact"
+  topics = [ "customers/redact" ]
 
   [[webhooks.subscriptions]]
-  topics = ["shop/redact"]
   uri = "/webhooks/shop_redact"
+  topics = [ "shop/redact" ]
 
 [app_proxy]
-url = "{env.HOST}/apps/vehicle-selector"
+url = "https://vehicle-selector-pro.fly.dev/apps/vehicle-selector"
 subpath = "vehicle-selector"
 prefix = "apps"
 
 [pos]
-embedded = false
+embedded = true
