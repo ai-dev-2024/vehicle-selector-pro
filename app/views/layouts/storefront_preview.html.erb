@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= content_for(:page_title).presence || 'Vehicle Selector Pro — Storefront Preview' %></title>
   <link rel="stylesheet" href="/ext-assets/vehicle-selector.css?v=1">
+  <% if content_for?(:head) %><%= yield :head %><% end %>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">

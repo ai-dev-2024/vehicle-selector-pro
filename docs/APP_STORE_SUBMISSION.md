@@ -1,0 +1,108 @@
+# App Store Submission Guide — Vehicle Selector Pro
+
+Everything needed to submit this app to the Shopify App Store, in order. Items marked **[Dashboard]** happen in the Shopify Partners Dashboard, **[Repo]** are files in this repository, **[Live]** are URL entries pointing at the deployed app.
+
+## 0. Pre-flight — what must already be true
+
+- [x] All spec requirements implemented and verified (see `REQUIREMENTS-VERIFICATION.md`)
+- [x] GDPR webhooks implemented (`/webhooks/customers_data_request`, `/webhooks/customers_redact`, `/webhooks/shop_redact`)
+- [x] Privacy policy hosted or linkable (`docs/PRIVACY.md` — must be publicly reachable at submission; see step 3)
+- [x] App deployed and healthy (Fly.io, `https://vehicle-selector-pro.fly.dev`)
+- [x] Session-based admin auth (App Bridge / OAuth session required for every admin route)
+- [x] Theme App Extension released via `shopify app deploy` (2 blocks + snippet)
+
+## 1. [Dashboard] App information
+
+- **App name:** Vehicle Selector Pro
+- **App URL:** `https://vehicle-selector-pro.fly.dev`
+- **Allowed redirection URL:** `https://vehicle-selector-pro.fly.dev/auth/shopify/callback`
+- **App proxy:** subpath `apps/vehicle-selector` → `https://vehicle-selector-pro.fly.dev` (already configured and verified live)
+- **Embedded app:** enabled (App Bridge)
+
+## 2. [Dashboard] Mandatory customer-privacy webhooks
+
+Under **App setup → Event subscriptions → Customer privacy**, register:
+
+- `customers/data_request` → `https://vehicle-selector-pro.fly.dev/webhooks/customers_data_request`
+- `customers/redact` → `https://vehicle-selector-pro.fly.dev/webhooks/customers_redact`
+- `shop/redact` → `https://vehicle-selector-pro.fly.dev/webhooks/shop_redact`
+
+These three cannot be registered via the API; the Rails endpoints already exist and return 200.
+
+## 3. [Live] Hosting the privacy policy
+
+Shopify requires a **publicly reachable URL**. The repo file is not enough. Fastest path:
+
+```
+flyctl deploy   # after adding a /privacy route, or:
+```
+
+- Recommended: add a `get "privacy", to: "storefront_preview#privacy"` route rendering `docs/PRIVACY.md` as HTML, or
+- publish the markdown to GitHub Pages / Notion and use that URL.
+
+**This is the one remaining build item — see below.** The submission guide, listing copy, and review notes are ready; only the hosted-URL step is pending.
+
+## 4. [Dashboard] Listing content (copy-paste ready)
+
+**Tagline (≤60 chars):**
+> Fitment intelligence for Shopify automotive stores
+
+**Description:**
+
+> **Stop guessing. Start fitting.**
+>
+> Vehicle Selector Pro lets automotive merchants attach Year / Make / Model / Trim / Engine fitment data to any product — and gives shoppers a cascading vehicle filter right on the storefront.
+>
+> - **Cascading vehicle widget** — shoppers pick Year → Make → Model → Trim → Engine and instantly see only the parts that fit their vehicle
+> - **"Guaranteed Exact Fit" badges** — product pages show fit, no-fit, or universal-fit status, cutting wrong-part returns
+> - **My Garage** — shoppers save multiple vehicles and switch between them on any page
+> - **Bulk CSV import** — load thousands of fitment rows in minutes; a sample template is built in
+> - **Automatic sync** — fitment data is written to product metafields via the Shopify GraphQL Admin API and kept current through product webhooks
+> - **Multi-store ready** — every store's catalog and vehicles are isolated and encrypted
+>
+> Built natively on Shopify: Theme App Extension blocks (no ScriptTag), App Proxy filtering, Polaris-styled admin, Sidekiq-backed webhooks. Works with any OS 2.0 theme.
+
+**Categories:** Automotive & Vehicles; Store design
+
+**Keywords:** vehicle fitment, year make model, auto parts, garage, fitment filter
+
+**Screenshots (already produced, in `demo/autoplay/frames_live/`):** dashboard with coverage stats, vehicle library, fitment matrix, widget settings, bulk import, storefront widget + garage + PDP badges.
+
+**Demo video:** `demo/Vehicle_Selector_Pro_Demo_v3.mp4` (2.5 min, narrated).
+
+## 5. [Dashboard] Review notes (paste into "Notes for reviewers")
+
+```
+Demo store: https://vehicle-selector-pro.myshopify.com
+Staff account for review: (create one before submitting)
+
+What this app does:
+1. Admin (embedded): open the app from the admin → dashboard shows catalog
+   coverage; Product fitments has the fitment matrix; Sync triggers metafield
+   writes; Bulk imports accepts the sample CSV in db/sample-data/.
+2. Storefront: the theme has the app's two blocks added (vehicle selector
+   filter + product fitment badge). Pick Year=2024 Ford F-150 Lariat to see
+   filtered results; a mapped product page shows the fit badge; the Garage
+   saves the vehicle.
+3. App Proxy endpoints are HMAC-verified (tampered signatures → 401).
+4. GDPR webhooks are registered and return 200; shop/redact erases all
+   shop-scoped data.
+
+No paid plan / billing during review; the app is fully functional in demo mode.
+```
+
+## 6. [Dashboard] Submission checklist
+
+- [ ] Privacy policy URL set (step 3)
+- [ ] Listing copy + screenshots + video uploaded
+- [ ] Mandatory GDPR webhooks registered (step 2)
+- [ ] App URL / redirect URLs correct (step 1)
+- [ ] Review staff account created on the demo store
+- [ ] `shopify app deploy` run so the released extension version matches the repo
+- [ ] Submit for review
+
+## 7. After approval
+
+- [ ] Set distribution to "Public listing"
+- [ ] Monitor Sidekiq deadset + `MetafieldSyncLog` failures for the first week
+- [ ] Keep `REQUIREMENTS-VERIFICATION.md` updated when scopes or endpoints change

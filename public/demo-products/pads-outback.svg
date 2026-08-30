@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="262" rx="130" ry="11" fill="#000" opacity="0.06"/>
+  <g>
+    <path d="M104 100 L296 100 Q314 100 314 118 L314 152 Q314 170 296 170 L104 170 Q86 170 86 152 L86 118 Q86 100 104 100 Z" fill="#1f2937"/>
+    <path d="M114 114 L286 114 Q300 114 300 128 L300 142 Q300 156 286 156 L114 156 Q100 156 100 142 L100 128 Q100 114 114 114 Z" fill="#374151"/>
+    <line x1="200" y1="116" x2="200" y2="154" stroke="#0b6e5c" stroke-width="5"/>
+  </g>
+  <g transform="translate(0,96) scale(0.82)" transform-origin="200 150">
+    <path d="M104 100 L296 100 Q314 100 314 118 L314 152 Q314 170 296 170 L104 170 Q86 170 86 152 L86 118 Q86 100 104 100 Z" fill="#1f2937"/>
+    <path d="M114 114 L286 114 Q300 114 300 128 L300 142 Q300 156 286 156 L114 156 Q100 156 100 142 L100 128 Q100 114 114 114 Z" fill="#374151"/>
+    <line x1="200" y1="116" x2="200" y2="154" stroke="#0b6e5c" stroke-width="5"/>
+  </g>
+  <text x="200" y="88" font-family="Arial" font-size="12" fill="#6b7280" text-anchor="middle">FRONT + REAR SET · LOW DUST</text>
+</svg>

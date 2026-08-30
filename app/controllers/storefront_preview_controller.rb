@@ -36,7 +36,19 @@ class StorefrontPreviewController < ApplicationController
     "APX-CAI-MST-EB" => "/demo-products/intake-mustang.svg",
     "APX-LGT-BAR-20-UNIV" => "/demo-products/light-bar.svg",
     "APX-SUSP-LFT-4RN-2IN" => "/demo-products/leveling-kit.svg",
-    "APX-BED-MAT-TAC" => "/demo-products/bed-mat.svg"
+    "APX-BED-MAT-TAC" => "/demo-products/bed-mat.svg",
+    "APX-CAI-RAM-V8" => "/demo-products/intake-ram.svg",
+    "APX-EXH-RAM-V8" => "/demo-products/exhaust-ram.svg",
+    "APX-SUSP-LFT-RAM-25" => "/demo-products/leveling-ram.svg",
+    "APX-CAI-CIV-15T" => "/demo-products/intake-civic.svg",
+    "APX-CHP-SPR-CIV" => "/demo-products/springs-civic.svg",
+    "APX-EXT-RACK-OUT" => "/demo-products/roof-racks.svg",
+    "APX-BRK-PAD-OUT" => "/demo-products/pads-outback.svg",
+    "APX-CAI-BRN-27" => "/demo-products/intake-bronco.svg",
+    "APX-LGT-POD-BRN" => "/demo-products/pod-kit-bronco.svg",
+    "APX-TOW-HITCH-SLV" => "/demo-products/hitch-silverado.svg",
+    "APX-BRK-ROT-MST" => "/demo-products/rotors-mustang.svg",
+    "APX-SUSP-SHCK-TAC" => "/demo-products/shocks-tacoma.svg"
   }.freeze
 
   def index
@@ -89,6 +101,18 @@ class StorefrontPreviewController < ApplicationController
   end
 
   def support; end
+
+  # Public privacy policy (App Store submission requires a public URL).
+  # Rendered from docs/PRIVACY.md; MarkdownRenderer supports exactly the
+  # constructs that document uses (headings, tables, lists, bold, links) and
+  # HTML-escapes everything first.
+  def privacy
+    doc_path = Rails.root.join("docs/PRIVACY.md")
+    @privacy_html = MarkdownRenderer.new(File.read(doc_path)).to_html
+    render layout: "storefront_preview"
+  end
+
+  private
 
   # Dev-only renders of the REAL admin views (same templates + data the
   # authenticated admin sees), used for demos/screenshots. The real /admin
@@ -481,10 +505,189 @@ class StorefrontPreviewController < ApplicationController
         ["Cleanup", "Roll out and hose"],
         ["Warranty", "5 years against defect"]
       ]
+    },
+    "APX-CAI-RAM-V8" => {
+      features: [
+        "Rotomolded high-flow tube with smooth interior walls",
+        "Washable conical filter, service every 50k miles",
+        "Heat shield isolates intake air from engine bay soak",
+        "Dyno-verified +15 hp on the 5.7L HEMI — no tune required"
+      ],
+      specs: [
+        ["Gains", "+15 hp / +19 lb-ft @ wheels"],
+        ["Design", "Rotomolded tube + heat shield"],
+        ["Filter", "Washable conical"],
+        ["Fitment", "RAM 1500 5.7L HEMI 2019+ (incl. eTorque)"],
+        ["Warranty", "Lifetime limited (filter: 1 year)"]
+      ]
+    },
+    "APX-EXH-RAM-V8" => {
+      features: [
+        "Full 2.75-inch mandrel-bent T-304 stainless tubing",
+        "Straight-through mufflers: deep under load, mild at cruise",
+        "Keeps factory catalytic converters and rear oxygen sensors",
+        "Bolts to OEM flanges — no cutting or welding"
+      ],
+      specs: [
+        ["Material", "T-304 stainless, TIG-welded"],
+        ["Tube diameter", "2.75 in mandrel-bent"],
+        ["Tips", "Dual 4-inch polished stainless"],
+        ["Fitment", "RAM 1500 5.7L HEMI 2019+"],
+        ["Warranty", "Lifetime on materials and workmanship"]
+      ]
+    },
+    "APX-SUSP-LFT-RAM-25" => {
+      features: [
+        "Billet 6061-T6 front strut spacers — true 2.5-inch level",
+        "Corrects the RAM's factory rake for a level stance",
+        "Clears up to 35-inch tires after alignment",
+        "Keeps factory coils and shocks — no ride-quality penalty"
+      ],
+      specs: [
+        ["Lift", "2.5 in front level"],
+        ["Material", "Billet 6061-T6, anodized"],
+        ["Tire clearance", "Up to 35 in (alignment required)"],
+        ["Fitment", "RAM 1500 4WD 2019+"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-CAI-CIV-15T" => {
+      features: [
+        "Rotomolded short-ram with integral heat shield",
+        "Dry synthetic media — no oiling, no MAF contamination",
+        "Dyno-verified +9 hp / +11 lb-ft on the 1.5L turbo",
+        "Installs with hand tools in about an hour"
+      ],
+      specs: [
+        ["Gains", "+9 hp / +11 lb-ft @ wheels"],
+        ["Filter", "Dry synthetic, washable"],
+        ["Design", "Short-ram + heat shield"],
+        ["Fitment", "Civic 1.5L Turbo 2016+ (Sedan/Hatch/Si)"],
+        ["Warranty", "Lifetime limited (filter: 1 year)"]
+      ]
+    },
+    "APX-CHP-SPR-CIV" => {
+      features: [
+        "Progressive-rate steel springs: -1.2 in front, -1.0 in rear",
+        "Soft initial rate keeps daily-comfort ride quality",
+        "Stiffer final rate sharpens turn-in and cuts body roll",
+        "Shot-peened and powder-coated for corrosion resistance"
+      ],
+      specs: [
+        ["Drop", "-1.2 in front / -1.0 in rear"],
+        ["Rate", "Progressive linear"],
+        ["Material", "Shot-peened chrome-silicon steel"],
+        ["Fitment", "Civic 1.5T 2016+ incl. Si"],
+        ["Warranty", "Limited lifetime against sagging"]
+      ]
+    },
+    "APX-EXT-RACK-OUT" => {
+      features: [
+        "Wing-profile aluminum bars cut wind whistle at highway speed",
+        "165 lb dynamic load — boxes, bikes, kayaks and skis",
+        "Mounts to Outback factory fixed points in under an hour",
+        "T-nut channel accepts most accessory carriers"
+      ],
+      specs: [
+        ["Load rating", "165 lb dynamic / 500 lb static"],
+        ["Material", "Anodized 6063 aluminum"],
+        ["Fitment", "Outback 2020+ factory points"],
+        ["Install", "~45 minutes, hex key included"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-BRK-PAD-OUT" => {
+      features: [
+        "Ceramic compound rated for a loaded wagon plus roof cargo",
+        "Front and rear sets in one box — complete pad service",
+        "Shimmed backing plates kill squeal and rattle",
+        "Hardware clips included for both axles"
+      ],
+      specs: [
+        ["Compound", "Ceramic, low-dust"],
+        ["Coverage", "Front + rear axle sets"],
+        ["Fitment", "Outback 2015+"],
+        ["Includes", "Shims and hardware, both axles"],
+        ["Warranty", "2 years / 24,000 miles"]
+      ]
+    },
+    "APX-CAI-BRN-27" => {
+      features: [
+        "Sealed airbox with hydro-shield prefilter for wet trail runs",
+        "Dyno-verified +14 hp on the 2.7L EcoBoost",
+        "Heat shield seals against the hood for cool intake air",
+        "Washable filter — service every 30k miles off-road"
+      ],
+      specs: [
+        ["Gains", "+14 hp / +17 lb-ft @ wheels"],
+        ["Design", "Sealed airbox + hydro-shield"],
+        ["Fitment", "Bronco 2.7L EcoBoost 2021+"],
+        ["Install", "~90 minutes, hand tools"],
+        ["Warranty", "Lifetime limited (filter: 1 year)"]
+      ]
+    },
+    "APX-LGT-POD-BRN" => {
+      features: [
+        "Six 3-inch 4,800 lm pods on a hidden-channel roof plate",
+        "No-drill mount to Bronco factory roof rack rails",
+        "Wiring runs inside the rack channels — clean install",
+        "Individual pod aiming: spot up front, flood to the sides"
+      ],
+      specs: [
+        ["Light output", "14,400 lm total (6 pods)"],
+        ["Mount", "Factory roof rack rails, no drill"],
+        ["Ingress", "IP68 pods"],
+        ["Fitment", "Bronco 2021+ with factory rack"],
+        ["Warranty", "3 years against defect and moisture"]
+      ]
+    },
+    "APX-TOW-HITCH-SLV" => {
+      features: [
+        "SAE J684 Class IV — 12,000 lb GTW, 1,200 lb tongue",
+        "2-inch receiver for ball mounts, racks and carriers",
+        "Bolt-on to Silverado factory mount points — no drilling",
+        "E-coat + powder coat resists winter road salt"
+      ],
+      specs: [
+        ["Class", "IV (SAE J684)"],
+        ["Receiver", "2 in square"],
+        ["Rating", "12,000 lb GTW / 1,200 lb tongue"],
+        ["Fitment", "Silverado 1500 2014+"],
+        ["Warranty", "Lifetime structural"]
+      ]
+    },
+    "APX-BRK-ROT-MST" => {
+      features: [
+        "Directionally slotted vanes evacuate gas, water and dust",
+        "G3000 gray iron, mill-balanced under 20 g per side",
+        "Black electro-coating on hat and edges prevents rust rings",
+        "Track-validated with the Apex QuietStop pad compound"
+      ],
+      specs: [
+        ["Finish", "Slotted, Geomet-coated"],
+        ["Diameter", "OEM 352 mm (GT)"],
+        ["Fitment", "Mustang 5.0L V8 2015+ (pair)"],
+        ["Balance", "< 20 g residual"],
+        ["Warranty", "2 years against warp and crack"]
+      ]
+    },
+    "APX-SUSP-SHCK-TAC" => {
+      features: [
+        "Twin-tube gas shocks tuned for Tacoma 4WD load carriers",
+        "Comfortable 0-inch through 3-inch lift range",
+        "Expanded reserve delays fade on washboard descents",
+        "Sold as a matched rear pair with all bushings"
+      ],
+      specs: [
+        ["Type", "Twin-tube gas, rear pair"],
+        ["Lift range", "0–3 in"],
+        ["Fitment", "Tacoma 4WD 2016+"],
+        ["Valving", "Load-tuned, velocity sensitive"],
+        ["Warranty", "Limited lifetime (1 yr seal)"]
+      ]
     }
   }.freeze
 
-  private
 
   def render_demo_404
     html = '<p style="padding:48px;text-align:center;font-family:sans-serif">' \

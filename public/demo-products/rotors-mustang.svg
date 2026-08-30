@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="258" rx="130" ry="11" fill="#000" opacity="0.06"/>
+  <g>
+    <circle cx="160" cy="160" r="80" fill="#4b5563"/>
+    <circle cx="160" cy="160" r="64" fill="#9ca3af"/>
+    <circle cx="160" cy="160" r="30" fill="#6b7280"/>
+    <circle cx="160" cy="160" r="14" fill="#111827"/>
+    <circle cx="128" cy="128" r="7" fill="#111827"/>
+    <circle cx="192" cy="128" r="7" fill="#111827"/>
+    <circle cx="128" cy="192" r="7" fill="#111827"/>
+    <circle cx="192" cy="192" r="7" fill="#111827"/>
+    <line x1="96" y1="160" x2="224" y2="160" stroke="#1f2937" stroke-width="4"/>
+    <line x1="160" y1="96" x2="160" y2="224" stroke="#1f2937" stroke-width="4"/>
+  </g>
+  <g transform="translate(170,0) scale(0.72)" transform-origin="230 160">
+    <circle cx="160" cy="160" r="80" fill="#4b5563"/>
+    <circle cx="160" cy="160" r="64" fill="#9ca3af"/>
+    <circle cx="160" cy="160" r="30" fill="#6b7280"/>
+    <circle cx="160" cy="160" r="14" fill="#111827"/>
+    <line x1="96" y1="160" x2="224" y2="160" stroke="#1f2937" stroke-width="4"/>
+    <line x1="160" y1="96" x2="160" y2="224" stroke="#1f2937" stroke-width="4"/>
+  </g>
+  <text x="200" y="66" font-family="Arial" font-size="12" fill="#6b7280" text-anchor="middle">SLOTTED · G3000 · PAIR</text>
+</svg>

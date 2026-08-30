@@ -111,7 +111,47 @@ vehicles_data = [
   { year: 2023, make: "BMW", model: "3 Series", trim: "M3 Competition", engine: "3.0L M TwinPower Turbo S58 I6",
     drivetrain: "AWD", body_style: "Sedan" },
   { year: 2022, make: "BMW", model: "3 Series", trim: "330e", engine: "2.0L TwinPower Turbo PHEV I4",
-    drivetrain: "RWD", body_style: "Sedan" }
+    drivetrain: "RWD", body_style: "Sedan" },
+
+  # RAM 1500 (2022-2024)
+  { year: 2024, make: "RAM", model: "1500", trim: "Laramie", engine: "5.7L HEMI V8 with eTorque",
+    drivetrain: "4WD", body_style: "Crew Cab" },
+  { year: 2024, make: "RAM", model: "1500", trim: "Big Horn", engine: "3.6L Pentastar V6",
+    drivetrain: "4WD", body_style: "Quad Cab" },
+  { year: 2023, make: "RAM", model: "1500", trim: "Rebel", engine: "5.7L HEMI V8",
+    drivetrain: "4WD", body_style: "Crew Cab" },
+  { year: 2022, make: "RAM", model: "1500", trim: "Limited", engine: "5.7L HEMI V8 with eTorque",
+    drivetrain: "4WD", body_style: "Crew Cab" },
+
+  # Honda Civic (2022-2024)
+  { year: 2024, make: "Honda", model: "Civic", trim: "Sport", engine: "1.5L Turbocharged I4",
+    drivetrain: "FWD", body_style: "Sedan" },
+  { year: 2024, make: "Honda", model: "Civic", trim: "Si", engine: "1.5L Turbocharged High-Output I4",
+    drivetrain: "FWD", body_style: "Sedan" },
+  { year: 2023, make: "Honda", model: "Civic", trim: "Sport Touring", engine: "1.5L Turbocharged I4",
+    drivetrain: "FWD", body_style: "Hatchback" },
+
+  # Subaru Outback (2023-2024)
+  { year: 2024, make: "Subaru", model: "Outback", trim: "Wilderness", engine: "2.4L Turbo BOXER I4",
+    drivetrain: "AWD", body_style: "Wagon" },
+  { year: 2023, make: "Subaru", model: "Outback", trim: "Limited", engine: "2.5L BOXER I4",
+    drivetrain: "AWD", body_style: "Wagon" },
+
+  # Ford Bronco (2023-2024)
+  { year: 2024, make: "Ford", model: "Bronco", trim: "Badlands", engine: "2.7L EcoBoost V6",
+    drivetrain: "4WD", body_style: "2-Door SUV" },
+  { year: 2024, make: "Ford", model: "Bronco", trim: "Wildtrak", engine: "2.7L EcoBoost V6",
+    drivetrain: "4WD", body_style: "4-Door SUV" },
+  { year: 2023, make: "Ford", model: "Bronco", trim: "Outer Banks", engine: "2.3L EcoBoost I4",
+    drivetrain: "4WD", body_style: "4-Door SUV" },
+
+  # Older F-150 / Silverado years
+  { year: 2020, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L EcoBoost V6",
+    drivetrain: "4WD", body_style: "SuperCrew" },
+  { year: 2020, make: "Ford", model: "F-150", trim: "XLT", engine: "5.0L Ti-VCT V8",
+    drivetrain: "4WD", body_style: "SuperCab" },
+  { year: 2020, make: "Chevrolet", model: "Silverado 1500", trim: "LT Trail Boss", engine: "5.3L EcoTec3 V8",
+    drivetrain: "4WD", body_style: "Double Cab" }
 ]
 
 vehicles = vehicles_data.map do |v_attrs|
@@ -155,9 +195,10 @@ catalog_products = [
     price_cents: 48_900,
     short_description: "Severe-duty drilled & slotted rotors with carbon-ceramic pads — shorter stops, less fade under towing loads.",
     universal: false,
-    fitment_notes: "Front axle only. Fits 6-lug wheel hubs.",
+    fitment_notes: "Front axle only. Fits 6-lug wheel hubs on F-150, Silverado 1500 and RAM 1500.",
     position: "Front Axle",
-    matching_vehicles: Vehicle.where(make: %w[Ford Chevrolet], model: ["F-150", "Silverado 1500"])
+    matching_vehicles: Vehicle.where(make: %w[Ford Chevrolet RAM],
+                                     model: ["F-150", "Silverado 1500", "1500"])
   },
   {
     product_id: "gid://shopify/Product/10358754050324",
@@ -270,9 +311,10 @@ catalog_products = [
     price_cents: 21_900,
     short_description: "AGM battery with 800 cold-crank amps — start-stop ready, vibration resistant, 4-year warranty.",
     universal: false,
-    fitment_notes: "Group H7/48. Fits F-150, Silverado 1500 and most full-size trucks/SUVs.",
+    fitment_notes: "Group H7/48. Fits F-150, Silverado 1500, RAM 1500 and most full-size trucks.",
     position: "Engine Bay / Battery Tray",
-    matching_vehicles: Vehicle.where(make: %w[Ford Chevrolet], model: ["F-150", "Silverado 1500"])
+    matching_vehicles: Vehicle.where(make: %w[Ford Chevrolet RAM],
+                                     model: ["F-150", "Silverado 1500", "1500"])
   },
   {
     product_id: "gid://shopify/Product/10358754214004",
@@ -443,6 +485,176 @@ catalog_products = [
     fitment_notes: "Fits Tacoma (2016+) 5-ft bed. Custom-molded, no trimming required.",
     position: "Truck Bed",
     matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma")
+  },
+
+  # ---- Каталог волна 3: RAM, Honda, Subaru, Bronco, Silverado ----
+  {
+    product_id: "gid://shopify/Product/10358754214016",
+    product_handle: "apex-airraid-cai-ram-hemi",
+    product_title: "Apex AirRaid Cold Air Intake (RAM 1500 5.7L HEMI)",
+    sku: "APX-CAI-RAM-V8",
+    brand: "Apex Performance",
+    category: "Air Intake",
+    price_cents: 31_900,
+    short_description: "Rotomolded intake with washable filter — sharper HEMI throttle response and a deeper growl.",
+    universal: false,
+    fitment_notes: "Fits RAM 1500 5.7L HEMI (2019+, incl. eTorque). No tune required.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "RAM", model: "1500").where("engine LIKE ?", "%5.7L HEMI%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214017",
+    product_handle: "apex-stealth-catback-ram-hemi",
+    product_title: "Apex Stealth 2.75-Inch Stainless Cat-Back Exhaust (RAM 1500 HEMI)",
+    sku: "APX-EXH-RAM-V8",
+    brand: "Apex Performance",
+    category: "Exhaust",
+    price_cents: 74_900,
+    short_description: "Mandrel-bent T-304 stainless cat-back with aggressive-but-civilized turbo mufflers.",
+    universal: false,
+    fitment_notes: "Fits RAM 1500 5.7L HEMI (2019+). Bolts to factory flanges, keeps rear sensors.",
+    position: "Exhaust / Undercarriage",
+    matching_vehicles: Vehicle.where(make: "RAM", model: "1500").where("engine LIKE ?", "%5.7L HEMI%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214018",
+    product_handle: "apex-trailrunner-leveling-ram-25",
+    product_title: "Apex TrailRunner 2.5-Inch Leveling Kit (RAM 1500 4WD)",
+    sku: "APX-SUSP-LFT-RAM-25",
+    brand: "Apex TrailRunner",
+    category: "Suspension",
+    price_cents: 15_900,
+    short_description: "Billet strut spacers level the RAM's factory rake and clear 35-inch tires.",
+    universal: false,
+    fitment_notes: "Fits RAM 1500 4WD (2019+). Front spacers only; alignment required.",
+    position: "Front Suspension",
+    matching_vehicles: Vehicle.where(make: "RAM", model: "1500", drivetrain: "4WD")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214019",
+    product_handle: "apex-short-ram-intake-civic-15t",
+    product_title: "Apex RaceWerks Short-Ram Intake (Honda Civic 1.5L Turbo)",
+    sku: "APX-CAI-CIV-15T",
+    brand: "Apex RaceWerks",
+    category: "Air Intake",
+    price_cents: 24_900,
+    short_description: "Heat-shielded short-ram with dry filter — +9 hp on the 1.5T, install in an afternoon.",
+    universal: false,
+    fitment_notes: "Fits Civic 1.5L Turbo (2016+, Sedan/Hatchback/Si). No tune required.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Honda", model: "Civic")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214020",
+    product_handle: "apex-racewerks-lowering-springs-civic",
+    product_title: "Apex RaceWerks Progressive Lowering Springs (Honda Civic 1.5T)",
+    sku: "APX-CHP-SPR-CIV",
+    brand: "Apex RaceWerks",
+    category: "Chassis & Handling",
+    price_cents: 27_900,
+    short_description: "Progressive-rate springs drop 1.2 in front / 1.0 in rear — sharper corners, comfortable daily ride.",
+    universal: false,
+    fitment_notes: "Fits Civic Sedan/Hatchback 1.5T (2016+) incl. Si. Keeps stock shocks within travel limits.",
+    position: "Front & Rear Springs",
+    matching_vehicles: Vehicle.where(make: "Honda", model: "Civic")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214021",
+    product_handle: "apex-trailguard-crossbars-outback",
+    product_title: "Apex TrailGuard Aero Crossbars (Subaru Outback)",
+    sku: "APX-EXT-RACK-OUT",
+    brand: "Apex TrailGuard",
+    category: "Exterior & Racks",
+    price_cents: 32_900,
+    short_description: "Low-profile aero crossbars rated 165 lb — mounts boxes, bikes and kayaks without wind whistle.",
+    universal: false,
+    fitment_notes: "Fits Outback (2020+) factory fixed points. Load-rated 165 lb dynamic.",
+    position: "Roof Rails",
+    matching_vehicles: Vehicle.where(make: "Subaru", model: "Outback")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214022",
+    product_handle: "apex-quietstop-pads-outback",
+    product_title: "Apex QuietStop Ceramic Brake Pads (Subaru Outback, front + rear)",
+    sku: "APX-BRK-PAD-OUT",
+    brand: "Apex Performance",
+    category: "Brakes",
+    price_cents: 8_900,
+    short_description: "Front and rear ceramic pad set with hardware — quiet, low-dust stops for a loaded wagon.",
+    universal: false,
+    fitment_notes: "Fits Outback (2015+), front and rear axles. Hardware included.",
+    position: "Front & Rear Axles",
+    matching_vehicles: Vehicle.where(make: "Subaru", model: "Outback")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214023",
+    product_handle: "apex-stage2-cai-bronco-27",
+    product_title: "Apex Stage-2 Cold Air Intake (Ford Bronco 2.7L EcoBoost)",
+    sku: "APX-CAI-BRN-27",
+    brand: "Apex Performance",
+    category: "Air Intake",
+    price_cents: 34_900,
+    short_description: "High-flow sealed intake for the 2.7L EcoBoost — +14 hp, water-resistant for trail crossings.",
+    universal: false,
+    fitment_notes: "Fits Bronco 2.7L EcoBoost (2021+). Hydro-shield prefilter included.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "Bronco").where("engine LIKE ?", "%2.7L EcoBoost%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214024",
+    product_handle: "apex-ultrabeam-pod-kit-bronco",
+    product_title: "Apex UltraBeam 6-Pod Roof Light Kit (Ford Bronco)",
+    sku: "APX-LGT-POD-BRN",
+    brand: "Apex Lighting",
+    category: "Lighting",
+    price_cents: 24_900,
+    short_description: "Six 3-inch pods on a roof-mount plate — 14,400 lm of trail lighting with hidden wiring channels.",
+    universal: false,
+    fitment_notes: "Fits Bronco (2021+) factory roof rack rails. Harness and switch included.",
+    position: "Roof Rack",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "Bronco")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214025",
+    product_handle: "apex-towmaster-hitch-silverado",
+    product_title: "Apex TowMaster Class IV Trailer Hitch (Chevrolet Silverado 1500)",
+    sku: "APX-TOW-HITCH-SLV",
+    brand: "Apex TowMaster",
+    category: "Towing",
+    price_cents: 24_900,
+    short_description: "2-inch Class IV receiver, 12,000 lb GTW — bolt-on with factory mount points and hardware.",
+    universal: false,
+    fitment_notes: "Fits Silverado 1500 (2014+). Pin & clip included; no drilling.",
+    position: "Rear Chassis",
+    matching_vehicles: Vehicle.where(make: "Chevrolet", model: "Silverado 1500")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214026",
+    product_handle: "apex-slotted-front-rotors-mustang-gt",
+    product_title: "Apex Pro Slotted Front Rotors (Mustang GT / Mach 1)",
+    sku: "APX-BRK-ROT-MST",
+    brand: "Apex Performance",
+    category: "Brakes",
+    price_cents: 44_900,
+    short_description: "Directionally slotted G3000 rotors for the Coyote GT — fade-resistant track-day braking.",
+    universal: false,
+    fitment_notes: "Fits Mustang 5.0L V8 (2015+). Sold as a pair; pads sold separately.",
+    position: "Front Axle",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "Mustang").where("engine LIKE ?", "%5.0L%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214027",
+    product_handle: "apex-trailrunner-rear-shocks-tacoma",
+    product_title: "Apex TrailRunner Rear Shocks (Toyota Tacoma 4WD, pair)",
+    sku: "APX-SUSP-SHCK-TAC",
+    brand: "Apex TrailRunner",
+    category: "Suspension",
+    price_cents: 27_900,
+    short_description: "Twin-tube gas rear shocks tuned for loaded trails — pairs with the Baja lift kit.",
+    universal: false,
+    fitment_notes: "Rear pair, Tacoma 4WD (2016+). Fits stock or lifted ride heights 0–3 in.",
+    position: "Rear Suspension",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma", drivetrain: "4WD")
   }
 ]
 
