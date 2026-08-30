@@ -7,6 +7,8 @@
 ### Fitment intelligence for Shopify automotive stores
 
 [![Live App](https://img.shields.io/badge/Live_App-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/)
+[![Install](https://img.shields.io/badge/Install_on_Your_Store-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)
+[![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
 
@@ -16,7 +18,7 @@
 
 Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data to their products. Customers filter the catalog with cascading dropdowns and see **"Guaranteed Exact Fit"** badges on product pages — powered by Shopify App Proxy, Product Metafields, and a Theme App Extension.
 
-**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)**
+**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro)**
 
 ---
 
@@ -48,6 +50,14 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 <img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Fitment rules matrix with 35 product-to-vehicle mappings, sync status, and edit controls" width="100%">
 
+**Widget Configuration**
+
+<img src="demo/autoplay/frames_live/05_settings.png" alt="Widget and Garage configuration with brand color, selector depth, and My Garage settings" width="100%">
+
+**Bulk CSV Import**
+
+<img src="demo/autoplay/frames_live/06_bulk_imports.png" alt="Bulk CSV fitment import with file upload and paste options" width="100%">
+
 </div>
 
 ---
@@ -58,11 +68,19 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
   Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo.mp4">download the .mp4</a>.
 </video>
 
-<sup>85-second narrated walkthrough with AI-generated TTS voiceover · [script](docs/DEMO_SCRIPT.md)</sup>
+<sup>2-minute narrated walkthrough with natural AI voiceover (Edge TTS) · [script](docs/DEMO_SCRIPT.md)</sup>
 
 ---
 
 ## Quick start
+
+### Try it now
+
+**[Open live app →](https://vehicle-selector-pro.fly.dev/)** — click "Install on your store" to connect your Shopify store.
+
+**[Install on your store →](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** — OAuth flow installs the app with all permissions.
+
+### Local development
 
 ```bash
 git clone https://github.com/ai-dev-2024/vehicle-selector-pro.git
