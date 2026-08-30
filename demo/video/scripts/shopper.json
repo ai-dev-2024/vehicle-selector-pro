@@ -1,0 +1,16 @@
+{
+  "title": "Vehicle Selector Pro — Shopper Experience",
+  "voice": "en-US-AriaNeural",
+  "duration_seconds": 140,
+  "scenes": [
+    {"id":"title","frame":null,"capt":null,"narration":"Finding the right part for your exact vehicle — that is what Vehicle Selector Pro does."},
+    {"id":"home","frame":"store_home","capt":"Start with your vehicle","narration":"Everything begins with the selector. Choose the year, the make, the model, and drill into trim and engine. Every drop-down narrows the catalog the moment you pick."},
+    {"id":"collection","frame":"store_collection","capt":"Compatible parts only","narration":"Hit find parts and the collection reshapes itself around your vehicle. No irrelevant rows, no guesswork — just parts that are guaranteed to fit."},
+    {"id":"pdp_exact","frame":"pdp_exact","capt":"Guaranteed exact fit","narration":"Open any product and the fitment badge does the convincing. This intake is a guaranteed exact fit for your truck — verified, stamped, and ready to order."},
+    {"id":"pdp_nofit","frame":"pdp_nofit","capt":"Incompatible, up front","narration":"Incompatible parts fail loud and early. A clear does-not-fit warning stops a bad purchase before checkout, saving returns and support calls."},
+    {"id":"pdp_universal","frame":"pdp_universal","capt":"Universal still works","narration":"And universal accessories stay easy. LED pods and add-ons carry a universal badge, so nothing is left to interpretation."},
+    {"id":"garage","frame":"store_garage","capt":"A garage that remembers","narration":"My Garage remembers every vehicle you own. Switch between a truck and a sedan on any page, without ever starting over."},
+    {"id":"support","frame":"store_support","capt":"Confidence after checkout","narration":"Fitment questions have a real home. Clear support, honest part data, and a 100 percent fitment guarantee behind every order."},
+    {"id":"outro","frame":"store_home","capt":"Built to fit","narration":"Vehicle Selector Pro. The right part for the right vehicle — first time, every time."}
+  ]
+}

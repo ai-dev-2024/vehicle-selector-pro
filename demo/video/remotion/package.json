@@ -1,0 +1,19 @@
+{
+  "name": "vsp-demo-videos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "merchant": "remotion render MerchantDemo out/vehicle-selector-merchant.mp4",
+    "shopper": "remotion render ShopperDemo out/vehicle-selector-shopper.mp4",
+    "both": "npm run merchant & npm run shopper"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.518",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.518"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3"
+  }
+}

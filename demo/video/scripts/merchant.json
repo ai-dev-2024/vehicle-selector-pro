@@ -1,0 +1,15 @@
+{
+  "title": "Vehicle Selector Pro — Merchant Command Center",
+  "voice": "en-US-GuyNeural",
+  "duration_seconds": 150,
+  "scenes": [
+    {"id":"title","frame":null,"capt":null,"narration":"Vehicle Selector Pro. The fitment command center for Shopify automotive stores."},
+    {"id":"dashboard","frame":"admin_overview","capt":"Catalog at a glance","narration":"Open the dashboard and the whole catalog is legible at once. Mapped products, vehicle coverage, rule health, and live sync status in a single view."},
+    {"id":"matrix","frame":"admin_matrix","capt":"Every fitment, one rule","narration":"The fitment matrix says exactly what fits. Every product-to-vehicle mapping, its fit type, and its verification state all live here — direct fit, universal, or held for review."},
+    {"id":"library","frame":"admin_library","capt":"The YMMTE database","narration":"Behind the matrix is the normalized vehicle library. Year, make, model, trim, and engine — the same tree your shoppers will filter by, kept fast with a local cache."},
+    {"id":"settings","frame":"admin_settings","capt":"Brand it to match","narration":"Selector settings ship straight to the Theme App Extension. Labels, brand color, selector depth, garage limits — merchant controlled, no code."},
+    {"id":"imports","frame":"admin_imports","capt":"Import at scale","narration":"Bulk CSV import maps hundreds of products in one pass, staged and reviewed before anything reaches the storefront."},
+    {"id":"sync","frame":"admin_sync","capt":"Sync, proven","narration":"Fitment data syncs to Shopify metafields through GraphQL in Sidekiq batches. Webhooks keep the cache honest — every App Proxy request HMAC-verified."},
+    {"id":"outro","frame":"store_home","capt":"Built to ship","narration":"Vehicle Selector Pro. Fitment intelligence, built for Rails, ready for production."}
+  ]
+}

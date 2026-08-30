@@ -36,18 +36,27 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ## Demo
 
+Two narrated walkthroughs — a merchant command-center tour and the shopper experience — cut from the live app against the shop-drawing redesign, voiced with natural neural narration.
+
 <div align="center">
 
-<video src="demo/Vehicle_Selector_Pro_Demo_v3.mp4" controls width="100%" poster="docs/assets/screenshot-hero.png">
-  Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo_v3.mp4">download the .mp4</a>.
+**For merchants — the fitment command center · 2:09**
+
+<video src="demo/vehicle-selector-pro-merchant.mp4" controls width="100%" poster="demo/vehicle-selector-merchant-poster.png">
+  Your browser does not support the video tag — <a href="demo/vehicle-selector-pro-merchant.mp4">download the .mp4</a>.
 </video>
 
-**[▶ Watch the 2.5-minute walkthrough](demo/Vehicle_Selector_Pro_Demo_v3.mp4)** — real screen recording of the working app with studio AI voiceover and background score · [script](docs/DEMO_SCRIPT.md) · [interactive walkthrough](demo/index.html)
+**For shoppers — from vehicle selector to guaranteed-fit checkout · 2:21**
+
+<video src="demo/vehicle-selector-pro-shopper.mp4" controls width="100%" poster="demo/vehicle-selector-shopper-poster.png">
+  Your browser does not support the video tag — <a href="demo/vehicle-selector-pro-shopper.mp4">download the .mp4</a>.
+</video>
+
+[Merchant ▶ watch](demo/vehicle-selector-pro-merchant.mp4) · [Shopper ▶ watch](demo/vehicle-selector-pro-shopper.mp4) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](demo/index.html)
 
 </div>
 
 ---
-
 ## Features
 
 - **Cascading storefront widget** — Year, Make, Model, Trim, Engine dropdowns driven by HMAC-signed App Proxy queries
