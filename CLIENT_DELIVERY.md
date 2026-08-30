@@ -24,10 +24,11 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
    - Two automated test suites: isolated unit harness (11 runs / 35 assertions) and full-stack integration tests that boot the real app and issue HTTP requests (9 runs / 28 assertions) — all passing.
 
 2. **Live Deployment & Verification**:
-   - **Live link to submit:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
-   - **Install:** `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
-   - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `$app.vehicle_fitment` read-back verified 7/7
-   - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
+    - **Health check:** `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
+    - **Installation:** `https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
+    - **Daily access:** After installation, access via Shopify Admin → Apps → Vehicle Selector Pro (no separate login needed)
+    - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `$app.vehicle_fitment` read-back verified 7/7
+    - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 
 3. **Demo Assets — what to submit:**
    - **Recorded video (2.5 min, narrated):** [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — also at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (raw: `/raw/main/...`) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) · poster `demo/video/frame-000.png`

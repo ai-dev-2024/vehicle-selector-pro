@@ -6,8 +6,6 @@
 
 ### Fitment intelligence for Shopify automotive stores
 
-[![Live App](https://img.shields.io/badge/Live_App-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/)
-[![Install](https://img.shields.io/badge/Install_on_Your_Store-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
@@ -18,7 +16,7 @@
 
 Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data to their products. Customers filter the catalog with cascading dropdowns and see **"Guaranteed Exact Fit"** badges on product pages — powered by Shopify App Proxy, Product Metafields, and a Theme App Extension.
 
-**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro)**
+**[GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)**
 
 ---
 
@@ -74,11 +72,16 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ## Quick start
 
-### Try it now
+### Installation
 
-**[Open live app →](https://vehicle-selector-pro.fly.dev/)** — click "Install on your store" to connect your Shopify store.
+1. **Install the app** on your Shopify store:
+   ```
+   https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com
+   ```
+2. **Approve permissions** when Shopify asks
+3. **Access the app** from Shopify Admin → Apps → Vehicle Selector Pro
 
-**[Install on your store →](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** — OAuth flow installs the app with all permissions.
+The app loads inside your Shopify admin — no separate login needed after installation.
 
 ### Local development
 
