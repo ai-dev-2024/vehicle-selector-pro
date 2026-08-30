@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Vehicle Selector Pro</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#f6f6f7; color:#202223; }
+  .page { width:1280px; height:720px; display:none; position:relative; overflow:hidden; }
+  .page.active { display:flex; }
+
+  /* Scene 1: Hero */
+  .hero { background: linear-gradient(135deg, #008060 0%, #004c3f 100%); color:#fff; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .hero h1 { font-size:56px; font-weight:700; margin-bottom:16px; letter-spacing:-1px; }
+  .hero p { font-size:22px; opacity:0.9; max-width:700px; line-height:1.5; }
+  .hero .badge-row { margin-top:32px; display:flex; gap:12px; }
+  .hero .badge { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:8px; padding:10px 20px; font-size:14px; font-weight:500; }
+
+  /* Scene 2: Storefront */
+  .storefront { background:#fff; flex-direction:column; }
+  .storefront .topbar { background:#008060; color:#fff; padding:14px 40px; font-size:18px; font-weight:600; display:flex; justify-content:space-between; }
+  .storefront .content { display:flex; flex:1; }
+  .storefront .sidebar { width:360px; background:#f6f6f7; padding:28px; border-right:1px solid #e1e3e5; }
+  .storefront .main { flex:1; padding:28px; }
+  .filter-group { margin-bottom:20px; }
+  .filter-group label { display:block; font-size:12px; font-weight:600; text-transform:uppercase; color:#6d7175; margin-bottom:6px; letter-spacing:0.5px; }
+  .filter-group select { width:100%; padding:10px 12px; border:1px solid #c9ccd1; border-radius:8px; font-size:15px; background:#fff; color:#202223; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236d7175' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; }
+  .filter-group select.filled { border-color:#008060; background-color:#f0faf7; }
+  .btn-search { width:100%; padding:12px; background:#008060; color:#fff; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; margin-top:8px; }
+  .product-card { border:1px solid #e1e3e5; border-radius:12px; padding:20px; margin-bottom:16px; display:flex; gap:20px; background:#fff; }
+  .product-img { width:120px; height:120px; background:#e1e3e5; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:40px; }
+  .product-info h3 { font-size:16px; font-weight:600; margin-bottom:4px; }
+  .product-info .sku { font-size:13px; color:#6d7175; margin-bottom:8px; }
+  .badge-fit { display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+  .badge-fit.exact { background:#d4edda; color:#155724; }
+  .badge-fit.none { background:#f8d7da; color:#721c24; }
+  .badge-fit.universal { background:#cce5ff; color:#004085; }
+
+  /* Scene 3: PDP */
+  .pdp { background:#fff; flex-direction:row; }
+  .pdp .gallery { width:500px; background:#f6f6f7; display:flex; align-items:center; justify-content:center; font-size:80px; }
+  .pdp .details { flex:1; padding:40px; }
+  .pdp .details h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .pdp .details .price { font-size:24px; color:#008060; font-weight:600; margin-bottom:16px; }
+  .fitment-badge { padding:14px 20px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center; gap:12px; font-weight:600; font-size:15px; }
+  .fitment-badge.exact { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+  .fitment-badge.none { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+  .fitment-badge .icon { font-size:24px; }
+
+  /* Scene 4: Admin */
+  .admin { background:#f6f6f7; flex-direction:column; }
+  .admin .sidebar-nav { width:240px; background:#1a1a2e; color:#fff; padding:20px 0; position:absolute; left:0; top:0; bottom:0; }
+  .admin .sidebar-nav .logo { padding:0 20px 20px; font-size:16px; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .admin .sidebar-nav .nav-item { padding:10px 20px; font-size:14px; color:rgba(255,255,255,0.6); cursor:pointer; }
+  .admin .sidebar-nav .nav-item.active { background:rgba(255,255,255,0.1); color:#fff; border-left:3px solid #008060; }
+  .admin .main-content { margin-left:240px; padding:28px; flex:1; }
+  .admin .stat-row { display:flex; gap:16px; margin-bottom:24px; }
+  .admin .stat-card { background:#fff; border-radius:10px; padding:20px; flex:1; border:1px solid #e1e3e5; }
+  .admin .stat-card .label { font-size:12px; text-transform:uppercase; color:#6d7175; font-weight:600; letter-spacing:0.5px; }
+  .admin .stat-card .value { font-size:32px; font-weight:700; color:#202223; margin-top:4px; }
+  .admin .stat-card .sub { font-size:13px; color:#008060; margin-top:4px; }
+  .admin table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; border:1px solid #e1e3e5; }
+  .admin th { background:#f6f6f7; padding:12px 16px; text-align:left; font-size:12px; text-transform:uppercase; color:#6d7175; font-weight:600; letter-spacing:0.5px; }
+  .admin td { padding:12px 16px; border-top:1px solid #e1e3e5; font-size:14px; }
+
+  /* Scene 5: Architecture */
+  .arch { background:#0d1117; color:#e6edf3; flex-direction:column; align-items:center; justify-content:center; }
+  .arch h2 { font-size:36px; font-weight:700; margin-bottom:40px; }
+  .arch .diagram { display:flex; gap:40px; align-items:flex-start; }
+  .arch .layer { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:20px; width:220px; }
+  .arch .layer h3 { font-size:14px; font-weight:600; color:#58a6ff; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+  .arch .layer .item { background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:8px 12px; margin-bottom:6px; font-size:13px; }
+  .arch .arrow { color:#58a6ff; font-size:28px; align-self:center; }
+
+  /* Narration overlay */
+  .narration { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.85)); padding:60px 40px 30px; color:#fff; }
+  .narration .scene-title { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#58a6ff; margin-bottom:6px; font-weight:600; }
+  .narration .scene-text { font-size:18px; line-height:1.6; max-width:800px; }
+</style>
+</head>
+<body>
+
+<!-- Scene 1: Hero -->
+<div class="page hero active" id="scene1">
+  <h1>Vehicle Selector Pro</h1>
+  <p>Fitment intelligence for Shopify automotive stores. Year, Make, Model, Trim, Engine — customers find the right part every time.</p>
+  <div class="badge-row">
+    <div class="badge">Ruby on Rails 7.1</div>
+    <div class="badge">Shopify Theme App Extension</div>
+    <div class="badge">GraphQL Admin API</div>
+    <div class="badge">PostgreSQL + Redis</div>
+  </div>
+  <div class="narration">
+    <div class="scene-title">Vehicle Selector Pro</div>
+    <div class="scene-text">A production Shopify application for automotive and specialty-parts merchants. Customers filter by Year, Make, Model, Trim, and Engine — and see Guaranteed Exact Fit badges on product pages.</div>
+  </div>
+</div>
+
+<!-- Scene 2: Storefront Filters -->
+<div class="page storefront" id="scene2">
+  <div class="topbar">
+    <span>Apex Performance Parts</span>
+    <span>🛒 Cart (0)</span>
+  </div>
+  <div class="content">
+    <div class="sidebar">
+      <h3 style="margin-bottom:16px; font-size:16px;">Find Parts for Your Vehicle</h3>
+      <div class="filter-group">
+        <label>Year</label>
+        <select class="filled"><option>2024</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Make</label>
+        <select class="filled"><option>Ford</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Model</label>
+        <select class="filled"><option>F-150</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Trim</label>
+        <select class="filled"><option>Lariat</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Engine</label>
+        <select><option>Select engine...</option></select>
+      </div>
+      <button class="btn-search">Search Compatible Parts</button>
+    </div>
+    <div class="main">
+      <h3 style="margin-bottom:16px;">Compatible Parts (3)</h3>
+      <div class="product-card">
+        <div class="product-img">🔧</div>
+        <div class="product-info">
+          <h3>Apex Cold Air Intake System</h3>
+          <div class="sku">SKU: APX-CAI-35EB · $349.99</div>
+          <span class="badge-fit exact">✓ Guaranteed Exact Fit</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🛞</div>
+        <div class="product-info">
+          <h3>TerraGrip All-Terrain Tires (Set of 4)</h3>
+          <div class="sku">SKU: TGR-AT-27565R18 · $899.99</div>
+          <span class="badge-fit exact">✓ Guaranteed Exact Fit</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">💡</div>
+        <div class="product-info">
+          <h3>LumenX LED Pod Lights</h3>
+          <div class="sku">SKU: LMX-POD-2PACK · $79.99</div>
+          <span class="badge-fit universal">★ Universal Fit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="narration">
+    <div class="scene-title">Cascading Storefront Filters</div>
+    <div class="scene-text">Year cascades into Make, Model, Trim, and Engine. Every selection narrows the results instantly — powered by HMAC-signed App Proxy queries with sub-15ms response times.</div>
+  </div>
+</div>
+
+<!-- Scene 3: Product Page -->
+<div class="page pdp" id="scene3">
+  <div class="gallery">🔧</div>
+  <div class="details">
+    <div style="font-size:13px; color:#6d7175; margin-bottom:8px;">Apex Performance Parts > Engine > Air Intake</div>
+    <h1>Apex Cold Air Intake System</h1>
+    <div class="price">$349.99</div>
+    <div class="fitment-badge exact">
+      <span class="icon">✅</span>
+      <div>
+        <div>Guaranteed Exact Fit for 2024 Ford F-150 Lariat</div>
+        <div style="font-size:13px; font-weight:400; margin-top:4px; opacity:0.8;">Direct bolt-on replacement · Engine Bay · No modifications required</div>
+      </div>
+    </div>
+    <p style="font-size:14px; color:#6d7175; line-height:1.6; margin-bottom:20px;">High-flow cold air intake designed specifically for the 3.5L EcoBoost V6. Increases airflow by 40% over stock. Includes all hardware and installation instructions.</p>
+    <div style="display:flex; gap:12px;">
+      <button style="flex:1; padding:14px; background:#008060; color:#fff; border:none; border-radius:8px; font-size:16px; font-weight:600;">Add to Cart</button>
+      <button style="padding:14px 20px; background:#fff; border:1px solid #c9ccd1; border-radius:8px; font-size:16px;">♡ Save</button>
+    </div>
+  </div>
+  <div class="narration">
+    <div class="scene-title">Product Fitment Badge</div>
+    <div class="scene-text">On the product page, a Guaranteed Exact Fit badge confirms compatibility in real time. Incompatible parts show a clear Does NOT Fit warning — reducing returns and support tickets.</div>
+  </div>
+</div>
+
+<!-- Scene 4: Admin Dashboard -->
+<div class="page admin" id="scene4">
+  <div class="sidebar-nav">
+    <div class="logo">🚗 Vehicle Selector</div>
+    <div class="nav-item active">📊 Dashboard</div>
+    <div class="nav-item">🔗 Fitment Rules</div>
+    <div class="nav-item">🏭 Vehicle Library</div>
+    <div class="nav-item">📥 Bulk Import</div>
+    <div class="nav-item">🔄 Sync Monitor</div>
+    <div class="nav-item">⚙️ Settings</div>
+  </div>
+  <div class="main-content">
+    <h2 style="font-size:22px; margin-bottom:20px;">Dashboard</h2>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="label">Total Vehicles</div>
+        <div class="value">33</div>
+        <div class="sub">Year/Make/Model combinations</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Fitment Rules</div>
+        <div class="value">35</div>
+        <div class="sub">Product-vehicle mappings</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Mapped Products</div>
+        <div class="value">7</div>
+        <div class="sub">With metafield sync</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Last Sync</div>
+        <div class="value" style="font-size:20px;">2 min ago</div>
+        <div class="sub">Sidekiq batch job</div>
+      </div>
+    </div>
+    <h3 style="font-size:15px; margin-bottom:12px;">Recent Fitment Rules</h3>
+    <table>
+      <thead><tr><th>Product</th><th>Vehicle</th><th>Type</th><th>Status</th><th>Synced</th></tr></thead>
+      <tbody>
+        <tr><td>Apex Cold Air Intake</td><td>2024 Ford F-150 Lariat</td><td>Direct Fit</td><td style="color:#008060;">● Active</td><td>✓</td></tr>
+        <tr><td>TerraGrip All-Terrain</td><td>2024 Ford F-150 XLT</td><td>Direct Fit</td><td style="color:#008060;">● Active</td><td>✓</td></tr>
+        <tr><td>Mustang GT Exhaust</td><td>2024 Ford Mustang GT</td><td>Direct Fit</td><td style="color:#008060;">● Active</td><td>✓</td></tr>
+        <tr><td>LumenX LED Pods</td><td>Universal</td><td>Universal</td><td style="color:#008060;">● Active</td><td>✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="narration">
+    <div class="scene-title">Merchant Admin Dashboard</div>
+    <div class="scene-text">Merchants manage fitment rules, vehicle library, and bulk imports from a Polaris-styled dashboard. Sidekiq syncs changes to Shopify Product Metafields in batches of 25.</div>
+  </div>
+</div>
+
+<!-- Scene 5: Architecture -->
+<div class="page arch" id="scene5">
+  <h2>System Architecture</h2>
+  <div class="diagram">
+    <div class="layer">
+      <h3>Storefront</h3>
+      <div class="item">Theme App Extension</div>
+      <div class="item">Vehicle Selector Filter</div>
+      <div class="item">Product Fitment Badge</div>
+      <div class="item">My Garage (localStorage)</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer">
+      <h3>App Proxy</h3>
+      <div class="item">HMAC-SHA256 Verification</div>
+      <div class="item">Rack::Attack Throttling</div>
+      <div class="item">Per-Shop Cache</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer">
+      <h3>Rails 7.1</h3>
+      <div class="item">VehicleFiltersController</div>
+      <div class="item">FitmentSearchService</div>
+      <div class="item">MetafieldSyncService</div>
+      <div class="item">BulkFitmentImporter</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer">
+      <h3>Data Layer</h3>
+      <div class="item">PostgreSQL</div>
+      <div class="item">Redis Cache</div>
+      <div class="item">Sidekiq Jobs</div>
+      <div class="item">Shopify GraphQL API</div>
+    </div>
+  </div>
+  <div class="narration">
+    <div class="scene-title">Production Architecture</div>
+    <div class="scene-text">Multi-tenant by design. Every request verified with HMAC-SHA256. Metafields synced via GraphQL. Deployed on Fly.io with PostgreSQL, Redis, and Sidekiq. Production ready.</div>
+  </div>
+</div>
+
+</body>
+</html>

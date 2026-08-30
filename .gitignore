@@ -80,3 +80,11 @@ infra/redis/fly.toml
 # Node.js demo tooling (puppeteer for video capture)
 node_modules/
 npm-debug.log*
+
+# Demo pipeline intermediate files (regenerable)
+demo/autoplay/temp_segments/
+demo/autoplay/test_output.mp4
+demo/autoplay/frames/01_health.png
+demo/autoplay/frames/03_storefront_filters.png
+demo/autoplay/frames/04_github_repo.png
+demo/autoplay/frames/05_github_readme.png

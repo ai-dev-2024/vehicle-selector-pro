@@ -16,7 +16,7 @@
 
 Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data to their products. Customers filter the catalog with cascading dropdowns and see **"Guaranteed Exact Fit"** badges on product pages — powered by Shopify App Proxy, Product Metafields, and a Theme App Extension.
 
-**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[2.5 min demo video](#demo)** · **[Setup guide](docs/SETUP.md)**
+**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)**
 
 ---
 
@@ -32,13 +32,37 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ---
 
+## Screenshots
+
+<div align="center">
+
+**Storefront — Cascading Filters & Product Results**
+
+<img src="docs/assets/screenshot-storefront.png" alt="Storefront with cascading Year/Make/Model filters and product results with fitment badges" width="100%">
+
+**Product Page — Guaranteed Exact Fit Badge**
+
+<img src="docs/assets/screenshot-pdp.png" alt="Product detail page showing Guaranteed Exact Fit badge for 2024 Ford F-150 Lariat" width="100%">
+
+**Merchant Admin Dashboard**
+
+<img src="docs/assets/screenshot-admin.png" alt="Admin dashboard with fitment stats, vehicle count, and recent rules table" width="100%">
+
+**System Architecture**
+
+<img src="docs/assets/screenshot-architecture.png" alt="Architecture diagram: Storefront → App Proxy → Rails 7.1 → Data Layer" width="100%">
+
+</div>
+
+---
+
 ## Demo
 
-<video src="demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm" controls width="100%" poster="demo/video/frame-000.png">
-  Your browser does not support the video tag — <a href="demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm">download the .webm</a> or <a href="https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm">watch on GitHub</a>.
+<video src="demo/Vehicle_Selector_Pro_Demo.mp4" controls width="100%" poster="docs/assets/screenshot-hero.png">
+  Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo.mp4">download the .mp4</a>.
 </video>
 
-<sup>2.5-minute narrated walkthrough · [script](docs/DEMO_SCRIPT.md) · [raw video](https://github.com/ai-dev-2024/vehicle-selector-pro/raw/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm)</sup>
+<sup>70-second narrated walkthrough with AI-generated TTS voiceover · [script](docs/DEMO_SCRIPT.md)</sup>
 
 ---
 

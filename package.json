@@ -12,9 +12,15 @@
     "type": "git",
     "url": "git+https://github.com/ai-dev-2024/vehicle-selector-pro.git"
   },
-  "keywords": ["shopify", "rails", "vehicle-fitment", "demo"],
+  "keywords": [
+    "shopify",
+    "rails",
+    "vehicle-fitment",
+    "demo"
+  ],
   "homepage": "https://github.com/ai-dev-2024/vehicle-selector-pro#readme",
   "dependencies": {
+    "playwright": "^1.62.1",
     "puppeteer": "^25.9.0"
   },
   "allowScripts": {
