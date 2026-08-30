@@ -1,0 +1,38 @@
+[
+  {
+    "name": "01_dashboard",
+    "title": "Admin Dashboard",
+    "narrate": "Vehicle Selector Pro. The merchant dashboard shows catalog coverage at a glance — 7 mapped products, 100 percent vehicle coverage, 29 YMMTE configurations, and zero items needing review.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\01_dashboard.png"
+  },
+  {
+    "name": "02_vehicles",
+    "title": "Vehicle Library",
+    "narrate": "The vehicle library is the normalized cache behind every storefront dropdown. 33 vehicles across BMW, Chevrolet, Ford, and Jeep — each with Year, Make, Model, Trim, and Engine data, mapped parts, and drivetrain info.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\02_vehicles.png"
+  },
+  {
+    "name": "03_fitment_rules",
+    "title": "Fitment Rules Matrix",
+    "narrate": "Merchants manage fitment rules in the admin. Every product-to-vehicle mapping is a row in the matrix — with sync status, fitment type, and notes. Rules ship live. Incomplete data stays flagged for review.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\03_fitment_rules.png"
+  },
+  {
+    "name": "05_settings",
+    "title": "Widget Configuration",
+    "narrate": "Merchants customize the storefront widget — header title, brand color, subtitle, button labels, and cascading selector depth. Toggle trim and engine selectors independently. Configure My Garage customer features.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\05_settings.png"
+  },
+  {
+    "name": "06_bulk_imports",
+    "title": "Bulk CSV Import",
+    "narrate": "Import thousands of vehicle-to-product compatibility mappings at once. Upload a CSV file or paste raw CSV text. Download the template to get started.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\06_bulk_imports.png"
+  },
+  {
+    "name": "09_github_features",
+    "title": "Open Source on GitHub",
+    "narrate": "Vehicle Selector Pro is open source under the MIT license. Built with Ruby on Rails 7.1, PostgreSQL, Sidekiq, and deployed on Fly.io. HMAC-SHA256 verified on every request. Production ready.",
+    "img": "C:\\Users\\Muhib\\Desktop\\Projects\\Vehicle Selector Pro\\demo\\autoplay\\frames_live\\09_github_features.png"
+  }
+]

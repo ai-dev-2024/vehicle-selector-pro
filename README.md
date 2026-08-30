@@ -36,21 +36,17 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 <div align="center">
 
-**Storefront — Cascading Filters & Product Results**
-
-<img src="docs/assets/screenshot-storefront.png" alt="Storefront with cascading Year/Make/Model filters and product results with fitment badges" width="100%">
-
-**Product Page — Guaranteed Exact Fit Badge**
-
-<img src="docs/assets/screenshot-pdp.png" alt="Product detail page showing Guaranteed Exact Fit badge for 2024 Ford F-150 Lariat" width="100%">
-
 **Merchant Admin Dashboard**
 
-<img src="docs/assets/screenshot-admin.png" alt="Admin dashboard with fitment stats, vehicle count, and recent rules table" width="100%">
+<img src="demo/autoplay/frames_live/01_dashboard.png" alt="Admin dashboard with 100% catalog coverage, 7 mapped products, and live sync status" width="100%">
 
-**System Architecture**
+**Vehicle Library (YMMTE Database)**
 
-<img src="docs/assets/screenshot-architecture.png" alt="Architecture diagram: Storefront → App Proxy → Rails 7.1 → Data Layer" width="100%">
+<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Vehicle database with 33 vehicles across BMW, Chevrolet, Ford, and Jeep with cascading filters" width="100%">
+
+**Product Fitment Matrix**
+
+<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Fitment rules matrix with 35 product-to-vehicle mappings, sync status, and edit controls" width="100%">
 
 </div>
 
@@ -62,7 +58,7 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
   Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo.mp4">download the .mp4</a>.
 </video>
 
-<sup>70-second narrated walkthrough with AI-generated TTS voiceover · [script](docs/DEMO_SCRIPT.md)</sup>
+<sup>85-second narrated walkthrough with AI-generated TTS voiceover · [script](docs/DEMO_SCRIPT.md)</sup>
 
 ---
 
