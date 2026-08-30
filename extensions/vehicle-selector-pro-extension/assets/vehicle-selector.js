@@ -8,7 +8,11 @@
 
   const STORAGE_KEY_ACTIVE = 'vsp_active_vehicle';
   const STORAGE_KEY_GARAGE = 'vsp_customer_garage';
-  const PROXY_BASE_URL = '/apps/vehicle-selector';
+  // On a real storefront, Shopify's App Proxy signs requests to
+  // /apps/vehicle-selector. On the public /demo pages (served directly by the
+  // Rails app, no proxy in between), the widget uses the read-only demo API.
+  const ON_DEMO_PAGE = window.location.pathname.startsWith('/demo');
+  const PROXY_BASE_URL = ON_DEMO_PAGE ? '/demo/api' : '/apps/vehicle-selector';
 
   class VehicleSelectorClient {
     constructor() {
@@ -248,7 +252,10 @@
           const collectionHandle = widget.dataset.collectionHandle || 'all';
           const token = `${selected.year}|${selected.make.toLowerCase()}|${selected.model.toLowerCase()}`;
 
-          const targetUrl = `/collections/${collectionHandle}?${encodeURIComponent(filterParam)}=${encodeURIComponent(token)}`;
+          // On the public demo site, results render at /demo/collection
+          // (the Shopify /collections/... path only exists inside a theme).
+          const basePath = ON_DEMO_PAGE ? '/demo/collection' : `/collections/${collectionHandle}`;
+          const targetUrl = `${basePath}?${encodeURIComponent(filterParam)}=${encodeURIComponent(token)}`;
           window.location.href = targetUrl;
         });
       }

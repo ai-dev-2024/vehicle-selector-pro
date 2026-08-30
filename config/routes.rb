@@ -96,6 +96,20 @@ Rails.application.routes.draw do
   get 'demo/admin', to: 'storefront_preview#admin_dashboard'
   get 'demo/admin/sync', to: 'storefront_preview#admin_sync'
 
+  # Public read-only JSON API for the demo storefront widget. The real
+  # storefront uses the HMAC-signed App Proxy; the demo is served directly by
+  # Rails so it needs its own unauthenticated-but-demo-scoped endpoints.
+  namespace :demo, path: 'demo/api' do
+    get 'years', to: '/demo_api#years'
+    get 'makes', to: '/demo_api#makes'
+    get 'models', to: '/demo_api#models'
+    get 'trims', to: '/demo_api#trims'
+    get 'engines', to: '/demo_api#engines'
+    get 'search', to: '/demo_api#search_products'
+    get 'check_fitment', to: '/demo_api#check_fitment'
+    get 'product_fitments', to: '/demo_api#product_fitments'
+  end
+
   # Theme App Extension widget assets used by the demo pages. Filenames are
   # sanitized with File.basename and served read-only from the bundled
   # extension assets directory, so this is safe to expose in production.
