@@ -11,15 +11,21 @@
 <div class="sp-section-title">Featured Parts <span style="color:#6d7175; font-weight:500; font-size:13px;">— fitment badges update live when you select a vehicle</span></div>
 
 <div class="sp-grid">
-  <% category_icons = {
-       "Air Intake" => "🌪️", "Brakes" => "🛑", "Suspension" => "🏔️",
-       "Exhaust" => "💨", "Bumpers & Armor" => "🛡️", "Lighting" => "💡",
-       "Chassis & Handling" => "🏁"
+  <% product_images = {
+       "APX-CAI-F150-EB"  => "/demo-products/intake.jpg",
+       "APX-BRK-HD-TRK"   => "/demo-products/brakes.jpg",
+       "APX-SUSP-TACO-3IN" => "/demo-products/suspension.jpg",
+       "APX-EXH-MUST-V8"  => "/demo-products/exhaust.jpg",
+       "APX-BMP-JL-001"   => "/demo-products/bumper.jpg",
+       "APX-LGT-UNIV-POD" => "/demo-products/led-pods.jpg",
+       "APX-STRUT-G20-CF" => "/demo-products/strut-brace.jpg"
      } %>
   <% @products.each do |p| %>
     <div class="sp-card">
       <div class="sp-card-img">
-        <span><%= category_icons[p[:category]] || "⚙️" %></span>
+        <% if product_images[p[:sku]] %>
+          <img src="<%= product_images[p[:sku]] %>" alt="<%= p[:title] %>" class="sp-card-photo" loading="lazy">
+        <% end %>
         <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
       </div>
       <div class="sp-card-body">

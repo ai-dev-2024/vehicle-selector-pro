@@ -12,22 +12,29 @@
   <div class="sp-results-banner">
     ✔ Showing parts that fit your <strong><%= @vehicle[:display_name] %></strong>
     — <strong><%= @products.size %></strong> matching part<%= 's' unless @products.size == 1 %>
-    <a href="/storefront_preview" style="float:right; color:#14532d;">Clear vehicle</a>
+    <% home_path = request.path.start_with?('/demo') ? '/demo' : '/storefront_preview' %>
+    <a href="<%= home_path %>" style="float:right; color:#14532d;">Clear vehicle</a>
   </div>
 
   <div class="sp-section-title">Compatible Parts for <%= @vehicle[:display_name] %></div>
 
   <div class="sp-grid">
-    <% category_icons = {
-         "Air Intake" => "🌪️", "Brakes" => "🛑", "Suspension" => "🏔️",
-         "Exhaust" => "💨", "Bumpers & Armor" => "🛡️", "Lighting" => "💡",
-         "Chassis & Handling" => "🏁"
+    <% product_images = {
+         "APX-CAI-F150-EB"  => "/demo-products/intake.jpg",
+         "APX-BRK-HD-TRK"   => "/demo-products/brakes.jpg",
+         "APX-SUSP-TACO-3IN" => "/demo-products/suspension.jpg",
+         "APX-EXH-MUST-V8"  => "/demo-products/exhaust.jpg",
+         "APX-BMP-JL-001"   => "/demo-products/bumper.jpg",
+         "APX-LGT-UNIV-POD" => "/demo-products/led-pods.jpg",
+         "APX-STRUT-G20-CF" => "/demo-products/strut-brace.jpg"
        } %>
     <% if @products.any? %>
       <% @products.each do |p| %>
         <div class="sp-card">
           <div class="sp-card-img">
-            <span><%= category_icons[p[:category]] || "⚙️" %></span>
+            <% if product_images[p[:sku]] %>
+              <img src="<%= product_images[p[:sku]] %>" alt="<%= p[:product_title] %>" class="sp-card-photo" loading="lazy">
+            <% end %>
             <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
           </div>
           <div class="sp-card-body">
