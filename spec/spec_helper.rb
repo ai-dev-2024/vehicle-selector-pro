@@ -12,6 +12,7 @@ class Object
     respond_to?(:empty?) ? !!empty? : !self
   end
 
+  # rubocop:disable-next Rails/Present -- this IS the definition of present?
   def present?
     !blank?
   end

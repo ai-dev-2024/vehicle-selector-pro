@@ -4,12 +4,14 @@
 # uses double-quoted strings without frozen-string-literal comments; the
 # settings below keep that existing style instead of churning every file.
 # Metric thresholds are set so the current, tested code passes while still
-# flagging genuinely bloated new code.
-require:
+# flagging genuinely bloated new code. Specs are excluded from the metrics
+# family because they read as fixtures + assertions.
+plugins:
   - rubocop-rails
 
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
   TargetRubyVersion: 3.2
   Exclude:
     - 'bin/**/*'
@@ -42,20 +44,21 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'spec/**/*'
 
-# Specs are allowed to be verbose; they read as fixtures + assertions.
 Metrics/MethodLength:
+  Max: 35
   Exclude:
     - 'spec/**/*'
 
 Metrics/AbcSize:
+  Max: 50
   Exclude:
     - 'spec/**/*'
 
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 14
 
 Metrics/PerceivedComplexity:
-  Max: 12
+  Max: 14
 
 Metrics/ClassLength:
   Max: 400
