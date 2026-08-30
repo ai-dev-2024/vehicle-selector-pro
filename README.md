@@ -12,6 +12,7 @@
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
+[![Buy me a coffee](https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?style=flat-square&logo=kofi&logoColor=white)](https://ko-fi.com/ai_dev_2024)
 
 </div>
 
@@ -25,12 +26,17 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 | | | | |
 |---|---|---|---|
-| **33** YMMTE configurations | **143** verified fitments | **28** mapped products | **5** brands represented |
+| **48** YMMTE configurations | **204** verified fitments | **40** mapped products | **8** brands represented |
 
 </div>
 
 
 > **Installing on your own store** — this is a custom (unlisted) app, so Shopify requires installation through the Partners distribution link. Open an issue or request access and we will generate an install link for your store. The live demo above needs no installation.
+
+---
+
+> **Built entirely with free AI tools.** This project was designed, coded, and documented using no-cost AI assistance end to end — no paid AI models or paid tools were used anywhere in its development. Everything you see was produced with accessible, free tooling, which is why the potential for further growth is so large: with paid, frontier AI models and commercial tooling, this foundation can be extended into a far richer, production-grade solution with ease.
+
 
 ---
 
@@ -238,6 +244,18 @@ Then open `http://localhost:3000` for the admin dashboard, or `http://localhost:
 | [App Store submission](docs/APP_STORE_SUBMISSION.md) | Partners Dashboard steps, listing copy, review notes |
 | [Demo script](docs/DEMO_SCRIPT.md) | Voiceover narration for the walkthrough video |
 | [Changelog](CHANGELOG.md) | Release history |
+
+---
+
+## Support
+
+If the demo or the project saved you time or inspired an idea, you can **buy me a coffee** — it fuels more free, open development like this.
+
+<div align="center">
+
+[![Buy me a coffee](https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?style=flat-square&logo=kofi&logoColor=white)](https://ko-fi.com/ai_dev_2024) &nbsp; https://ko-fi.com/ai_dev_2024
+
+</div>
 
 ---
 

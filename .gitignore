@@ -96,3 +96,7 @@ demo/autoplay/frames/05_github_readme.png
 # Agent/tooling working directories (not project source)
 .freebuff/
 .playwright-mcp/
+
+# Client-facing report deliverables (generated via scripts/make_reports.py —
+# sent to the client separately, not part of the codebase)
+/out/
