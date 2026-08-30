@@ -1,6 +1,11 @@
 module Admin
   class BaseController < ApplicationController
-    include ShopifyApp::EnsureInstalled
+    # Session-based auth, NOT EnsureInstalled: EnsureInstalled only proves the
+    # app is installed on the shop named in params[:shop] — any visitor could
+    # pass ?shop=<domain> and reach every admin action. EnsureHasSession (via
+    # LoginProtection) requires a verified OAuth/JWT session for that shop, so
+    # the two concerns must never be mixed (the gem raises if they are).
+    include ShopifyApp::EnsureHasSession
 
     layout "embedded_app"
     before_action :set_current_shop
@@ -14,29 +19,24 @@ module Admin
     private
 
     def set_current_shop
-      # ShopifyApp gem sets session via JWT/session; fallback to params for App Bridge fetches
-      shop_domain = params[:shop] || session[:shopify_domain] || session[:shop_domain] || request.headers["X-Shopify-Shop-Domain"] || ENV.fetch(
-        "SHOPIFY_STORE_DOMAIN", nil
-      )
-
-      @current_shop = Shop.active.find_by(shopify_domain: shop_domain) if shop_domain.present?
+      # Derive the shop ONLY from the verified session — never from params,
+      # headers or ENV, which a caller controls.
+      domain = current_shopify_session&.shop&.to_s
+      @current_shop = domain && Shop.active.find_by(shopify_domain: domain)
 
       return if @current_shop
 
-      if Rails.env.local?
-        # Dev/test convenience: use first shop or seed a demo shop
-        @current_shop = Shop.active.first || Shop.first
-        @current_shop ||= Shop.create!(
-          shopify_domain: "apex-performance-parts.myshopify.com",
-          shopify_token: "dev_token_placeholder",
-          name: "Apex Performance Auto"
-        )
-      else
-        # In production, enforce Shopify authentication
-        redirect_to "/login?shop=#{shop_domain}" and return if shop_domain.present?
+      redirect_to "/login" and return unless Rails.env.local?
 
-        redirect_to "/login" and return
-      end
+      # Dev/test convenience: use first shop or seed a demo shop
+      # rubocop:disable Naming/MemoizedInstanceVariableName -- @current_shop is the conventional name read by every action
+      @current_shop = Shop.active.first || Shop.first
+      @current_shop ||= Shop.create!(
+        shopify_domain: "apex-performance-parts.myshopify.com",
+        shopify_token: "dev_token_placeholder",
+        name: "Apex Performance Auto"
+      )
+      # rubocop:enable Naming/MemoizedInstanceVariableName
     end
   end
 end

@@ -1,5 +1,5 @@
 class VehicleHierarchyService
-  GLOBAL_CACHE_KEY = "vsp/global_ymm_tree"
+  GLOBAL_CACHE_KEY = "vsp/global_ymm_tree".freeze
 
   def self.invalidate_global_cache
     Rails.cache.delete(GLOBAL_CACHE_KEY)
@@ -23,9 +23,9 @@ class VehicleHierarchyService
     end
 
     # De-duplicate arrays
-    tree.each do |_yr, makes|
-      makes.each do |_mk, models|
-        models.each do |_mdl, specs|
+    tree.each_value do |makes|
+      makes.each_value do |models|
+        models.each_value do |specs|
           specs[:trims].uniq!
           specs[:engines].uniq!
         end

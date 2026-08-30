@@ -5,7 +5,7 @@ require "json"
 module Shopify
   class GraphQLClient
     MAX_RETRIES = 3
-    DEFAULT_API_VERSION = "2025-07"
+    DEFAULT_API_VERSION = "2025-07".freeze
 
     attr_reader :shop, :api_version
 
@@ -71,7 +71,7 @@ module Shopify
           return execute_with_retry(query_string, variables, attempts + 1)
         end
 
-        error_messages = parsed["errors"].map { |e| e["message"] }.join("; ")
+        error_messages = parsed["errors"].pluck("message").join("; ")
         raise GraphQLError, "GraphQL Errors: #{error_messages}"
       end
 
@@ -91,10 +91,16 @@ module Shopify
     def handle_throttle(attempts, query_string, variables)
       raise ThrottledError, "Shopify API rate limit exceeded for #{@shop.shopify_domain}" unless attempts < MAX_RETRIES
 
-      backoff = 2**(attempts + 1)
-      Rails.logger.warn("[ShopifyGraphQL Throttle] Received 429 for #{@shop.shopify_domain}. Backing off #{backoff}s...")
+      backoff = jittered_backoff(attempts)
+      Rails.logger.warn("[ShopifyGraphQL Throttle] Received 429 for #{@shop.shopify_domain}. Backing off #{backoff.round(1)}s...")
       sleep(backoff)
       execute_with_retry(query_string, variables, attempts + 1)
+    end
+
+    # Exponential backoff with jitter so concurrent jobs don't retry in lockstep
+    # and re-throttle together.
+    def jittered_backoff(attempts, base: 2.0)
+      base**(attempts + 1) * (1.0 + rand * 0.5)
     end
 
     def extract_restore_rate(parsed)
