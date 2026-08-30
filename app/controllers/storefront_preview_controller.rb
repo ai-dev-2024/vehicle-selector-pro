@@ -72,11 +72,11 @@ class StorefrontPreviewController < ApplicationController
     render layout: "storefront_preview"
   end
 
-  private
-
   # Dev-only renders of the REAL admin views (same templates + data the
-  # authenticated admin sees), used for demos/screenshots. The real /admin
-  # routes keep their embedded-session requirement unchanged.
+  # authenticated admin sees), used for demos/screenshots. These are dispatched
+  # by the /demo/admin* routes, so they must stay PUBLIC actions — Rails raises
+  # AbstractController::ActionNotFound for private ones. The real /admin routes
+  # keep their embedded-session requirement unchanged.
   def admin_dashboard
     @current_shop = shop
     @total_fitments = shop.vehicle_product_fitments.count
@@ -130,52 +130,5 @@ class StorefrontPreviewController < ApplicationController
     @current_shop = shop
     @recent_fitments_count = shop.vehicle_product_fitments.count
     render template: "admin/bulk_imports/index", layout: "embedded_app"
-  end
-
-  def render_demo_404
-    html = '<p style="padding:48px;text-align:center;font-family:sans-serif">' \
-           'Product not found. <a href="/demo">Back to shop</a></p>'
-    # rubocop:disable-next Rails/OutputSafety -- fixed demo string, no user input
-    render html: html.html_safe, layout: false, status: :not_found
-  end
-
-  def shop
-    @shop ||= DemoShopResolver.resolve
-  end
-
-  def compatible_fitments(product_id)
-    return [] unless shop
-
-    shop.vehicle_product_fitments.includes(:vehicle)
-        .where(product_id: product_id)
-        .map { |f| f.universal_fit? ? "Universal — fits all vehicles" : f.vehicle&.display_name }
-        .compact.uniq
-  end
-
-  def distinct_products
-    seen = {}
-    (shop&.vehicle_product_fitments || []).each do |f|
-      next if f.product_id.blank?
-
-      seen[f.product_id] ||= {
-        product_id: f.product_id,
-        title: f.product_title.presence || f.product_id,
-        sku: f.sku,
-        brand: f.brand,
-        category: f.category,
-        price_cents: f.price_cents,
-        short_description: f.short_description,
-        universal: f.universal_fit?,
-        image: DEMO_PRODUCT_IMAGES[f.sku]
-      }
-    end
-    seen.values
-  end
-
-  # Capitalize alphabetic words while keeping separators intact, so that a
-  # lowercased filter token like "f-150" renders as "F-150" (titleize would
-  # incorrectly produce "F 150").
-  def pretty_case(value)
-    value.to_s.split(/(\W+)/).map { |part| part =~ /\A[a-z]/ ? part.capitalize : part }.join.presence
   end
 end
