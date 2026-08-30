@@ -46,7 +46,7 @@ secrets/
 .DS_Store
 Thumbs.db
 
-# Ignore demo video frames
+# Ignore demo video frames (generated via npm run capture)
 demo/video/frame-*.png
 
 # Ignore IDE files
@@ -73,6 +73,9 @@ flyctl.exe
 
 # Redis infra config contains a generated password
 infra/redis/fly.toml
+
+# Shopify CLI bundle (regenerated via shopify app deploy)
+.shopify/
 
 # Node.js demo tooling (puppeteer for video capture)
 node_modules/

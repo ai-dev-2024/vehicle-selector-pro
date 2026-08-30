@@ -17,7 +17,7 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-org/vehicle-selector-pro.git
+git clone https://github.com/ai-dev-2024/vehicle-selector-pro.git
 cd vehicle-selector-pro
 ```
 
@@ -39,14 +39,17 @@ bundle exec rake db:seed
 ```
 
 ### 4. Configure Environment Variables
-Create a `.env` file in the project root:
+Create a `.env` file in the project root (see `.env.example`):
 ```env
-SHOPIFY_API_KEY=your_shopify_api_key
-SHOPIFY_API_SECRET=your_shopify_api_secret
-SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-HOST=https://your-app-url.com
-REDIS_URL=redis://localhost:6379/1
+SHOPIFY_API_KEY=your_api_key_here   # from partners.shopify.com → Apps → Client ID (see .env.example)
+SHOPIFY_API_SECRET=your_api_secret_here # from Partners Dashboard — never commit real value
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com  # e.g. vehicle-selector-pro.myshopify.com
+HOST=http://localhost:3000
+# Production only (Fly secrets): DATABASE_URL, REDIS_URL, SECRET_KEY_BASE, ACTIVE_RECORD_ENCRYPTION_* 
 ```
+Generate `HOST` as your ngrok URL for local tunnels (`ngrok http 3000`) or keep `http://localhost:3000` for `storefront_preview` (bypasses HMAC with `?skip_proxy_verify=true` in dev). For full parsing run `bundle exec rails db:prepare db:seed` which loads 33 vehicles + 35 fitments.
+
+**Sidekiq is required** for metafield sync & webhooks — run `bundle exec sidekiq -C config/sidekiq.yml` alongside `rails server` (otherwise `VehicleProductFitment` after_commit enqueue silently warns).
 
 ### 5. Start Local Development Servers
 

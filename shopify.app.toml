@@ -22,7 +22,7 @@ access.admin = "merchant_read_write"
 redirect_urls = [ "https://vehicle-selector-pro.fly.dev/auth/shopify/callback" ]
 
 [webhooks]
-api_version = "2026-07"
+api_version = "2025-07"
 
   [[webhooks.subscriptions]]
   uri = "/webhooks/products_create"

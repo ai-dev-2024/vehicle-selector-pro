@@ -21,7 +21,7 @@ present in code.
 | 8 | Webhooks async via ActiveJob + Sidekiq | ✅ Verified | Signed POST → 200; tampered → 401; `Webhooks::ProductsUpdateJob` performed by Sidekiq (webhooks queue, 130 ms) |
 | 9 | Git repo with app + extension | ✅ Verified | This repository |
 | 10 | README with setup instructions | ✅ Verified | `README.md` + `docs/SETUP.md` + `docs/DEPLOYMENT.md` |
-| 11 | 2–3 min screen recording | ⏳ In progress | Narrated walkthrough assembled from live app captures → `demo/video/` |
+| 11 | 2–3 min screen recording | ✅ Verified | Narrated 2.5-min walkthrough `demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (10 MB, tracked) + `docs/DEMO_SCRIPT.md` matches video — playable at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` and locally via `demo/index.html` / `storefront_preview` |
 
 ## Test evidence
 

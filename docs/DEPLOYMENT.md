@@ -51,9 +51,8 @@ flyctl postgres attach vehicle-selector-pro-db -a vehicle-selector-pro
 ### Redis (for Sidekiq + Rails cache)
 
 Fly's managed Upstash Redis requires interactive prompts; a plain Redis app on
-the private network is simpler and fully scriptable. Config lives in
-[`infra/redis/fly.toml`](../infra/redis/fly.toml) (a committed example with a
-placeholder password is at `infra/redis/fly.toml.example`):
+the private network is simpler and fully scriptable. Config lives in `infra/redis/fly.toml` (gitignored — holds real password) — a committed template with
+placeholder is at [`infra/redis/fly.toml.example`](../infra/redis/fly.toml.example):
 
 ```bash
 # 1. Generate a password and put it in infra/redis/fly.toml (keep it out of git)
@@ -195,10 +194,7 @@ flyctl machine run registry.fly.io/vehicle-selector-pro:<image-tag> \
 
 ### Autoscaling behaviour
 
-`auto_stop_machines = true` with `min_machines_running = 0` stops idle web
-machines; Shopify requests (OAuth, webhooks, proxy) auto-start them. First
-request after idle pays a ~2–4s cold start. For production traffic set
-`min_machines_running = 1`.
+`fly.toml:19` is `min_machines_running = 1` (always warm — avoids 2–4s cold start on OAuth/webhooks). Set `0` only to save cost on idle dev (`auto_stop_machines = true` / `auto_start_machines = true`); first request then pays the cold-start latency.
 
 ### Costs (approximate, shared instances)
 

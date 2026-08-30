@@ -10,7 +10,7 @@
 
 <br>
 
-[![Live App](https://img.shields.io/badge/Live_App-vehicle--selector--pro.fly.dev-008060?style=for-the-badge&logo=flydotio&logoColor=white)](https://vehicle-selector-pro.fly.dev/up)
+[![Live App](https://img.shields.io/badge/Live_App-vehicle--selector--pro.fly.dev-008060?style=for-the-badge&logo=flydotio&logoColor=white)](https://vehicle-selector-pro.fly.dev/)
 [![Health Check](https://img.shields.io/badge/Health-OK-008060?style=for-the-badge&logo=statuspage&logoColor=white)](https://vehicle-selector-pro.fly.dev/up)
 [![Tests](https://img.shields.io/badge/Tests-11_unit_%2B_9_integration_passing-008060?style=for-the-badge&logo=minitest&logoColor=white)](#-testing)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=for-the-badge&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
@@ -36,12 +36,27 @@ This repository is a complete, deployed, end-to-end implementation — not a pro
 
 | Evidence | Where |
 |---|---|
-| Live app (web + Sidekiq worker + Postgres + Redis) | https://vehicle-selector-pro.fly.dev/up |
+| **Live app (Puma + Sidekiq + Postgres + Redis)** | **https://vehicle-selector-pro.fly.dev — [`/up`](https://vehicle-selector-pro.fly.dev/up) returns `{"status":"ok"}`** |
+| ▶ **2.5-min demo video (narrated)** | [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — [watch on GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) · [script](docs/DEMO_SCRIPT.md) |
 | App Proxy endpoints verified with real HMAC signatures | [API reference](#-app-proxy-api-reference) |
 | OAuth install on a real Shopify development store | `vehicle-selector-pro.myshopify.com` |
 | Metafields written to 7 real products (35 fitment records) | GraphQL `metafieldsSet` |
 | Async webhook processing (HMAC-verified → Sidekiq) | `Webhooks::` controllers + jobs |
 | Automated test suites (unit + full-stack integration) | [Testing](#-testing) |
+
+---
+
+## 🎬 Live demo — what to submit to the client
+
+> **Live link:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}`  
+> **Dev store:** `vehicle-selector-pro.myshopify.com` — install via `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com`  
+> **Video (2.5 min, narrated):** [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — raw: `https://github.com/ai-dev-2024/vehicle-selector-pro/raw/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` · script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md)
+
+<video src="demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm" controls muted width="100%" poster="demo/video/frame-000.png">
+  Your browser does not support the video tag — <a href="demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm">download the .webm</a> or <a href="https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm">watch on GitHub</a>.
+</video>
+
+*If the embed does not play on GitHub, open the [raw video link](https://github.com/ai-dev-2024/vehicle-selector-pro/raw/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) and use the **Play 2.5-min walkthrough** button in `demo/index.html` (local `http://localhost:3000/storefront_preview` + `admin_preview`).*
 
 ---
 
@@ -60,6 +75,26 @@ This repository is a complete, deployed, end-to-end implementation — not a pro
 | **Hardened App Proxy** | HMAC-SHA256 signature verification (constant-time compare), Rack::Attack throttling, cache versioning per shop |
 
 </div>
+
+---
+
+## 🏪 Production readiness — what reviewers (and clients) look for
+
+Inspired by the 2026 App Store fitment checklist (Fyresite, VFitz, Convermax) and [Shopify Theme App Extension](https://shopify.dev/docs/apps/build/online-store/theme-app-extensions) + [App Proxy](https://shopify.dev/docs/apps/build/online-store/app-proxies) docs:
+
+| Checklist | How this repo does it | Why it matters |
+|---|---|---|
+| **No ScriptTag — 100% Theme App Extension** | `extensions/vehicle-selector-pro-extension/` — 2 app blocks (`vehicle_selector_filter.liquid`, `product_fitment_badge.liquid`) + vanilla `vehicle-selector.js` (no external CDN), targets `section` per Shopify `2025-07` | App Store rejects ScriptTag; theme blocks are the only OS 2.0 path |
+| **Structured metafields, not tags/titles** | `$app.vehicle_fitment` JSON via `metafieldsSet` batches of 25 (`services/shopify/metafield_sync_service.rb`), normalized PG cache `vehicles`/`vehicle_product_fitments` with compound YMMTE indexes | Tags in titles fail at 5k SKUs — metafields are filterable + ownable data |
+| **Persistent My Garage** | `localStorage` `vsp_active_vehicle` + `vsp_customer_garage` (max 5) with `vsp:vehicleChanged` event, sticky across collections & PDP badges (`vehicle-selector.js:42`) | Stores without persistent garage force re-entry every page — top churn reason |
+| **Server-side, cached filtering** | `FitmentSearchService` + Redis `YMM Cascading Trees` + `Cache-Control: public, max-age=180` — not client-side JS filtering | Client-side filtering lags on mobile and breaks Lighthouse |
+| **HMAC + rate-limiting everywhere** | App Proxy `HMAC-SHA256` hex (`AppProxySignatureVerifier.calculate_signature` sorted `key=value`) + `X-Shopify-Hmac-Sha256` Base64 on webhooks, both `secure_compare`; `Rack::Attack` throttling | Unsigned `…/years?shop=…` → `401` on live — verified in `REQUIREMENTS-VERIFICATION.md` |
+| **OAuth & multi-tenant isolation** | `shopify_app` 22.0 OAuth, `Shop.active` + `ShopScoped` concern everywhere, tokens encrypted (`encrypts :shopify_token`) | Prevents cross-shop data leak; required for App Store review |
+| **Async webhooks** | `products/*`, `app/uninstalled`, `shop/update` → `Webhooks::*Job` on `queue: webhooks` (Sidekiq) — `Webhooks::BaseController` verifies HMAC then `200` | Sync webhook handling times out under load |
+| **Bulk CSV + API** | `BulkFitmentImporter` (headers `product_id,sku,year,make,model,…`) + `sample_template` export, plus `FitmentSearchService` for programmatic access | 50k SKU stores need bulk; ACES/PIES adapter is out-of-scope by design (see Roadmap) |
+| **Data ownership** | Fitment JSON lives in **your** `product.metafields.app.vehicle_fitment` — exportable without vendor lock-in | Most fitment apps trap data in proprietary DBs |
+
+**App Store submission notes:** scopes `read_products,write_products,read_product_listings,read_customers,write_customers` justified in `shopify.app.toml:8`; GDPR `customers/data_request|redact`, `shop/redact` handled (`webhooks/customers_controller.rb`, `shop_controller.rb`) — configure URLs in Partners Dashboard > Customer privacy (CLI cannot register them); support contact via repo Issues; privacy policy should point to the webhook endpoints above.
 
 ---
 

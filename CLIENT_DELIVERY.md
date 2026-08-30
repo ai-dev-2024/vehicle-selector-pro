@@ -24,13 +24,15 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
    - Two automated test suites: isolated unit harness (11 runs / 35 assertions) and full-stack integration tests that boot the real app and issue HTTP requests (9 runs / 28 assertions) — all passing.
 
 2. **Live Deployment & Verification**:
-   - Deployed on Fly.io: https://vehicle-selector-pro.fly.dev (Puma + Sidekiq + Postgres + private Redis).
-   - Installed via OAuth on a real Shopify development store with 7 demo products; fitment metafields verified on all products.
+   - **Live link to submit:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
+   - **Install:** `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
+   - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `$app.vehicle_fitment` read-back verified 7/7
    - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 
-3. **Demo Assets**:
-   - `/storefront_preview` (development-only harness) renders the production Theme App Extension widget against the live API — cascading filters, collection results, and PDP fitment badges.
-   - Narrated 2.5-minute walkthrough video in `demo/video/` with the matching script in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
+3. **Demo Assets — what to submit:**
+   - **Recorded video (2.5 min, narrated):** [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — also at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (raw: `/raw/main/...`) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) · poster `demo/video/frame-000.png`
+   - `/storefront_preview` (dev harness) + `admin_preview` render the real extension widget against live API for local re-recording via `npm run capture` (puppeteer)
+   - `demo/index.html` — Play 2.5-min walkthrough button (Web Speech API + tab capture)
 
 4. **Production Documentation**:
    - Comprehensive [`README.md`](README.md) with system architecture diagrams, database ERDs, API endpoint reference, and step-by-step setup.

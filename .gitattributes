@@ -1,0 +1,4 @@
+# Demo video is 10 MB — keep in Git LFS on next re-upload to avoid bloat; currently tracked as blob
+demo/video/*.webm filter=lfs diff=lfs merge=lfs -text
+# Binary frames generated locally
+demo/video/*.png binary

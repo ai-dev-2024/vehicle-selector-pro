@@ -54,9 +54,9 @@ Vehicle Selector Pro/
 │       ├── snippets/                   # Reusable snippets
 │       └── shopify.extension.toml      # Extension config
 ├── infra/                            # Deployment infrastructure
-│   └── redis/                        # Fly.io private Redis config
-│       ├── fly.toml                  # (gitignored; holds password)
-│       └── fly.toml.example          # Committed template
+│   └── redis/                        # Fly.io private Redis config (iad, private net)
+│       ├── fly.toml                  # gitignored — holds real password (rotate before handoff)
+│       └── fly.toml.example          # Committed template (placeholder password)
 ├── spec/                             # Test suite
 │   ├── integration/                  # Full-stack request tests
 │   ├── services/                      # Service tests
@@ -70,14 +70,13 @@ Vehicle Selector Pro/
 │   ├── SETUP.md                      # Setup instructions
 │   └── DEMO_SCRIPT.md                # Demo script
 ├── demo/                             # Demo materials
-│   ├── index.html                    # Enhanced demo interface
+│   ├── index.html                    # Enhanced demo interface (Play 2.5-min walkthrough)
 │   ├── demo-alternative.html          # Alternative demo
 │   ├── command-center.css            # Demo styling
 │   └── video/                        # Demo video files
-│       ├── Vehicle_Selector_Pro_2.5min_Demo.webm
-│       └── frame-*.png                # Video frames
-├── assets/                           # Additional assets
-│   └── tts/                          # Text-to-speech assets
+│       ├── Vehicle_Selector_Pro_2.5min_Demo.webm  # Tracked (10 MB)
+│       └── frame-*.png                # gitignored — generated via `npm run capture` (puppeteer)
+
 ├── Gemfile                           # Ruby dependencies
 ├── Dockerfile                        # Container configuration
 ├── fly.toml                          # Fly.io deployment config
