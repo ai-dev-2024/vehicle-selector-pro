@@ -44,8 +44,13 @@
           <tr>
             <td style="max-width: 280px;">
               <strong style="color: #202223;"><%= fitment.product_title.presence || fitment.product_id %></strong>
+              <div style="font-size: 12px; color: #6d7175; margin-top: 2px;">
+                <% if fitment.brand.present? %><span style="font-weight: 600; color: #0b525b;"><%= fitment.brand %></span> · <% end %>
+                <% if fitment.category.present? %><%= fitment.category %> · <% end %>
+                <% if fitment.price_cents.present? %><%= number_to_currency(fitment.price_cents / 100.0, precision: (fitment.price_cents % 100).zero? ? 0 : 2) %><% end %>
+              </div>
               <% if fitment.sku.present? %>
-                <div style="font-size: 12px; color: #6d7175;">SKU: <code><%= fitment.sku %></code></div>
+                <div style="font-size: 12px; color: #6d7175;">Part #: <code><%= fitment.sku %></code></div>
               <% end %>
             </td>
             <td>

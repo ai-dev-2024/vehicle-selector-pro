@@ -24,7 +24,7 @@ The application is **live on Fly.io**, **installed on a real Shopify development
 | **Health check** | `/up` → `{"status":"ok"}` (200) |
 | **HMAC enforcement** | unsigned proxy request → 401 |
 | **OAuth install** | `vehicle-selector-pro.myshopify.com` — 7 products, 35 fitments |
-| **Metafields** | `$app.vehicle_fitment` written to 7/7 products via `metafieldsSet` |
+| **Metafields** | `custom.vehicle_fitment` written to 7/7 products via `metafieldsSet` |
 
 ### 2. Source code
 
@@ -51,13 +51,12 @@ The application is **live on Fly.io**, **installed on a real Shopify development
 
 | Item | Detail |
 |---|---|
-| **Format** | MP4 (H.264 + AAC) |
-| **Duration** | 70 seconds |
-| **Size** | 1.5 MB |
-| **Narration** | AI-generated TTS (Microsoft David Desktop) |
-| **Scenes** | 5 — Hero, Storefront Filters, Product Page, Admin Dashboard, Architecture |
-| **Location** | `demo/Vehicle_Selector_Pro_Demo.mp4` |
-| **Old video** | `demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (10 MB, screen recording) |
+| **Format** | MP4 (H.264 + AAC, 1280x720, loudness-normalized to -15 LUFS) |
+| **Duration** | 156 seconds (~2.5 minutes) |
+| **Size** | 7.5 MB |
+| **Narration** | ElevenLabs studio TTS (James), 13 clips synced per scene, over a subtle background score |
+| **Content** | Real Playwright screen recording of the working app — cascading YMM selection, parts search, My Garage, PDP fitment badges, rules, vehicle library, sync monitor |
+| **Location** | `demo/Vehicle_Selector_Pro_Demo_v3.mp4` |
 
 ### 5. Documentation
 
@@ -101,15 +100,15 @@ Storefront (Theme App Extension)
 
 The demo video was created using an automated pipeline:
 
-1. **Playwright** navigated 5 showcase scenes (HTML pages styled to match the app)
-2. **Windows Speech Synthesis** (Microsoft David Desktop) generated TTS narration for each scene
-3. **ffmpeg** combined screenshots + audio into H.264 MP4 segments, then concatenated
+1. **Playwright** recorded a real screen video of the automated walkthrough in `demo/index.html` (virtual cursor, timed cues driving actual page interactions)
+2. **ElevenLabs TTS** generated 13 narration clips, one per walkthrough cue
+3. **ffmpeg** mixed the cue-synced narration over a subtle music bed, applied loudness normalization, and encoded H.264 + AAC with faststart
 
 Scripts:
-- `demo/autoplay/capture.js` — Playwright screenshot automation
-- `demo/autoplay/narrate.ps1` — PowerShell TTS audio generation
-- `demo/autoplay/build.js` — ffmpeg video assembly
-- `demo/autoplay/showcase.html` — HTML showcase pages (5 scenes)
+- `demo/autoplay/record_v3.js` — Playwright screen recording of the walkthrough
+- `demo/autoplay/build_v3.sh` — ffmpeg audio mixing (per-cue delays, music bed, loudnorm) and assembly
+- `demo/autoplay/audio_v3/` — narration clips + music bed
+- `demo/index.html` — the scripted walkthrough page that was recorded
 
 ---
 
@@ -121,9 +120,9 @@ Scripts:
 | HMAC enforcement | unsigned `/years` → 401 |
 | Unit tests | 11 runs, 35 assertions, 0 failures |
 | Integration tests | 9 runs, 28 assertions, 0 failures |
-| Metafield read-back | 7/7 products carry `$app.vehicle_fitment` |
+| Metafield read-back | 7/7 products carry `custom.vehicle_fitment` |
 | OAuth flow | Real install on `vehicle-selector-pro.myshopify.com` |
-| Demo video | 70s MP4, 5 narrated scenes, 1.5 MB |
+| Demo video | 156s MP4, real screen recording, narrated, 7.5 MB |
 | GitHub homepage | Screenshots, features, quick start, docs links |
 | All 11 client requirements | Verified in `REQUIREMENTS-VERIFICATION.md` |
 
@@ -146,4 +145,4 @@ Scripts:
 | GitHub | https://github.com/ai-dev-2024/vehicle-selector-pro |
 | Install | https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com |
 | Health | https://vehicle-selector-pro.fly.dev/up |
-| Demo video | `demo/Vehicle_Selector_Pro_Demo.mp4` |
+| Demo video | `demo/Vehicle_Selector_Pro_Demo_v3.mp4` |

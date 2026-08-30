@@ -12,7 +12,7 @@
 
 Vehicle Selector Pro is an enterprise-grade Shopify application engineered to solve the complex automotive Year-Make-Model-Trim-Engine (YMMTE) fitment problem for merchants.
 
-By combining a **normalized, high-speed multi-tenant local cache** with **Shopify Product Metafield synchronization** (app-owned `$app.vehicle_fitment` metafields via GraphQL `metafieldsSet`), Vehicle Selector Pro delivers cached storefront filtering, guaranteed fitment badges on product detail pages (PDP), and customer vehicle wallets ("My Garage") without impacting store performance or using deprecated ScriptTag APIs.
+By combining a **normalized, high-speed multi-tenant local cache** with **Shopify Product Metafield synchronization** (`custom.vehicle_fitment` metafields via GraphQL `metafieldsSet`), Vehicle Selector Pro delivers cached storefront filtering, guaranteed fitment badges on product detail pages (PDP), and customer vehicle wallets ("My Garage") without impacting store performance or using deprecated ScriptTag APIs.
 
 ---
 
@@ -24,14 +24,13 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
    - Two automated test suites: isolated unit harness (11 runs / 35 assertions) and full-stack integration tests that boot the real app and issue HTTP requests (9 runs / 28 assertions) — all passing.
 
 2. **Live Deployment & Verification**:
-    - **Health check:** `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
-    - **Installation:** `https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
-    - **Daily access:** After installation, access via Shopify Admin → Apps → Vehicle Selector Pro (no separate login needed)
-    - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `$app.vehicle_fitment` read-back verified 7/7
-    - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
+   - **Live link to submit:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
+   - **Install:** `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
+   - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `custom.vehicle_fitment` read-back verified 7/7
+   - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 
 3. **Demo Assets — what to submit:**
-   - **Recorded video (2.5 min, narrated):** [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — also at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (raw: `/raw/main/...`) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) · poster `demo/video/frame-000.png`
+   - **Recorded video (2.5 min, narrated):** [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4) — also at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/Vehicle_Selector_Pro_Demo_v3.mp4` (raw: `/raw/main/...`) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Real screen recording of the working app, ElevenLabs studio voiceover synced per scene, background score, loudness-normalized.
    - `/storefront_preview` (dev harness) + `admin_preview` render the real extension widget against live API for local re-recording via `npm run capture` (puppeteer)
    - `demo/index.html` — Play 2.5-min walkthrough button (Web Speech API + tab capture)
 
@@ -52,7 +51,7 @@ Use the professional voiceover script in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIP
 - **Continuous read version** for single-take recording
 - **Recording setup** recommendations (OBS Studio + mic, or Loom)
 
-The 2.5-minute demo video is at [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — [watch on GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm).
+The 2.5-minute demo video is at [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4) — [watch on GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/Vehicle_Selector_Pro_Demo_v3.mp4).
 
 ---
 
@@ -61,6 +60,6 @@ The 2.5-minute demo video is at [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.we
 - **Framework**: Ruby on Rails 7.1 (Ruby >= 3.2.0)
 - **Database**: PostgreSQL (Production) / SQLite3 (Development & CI)
 - **Background Jobs**: Sidekiq 7 + Redis with exponential backoff for GraphQL rate-limiting
-- **Shopify API Version**: `2025-07` (GraphQL Admin API); app-owned metafield definitions in `shopify.app.toml`
+- **Shopify API Version**: `2025-07` (GraphQL Admin API); `custom.vehicle_fitment` product metafield definition created at install via `MetafieldDefinitionService`
 - **App Proxy Security**: HMAC-SHA256 verification via constant-time comparison (`ActiveSupport::SecurityUtils.secure_compare`)
 - **Theme Extension**: Zero ScriptTag API usage; 100% Theme App Extension (OS 2.0) compliant.

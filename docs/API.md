@@ -43,7 +43,7 @@ All webhook endpoints verify `X-Shopify-Hmac-Sha256` (Base64 HMAC-SHA256 of the 
 
 ## Metafield schema
 
-Fitment data is synced to Shopify Product Metafields under the `$app.vehicle_fitment` namespace (JSON type):
+Fitment data is synced to Shopify Product Metafields under the `custom.vehicle_fitment` namespace (JSON type, pinned, storefront `PUBLIC_READ`):
 
 ```json
 {

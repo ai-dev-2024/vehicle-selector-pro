@@ -69,8 +69,18 @@ class StorefrontPreviewController < ActionController::Base
 
   private
 
+  # The demo must always render the shop that actually holds the seeded demo
+  # catalog. A real store can hold both an OAuth-installed shop row and the
+  # seeded demo row; prefer the demo domain, then the shop with the most
+  # fitments, so the public /demo pages never render an empty catalog.
   def shop
-    @shop ||= Shop.active.first || Shop.first
+    @shop ||= begin
+      demo_domain = ENV.fetch('SHOPIFY_STORE_DOMAIN', 'vehicle-selector-pro.myshopify.com')
+      Shop.find_by(shopify_domain: demo_domain) ||
+        Shop.active.left_joins(:vehicle_product_fitments)
+            .group(:id).order(Arel.sql('COUNT(vehicle_product_fitments.id) DESC')).first ||
+        Shop.active.first || Shop.first
+    end
   end
 
   def distinct_products
@@ -81,6 +91,10 @@ class StorefrontPreviewController < ActionController::Base
         product_id: f.product_id,
         title: f.product_title.presence || f.product_id,
         sku: f.sku,
+        brand: f.brand,
+        category: f.category,
+        price_cents: f.price_cents,
+        short_description: f.short_description,
         universal: f.universal_fit?
       }
     end

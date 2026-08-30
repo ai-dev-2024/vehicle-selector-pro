@@ -14,9 +14,9 @@ live Shopify development store.
 - HMAC-SHA256 verified App Proxy API (`/apps/vehicle-selector/*`): years, makes,
   models, trims, engines, search, check_fitment (numeric + GID product IDs),
   product_fitments, garage. Per-shop cache versioning and Rack::Attack throttling.
-- GraphQL Admin API synchronization of fitment data to app-owned product
-  metafields (`$app.vehicle_fitment`, JSON) via `metafieldsSet` in batches of 25,
-  with retry/backoff for throttled queries.
+- GraphQL Admin API synchronization of fitment data to `custom.vehicle_fitment`
+  product metafields (JSON, pinned, storefront PUBLIC_READ) via `metafieldsSet`
+  in batches of 25, with retry/backoff for throttled queries.
 - Async webhook pipeline: HMAC-verified endpoints enqueueing Sidekiq jobs for
   `products/create|update|delete`, `app/uninstalled`, `shop/update` and the
   mandatory privacy topics.

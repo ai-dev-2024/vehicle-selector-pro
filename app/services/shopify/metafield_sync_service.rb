@@ -1,9 +1,13 @@
 module Shopify
   class MetafieldSyncService
-    # App-owned metafield defined in shopify.app.toml:
-    #   [product.metafields.app.vehicle_fitment]  type = "json"
-    # metafieldsSet targets namespace "$app" when namespace is omitted.
+    # Merchant-visible metafield pinned on the store:
+    #   custom.vehicle_fitment  type = "json"  (storefront PUBLIC_READ)
+    # Definition is ensured by MetafieldDefinitionService; we always send
+    # namespace + type explicitly so metafieldsSet works even before the
+    # definition exists.
+    NAMESPACE = "custom"
     KEY = "vehicle_fitment"
+    TYPE = "json"
     BATCH_SIZE = 25
 
     METAFIELDS_SET_MUTATION = <<~GRAPHQL
@@ -131,7 +135,9 @@ module Shopify
 
       {
         ownerId: owner_gid,
+        namespace: NAMESPACE,
         key: KEY,
+        type: TYPE,
         value: metafield_value
       }
     end

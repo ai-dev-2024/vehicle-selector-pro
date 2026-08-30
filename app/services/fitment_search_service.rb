@@ -116,6 +116,10 @@ class FitmentSearchService
           product_handle: f.product_handle,
           product_title: f.product_title,
           sku: f.sku,
+          brand: f.brand,
+          category: f.category,
+          price_cents: f.price_cents,
+          short_description: f.short_description,
           universal: f.universal_fit?,
           fitment_notes: f.fitment_notes,
           position: f.position

@@ -18,14 +18,28 @@
   <div class="sp-section-title">Compatible Parts for <%= @vehicle[:display_name] %></div>
 
   <div class="sp-grid">
-    <% icons = %w[🌀 🛞 🏗️ 🔩 🛡️ 💡 🧰 ⚙️] %>
+    <% category_icons = {
+         "Air Intake" => "🌪️", "Brakes" => "🛑", "Suspension" => "🏔️",
+         "Exhaust" => "💨", "Bumpers & Armor" => "🛡️", "Lighting" => "💡",
+         "Chassis & Handling" => "🏁"
+       } %>
     <% if @products.any? %>
-      <% @products.each_with_index do |p, i| %>
+      <% @products.each do |p| %>
         <div class="sp-card">
-          <div class="sp-card-img"><%= icons[i % icons.length] %></div>
+          <div class="sp-card-img">
+            <span><%= category_icons[p[:category]] || "⚙️" %></span>
+            <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
+          </div>
           <div class="sp-card-body">
+            <div class="sp-card-brand-row">
+              <% if p[:brand].present? %><span class="sp-card-brand"><%= p[:brand] %></span><% end %>
+              <% if p[:price_cents] %><span class="sp-card-price"><%= number_to_currency(p[:price_cents] / 100.0, precision: (p[:price_cents] % 100).zero? ? 0 : 2) %></span><% end %>
+            </div>
             <div class="sp-card-title"><%= p[:product_title] %></div>
-            <div class="sp-card-sku">SKU <%= p[:sku] %><%= ' · Universal Fit' if p[:universal] %></div>
+            <% if p[:short_description].present? %>
+              <div class="sp-card-desc"><%= p[:short_description] %></div>
+            <% end %>
+            <div class="sp-card-sku">PART # <%= p[:sku] %><%= ' · Universal Fit' if p[:universal] %></div>
             <div
               class="vsp-pdp-fitment-badge <%= p[:universal] ? 'vsp-fit-universal' : 'vsp-fit-exact' %>"
               data-product-id="<%= p[:product_id] %>"

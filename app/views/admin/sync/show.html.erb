@@ -51,11 +51,14 @@
             <td><%= log.created_at.strftime("%b %d, %Y %H:%M") %></td>
             <td><span class="badge badge-info"><%= log.sync_type.to_s.upcase %></span></td>
             <td>
-              <% case log.status %>
-              <% when 'completed' %><span class="badge badge-live">Completed</span>
-              <% when 'in_progress' %><span class="badge badge-review">In progress (<%= log.progress_percentage %>%)</span>
-              <% when 'failed' %><span class="badge" style="background:#fde8e6;color:var(--danger)">Failed</span>
-              <% else %><span class="badge badge-info">Pending</span>
+              <% if log.status == 'completed' %>
+                <span class="badge badge-live">Completed</span>
+              <% elsif log.status == 'in_progress' %>
+                <span class="badge badge-review">In progress (<%= log.progress_percentage %>%)</span>
+              <% elsif log.status == 'failed' %>
+                <span class="badge" style="background:#fde8e6;color:var(--danger)">Failed</span>
+              <% else %>
+                <span class="badge badge-info">Pending</span>
               <% end %>
             </td>
             <td><%= log.synced_products %> / <%= log.total_products %></td>

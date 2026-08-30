@@ -11,13 +11,27 @@
 <div class="sp-section-title">Featured Parts <span style="color:#6d7175; font-weight:500; font-size:13px;">— fitment badges update live when you select a vehicle</span></div>
 
 <div class="sp-grid">
-  <% icons = %w[🌀 🛞 🏗️ 🔩 🛡️ 💡 🧰 ⚙️] %>
-  <% @products.each_with_index do |p, i| %>
+  <% category_icons = {
+       "Air Intake" => "🌪️", "Brakes" => "🛑", "Suspension" => "🏔️",
+       "Exhaust" => "💨", "Bumpers & Armor" => "🛡️", "Lighting" => "💡",
+       "Chassis & Handling" => "🏁"
+     } %>
+  <% @products.each do |p| %>
     <div class="sp-card">
-      <div class="sp-card-img"><%= icons[i % icons.length] %></div>
+      <div class="sp-card-img">
+        <span><%= category_icons[p[:category]] || "⚙️" %></span>
+        <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
+      </div>
       <div class="sp-card-body">
+        <div class="sp-card-brand-row">
+          <% if p[:brand].present? %><span class="sp-card-brand"><%= p[:brand] %></span><% end %>
+          <% if p[:price_cents] %><span class="sp-card-price"><%= number_to_currency(p[:price_cents] / 100.0, precision: (p[:price_cents] % 100).zero? ? 0 : 2) %></span><% end %>
+        </div>
         <div class="sp-card-title"><%= p[:title] %></div>
-        <div class="sp-card-sku">SKU <%= p[:sku] %></div>
+        <% if p[:short_description].present? %>
+          <div class="sp-card-desc"><%= p[:short_description] %></div>
+        <% end %>
+        <div class="sp-card-sku">PART # <%= p[:sku] %></div>
         <!-- Identical markup to blocks/product_fitment_badge.liquid -->
         <div
           class="vsp-pdp-fitment-badge vsp-fit-unselected"

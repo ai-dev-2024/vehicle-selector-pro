@@ -17,4 +17,10 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
+  # Allow sandbox / tunnel preview hosts (dev only)
+  config.hosts << /.*\.sandbox\.novita\.ai/
+  config.hosts << /.*\.e2b\.dev/
+  config.hosts << /.*\.ngrok.*\.(app|io|dev)/
+  config.hosts << /.*\.trycloudflare\.com/
 end

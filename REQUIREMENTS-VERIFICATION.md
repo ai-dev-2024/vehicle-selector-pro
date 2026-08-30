@@ -21,7 +21,7 @@ present in code.
 | 8 | Webhooks async via ActiveJob + Sidekiq | ✅ Verified | Signed POST → 200; tampered → 401; `Webhooks::ProductsUpdateJob` performed by Sidekiq (webhooks queue, 130 ms) |
 | 9 | Git repo with app + extension | ✅ Verified | This repository |
 | 10 | README with setup instructions | ✅ Verified | `README.md` + `docs/SETUP.md` + `docs/DEPLOYMENT.md` |
-| 11 | 2–3 min screen recording | ✅ Verified | Narrated 2.5-min walkthrough `demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` (10 MB, tracked) + `docs/DEMO_SCRIPT.md` matches video — playable at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm` and locally via `demo/index.html` / `storefront_preview` |
+| 11 | 2–3 min screen recording | ✅ Verified | Narrated 2.5-min walkthrough `demo/Vehicle_Selector_Pro_Demo_v3.mp4` (real screen recording of the working app, ElevenLabs voiceover) — playable at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/Vehicle_Selector_Pro_Demo_v3.mp4` and interactively via `demo/index.html` |
 
 ## Test evidence
 
@@ -31,7 +31,7 @@ Integration:       9 runs, 28 assertions, 0 failures   (boots the real app; HTTP
 Production spot checks (curl, HMAC-signed): /up, /years, /makes, /models,
   /trims, /engines, /search, /check_fitment, /product_fitments, /garage → 200
   unsigned/tampered variants → 401
-Metafield read-back: 7/7 products carry $app.vehicle_fitment (fitments: 5/13/5/3/4/1/4)
+Metafield read-back: 7/7 products carry custom.vehicle_fitment (fitments: 5/13/5/3/4/1/4)
 ```
 
 ## Known limitations (documented, by design)

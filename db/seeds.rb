@@ -97,78 +97,100 @@ end
 puts "✓ Seeded #{vehicles.count} distinct Year/Make/Model/Trim/Engine vehicle configurations"
 
 # 4. Seed Product Fitment Catalog
-# Self-healing: remove any legacy placeholder-GID fitments (8192019283xxx)
-# left over from earlier seed runs so the catalog maps 1:1 to real store
-# products. Idempotent and safe to run on every deploy.
-legacy = VehicleProductFitment.where("product_id LIKE ?", "%8192019283%")
-puts "✓ Removed #{legacy.count} legacy placeholder-GID fitment rows" if legacy.delete_all > 0
-
 catalog_products = [
   {
-    product_id: "gid://shopify/Product/8192019283001",
+    product_id: "gid://shopify/Product/10358752313620",
     product_handle: "apex-stage-2-cold-air-intake-ford-f150-ecoboost",
     product_title: "Apex Stage-2 Cold Air Intake System (Ford F-150 3.5L / 2.7L EcoBoost)",
     sku: "APX-CAI-F150-EB",
+    brand: "Apex Performance",
+    category: "Air Intake",
+    price_cents: 34900,
+    short_description: "High-flow roto-molded intake with oiled cotton filter — sharper throttle response and a deeper induction note.",
     universal: false,
     fitment_notes: "Direct bolt-on replacement. Calibrated for 2.7L & 3.5L EcoBoost engines.",
     position: "Engine Bay",
     matching_vehicles: Vehicle.where(make: "Ford", model: "F-150").where("engine LIKE ?", "%EcoBoost%")
   },
   {
-    product_id: "gid://shopify/Product/8192019283002",
+    product_id: "gid://shopify/Product/10358754017556",
     product_handle: "apex-pro-heavy-duty-brake-pad-rotor-kit-truck",
     product_title: "Apex Pro Severe-Duty Drilled & Slotted Brake Kit (Front Axle)",
     sku: "APX-BRK-HD-TRK",
+    brand: "Apex Performance",
+    category: "Brakes",
+    price_cents: 48900,
+    short_description: "Severe-duty drilled & slotted rotors with carbon-ceramic pads — shorter stops, less fade under towing loads.",
     universal: false,
     fitment_notes: "Front axle only. Fits 6-lug wheel hubs.",
     position: "Front Axle",
     matching_vehicles: Vehicle.where(make: ["Ford", "Chevrolet"], model: ["F-150", "Silverado 1500"])
   },
   {
-    product_id: "gid://shopify/Product/8192019283003",
+    product_id: "gid://shopify/Product/10358754050324",
     product_handle: "apex-baja-3-inch-suspension-lift-kit-tacoma",
     product_title: "Apex Baja 3-Inch Coilovers & Billet Control Arm Lift System",
     sku: "APX-SUSP-TACO-3IN",
+    brand: "Apex Performance",
+    category: "Suspension",
+    price_cents: 114900,
+    short_description: "Complete 3-inch lift: tuned coilovers, billet upper control arms and extended travel — levels stance, clears 33s.",
     universal: false,
     fitment_notes: "Compatible with 4WD models. Clears up to 33-inch tires with zero rub.",
     position: "Front & Rear Suspension",
     matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma", drivetrain: "4WD")
   },
   {
-    product_id: "gid://shopify/Product/8192019283004",
+    product_id: "gid://shopify/Product/10358754083092",
     product_handle: "apex-stealth-stainless-cat-back-exhaust-v8",
     product_title: "Apex Stealth 3-Inch Dual Stainless Cat-Back Exhaust (Coyote V8)",
     sku: "APX-EXH-MUST-V8",
+    brand: "Apex Performance",
+    category: "Exhaust",
+    price_cents: 89900,
+    short_description: "3-inch mandrel-bent stainless cat-back with active valves — aggressive under load, civilized at cruise.",
     universal: false,
     fitment_notes: "Engineered for 5.0L Coyote V8 engines with active valve control.",
     position: "Exhaust / Undercarriage",
     matching_vehicles: Vehicle.where(make: "Ford", model: "Mustang").where("engine LIKE ?", "%Coyote%")
   },
   {
-    product_id: "gid://shopify/Product/8192019283005",
+    product_id: "gid://shopify/Product/10358754115860",
     product_handle: "apex-rock-crawler-front-bumper-jeep-wrangler",
     product_title: "Apex Armor Rock-Crawler High-Clearance Winch Front Bumper",
     sku: "APX-BMP-JL-001",
+    brand: "Apex Armor",
+    category: "Bumpers & Armor",
+    price_cents: 74900,
+    short_description: "High-clearance steel winch bumper with welded recovery points and integrated fog light mounts.",
     universal: false,
     fitment_notes: "Fits all JL Wrangler models. Accommodates up to 12,000 lb winches.",
     position: "Front Bumper",
     matching_vehicles: Vehicle.where(make: "Jeep", model: "Wrangler")
   },
   {
-    product_id: "gid://shopify/Product/8192019283006",
+    product_id: "gid://shopify/Product/10358754148628",
     product_handle: "apex-universal-high-output-led-fog-pod-kit",
     product_title: "Apex UltraBeam 3-Inch Amber SAE/DOT High-Output LED Pods (Universal)",
     sku: "APX-LGT-UNIV-POD",
+    brand: "Apex Lighting",
+    category: "Lighting",
+    price_cents: 18900,
+    short_description: "3-inch SAE/DOT street-legal amber LED pods, 4,800 lm per pair, IP68 sealed — mounts anywhere with included brackets.",
     universal: true,
     fitment_notes: "Universal fitment. Includes multi-fit brackets and waterproof DT wiring harness.",
     position: "Auxiliary / Universal",
     matching_vehicles: []
   },
   {
-    product_id: "gid://shopify/Product/8192019283007",
+    product_id: "gid://shopify/Product/10358754181396",
     product_handle: "apex-carbon-fiber-strut-tower-brace-bmw",
     product_title: "Apex RaceWerks Carbon Fiber Chassis Strut Tower Brace (BMW G20 3-Series)",
     sku: "APX-STRUT-G20-CF",
+    brand: "Apex RaceWerks",
+    category: "Chassis & Handling",
+    price_cents: 32900,
+    short_description: "Dry-carbon strut tower brace — sharpens turn-in and cuts front-end flex without adding weight.",
     universal: false,
     fitment_notes: "Fits G20 3-Series chassis (330i, M340i, M3). Enhances front-end torsional rigidity.",
     position: "Front Strut Towers",
@@ -178,6 +200,18 @@ catalog_products = [
 
 fitment_count = 0
 catalog_products.each do |prod|
+  detail_attrs = {
+    product_handle: prod[:product_handle],
+    product_title: prod[:product_title],
+    sku: prod[:sku],
+    brand: prod[:brand],
+    category: prod[:category],
+    price_cents: prod[:price_cents],
+    short_description: prod[:short_description],
+    fitment_notes: prod[:fitment_notes],
+    position: prod[:position]
+  }
+
   if prod[:universal]
     # Create universal fitment
     VehicleProductFitment.find_or_create_by!(
@@ -185,14 +219,10 @@ catalog_products.each do |prod|
       product_id: prod[:product_id],
       universal_fit: true
     ) do |f|
-      f.product_handle = prod[:product_handle]
-      f.product_title = prod[:product_title]
-      f.sku = prod[:sku]
-      f.fitment_notes = prod[:fitment_notes]
-      f.position = prod[:position]
+      f.assign_attributes(detail_attrs)
       f.synced_to_metafield = true
       f.last_synced_at = Time.current
-    end
+    end.tap { |f| f.update!(detail_attrs) unless f.saved_changes.empty? && detail_attrs.all? { |k, v| f.public_send(k) == v } }
     fitment_count += 1
   else
     prod[:matching_vehicles].each do |veh|
@@ -201,15 +231,11 @@ catalog_products.each do |prod|
         vehicle: veh,
         product_id: prod[:product_id]
       ) do |f|
-        f.product_handle = prod[:product_handle]
-        f.product_title = prod[:product_title]
-        f.sku = prod[:sku]
+        f.assign_attributes(detail_attrs)
         f.universal_fit = false
-        f.fitment_notes = prod[:fitment_notes]
-        f.position = prod[:position]
         f.synced_to_metafield = true
         f.last_synced_at = Time.current
-      end
+      end.tap { |f| f.update!(detail_attrs) unless detail_attrs.all? { |k, v| f.public_send(k) == v } }
       fitment_count += 1
     end
   end

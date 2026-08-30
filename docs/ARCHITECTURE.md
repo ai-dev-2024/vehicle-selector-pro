@@ -121,7 +121,7 @@ erDiagram
 1. Merchant assigns fitment via admin dashboard
 2. `after_commit` callback enqueues `BatchSyncJob`
 3. Job batches products in groups of 25
-4. `metafieldsSet` GraphQL mutation writes `$app.vehicle_fitment` JSON
+4. `metafieldsSet` GraphQL mutation writes `custom.vehicle_fitment` JSON
 5. `MetafieldSyncLog` records status for the sync monitor
 
 ## Security layers

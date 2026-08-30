@@ -72,12 +72,14 @@ Vehicle Selector Pro/
 │   ├── SETUP.md                      # Setup instructions
 │   └── DEMO_SCRIPT.md                # Voiceover narration script
 ├── demo/                             # Demo materials
-│   ├── index.html                    # Enhanced demo interface (Play 2.5-min walkthrough)
-│   ├── demo-alternative.html          # Alternative demo
+│   ├── index.html                    # Interactive walkthrough (Play 2.5-min demo)
 │   ├── command-center.css            # Demo styling
-│   └── video/                        # Demo video files
-│       ├── Vehicle_Selector_Pro_2.5min_Demo.webm  # Tracked (10 MB)
-│       └── frame-*.png                # gitignored — generated via `npm run capture` (puppeteer)
+│   ├── Vehicle_Selector_Pro_Demo_v3.mp4  # Narrated screen recording (2.5 min)
+│   └── autoplay/                     # Video generation pipeline
+│       ├── record_v3.js               # Playwright screen recording
+│       ├── build_v3.sh                # ffmpeg assembly (narration + music + loudnorm)
+│       ├── audio_v3/                  # ElevenLabs narration clips + music bed
+│       └── frames_live/               # Real app screenshots used in README
 
 ├── Gemfile                           # Ruby dependencies
 ├── Dockerfile                        # Container configuration
@@ -89,9 +91,7 @@ Vehicle Selector Pro/
 ├── README.md                         # Main documentation
 ├── CHANGELOG.md                      # Release history
 ├── CLIENT_DELIVERY.md                # Client delivery information
-├── shopify.app.toml                  # Shopify app configuration
-├── Vehicle Selector Pro (Ruby on Rails).pdf  # Original requirements
-└── Vehicle Selector Pro (Ruby on Rails).docx  # Original requirements
+└── shopify.app.toml                  # Shopify app configuration
 ```
 
 ## File Purposes
