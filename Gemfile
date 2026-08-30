@@ -28,6 +28,9 @@ gem 'sqlite3', '~> 1.7'
 # Background Processing & Queuing
 gem 'sidekiq', '~> 7.2'
 gem 'redis', '~> 5.1'
+# Rails 7.1's redis_cache_store requires the connection_pool 2.x constructor
+# signature; 3.x removed it and breaks production boot when REDIS_URL is set.
+gem 'connection_pool', '~> 2.4'
 
 # Fast JSON Serialization
 gem 'oj', '~> 3.16'

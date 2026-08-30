@@ -243,3 +243,43 @@ body.cc-body {
   .cc-sidebar { width: 100%; }
   .cc-metrics, .cc-selects { grid-template-columns: 1fr; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Polaris-compat components (admin sync + bulk-import views).         */
+/* Styled with Shopify Polaris design tokens so these pages match the  */
+/* "styled with Polaris CSS" requirement.                             */
+/* ------------------------------------------------------------------ */
+.polaris-card {
+  background: #fff;
+  border: 1px solid #e1e3e5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.06);
+}
+.polaris-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; font-family: var(--sans); font-size: 14px; font-weight: 600;
+  line-height: 1; padding: 11px 18px; border-radius: 8px;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.polaris-btn-primary { background: #008060; color: #fff; }
+.polaris-btn-primary:hover { background: #006e52; }
+.polaris-btn-secondary { background: #fff; color: #202223; border-color: #c9cccf; }
+.polaris-btn-secondary:hover { background: #f6f6f7; }
+.polaris-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.polaris-table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #6d7175; padding: 10px 12px; border-bottom: 1px solid #e1e3e5;
+}
+.polaris-table td { padding: 12px; border-bottom: 1px solid #f1f2f3; vertical-align: top; color: #202223; }
+.polaris-table tr:last-child td { border-bottom: 0; }
+.polaris-banner {
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+  background: #e4f8f4; border: 1px solid #97e2d3; color: #0c5145; font-size: 14px;
+}
+.polaris-banner-alert { background: #fff0f0; border-color: #fed3d1; color: #bf0711; }
+.badge-success { background: #e4f4ea; color: #108043; }
+.badge-warning { background: #fff5ea; color: #c06a1e; }
+.badge-alert { background: #fde8e6; color: var(--danger); }

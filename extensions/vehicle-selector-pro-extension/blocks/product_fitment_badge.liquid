@@ -1,7 +1,7 @@
 {{ 'vehicle-selector.css' | asset_url | stylesheet_tag }}
 
 {% assign current_product_id = product.id %}
-{% assign metafield_data = product.metafields.custom.vehicle_fitment.value %}
+{% assign metafield_data = product.metafields['$app'].vehicle_fitment.value %}
 
 <div 
   class="vsp-pdp-fitment-badge vsp-fit-unselected"
@@ -22,7 +22,7 @@
 {% schema %}
 {
   "name": "Product Fitment Badge",
-  "target": "block",
+  "target": "section",
   "stylesheet": "vehicle-selector.css",
   "javascript": "vehicle-selector.js",
   "settings": [

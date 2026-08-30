@@ -84,6 +84,13 @@
     // --- Network & Cache Layer ---
 
     async fetchApi(endpoint, params = {}) {
+      // On a live storefront, Shopify's App Proxy injects the HMAC signature.
+      // For the local storefront preview (served by the Rails app itself)
+      // there is no proxy, so use the development-only verification bypass.
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') {
+        params = Object.assign({ skip_proxy_verify: 'true' }, params);
+      }
       const query = new URLSearchParams(params).toString();
       const url = `${PROXY_BASE_URL}/${endpoint}${query ? '?' + query : ''}`;
 

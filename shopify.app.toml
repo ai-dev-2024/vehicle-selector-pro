@@ -11,6 +11,13 @@ scopes = "read_products,write_products,read_product_listings,read_customers,writ
 use_legacy_install_flow = false
 optional_scopes = [ ]
 
+# App-owned product metafield: fitment data synced by the Rails app via
+# metafieldsSet. Accessed with namespace "$app" (never "custom"/"app").
+[product.metafields.app.vehicle_fitment]
+type = "json"
+name = "Vehicle Fitment"
+access.admin = "merchant_read_write"
+
 [auth]
 redirect_urls = [ "https://vehicle-selector-pro.fly.dev/auth/shopify/callback" ]
 
@@ -37,17 +44,12 @@ api_version = "2026-07"
   uri = "/webhooks/shop_update"
   topics = [ "shop/update" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers_data_request"
-  topics = [ "customers/data_request" ]
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers_redact"
-  topics = [ "customers/redact" ]
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/shop_redact"
-  topics = [ "shop/redact" ]
+  # Mandatory customer-privacy webhooks (customers/data_request,
+  # customers/redact, shop/redact) cannot be registered here — Shopify
+  # requires them to be configured in the Partners Dashboard under
+  # "Customer privacy". The Rails endpoints for them are implemented at
+  # /webhooks/customers_data_request, /webhooks/customers_redact and
+  # /webhooks/shop_redact.
 
 [app_proxy]
 url = "https://vehicle-selector-pro.fly.dev/apps/vehicle-selector"

@@ -1,6 +1,8 @@
 module Shopify
   class MetafieldSyncService
-    NAMESPACE = "custom"
+    # App-owned metafield defined in shopify.app.toml:
+    #   [product.metafields.app.vehicle_fitment]  type = "json"
+    # metafieldsSet targets namespace "$app" when namespace is omitted.
     KEY = "vehicle_fitment"
     BATCH_SIZE = 25
 
@@ -129,9 +131,7 @@ module Shopify
 
       {
         ownerId: owner_gid,
-        namespace: NAMESPACE,
         key: KEY,
-        type: "json",
         value: metafield_value
       }
     end

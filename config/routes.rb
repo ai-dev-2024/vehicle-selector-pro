@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  mount ShopifyApp::Engine, at: '/'
+  # NOTE: ShopifyApp::Engine is mounted at the BOTTOM of this file so the
+  # app's own /webhooks/* controllers win over the engine's catch-all
+  # /webhooks/(:type) route (which would raise NoWebhookHandler). Unmatched
+  # paths such as /login and /auth/shopify/callback cascade to the engine.
   root to: 'admin/dashboard#index'
 
   # Shopify Embedded Admin Routes
@@ -83,4 +86,28 @@ Rails.application.routes.draw do
 
   # Healthcheck for load balancers and container orchestrators
   get 'up', to: proc { [200, { 'Content-Type' => 'application/json' }, ['{"status":"ok"}']] }
+
+  # Storefront preview harness (development only): renders the real Theme App
+  # Extension widget assets against this app's own API so the storefront
+  # experience can be demonstrated and recorded outside a Shopify theme.
+  if Rails.env.development?
+    get 'storefront_preview', to: 'storefront_preview#index'
+    get 'collections/storefront_preview', to: 'storefront_preview#collection'
+    ext_assets = Rails.root.join('extensions', 'vehicle-selector-pro-extension', 'assets')
+    get 'ext-assets/:filename', format: false, constraints: { filename: /[^\/]+/ },
+        to: lambda { |env|
+          filename = File.basename(env['action_dispatch.request.path_parameters'][:filename].to_s)
+          path = ext_assets.join(filename)
+          if File.file?(path)
+            type = filename.end_with?('.css') ? 'text/css' : 'application/javascript'
+            [200, { 'content-type' => type }, [File.read(path)]]
+          else
+            [404, { 'content-type' => 'text/plain' }, ['not found']]
+          end
+        }
+  end
+
+  # Mounted last so application routes take precedence; the engine handles
+  # /login, /auth/shopify/callback and anything else it defines.
+  mount ShopifyApp::Engine, at: '/'
 end

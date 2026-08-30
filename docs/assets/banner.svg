@@ -1,0 +1,122 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Inter, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.55" stop-color="#12293f"/>
+      <stop offset="1" stop-color="#0b3b36"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e293b"/>
+      <stop offset="1" stop-color="#16212f"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#008060"/>
+      <stop offset="1" stop-color="#00a37c"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- subtle grid -->
+  <g stroke="#ffffff" stroke-opacity="0.035">
+    <path d="M0 106 H1280 M0 212 H1280 M0 318 H1280 M0 424 H1280 M0 530 H1280"/>
+    <path d="M160 0 V640 M320 0 V640 M480 0 V640 M640 0 V640 M800 0 V640 M960 0 V640 M1120 0 V640"/>
+  </g>
+
+  <!-- accent glows -->
+  <circle cx="1150" cy="90" r="190" fill="#008060" opacity="0.14"/>
+  <circle cx="90" cy="580" r="170" fill="#1f6feb" opacity="0.10"/>
+
+  <!-- Left: copy -->
+  <g>
+    <rect x="64" y="96" width="240" height="34" rx="17" fill="#008060" fill-opacity="0.16" stroke="#00a37c" stroke-opacity="0.55"/>
+    <text x="184" y="118" fill="#4fd1b0" font-size="15" font-weight="600" text-anchor="middle" letter-spacing="1.5">SHOPIFY APP · RAILS 7</text>
+
+    <text x="64" y="196" fill="#ffffff" font-size="58" font-weight="800" letter-spacing="-1">Vehicle Selector Pro</text>
+    <text x="64" y="238" fill="#94a3b8" font-size="22" font-weight="500">Year / Make / Model / Trim / Engine fitment intelligence</text>
+    <text x="64" y="268" fill="#94a3b8" font-size="22" font-weight="500">for Shopify storefronts — guaranteed-to-fit parts filtering.</text>
+
+    <!-- feature pills -->
+    <g font-size="15" font-weight="600">
+      <rect x="64" y="306" width="218" height="40" rx="10" fill="#1e293b" stroke="#334155"/>
+      <circle cx="86" cy="326" r="6" fill="#00a37c"/>
+      <text x="102" y="331" fill="#e2e8f0">Cascading filter widget</text>
+
+      <rect x="294" y="306" width="238" height="40" rx="10" fill="#1e293b" stroke="#334155"/>
+      <circle cx="316" cy="326" r="6" fill="#00a37c"/>
+      <text x="332" y="331" fill="#e2e8f0">PDP fitment badges</text>
+
+      <rect x="64" y="356" width="230" height="40" rx="10" fill="#1e293b" stroke="#334155"/>
+      <circle cx="86" cy="376" r="6" fill="#00a37c"/>
+      <text x="102" y="381" fill="#e2e8f0">GraphQL metafield sync</text>
+
+      <rect x="306" y="356" width="226" height="40" rx="10" fill="#1e293b" stroke="#334155"/>
+      <circle cx="328" cy="376" r="6" fill="#00a37c"/>
+      <text x="344" y="381" fill="#e2e8f0">HMAC-signed App Proxy</text>
+    </g>
+
+    <!-- stack badges -->
+    <g font-size="14" font-weight="700" text-anchor="middle">
+      <rect x="64" y="440" width="130" height="38" rx="19" fill="#7c2d12" stroke="#c2410c"/>
+      <text x="129" y="464" fill="#fdba74">Ruby 3.2</text>
+      <rect x="206" y="440" width="130" height="38" rx="19" fill="#7f1d1d" stroke="#b91c1c"/>
+      <text x="271" y="464" fill="#fca5a5">Rails 7.1</text>
+      <rect x="348" y="440" width="150" height="38" rx="19" fill="#14532d" stroke="#15803d"/>
+      <text x="423" y="464" fill="#86efac">PostgreSQL</text>
+      <rect x="510" y="440" width="120" height="38" rx="19" fill="#450a0a" stroke="#991b1b"/>
+      <text x="570" y="464" fill="#fda4af">Redis</text>
+      <rect x="642" y="440" width="150" height="38" rx="19" fill="#052e16" stroke="#166534"/>
+      <text x="717" y="464" fill="#6ee7b7">Sidekiq</text>
+    </g>
+
+    <text x="64" y="556" fill="#64748b" font-size="16">Live demo · vehicle-selector-pro.fly.dev   |   Ruby on Rails · Theme App Extension · GraphQL Admin API</text>
+  </g>
+
+  <!-- Right: storefront widget mockup -->
+  <g filter="url(#shadow)">
+    <rect x="700" y="112" width="512" height="416" rx="18" fill="url(#card)" stroke="#334155"/>
+    <rect x="700" y="112" width="512" height="58" rx="18" fill="#0f1b28"/>
+    <rect x="700" y="146" width="512" height="24" fill="#0f1b28"/>
+    <circle cx="728" cy="141" r="7" fill="#ef4444"/>
+    <circle cx="752" cy="141" r="7" fill="#f59e0b"/>
+    <circle cx="776" cy="141" r="7" fill="#22c55e"/>
+    <text x="956" y="147" fill="#94a3b8" font-size="15" text-anchor="middle" font-weight="600">your-store.myshopify.com</text>
+
+    <!-- widget card -->
+    <rect x="724" y="190" width="464" height="150" rx="12" fill="#0b1420" stroke="#1f2c3d"/>
+    <text x="744" y="222" fill="#ffffff" font-size="17" font-weight="700">🚗  Select Your Vehicle</text>
+    <text x="744" y="244" fill="#64748b" font-size="12.5">Find parts guaranteed to fit your exact vehicle</text>
+
+    <g font-size="13">
+      <rect x="744" y="262" width="100" height="40" rx="8" fill="#122032" stroke="#2b3b52"/>
+      <text x="758" y="277" fill="#64748b" font-size="10">YEAR</text>
+      <text x="758" y="295" fill="#e2e8f0" font-weight="600">2024 ▾</text>
+      <rect x="854" y="262" width="100" height="40" rx="8" fill="#122032" stroke="#2b3b52"/>
+      <text x="868" y="277" fill="#64748b" font-size="10">MAKE</text>
+      <text x="868" y="295" fill="#e2e8f0" font-weight="600">Ford ▾</text>
+      <rect x="964" y="262" width="110" height="40" rx="8" fill="#122032" stroke="#2b3b52"/>
+      <text x="978" y="277" fill="#64748b" font-size="10">MODEL</text>
+      <text x="978" y="295" fill="#e2e8f0" font-weight="600">F-150 ▾</text>
+      <rect x="1084" y="262" width="88" height="40" rx="8" fill="url(#green)"/>
+      <text x="1128" y="287" fill="#ffffff" font-weight="700" text-anchor="middle">Find Parts</text>
+    </g>
+
+    <!-- result product cards -->
+    <rect x="724" y="356" width="226" height="150" rx="12" fill="#0b1420" stroke="#1f2c3d"/>
+    <rect x="740" y="372" width="194" height="54" rx="8" fill="#122032"/>
+    <text x="837" y="404" fill="#475569" font-size="24" text-anchor="middle">🌀</text>
+    <text x="740" y="446" fill="#e2e8f0" font-size="12.5" font-weight="600">Stage-2 Cold Air Intake</text>
+    <rect x="740" y="458" width="176" height="30" rx="8" fill="#052e16" stroke="#166534"/>
+    <text x="828" y="477" fill="#6ee7b7" font-size="12" font-weight="700" text-anchor="middle">✔ Guaranteed Exact Fit</text>
+
+    <rect x="962" y="356" width="226" height="150" rx="12" fill="#0b1420" stroke="#1f2c3d"/>
+    <rect x="978" y="372" width="194" height="54" rx="8" fill="#122032"/>
+    <text x="1075" y="404" fill="#475569" font-size="24" text-anchor="middle">🛞</text>
+    <text x="978" y="446" fill="#e2e8f0" font-size="12.5" font-weight="600">Severe-Duty Brake Kit</text>
+    <rect x="978" y="458" width="176" height="30" rx="8" fill="#052e16" stroke="#166534"/>
+    <text x="1066" y="477" fill="#6ee7b7" font-size="12" font-weight="700" text-anchor="middle">✔ Guaranteed Exact Fit</text>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+# Never bake secrets or local state into the image.
+.git
+.gitignore
+.env
+.env.*
+.fly-token
+secrets/
+config/master.key
+config/credentials.yml.enc
+
+# Local databases, logs, temp.
+db/*.sqlite3
+db/*.sqlite3-journal
+storage/*
+log/*
+tmp/*
+
+# Docs / demo assets not needed at runtime.
+docs/
+demo/
+*.md
+!README.md
+
+# Coverage and editor junk.
+coverage/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

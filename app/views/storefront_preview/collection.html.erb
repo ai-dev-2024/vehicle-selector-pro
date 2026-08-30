@@ -1,0 +1,51 @@
+<div class="sp-hero">
+  <h1>Parts guaranteed to fit your exact vehicle</h1>
+  <p>Select your Year, Make and Model below — every part shown is verified against
+     our fitment database with a 100% fitment guarantee.</p>
+</div>
+
+<div class="sp-widget-wrap">
+  <%= render 'widget' %>
+</div>
+
+<% if @vehicle %>
+  <div class="sp-results-banner">
+    ✔ Showing parts that fit your <strong><%= @vehicle[:display_name] %></strong>
+    — <strong><%= @products.size %></strong> matching part<%= 's' unless @products.size == 1 %>
+    <a href="/storefront_preview" style="float:right; color:#14532d;">Clear vehicle</a>
+  </div>
+
+  <div class="sp-section-title">Compatible Parts for <%= @vehicle[:display_name] %></div>
+
+  <div class="sp-grid">
+    <% icons = %w[🌀 🛞 🏗️ 🔩 🛡️ 💡 🧰 ⚙️] %>
+    <% if @products.any? %>
+      <% @products.each_with_index do |p, i| %>
+        <div class="sp-card">
+          <div class="sp-card-img"><%= icons[i % icons.length] %></div>
+          <div class="sp-card-body">
+            <div class="sp-card-title"><%= p[:product_title] %></div>
+            <div class="sp-card-sku">SKU <%= p[:sku] %><%= ' · Universal Fit' if p[:universal] %></div>
+            <div
+              class="vsp-pdp-fitment-badge <%= p[:universal] ? 'vsp-fit-universal' : 'vsp-fit-exact' %>"
+              data-product-id="<%= p[:product_id] %>"
+              data-universal="<%= p[:universal] %>"
+            >
+              <div class="vsp-badge-icon"><%= p[:universal] ? '🌐' : '✔' %></div>
+              <div class="vsp-badge-content">
+                <div class="vsp-badge-title">
+                  <%= p[:universal] ? 'Universal Fitment' : "Guaranteed Exact Fit for #{@vehicle[:display_name]}" %>
+                </div>
+                <div class="vsp-badge-description"><%= p[:fitment_notes].presence || '100% Fitment Guarantee. Ready for installation.' %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="grid-column:1/-1; color:#6d7175; padding:20px;">No parts in the demo catalog match this exact vehicle. Try another Year / Make / Model.</p>
+    <% end %>
+  </div>
+<% else %>
+  <div class="sp-section-title">Select a vehicle above to filter compatible parts.</div>
+<% end %>

@@ -1,11 +1,13 @@
 # Seed file for Vehicle Selector Pro
 puts "== Seeding Vehicle Selector Pro Database =="
 
-# 1. Create Demo Shop
-shop = Shop.find_or_create_by!(shopify_domain: "apex-performance-parts.myshopify.com") do |s|
+# 1. Create Demo Shop (uses the configured store domain; falls back to the
+#    bundled demo store so local development works out of the box)
+demo_domain = ENV.fetch('SHOPIFY_STORE_DOMAIN', 'vehicle-selector-pro.myshopify.com')
+shop = Shop.find_or_create_by!(shopify_domain: demo_domain) do |s|
   s.shopify_token = "shpua_test_live_secret_token_12345"
-  s.name = "Apex Performance Auto & Truck"
-  s.email = "support@apexperformance.example"
+  s.name = "Vehicle Selector Pro Demo"
+  s.email = "support@vehicleselectorpro.example"
   s.currency = "USD"
   s.iana_timezone = "America/Detroit"
   s.active = true

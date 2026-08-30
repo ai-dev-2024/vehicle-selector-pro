@@ -70,3 +70,6 @@ Thumbs.db
 # Fly.io CLI binary (should never be committed)
 flyctl.zip
 flyctl.exe
+
+# Redis infra config contains a generated password
+infra/redis/fly.toml

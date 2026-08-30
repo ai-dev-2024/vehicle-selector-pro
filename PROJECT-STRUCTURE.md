@@ -27,8 +27,8 @@ Vehicle Selector Pro/
 │   │   └── vehicle_hierarchy_service.rb
 │   └── views/                        # View templates
 │       ├── admin/                    # Admin dashboard views
-│       ├── layouts/                  # Layout templates
-│       └── home/                     # Home page views
+│       ├── layouts/                  # Layout templates (incl. storefront_preview)
+│       └── storefront_preview/       # Storefront preview harness views
 ├── config/                           # Rails configuration
 │   ├── environments/                 # Environment-specific configs
 │   ├── initializers/                 # Initialization scripts
@@ -42,11 +42,8 @@ Vehicle Selector Pro/
 │   ├── migrate/                       # Database migrations
 │   ├── schema.rb                      # Database schema
 │   └── seeds.rb                       # Seed data
-├── extensions/                       # Shopify Theme Extensions
-│   ├── theme-app-extension/          # Basic theme extension
-│   │   ├── blocks/                    # Theme blocks
-│   │   └── shopify.app.toml          # Extension config
-│   └── vehicle-selector-pro-extension/ # Enhanced extension
+├── extensions/                       # Shopify Theme App Extension
+│   └── vehicle-selector-pro-extension/
 │       ├── assets/                    # JavaScript & CSS
 │       │   ├── vehicle-selector.js
 │       │   └── vehicle-selector.css
@@ -56,15 +53,19 @@ Vehicle Selector Pro/
 │       ├── locales/                    # Localization files
 │       ├── snippets/                   # Reusable snippets
 │       └── shopify.extension.toml      # Extension config
+├── infra/                            # Deployment infrastructure
+│   └── redis/                        # Fly.io private Redis config
+│       ├── fly.toml                  # (gitignored; holds password)
+│       └── fly.toml.example          # Committed template
 ├── spec/                             # Test suite
+│   ├── integration/                  # Full-stack request tests
 │   ├── services/                      # Service tests
 │   ├── spec_helper.rb                 # Test configuration
 │   └── test_runner.rb                 # Test runner
 ├── public/                           # Public assets
 │   └── command-center.css            # Demo styling
 ├── docs/                             # Documentation
-│   ├── ARCHITECTURE.md               # System architecture
-│   ├── API.md                        # API documentation
+│   ├── assets/                        # Banner/logo images
 │   ├── DEPLOYMENT.md                 # Deployment guide
 │   ├── SETUP.md                      # Setup instructions
 │   └── DEMO_SCRIPT.md                # Demo script
@@ -85,6 +86,7 @@ Vehicle Selector Pro/
 ├── .env.example                      # Environment template
 ├── .gitignore                        # Git ignore rules
 ├── README.md                         # Main documentation
+├── CHANGELOG.md                      # Release history
 ├── CLIENT_DELIVERY.md                # Client delivery information
 ├── shopify.app.toml                  # Shopify app configuration
 ├── Vehicle Selector Pro (Ruby on Rails).pdf  # Original requirements

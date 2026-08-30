@@ -30,7 +30,9 @@ module AppProxy
         return render json: { success: false, error: "Parameter 'product_id' is required" }, status: :bad_request
       end
 
-      fitments = current_shop.vehicle_product_fitments.where(product_id: product_id.to_s).includes(:vehicle)
+      fitments = current_shop.vehicle_product_fitments
+                             .where(product_id: FitmentSearchService.product_id_variants(product_id))
+                             .includes(:vehicle)
       render json: {
         success: true,
         product_id: product_id,

@@ -3,10 +3,6 @@ require 'uri'
 require 'json'
 
 module Shopify
-  class GraphQLError < StandardError; end
-  class ThrottledError < GraphQLError; end
-  class AuthenticationError < GraphQLError; end
-
   class GraphQLClient
     MAX_RETRIES = 3
     DEFAULT_API_VERSION = "2025-07"

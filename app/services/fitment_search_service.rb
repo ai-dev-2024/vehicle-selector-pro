@@ -10,6 +10,22 @@ class FitmentSearchService
     Rails.cache.fetch("vsp/shop_version/#{shop_id}", expires_in: 24.hours) { 1 }
   end
 
+  # Returns every stored representation of a product id so lookups match
+  # whether the caller passes a numeric id or a GraphQL global id (GID).
+  # Shopify themes expose product.id as a plain integer, while the API and
+  # metafields use gid://shopify/Product/<id>, so both forms must resolve.
+  def self.product_id_variants(product_id)
+    pid = product_id.to_s.strip
+    return [] if pid.blank?
+
+    gid_prefix = "gid://shopify/Product/"
+    if pid.start_with?(gid_prefix)
+      [pid, pid.delete_prefix(gid_prefix)]
+    else
+      [pid, "#{gid_prefix}#{pid}"]
+    end
+  end
+
   def initialize(shop)
     @shop = shop.is_a?(Shop) ? shop : Shop.find_by!(shopify_domain: shop.to_s)
     @version = self.class.shop_version(@shop.id)
@@ -109,8 +125,10 @@ class FitmentSearchService
   end
 
   def check_fitment(product_id:, vehicle_id: nil, year: nil, make: nil, model: nil, trim: nil, engine: nil)
+    pid_variants = self.class.product_id_variants(product_id)
+
     # Check if universal fit first
-    universal = @shop.vehicle_product_fitments.universal.find_by(product_id: product_id.to_s)
+    universal = @shop.vehicle_product_fitments.universal.find_by(product_id: pid_variants)
     if universal.present?
       return {
         fits: true,
@@ -134,7 +152,7 @@ class FitmentSearchService
 
     return { fits: false, status: 'vehicle_not_specified', badge_text: 'Select Vehicle', badge_color: 'warning' } if target_vehicle.nil?
 
-    fitment = @shop.vehicle_product_fitments.find_by(product_id: product_id.to_s, vehicle_id: target_vehicle.id)
+    fitment = @shop.vehicle_product_fitments.find_by(product_id: pid_variants, vehicle_id: target_vehicle.id)
 
     if fitment.present?
       {

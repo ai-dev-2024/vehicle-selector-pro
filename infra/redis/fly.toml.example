@@ -1,0 +1,24 @@
+# Dedicated Redis for Vehicle Selector Pro (Sidekiq jobs + Rails cache).
+# Deployed separately from the main app:
+#   flyctl apps create vsp-redis --org personal
+#   flyctl deploy --config infra/redis/fly.toml --app vsp-redis
+# Reachable from the main app at redis://default:<password>@vsp-redis.internal:6379
+app = "vsp-redis"
+primary_region = "iad"
+
+[build]
+  image = "redis:7-alpine"
+
+[processes]
+  app = "redis-server --requirepass REPLACE_WITH_GENERATED_PASSWORD --maxmemory 128mb --maxmemory-policy noeviction"
+
+[[services]]
+  internal_port = 6379
+  protocol = "tcp"
+  processes = ["app"]
+  auto_stop_machines = false
+  auto_start_machines = true
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

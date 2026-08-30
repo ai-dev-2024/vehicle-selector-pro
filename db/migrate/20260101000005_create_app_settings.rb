@@ -1,7 +1,7 @@
 class CreateAppSettings < ActiveRecord::Migration[7.1]
   def change
     create_table :app_settings do |t|
-      t.references :shop, null: false, foreign_key: { on_delete: :cascade }
+      t.references :shop, null: false, foreign_key: { on_delete: :cascade }, index: false
       t.string :widget_title, default: "Select Your Vehicle"
       t.string :widget_subtitle, default: "Find parts guaranteed to fit your exact vehicle"
       t.string :layout_style, default: "horizontal" # horizontal, vertical, popup

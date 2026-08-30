@@ -1,0 +1,36 @@
+<div class="sp-hero">
+  <h1>Parts guaranteed to fit your exact vehicle</h1>
+  <p>Select your Year, Make and Model below — every part shown is verified against
+     our fitment database with a 100% fitment guarantee.</p>
+</div>
+
+<div class="sp-widget-wrap">
+  <%= render 'widget' %>
+</div>
+
+<div class="sp-section-title">Featured Parts <span style="color:#6d7175; font-weight:500; font-size:13px;">— fitment badges update live when you select a vehicle</span></div>
+
+<div class="sp-grid">
+  <% icons = %w[🌀 🛞 🏗️ 🔩 🛡️ 💡 🧰 ⚙️] %>
+  <% @products.each_with_index do |p, i| %>
+    <div class="sp-card">
+      <div class="sp-card-img"><%= icons[i % icons.length] %></div>
+      <div class="sp-card-body">
+        <div class="sp-card-title"><%= p[:title] %></div>
+        <div class="sp-card-sku">SKU <%= p[:sku] %></div>
+        <!-- Identical markup to blocks/product_fitment_badge.liquid -->
+        <div
+          class="vsp-pdp-fitment-badge vsp-fit-unselected"
+          data-product-id="<%= p[:product_id] %>"
+          data-universal="<%= p[:universal] %>"
+        >
+          <div class="vsp-badge-icon">🚗</div>
+          <div class="vsp-badge-content">
+            <div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>
+            <div class="vsp-badge-description">100% Fitment Guarantee. Free returns if verified fitment fails.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

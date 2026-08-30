@@ -1,0 +1,59 @@
+<!-- Identical markup to blocks/vehicle_selector_filter.liquid (default settings) -->
+<div
+  class="vsp-widget-container"
+  data-layout="horizontal"
+  data-collection-handle="storefront_preview"
+  data-filter-param="filter.v.m.custom.vehicle_fitment"
+>
+  <div class="vsp-widget-header">
+    <div class="vsp-widget-title-area">
+      <h3 class="vsp-widget-title">
+        <span>🚗</span>
+        <span>Select Your Vehicle</span>
+      </h3>
+      <p class="vsp-widget-subtitle">Find parts guaranteed to fit your exact vehicle</p>
+    </div>
+    <div class="vsp-garage-wrapper">
+      <button type="button" class="vsp-garage-btn">
+        <span>🔧</span>
+        <span>My Garage</span>
+        <span class="vsp-caret">▼</span>
+      </button>
+      <div class="vsp-garage-dropdown"></div>
+    </div>
+  </div>
+
+  <div class="vsp-filters-grid">
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Year</label>
+      <select class="vsp-select vsp-select-year"><option value="">Loading Years...</option></select>
+    </div>
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Make</label>
+      <select class="vsp-select vsp-select-make" disabled><option value="">Select Make</option></select>
+    </div>
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Model</label>
+      <select class="vsp-select vsp-select-model" disabled><option value="">Select Model</option></select>
+    </div>
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Trim</label>
+      <select class="vsp-select vsp-select-trim" disabled><option value="">All Trims</option></select>
+    </div>
+    <div class="vsp-form-group">
+      <label class="vsp-form-label">Engine</label>
+      <select class="vsp-select vsp-select-engine" disabled><option value="">All Engines</option></select>
+    </div>
+    <div class="vsp-actions-group">
+      <button type="button" class="vsp-btn vsp-btn-primary vsp-btn-search" disabled>Find Parts</button>
+      <button type="button" class="vsp-btn vsp-btn-outline vsp-btn-reset">Clear</button>
+    </div>
+  </div>
+
+  <div class="vsp-active-vehicle-bar" style="display: none;">
+    <div class="vsp-active-vehicle-info">
+      <span>✔ Current Selected Vehicle:</span>
+      <span class="vsp-active-vehicle-name" style="color: #202223;"></span>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,7 @@
 
 Vehicle Selector Pro is an enterprise-grade Shopify application engineered to solve the complex automotive Year-Make-Model-Trim-Engine (YMMTE) fitment problem for merchants.
 
-By combining a **normalized, high-speed multi-tenant local cache** with **bi-directional Shopify Product Metafield synchronization** (`custom.vehicle_fitment`), Vehicle Selector Pro delivers sub-15ms storefront filtering, guaranteed fitment badges on product detail pages (PDP), and customer vehicle wallets ("My Garage") without impacting store performance or using deprecated ScriptTag APIs.
+By combining a **normalized, high-speed multi-tenant local cache** with **Shopify Product Metafield synchronization** (app-owned `$app.vehicle_fitment` metafields via GraphQL `metafieldsSet`), Vehicle Selector Pro delivers cached storefront filtering, guaranteed fitment badges on product detail pages (PDP), and customer vehicle wallets ("My Garage") without impacting store performance or using deprecated ScriptTag APIs.
 
 ---
 
@@ -21,24 +21,21 @@ By combining a **normalized, high-speed multi-tenant local cache** with **bi-dir
 1. **Source Code & Git Repository**:
    - Complete Rails 7.1 application with ActiveRecord multi-tenant models, controllers, background workers, and service objects.
    - Shopify Theme App Extension with Liquid blocks (`blocks/vehicle_selector_filter.liquid`, `blocks/product_fitment_badge.liquid`) and vanilla JavaScript client (`assets/vehicle-selector.js`).
-   - Automated test suite with 11 test suites and 35 assertions passing cleanly (`ruby spec/test_runner.rb`).
+   - Two automated test suites: isolated unit harness (11 runs / 35 assertions) and full-stack integration tests that boot the real app and issue HTTP requests (9 runs / 28 assertions) — all passing.
 
-2. **Interactive Demo Interface**:
-   - Located in `demo/` folder with two demo options:
-     - `demo/index.html` - Enhanced command center interface with automated walkthrough
-     - `demo/demo-alternative.html` - Alternative demo interface
-   - Fully interactive storefront widget, collection filters, and PDP fitment badges.
-   - Merchant Polaris admin dashboard with Fitment Matrix, YMM Tree Explorer, CSV bulk importer, and Metafield Sync Monitor.
+2. **Live Deployment & Verification**:
+   - Deployed on Fly.io: https://vehicle-selector-pro.fly.dev (Puma + Sidekiq + Postgres + private Redis).
+   - Installed via OAuth on a real Shopify development store with 7 demo products; fitment metafields verified on all products.
+   - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 
-3. **Demo Video**:
-   - Pre-recorded 2.5-minute walkthrough available in `demo/video/`
-   - Demonstrates all key features with professional narration
-   - Shows storefront functionality, admin dashboard, and fitment management
+3. **Demo Assets**:
+   - `/storefront_preview` (development-only harness) renders the production Theme App Extension widget against the live API — cascading filters, collection results, and PDP fitment badges.
+   - Narrated 2.5-minute walkthrough video in `demo/video/` with the matching script in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
 
 4. **Production Documentation**:
-   - Comprehensive [`README.md`](README.md) with system architecture diagrams, database ERDs, API endpoint reference, and step-by-step deployment instructions.
-   - [`docs/SETUP.md`](docs/SETUP.md) - Detailed setup and configuration guide
-   - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) - Complete deployment instructions for Fly.io
+   - Comprehensive [`README.md`](README.md) with system architecture diagrams, database ERDs, API endpoint reference, and step-by-step setup.
+   - [`docs/SETUP.md`](docs/SETUP.md) — local development guide
+   - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — verified Fly.io runbook incl. real incident table
 
 ---
 
@@ -51,7 +48,7 @@ Use this structured script when presenting the solution to stakeholders or clien
 "Hello! Today I'm presenting Vehicle Selector Pro, a production-grade Shopify application built with Ruby on Rails 7 and modern Online Store 2.0 Theme App Extensions. It is designed to handle high-volume automotive parts catalogs with complex Year, Make, Model, Trim, and Engine fitment rules."
 
 [0:25 - 0:55] Storefront Cascading Filters & Performance
-"On the storefront, the customer interacts with our Theme App Extension block. Notice how selecting the Year instantly cascades to available Makes, Models, Trims, and Engines. Because all lookups route through our Shopify App Proxy with multi-tier in-memory caching, responses are returned in under 15 milliseconds."
+"On the storefront, the customer interacts with our Theme App Extension block. Notice how selecting the Year instantly cascades to available Makes, Models, Trims, and Engines. All lookups route through our Shopify App Proxy with per-shop cached queries, so the dropdowns stay snappy even on large catalogs."
 
 [0:55 - 1:25] Collection Filtering & 'My Garage' Customer Wallet
 "When the customer clicks 'Search Compatible Parts', the collection page instantly filters to compatible products using Shopify's native metafield filter tokens. Furthermore, our 'My Garage' feature saves the customer's vehicle in LocalStorage, allowing them to switch between vehicles in their household effortlessly."
@@ -63,16 +60,16 @@ Use this structured script when presenting the solution to stakeholders or clien
 "In the Shopify Admin, merchants get a Polaris-styled dashboard with a full Product Fitment Matrix, YMM Vehicle Database explorer, and Bulk CSV Importer for uploading thousands of compatibility mappings. When fitment changes occur, our asynchronous Sidekiq background jobs batch-sync data to Shopify's GraphQL Admin API using the 'metafieldsSet' mutation."
 
 [2:25 - 2:30] Security, Testing & Production Readiness
-"All App Proxy requests are verified using HMAC-SHA256 signatures, and our complete test suite with 35 assertions passes with zero errors. The application is completely production-ready."
+"All App Proxy and webhook requests are verified using HMAC-SHA256 signatures with constant-time comparison, and both our unit and full-stack integration suites pass with zero errors. The application is deployed and production-ready."
 ```
 
 ---
 
 ## 🏛️ Technical Specifications Summary
 
-- **Framework**: Ruby on Rails 7.1.3 (Ruby >= 3.2.0)
+- **Framework**: Ruby on Rails 7.1 (Ruby >= 3.2.0)
 - **Database**: PostgreSQL (Production) / SQLite3 (Development & CI)
-- **Background Jobs**: Sidekiq 7.2 + Redis 5.0+ with exponential backoff for GraphQL rate-limiting
-- **Shopify API Version**: `2024-04` (GraphQL Admin API)
+- **Background Jobs**: Sidekiq 7 + Redis with exponential backoff for GraphQL rate-limiting
+- **Shopify API Version**: `2025-07` (GraphQL Admin API); app-owned metafield definitions in `shopify.app.toml`
 - **App Proxy Security**: HMAC-SHA256 verification via constant-time comparison (`ActiveSupport::SecurityUtils.secure_compare`)
 - **Theme Extension**: Zero ScriptTag API usage; 100% Theme App Extension (OS 2.0) compliant.

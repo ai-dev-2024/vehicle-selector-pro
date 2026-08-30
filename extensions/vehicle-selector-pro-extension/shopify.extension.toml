@@ -1,6 +1,7 @@
 name = "Vehicle Selector Pro"
 type = "theme"
 api_version = "2025-07"
+uid = "7f40caf8-6184-b89b-2176-2d1395c63f229d04c263"
 
 [blocks.vehicle_selector_filter]
 name = "Vehicle Selector Filter"
@@ -9,5 +10,5 @@ template = "blocks/vehicle_selector_filter.liquid"
 
 [blocks.product_fitment_badge]
 name = "Product Fitment Badge"
-target = "block"
+target = "section"
 template = "blocks/product_fitment_badge.liquid"

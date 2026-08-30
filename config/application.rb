@@ -22,9 +22,8 @@ module VehicleSelectorPro
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Auto-load services and workers
-    config.autoload_paths << Rails.root.join('app/services')
-    config.autoload_paths << Rails.root.join('app/jobs')
+    # app/services and app/jobs are autoloaded and eager-loaded by Rails
+    # convention (all app/* subdirectories); no manual registration needed.
 
     # Configuration for the application, engines, and railties goes here.
     config.active_job.queue_adapter = :sidekiq

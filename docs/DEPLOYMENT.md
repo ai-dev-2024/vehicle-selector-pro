@@ -1,237 +1,225 @@
-# Deployment Guide - Vehicle Selector Pro
+# Deployment Guide — Vehicle Selector Pro
 
-## Fly.io Deployment (Recommended)
+This guide reflects the **verified production deployment** of Vehicle Selector
+Pro on Fly.io. Every command below was executed successfully against the live
+environment at `https://vehicle-selector-pro.fly.dev`.
 
-### Prerequisites
-- Fly.io CLI installed
-- Fly.io account created
-- Application code ready
+- **App:** `vehicle-selector-pro` (region `iad`)
+- **Database:** Fly Postgres cluster `vehicle-selector-pro-db` (single node)
+- **Queue/Cache:** dedicated Redis app `vsp-redis` (internal network only)
+- **Processes:** `app` (Puma web) + `worker` (Sidekiq) with standby
 
-### 1. Install Fly.io CLI
+---
+
+## 1. Prerequisites
+
+| Tool | Purpose | Install |
+|------|---------|---------|
+| flyctl | Fly.io CLI | `winget install Fly-io.flyctl` (Windows) or see fly.io/docs |
+| Shopify CLI 4.x | App/extension deploy | `npm install -g @shopify/cli` |
+| A Shopify Partner app | Client ID + secret | partners.shopify.com |
+| A Shopify development store | Install target | Partners → Stores → Add store |
+
 ```bash
-# Using winget (Windows)
-winget install Fly-io.flyctl
-
-# Or download from https://fly.io/
+flyctl auth login          # interactive browser login
+shopify auth login         # interactive Partner login (one time)
 ```
 
-### 2. Authenticate with Fly.io
+Headless note: in CI or non-interactive shells, export `FLY_API_TOKEN`
+(create one with `flyctl tokens create deploy`) instead of `flyctl auth login`.
+
+---
+
+## 2. Provision infrastructure
+
 ```bash
-fly auth login
+# Web application
+flyctl apps create --name vehicle-selector-pro --org personal --yes
+
+# Postgres (single node is enough for a demo; use 3 nodes for production HA)
+flyctl postgres create \
+  --name vehicle-selector-pro-db \
+  --region iad \
+  --vm-size shared-cpu-1x \
+  --initial-cluster-size 1 \
+  --volume-size 1
+
+# Attach it — this sets the DATABASE_URL secret automatically
+flyctl postgres attach vehicle-selector-pro-db -a vehicle-selector-pro
 ```
 
-### 3. Initialize Application
+### Redis (for Sidekiq + Rails cache)
+
+Fly's managed Upstash Redis requires interactive prompts; a plain Redis app on
+the private network is simpler and fully scriptable. Config lives in
+[`infra/redis/fly.toml`](../infra/redis/fly.toml) (a committed example with a
+placeholder password is at `infra/redis/fly.toml.example`):
+
 ```bash
-cd vehicle-selector-pro
-fly launch --name vehicle-selector-pro
+# 1. Generate a password and put it in infra/redis/fly.toml (keep it out of git)
+openssl rand -hex 16
+
+# 2. Create + deploy
+flyctl apps create --name vsp-redis --org personal --yes
+flyctl deploy --config infra/redis/fly.toml --app vsp-redis
 ```
 
-### 4. Configure Environment Variables
+The app reaches it at `redis://default:<password>@vsp-redis.internal:6379`
+(private network only — never exposed publicly).
+
+---
+
+## 3. Configure secrets
+
 ```bash
-fly secrets set SHOPIFY_API_KEY=your_api_key
-fly secrets set SHOPIFY_API_SECRET=your_api_secret
-fly secrets set DATABASE_URL=postgres://user:password@hostname:5432/dbname
-fly secrets set REDIS_URL=redis://hostname:6379/1
+flyctl secrets set -a vehicle-selector-pro \
+  SHOPIFY_API_KEY="<client id>" \
+  SHOPIFY_API_SECRET="<client secret>" \
+  SHOPIFY_STORE_DOMAIN="your-store.myshopify.com" \
+  HOST="https://vehicle-selector-pro.fly.dev" \
+  SECRET_KEY_BASE="$(openssl rand -hex 64)" \
+  ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY="$(openssl rand -hex 32)" \
+  ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY="$(openssl rand -hex 32)" \
+  ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT="$(openssl rand -hex 32)" \
+  REDIS_URL="redis://default:<redis-password>@vsp-redis.internal:6379"
 ```
 
-### 5. Deploy Application
+`DATABASE_URL` comes from the Postgres attach step. Secrets are staged and
+applied on the next deploy; inspect names (never values) with
+`flyctl secrets list -a vehicle-selector-pro`.
+
+Why these matter:
+
+- `HOST` is the OAuth redirect base — it must match the URLs in
+  `shopify.app.toml` exactly.
+- `SECRET_KEY_BASE` and the three `ACTIVE_RECORD_ENCRYPTION_*` keys are
+  required because this app ships without `config/master.key` (tokens are
+  encrypted at rest with ActiveRecord encryption).
+- `REDIS_URL` switches the cache store to Redis and powers Sidekiq.
+
+---
+
+## 4. Deploy
+
 ```bash
-fly deploy
+flyctl deploy
 ```
 
-### 6. Access Your Application
-Your app will be available at: `https://vehicle-selector-pro.fly.dev`
+What happens:
 
-## Database Setup
+1. The Dockerfile image is built remotely (Depot). Build-time dummy env vars
+   let Rails boot for `assets:precompile` — real values are runtime-only.
+2. `[deploy] release_command` runs `bundle exec rails db:migrate` on a
+   throwaway machine.
+3. Machines are launched for both process groups: `app` (Puma, 2 machines)
+   and `worker` (Sidekiq, 1 + standby).
+4. Health check: `GET /up` every 15s.
 
-### Production Database
-Fly.io provides managed PostgreSQL:
+Seed the demo catalog (vehicles + fitments) once after the first deploy:
+
 ```bash
-# Create PostgreSQL database
-fly postgres create
-
-# Attach to application
-fly postgres attach vehicle-selector-pro-db
+flyctl machine run registry.fly.io/vehicle-selector-pro:<image-tag> \
+  -a vehicle-selector-pro --region iad \
+  --vm-size shared-cpu-1x --vm-memory 512mb --rm \
+  bundle exec rails db:seed
 ```
 
-### Redis for Sidekiq
+---
+
+## 5. Register the app on Shopify
+
+`shopify.app.toml` carries the application URL, OAuth redirect URLs, App Proxy
+mapping and webhook subscriptions. Push it (plus the Theme App Extension) with:
+
 ```bash
-# Create Redis instance
-fly redis create
-
-# Attach to application
-fly redis attach vehicle-selector-pro-redis
+shopify app deploy --allow-updates
 ```
 
-## Environment Configuration
+Notes learned the hard way:
 
-### Production Environment Variables
-Required variables for production:
-- `SHOPIFY_API_KEY` - Shopify API key
-- `SHOPIFY_API_SECRET` - Shopify API secret
-- `DATABASE_URL` - PostgreSQL connection string
-- `REDIS_URL` - Redis connection string
-- `RAILS_ENV` - Set to `production`
-- `RAILS_SERVE_STATIC_FILES` - Set to `true`
+- The mandatory **customer-privacy webhooks** (`customers/data_request`,
+  `customers/redact`, `shop/redact`) **cannot** be registered via CLI/API —
+  configure them in the Partners Dashboard under **Customer privacy**. The
+  Rails endpoints for them exist at `/webhooks/customers_data_request`,
+  `/webhooks/customers_redact`, `/webhooks/shop_redact`.
+- Theme-app-extension block schemas must use `"target": "section"` (or
+  `head`/`body`) — `"target": "block"` is rejected.
 
-### Security Considerations
-- Never commit `.env` file to repository
-- Use Fly.io secrets for sensitive data
-- Rotate API keys regularly
-- Enable SSL/TLS for all connections
+Then install the app on the dev store:
 
-## Scaling Configuration
-
-### Basic Scaling
-Update `fly.toml` for scaling:
-```toml
-[http_service]
-  internal_port = 3000
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 1
-
-[processes]
-  app = "bundle exec puma -C config/puma.rb"
-  worker = "bundle exec sidekiq -C config/sidekiq.yml"
+```
+https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com
 ```
 
-### Monitor Performance
+Approve the scopes in the Shopify admin; the OAuth callback stores the shop's
+access token (encrypted) and opens the embedded admin dashboard.
+
+---
+
+## 6. Verify
+
 ```bash
-# View application logs
-fly logs
-
-# Monitor resource usage
-fly dashboard
-```
-
-## Troubleshooting Deployment
-
-### Common Issues
-
-#### Build Failures
-```bash
-# Check build logs
-fly logs --build
-
-# Rebuild without cache
-fly deploy --build-only
-```
-
-#### Database Connection Issues
-```bash
-# Check database status
-fly postgres list
-
-# Reset database connection
-fly postgres reset vehicle-selector-pro-db
-```
-
-#### Runtime Errors
-```bash
-# View application logs
-fly logs
-
-# SSH into application
-fly ssh
-```
-
-## Continuous Deployment
-
-### GitHub Actions Integration
-Create `.github/workflows/deploy.yml`:
-```yaml
-name: Deploy to Fly.io
-on:
-  push:
-    branches: [ main ]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
-```
-
-## Monitoring and Maintenance
-
-### Health Checks
-The application includes a health check endpoint:
-```bash
+# Health
 curl https://vehicle-selector-pro.fly.dev/up
+# => {"status":"ok"}
+
+# App Proxy (signature verified server-side) — years for the shop
+curl "https://vehicle-selector-pro.fly.dev/apps/vehicle-selector/years?shop=<domain>&timestamp=<ts>&signature=<hmac>"
 ```
 
-### Log Management
+The proxy signature is `HMAC-SHA256(secret, sorted key=value pairs excluding
+signature)` — Shopify adds it automatically when storefront traffic arrives
+through the proxy; for manual testing compute it with the app's client secret.
+
+Machine status:
+
 ```bash
-# View recent logs
-fly logs
-
-# Follow logs in real-time
-fly logs --tail
+flyctl status -a vehicle-selector-pro   # app + worker should be "started"
+flyctl logs -a vehicle-selector-pro --no-tail
 ```
 
-### Backup Strategy
-- Regular database backups via Fly.io
-- Export Shopify metafields periodically
-- Keep configuration in version control
+---
 
-## Rollback Procedures
+## 7. Operating notes
 
-### Quick Rollback
+### One-off jobs
+
+`flyctl ssh console` can be unreliable from some networks; a one-off machine
+is deterministic:
+
 ```bash
-# Rollback to previous deployment
-fly deploy --rollback
+flyctl machine run registry.fly.io/vehicle-selector-pro:<image-tag> \
+  -a vehicle-selector-pro --region iad --rm \
+  bundle exec rails runner "puts Shop.count"
 ```
 
-### Database Rollback
-```bash
-# Use Fly.io database snapshots
-fly postgres snapshots
-```
+### Autoscaling behaviour
 
-## Performance Optimization
+`auto_stop_machines = true` with `min_machines_running = 0` stops idle web
+machines; Shopify requests (OAuth, webhooks, proxy) auto-start them. First
+request after idle pays a ~2–4s cold start. For production traffic set
+`min_machines_running = 1`.
 
-### Caching Strategy
-- Enable Rails caching in production
-- Use Redis for session storage
-- Implement CDN for static assets
+### Costs (approximate, shared instances)
 
-### Database Optimization
-- Add database indexes for frequently queried fields
-- Use connection pooling
-- Enable query caching
+| Resource | Spec | ~Monthly |
+|----------|------|----------|
+| 2× web machines | shared-cpu-1x 256MB | ~$4 |
+| 1× worker + standby | shared-cpu-1x 256MB | ~$2 |
+| Postgres | shared-cpu-1x + 1GB volume | ~$3 |
+| Redis | shared-cpu-1x 256MB ×2 | ~$4 |
 
-## Security Best Practices
+Tear everything down with `flyctl apps destroy vehicle-selector-pro`,
+`flyctl postgres destroy vehicle-selector-pro-db`, etc.
 
-1. **Environment Variables**: Never commit secrets
-2. **HTTPS Only**: Force SSL in production
-3. **API Keys**: Rotate regularly
-4. **Access Control**: Limit admin access
-5. **Monitoring**: Set up alerts for suspicious activity
+---
 
-## Support and Maintenance
+## 8. Troubleshooting (from real incidents)
 
-For deployment issues:
-1. Check Fly.io status page
-2. Review application logs
-3. Consult Fly.io documentation
-4. Check GitHub issues
-
-## Alternative Deployment Platforms
-
-### Railway
-- Easy PostgreSQL and Redis setup
-- GitHub integration
-- Simple deployment process
-
-### Render
-- Free tier available
-- Built-in PostgreSQL
-- Automatic SSL certificates
-
-### Heroku
-- Mature platform
-- Extensive documentation
-- Good for scaling
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `wrong number of arguments (given 1, expected 0)` in `ConnectionPool#initialize` at boot | `connection_pool` 3.x removed the hash constructor Rails 7.1's redis cache store uses | Pin `gem 'connection_pool', '~> 2.4'` |
+| Puma crashes: `rb_sysopen - tmp/pids/server.pid` | `tmp/` excluded from the image | `RUN mkdir -p tmp/pids log storage` in Dockerfile |
+| `PG::DuplicateTable ... index_app_settings_on_shop_id` | `t.references` + same-named explicit index | `t.references ..., index: false` |
+| Build fails in `assets:precompile` | `database.yml` raises without `DATABASE_URL` in production | Provide a dummy `DATABASE_URL` build ARG |
+| Zeitwerk/eager-load crash (`Shopify::ThrottledError` uninitialized) | Error classes defined inline in another file | One Zeitwerk-managed file per constant + inflections |
