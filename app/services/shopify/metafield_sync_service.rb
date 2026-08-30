@@ -1,10 +1,11 @@
 module Shopify
   class MetafieldSyncService
-    # Merchant-visible metafield pinned on the store:
-    #   custom.vehicle_fitment  type = "json"  (storefront PUBLIC_READ)
-    # Definition is ensured by MetafieldDefinitionService; we always send
-    # namespace + type explicitly so metafieldsSet works even before the
-    # definition exists.
+    # Merchant-visible metafield on the store:
+    #   custom.vehicle_fitment  type = "json"
+    # The merchant creates the one-time DEFINITION in admin for storefront-visible
+    # access (the Admin API cannot create merchant `custom`-namespace definitions);
+    # we always send namespace + type explicitly so metafieldsSet value writes
+    # work regardless.
     NAMESPACE = "custom".freeze
     KEY = "vehicle_fitment".freeze
     TYPE = "json".freeze

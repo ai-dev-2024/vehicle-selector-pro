@@ -52,6 +52,20 @@ class Shop < ApplicationRecord
     )
   end
 
+  # shopify_app stores every authenticated session through this hook (via
+  # SessionRepository.store_shop_session -> Shop.store). We extend the default
+  # ShopSessionStorage#store (which only writes the access token) to also
+  # reactivate the shop, so a merchant who uninstalls and reinstalls is not
+  # left permanently inactive and bounced out of the admin.
+  def self.store(auth_session, *_args)
+    shop = find_or_initialize_by(shopify_domain: auth_session.shop)
+    shop.shopify_token = auth_session.access_token
+    shop.active = true
+    shop.uninstalled_at = nil
+    shop.save!
+    shop.id
+  end
+
   def fitment_count
     vehicle_product_fitments.count
   end

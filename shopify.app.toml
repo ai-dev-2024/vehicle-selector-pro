@@ -11,14 +11,16 @@ scopes = "read_products,write_products,read_product_listings,read_customers,writ
 use_legacy_install_flow = false
 optional_scopes = [ ]
 
-# Product fitment metafield: the Rails app creates and manages the
-# `custom.vehicle_fitment` definition (type json, pinned, storefront
-# PUBLIC_READ) at install time via MetafieldDefinitionService, and syncs
-# values via the GraphQL `metafieldsSet` mutation. A standard `custom`
-# namespace is used so the merchant can inspect/edit values in the Shopify
-# admin and the data is readable by native collection filters & Storefront API.
-# (An app-owned `$app` definition was evaluated but cannot be driven by the
-# Admin API token used for background sync, so `custom` was chosen instead.)
+# Product fitment metafield: the Rails app WRITES fitment values to the
+# `custom.vehicle_fitment` product metafield via the GraphQL `metafieldsSet`
+# mutation (namespace `custom`, type `json`). The merchant creates that one
+# metafield DEFINITION once in the Shopify admin (Product -> Metafields,
+# click Add definition, Public read), because the Admin API cannot create
+# merchant-owned `custom`-namespace definitions; the app manages every value
+# write. Note: JSON metafields are not readable through the Storefront API or
+# native collection filters, so the storefront selector/fitment UX is driven
+# by this app's App Proxy + cached database, and the metafield is used for
+# admin read-back and merchant inspection.
 
 [auth]
 redirect_urls = [ "https://vehicle-selector-pro.fly.dev/auth/shopify/callback" ]

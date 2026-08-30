@@ -60,6 +60,6 @@ The 2.5-minute demo video is at [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/V
 - **Framework**: Ruby on Rails 7.1 (Ruby >= 3.2.0)
 - **Database**: PostgreSQL (Production) / SQLite3 (Development & CI)
 - **Background Jobs**: Sidekiq 7 + Redis with exponential backoff for GraphQL rate-limiting
-- **Shopify API Version**: `2025-07` (GraphQL Admin API); `custom.vehicle_fitment` product metafield definition created at install via `MetafieldDefinitionService`
+- **Shopify API Version**: `2025-07` (GraphQL Admin API); fitment values are written to the `custom.vehicle_fitment` product metafield via GraphQL `metafieldsSet`. Because the Admin API cannot create merchant-owned `custom`-namespace metafield **definitions**, the merchant creates that one definition in the Shopify admin (Product → Metafields) with *Public read* storefront access; the app handles every value write automatically.
 - **App Proxy Security**: HMAC-SHA256 verification via constant-time comparison (`ActiveSupport::SecurityUtils.secure_compare`)
 - **Theme Extension**: Zero ScriptTag API usage; 100% Theme App Extension (OS 2.0) compliant.
