@@ -66,9 +66,17 @@ bundle exec sidekiq -C config/sidekiq.yml
 ## Development Workflow
 
 ### Running Tests
+The canonical suite is RSpec (request, job, model and service specs) plus a
+Minitest integration suite that boots the real app:
+
 ```bash
-ruby spec/test_runner.rb
+bundle exec rspec spec --exclude-pattern "spec/integration/*"   # RSpec suite
+ruby spec/integration/app_proxy_integration_test.rb             # integration
+ruby spec/test_runner.rb                                        # both, with summary
+bundle exec rubocop                                             # lint (zero offenses)
 ```
+
+CI (`.github/workflows/ci.yml`) runs the suite + lint + zeitwerk check on every push and PR.
 
 ### Accessing the Application
 - **Admin Dashboard**: http://localhost:3000

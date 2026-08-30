@@ -8,6 +8,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live_Storefront_Demo-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/demo)
 [![Admin Preview](https://img.shields.io/badge/Live_Admin_Preview-1f6feb?style=flat-square)](https://vehicle-selector-pro.fly.dev/demo/admin)
+[![CI](https://github.com/ai-dev-2024/vehicle-selector-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-dev-2024/vehicle-selector-pro/actions/workflows/ci.yml)
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
@@ -224,6 +225,8 @@ Then open `http://localhost:3000` for the admin dashboard, or `http://localhost:
 | [Deployment](docs/DEPLOYMENT.md) | Fly.io runbook with provisioning commands |
 | [API reference](docs/API.md) | App Proxy endpoints and webhook topics |
 | [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model |
+| [Privacy policy](docs/PRIVACY.md) | GDPR coverage, data inventory, retention (also served at /privacy) |
+| [App Store submission](docs/APP_STORE_SUBMISSION.md) | Partners Dashboard steps, listing copy, review notes |
 | [Demo script](docs/DEMO_SCRIPT.md) | Voiceover narration for the walkthrough video |
 | [Changelog](CHANGELOG.md) | Release history |
 
