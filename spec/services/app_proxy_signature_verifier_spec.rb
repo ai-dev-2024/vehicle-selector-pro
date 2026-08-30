@@ -1,50 +1,44 @@
-require_relative "../spec_helper"
+require "rails_helper"
 
-class AppProxySignatureVerifierTest < Minitest::Test
-  def setup
-    @secret = "my_super_secret_shopify_key_12345"
+RSpec.describe AppProxySignatureVerifier do
+  let(:secret) { "my_super_secret_shopify_key_12345" }
+
+  def signed_params(params, signing_secret = secret)
+    filtered = params.reject { |k, _| %w[signature action controller format].include?(k.to_s) }
+    message = filtered.sort_by { |k, _| k.to_s }.map { |k, v| "#{k}=#{v}" }.join
+    params.merge("signature" => OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), signing_secret, message))
   end
 
-  def test_valid_signature_calculation_and_verification
-    params = {
-      "shop" => "apex-parts.myshopify.com",
-      "path_prefix" => "/apps/vehicle-selector",
-      "timestamp" => "1724900000",
-      "year" => "2024",
-      "make" => "Ford"
-    }
-
-    # Sorted order: make=Fordpath_prefix=/apps/vehicle-selectorshop=apex-parts.myshopify.comtimestamp=1724900000year=2024
-    expected_message = "make=Fordpath_prefix=/apps/vehicle-selectorshop=apex-parts.myshopify.comtimestamp=1724900000year=2024"
-    expected_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), @secret, expected_message)
-
-    params_with_signature = params.merge("signature" => expected_signature)
-
-    verifier = AppProxySignatureVerifier.new(params_with_signature, @secret)
-    assert verifier.valid?, "Expected signature to be valid"
-    assert_equal expected_signature, verifier.calculate_signature
+  it "validates a correctly signed request" do
+    params = signed_params("shop" => "apex-parts.myshopify.com", "timestamp" => "1724900000",
+                           "year" => "2024", "make" => "Ford")
+    expect(described_class.valid?(params, secret)).to be(true)
   end
 
-  def test_tampered_parameter_fails_verification
-    params = {
-      "shop" => "apex-parts.myshopify.com",
-      "year" => "2024",
-      "make" => "Ford"
-    }
-    valid_sig = AppProxySignatureVerifier.new(params, @secret).calculate_signature
-
-    # Tamper with year parameter
-    tampered_params = params.merge("year" => "2023", "signature" => valid_sig)
-    refute AppProxySignatureVerifier.valid?(tampered_params, @secret), "Tampered parameter must fail verification"
+  it "rejects a tampered value" do
+    params = signed_params("shop" => "apex-parts.myshopify.com", "year" => "2024")
+    params["year"] = "2023"
+    expect(described_class.valid?(params, secret)).to be(false)
   end
 
-  def test_missing_signature_fails
-    params = { "shop" => "apex-parts.myshopify.com", "year" => "2024" }
-    refute AppProxySignatureVerifier.valid?(params, @secret), "Missing signature must fail verification"
+  it "rejects a wrong secret" do
+    params = signed_params({ "shop" => "apex-parts.myshopify.com" }, "other_secret")
+    expect(described_class.valid?(params, secret)).to be(false)
   end
 
-  def test_empty_secret_fails
-    params = { "shop" => "apex-parts.myshopify.com", "signature" => "anything" }
-    refute AppProxySignatureVerifier.valid?(params, ""), "Empty secret must fail verification"
+  it "rejects a missing signature" do
+    expect(described_class.valid?({ "shop" => "apex-parts.myshopify.com", "year" => "2024" }, secret)).to be(false)
+  end
+
+  it "rejects when the app secret is blank" do
+    params = signed_params("shop" => "apex-parts.myshopify.com")
+    expect(described_class.valid?(params, "")).to be(false)
+  end
+
+  it "ignores routing params when calculating the signature" do
+    signed = signed_params("shop" => "apex-parts.myshopify.com")
+    signed["controller"] = "app_proxy/vehicle_filters"
+    signed["action"] = "years"
+    expect(described_class.valid?(signed, secret)).to be(true)
   end
 end

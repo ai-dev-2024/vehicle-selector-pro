@@ -1,13 +1,18 @@
 #!/usr/bin/env ruby
-# Comprehensive Test Runner for Vehicle Selector Pro
+# Test entrypoint for Vehicle Selector Pro.
+#
+# The canonical suite is RSpec (boots the real Rails app; request, job, model
+# and service specs). The App Proxy integration suite is Minitest-based and
+# runs standalone. This wrapper runs both and exits non-zero on any failure.
+#
+# Usage: ruby spec/test_runner.rb
 
-require_relative "spec_helper"
-require_relative "services/app_proxy_signature_verifier_spec"
-require_relative "services/bulk_fitment_importer_spec"
-require_relative "services/metafield_sync_service_spec"
-require_relative "services/fitment_search_service_spec"
-require_relative "services/vehicle_hierarchy_service_spec"
+rspec_ok = system("bundle exec rspec spec --exclude-pattern 'spec/integration/*'")
+integration_ok = system("ruby spec/integration/app_proxy_integration_test.rb")
 
-puts "=========================================================="
-puts "  Running Vehicle Selector Pro Comprehensive Test Suite   "
-puts "=========================================================="
+puts "=" * 58
+puts "RSpec:        #{rspec_ok ? 'PASS' : 'FAIL'}"
+puts "Integration:  #{integration_ok ? 'PASS' : 'FAIL'}"
+puts "=" * 58
+
+exit(rspec_ok && integration_ok ? 0 : 1)

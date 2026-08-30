@@ -1,30 +1,26 @@
-require_relative "../spec_helper"
+require "rails_helper"
 
-class VehicleHierarchyServiceTest < Minitest::Test
-  def test_hierarchy_tree_structure_deduplication
-    raw_vehicles = [
-      { year: 2024, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L EcoBoost V6" },
-      { year: 2024, make: "Ford", model: "F-150", trim: "XLT", engine: "2.7L EcoBoost V6" },
-      { year: 2024, make: "Ford", model: "Mustang", trim: "GT", engine: "5.0L V8" },
-      { year: 2023, make: "Toyota", model: "Tacoma", trim: "TRD Off-Road", engine: "3.5L V6" }
-    ]
+RSpec.describe VehicleHierarchyService do
+  before do
+    Rails.cache.clear
+    # The dev/test database carries the seeded demo catalog; scope the tree
+    # test to its own vehicles so shared data can't leak into assertions.
+    Vehicle.delete_all
+  end
 
-    tree = {}
-    raw_vehicles.each do |v|
-      tree[v[:year]] ||= {}
-      tree[v[:year]][v[:make]] ||= {}
-      tree[v[:year]][v[:make]][v[:model]] ||= { trims: [], engines: [] }
+  it "builds a deduplicated year → make → model tree" do
+    # 2088/2089 are beyond every other spec's data — the tree is global, so
+    # this spec must not collide with fixtures created elsewhere.
+    create(:vehicle, year: 2089, make: "Ford", model: "F-150", trim: "Lariat", engine: "3.5L")
+    create(:vehicle, year: 2089, make: "Ford", model: "F-150", trim: "XLT", engine: "2.7L")
+    create(:vehicle, year: 2088, make: "Toyota", model: "Tacoma", trim: "TRD", engine: "3.5L")
 
-      tree[v[:year]][v[:make]][v[:model]][:trims] << v[:trim]
-      tree[v[:year]][v[:make]][v[:model]][:engines] << v[:engine]
-    end
+    tree = described_class.full_tree
 
-    assert_includes tree.keys, 2024
-    assert_includes tree.keys, 2023
-    assert_includes tree[2024].keys, "Ford"
-    assert_includes tree[2024]["Ford"].keys, "F-150"
-    assert_includes tree[2024]["Ford"].keys, "Mustang"
-    assert_equal %w[Lariat XLT], tree[2024]["Ford"]["F-150"][:trims]
-    assert_equal ["3.5L EcoBoost V6", "2.7L EcoBoost V6"], tree[2024]["Ford"]["F-150"][:engines]
+    expect(tree.keys).to include(2089, 2088)
+    expect(tree[2089].keys).to contain_exactly("Ford")
+    expect(tree[2089]["Ford"].keys).to contain_exactly("F-150")
+    expect(tree[2089]["Ford"]["F-150"][:trims]).to contain_exactly("Lariat", "XLT")
+    expect(tree[2089]["Ford"]["F-150"][:engines]).to contain_exactly("3.5L", "2.7L")
   end
 end

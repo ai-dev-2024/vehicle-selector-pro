@@ -1,68 +1,67 @@
-require_relative "../spec_helper"
+require "rails_helper"
 
-class MetafieldSyncServiceTest < Minitest::Test
-  def test_metafield_json_structure_and_serialization
-    # Verify that the metafield payload conforms to Shopify Storefront JSON Schema
-    fitment_data = {
-      universal: false,
-      total_vehicles: 2,
-      fitments: [
-        {
-          year: 2024,
-          make: "Ford",
-          model: "F-150",
-          trim: "Lariat",
-          engine: "3.5L EcoBoost V6",
-          notes: "Direct bolt-on",
-          position: "Front"
-        },
-        {
-          year: 2023,
-          make: "Ford",
-          model: "F-150",
-          trim: "XLT",
-          engine: "5.0L V8",
-          notes: "Direct bolt-on",
-          position: "Front"
-        }
-      ],
-      ymm_keys: [
-        "2024|ford|f-150",
-        "2023|ford|f-150"
-      ],
-      last_updated: "2026-08-29T12:00:00Z"
-    }
+RSpec.describe Shopify::MetafieldSyncService do
+  let(:shop) { create(:shop) }
+  let(:client) { instance_double(Shopify::GraphQLClient) }
+  let(:service) { described_class.new(shop) }
 
-    json_str = fitment_data.to_json
-    parsed = JSON.parse(json_str)
-
-    assert_equal false, parsed["universal"]
-    assert_equal 2, parsed["fitments"].size
-    assert_equal 2024, parsed["fitments"][0]["year"]
-    assert_equal "Ford", parsed["fitments"][0]["make"]
-    assert_equal "2024|ford|f-150", parsed["ymm_keys"][0]
+  before do
+    allow(Shopify::GraphQLClient).to receive(:new).and_return(client)
+    allow(client).to receive(:mutate).and_return(
+      "metafieldsSet" => { "userErrors" => [], "metafields" => [] }
+    )
   end
 
-  def test_universal_fitment_payload
-    universal_data = {
-      universal: true,
-      total_vehicles: "all",
-      fitments: [
-        {
-          universal: true,
-          notes: "Fits all vehicles with standard 12V socket",
-          position: "Interior"
-        }
-      ],
-      ymm_keys: ["universal"],
-      last_updated: "2026-08-29T12:00:00Z"
-    }
+  def make_fitment(year, make, model)
+    create(:vehicle_product_fitment, shop: shop,
+                                     vehicle: create(:vehicle, year: year, make: make, model: model))
+  end
 
-    json_str = universal_data.to_json
-    parsed = JSON.parse(json_str)
+  describe "#sync_products" do
+    it "builds a metafieldsSet payload with YMM data and marks records synced" do
+      fitment = make_fitment(2024, "Ford", "F-150")
 
-    assert_equal true, parsed["universal"]
-    assert_equal "all", parsed["total_vehicles"]
-    assert_equal ["universal"], parsed["ymm_keys"]
+      result = service.sync_products([fitment.product_id])
+
+      expect(result[:success]).to be(true)
+      expect(client).to have_received(:mutate) do |mutation, vars|
+        expect(mutation).to include("metafieldsSet")
+        mf = vars[:metafields].first
+        expect(mf[:ownerId]).to eq(fitment.product_id)
+        expect(mf[:namespace]).to eq("custom")
+        expect(mf[:key]).to eq("vehicle_fitment")
+        payload = JSON.parse(mf[:value])
+        expect(payload["universal"]).to be(false)
+        expect(payload["fitments"].first["make"]).to eq("Ford")
+        expect(payload["ymm_keys"]).to eq(["2024|ford|f-150"])
+      end
+      expect(fitment.reload.synced_to_metafield).to be(true)
+    end
+
+    it "no-ops on an empty product list" do
+      expect(service.sync_products([])).to eq(success: true, count: 0)
+      expect(client).not_to have_received(:mutate)
+    end
+
+    it "raises on userErrors" do
+      allow(client).to receive(:mutate).and_return(
+        "metafieldsSet" => { "userErrors" => [{ "field" => ["value"], "message" => "Too large" }] }
+      )
+      fitment = make_fitment(2024, "Ford", "F-150")
+      expect { service.sync_products([fitment.product_id]) }.to raise_error(Shopify::GraphQLError)
+    end
+  end
+
+  describe "#sync_all" do
+    it "marks the sync log completed" do
+      fitment = make_fitment(2023, "Toyota", "Tacoma")
+      log = instance_spy(MetafieldSyncLog)
+      allow(MetafieldSyncLog).to receive(:new).and_return(log)
+
+      result = service.sync_all(log: log)
+      expect(result[:success]).to be(true)
+      expect(log).to have_received(:mark_in_progress!).at_least(:once)
+      expect(log).to have_received(:mark_completed!).with(1)
+    end
   end
 end

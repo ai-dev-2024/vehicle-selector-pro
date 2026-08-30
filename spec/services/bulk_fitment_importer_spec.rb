@@ -1,93 +1,51 @@
-require_relative "../spec_helper"
+require "rails_helper"
 
-class BulkFitmentImporterTest < Minitest::Test
-  class MockFitmentsCollection
-    attr_reader :records
+RSpec.describe BulkFitmentImporter do
+  let(:shop) { create(:shop) }
 
-    def initialize
-      @records = []
-    end
-
-    def find_or_initialize_by(attrs)
-      existing = @records.find do |r|
-        attrs.all? { |k, v| r.respond_to?(k) && r.send(k) == v }
-      end
-      return existing if existing
-
-      record = MockFitmentRecord.new(attrs)
-      @records << record
-      record
-    end
-
-    def where(attrs)
-      @records.select do |r|
-        attrs.all? { |k, v| r.respond_to?(k) && r.send(k) == v }
-      end
-    end
-  end
-
-  class MockFitmentRecord
-    attr_accessor :product_id, :product_handle, :product_title, :sku,
-                  :vehicle, :universal_fit, :fitment_type, :fitment_notes, :position, :shop_id
-
-    def initialize(attrs = {})
-      attrs.each { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
-    end
-
-    # Test double returning a boolean; name is intentional (ActiveRecord-compatible).
-    def save! # rubocop:disable Naming/PredicateMethod
-      true
-    end
-  end
-
-  class MockShop
-    attr_accessor :id, :shopify_domain, :fitments_collection
-
-    def initialize
-      @id = 1
-      @shopify_domain = "apex-test.myshopify.com"
-      @fitments_collection = MockFitmentsCollection.new
-    end
-
-    def vehicle_product_fitments
-      @fitments_collection
-    end
-
-    def active?
-      true
-    end
-  end
-
-  def setup
-    @shop = MockShop.new
-  end
-
-  def test_csv_parser_with_valid_rows
-    csv_text = <<~CSV
+  it "imports specific and universal rows and enqueues sync for affected products" do
+    csv = <<~CSV
       product_id,product_handle,product_title,year,make,model,trim,engine,universal,notes
-      gid://shopify/Product/1001,cold-air-intake,Cold Air Intake,2024,Ford,F-150,Lariat,3.5L EcoBoost,false,Direct fit
-      gid://shopify/Product/1002,universal-floor-mats,Rubber Floor Mats,,,,,,true,Universal fit
+      1001,cold-air-intake,Cold Air Intake,2024,Ford,F-150,Lariat,3.5L EcoBoost,false,Direct fit
+      1002,universal-floor-mats,Rubber Floor Mats,,,,,,true,Universal fit
     CSV
 
-    importer = BulkFitmentImporter.new(@shop, csv_text)
-    result = importer.import!
+    result = described_class.new(shop, csv).import!
 
-    puts "Importer errors: #{result[:errors].inspect}" if result[:errors].any?
-
-    assert_equal 2, result[:success_count]
-    assert_equal 0, result[:error_count]
+    expect(result[:success_count]).to eq(2)
+    expect(result[:error_count]).to eq(0)
+    expect(Vehicle.find_by(year: 2024, make: "Ford", model: "F-150", trim: "Lariat")).to be_present
+    expect(shop.vehicle_product_fitments.universal.count).to eq(1)
+    expect(Metafields::BatchSyncJob).to have_received(:perform_later)
   end
 
-  def test_csv_missing_required_headers_returns_error
-    csv_text = <<~CSV
-      unrelated_column_a,unrelated_column_b
-      value_1,value_2
+  it "reports rows missing required vehicle fields" do
+    csv = <<~CSV
+      product_id,year,make,model
+      1001,,,
     CSV
 
-    importer = BulkFitmentImporter.new(@shop, csv_text)
-    result = importer.import!
+    result = described_class.new(shop, csv).import!
+    expect(result[:error_count]).to eq(1)
+    expect(result[:errors].first).to include("Year, Make, and Model")
+  end
 
-    assert_includes result[:errors].first, "CSV must contain at least one of"
-    assert_equal 0, result[:success_count]
+  it "rejects CSVs with no recognizable product or vehicle columns" do
+    result = described_class.new(shop, "a,b\n1,2\n").import!
+    expect(result[:errors].first).to include("CSV must contain at least one of")
+    expect(result[:success_count]).to eq(0)
+  end
+
+  it "is idempotent — re-importing the same CSV does not duplicate records" do
+    csv = <<~CSV
+      product_id,year,make,model
+      1001,2024,Ford,F-150
+    CSV
+
+    described_class.new(shop, csv).import!
+    result = described_class.new(shop, csv).import!
+
+    expect(result[:success_count]).to eq(1)
+    expect(shop.vehicle_product_fitments.count).to eq(1)
   end
 end
