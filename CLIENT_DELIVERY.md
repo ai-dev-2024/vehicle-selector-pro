@@ -35,35 +35,23 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
    - `demo/index.html` — Play 2.5-min walkthrough button (Web Speech API + tab capture)
 
 4. **Production Documentation**:
-   - Comprehensive [`README.md`](README.md) with system architecture diagrams, database ERDs, API endpoint reference, and step-by-step setup.
+   - Clean [`README.md`](README.md) — features, quick start, tech stack, links to all docs
    - [`docs/SETUP.md`](docs/SETUP.md) — local development guide
    - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — verified Fly.io runbook incl. real incident table
+   - [`docs/API.md`](docs/API.md) — App Proxy endpoints, webhook topics, metafield schema
+   - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — system diagrams, data model, request flow
 
 ---
 
-## 🎤 Client Demonstration Script & Presentation Guide (2–3 Minutes)
+## Client Demonstration Script & Presentation Guide (2–3 Minutes)
 
-Use this structured script when presenting the solution to stakeholders or clients:
+Use the professional voiceover script in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) when presenting the solution to stakeholders or clients. The script includes:
 
-```text
-[0:00 - 0:25] Introduction & Multi-Tenant Architecture
-"Hello! Today I'm presenting Vehicle Selector Pro, a production-grade Shopify application built with Ruby on Rails 7 and modern Online Store 2.0 Theme App Extensions. It is designed to handle high-volume automotive parts catalogs with complex Year, Make, Model, Trim, and Engine fitment rules."
+- **Scene-by-scene narration** with timestamps and screen directions
+- **Continuous read version** for single-take recording
+- **Recording setup** recommendations (OBS Studio + mic, or Loom)
 
-[0:25 - 0:55] Storefront Cascading Filters & Performance
-"On the storefront, the customer interacts with our Theme App Extension block. Notice how selecting the Year instantly cascades to available Makes, Models, Trims, and Engines. All lookups route through our Shopify App Proxy with per-shop cached queries, so the dropdowns stay snappy even on large catalogs."
-
-[0:55 - 1:25] Collection Filtering & 'My Garage' Customer Wallet
-"When the customer clicks 'Search Compatible Parts', the collection page instantly filters to compatible products using Shopify's native metafield filter tokens. Furthermore, our 'My Garage' feature saves the customer's vehicle in LocalStorage, allowing them to switch between vehicles in their household effortlessly."
-
-[1:25 - 1:55] Product Detail Page (PDP) Fitment Guarantee Badge
-"On individual product detail pages, our dynamic Fitment Badge evaluates compatibility in real time. Matching parts display a green 'Guaranteed Exact Fit' badge with specific installation notes. Incompatible parts show a clear 'Does NOT Fit' warning, and universal accessories display a 'Universal Fitment' badge—drastically reducing return rates and customer confusion."
-
-[1:55 - 2:25] Polaris Merchant Admin & GraphQL Metafield Sync
-"In the Shopify Admin, merchants get a Polaris-styled dashboard with a full Product Fitment Matrix, YMM Vehicle Database explorer, and Bulk CSV Importer for uploading thousands of compatibility mappings. When fitment changes occur, our asynchronous Sidekiq background jobs batch-sync data to Shopify's GraphQL Admin API using the 'metafieldsSet' mutation."
-
-[2:25 - 2:30] Security, Testing & Production Readiness
-"All App Proxy and webhook requests are verified using HMAC-SHA256 signatures with constant-time comparison, and both our unit and full-stack integration suites pass with zero errors. The application is deployed and production-ready."
-```
+The 2.5-minute demo video is at [`demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm`](demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm) — [watch on GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/video/Vehicle_Selector_Pro_2.5min_Demo.webm).
 
 ---
 

@@ -66,9 +66,11 @@ Vehicle Selector Pro/
 │   └── command-center.css            # Demo styling
 ├── docs/                             # Documentation
 │   ├── assets/                        # Banner/logo images
+│   ├── API.md                        # App Proxy endpoints, webhooks, metafield schema
+│   ├── ARCHITECTURE.md               # System diagrams, data model, request flow
 │   ├── DEPLOYMENT.md                 # Deployment guide
 │   ├── SETUP.md                      # Setup instructions
-│   └── DEMO_SCRIPT.md                # Demo script
+│   └── DEMO_SCRIPT.md                # Voiceover narration script
 ├── demo/                             # Demo materials
 │   ├── index.html                    # Enhanced demo interface (Play 2.5-min walkthrough)
 │   ├── demo-alternative.html          # Alternative demo
