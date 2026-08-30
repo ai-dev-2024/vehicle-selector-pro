@@ -29,12 +29,19 @@ class StorefrontPreviewController < ApplicationController
     "APX-BRK-PAD-FRT" => "/demo-products/brake-pads.svg",
     "APX-SUSP-SHCK-JL" => "/demo-products/shocks.svg",
     "APX-EXH-TIP-MST" => "/demo-products/exhaust-tips.svg",
-    "APX-AIR-FIL-F150" => "/demo-products/air-filter.svg"
+    "APX-AIR-FIL-F150" => "/demo-products/air-filter.svg",
+    "APX-LIN-UNIV-FLR" => "/demo-products/floor-liners.svg",
+    "APX-TOW-HITCH-F150" => "/demo-products/trailer-hitch.svg",
+    "APX-BRK-PAD-RR-4RN" => "/demo-products/brake-pads-rear.svg",
+    "APX-CAI-MST-EB" => "/demo-products/intake-mustang.svg",
+    "APX-LGT-BAR-20-UNIV" => "/demo-products/light-bar.svg",
+    "APX-SUSP-LFT-4RN-2IN" => "/demo-products/leveling-kit.svg",
+    "APX-BED-MAT-TAC" => "/demo-products/bed-mat.svg"
   }.freeze
 
   def index
     @shop_name = shop&.name.presence || "Demo Auto Parts Store"
-    @products = distinct_products.first(8)
+    @products = distinct_products.first(12)
   end
 
   # My Garage page — vehicles saved by the shopper (localStorage), kept in
@@ -108,6 +115,37 @@ class StorefrontPreviewController < ApplicationController
     @sync_logs = shop.metafield_sync_logs.recent.limit(20)
     @pending_sync_count = @pending_count
     render template: "admin/sync/show", layout: "embedded_app"
+  end
+
+  def admin_fitments
+    @current_shop = shop
+    @fitments = shop.vehicle_product_fitments.includes(:vehicle).order(created_at: :desc).limit(20)
+    @page = 1
+    @per_page = 20
+    @total_count = shop.vehicle_product_fitments.count
+    render template: "admin/product_fitments/index", layout: "embedded_app"
+  end
+
+  def admin_vehicles
+    @current_shop = shop
+    @vehicles = Vehicle.active.order(year: :desc, make: :asc, model: :asc).limit(25)
+    @page = 1
+    @per_page = 25
+    @total_count = Vehicle.active.count
+    @distinct_years = Vehicle.distinct_years
+    render template: "admin/vehicles/index", layout: "embedded_app"
+  end
+
+  def admin_settings
+    @current_shop = shop
+    @settings = shop.settings
+    render template: "admin/settings/show", layout: "embedded_app"
+  end
+
+  def admin_imports
+    @current_shop = shop
+    @recent_fitments_count = shop.vehicle_product_fitments.count
+    render template: "admin/bulk_imports/index", layout: "embedded_app"
   end
 
   # Demo-only spec sheets for the seeded catalog. Details mirror typical
@@ -337,6 +375,111 @@ class StorefrontPreviewController < ApplicationController
         ["Service interval", "Clean every 50,000 miles"],
         ["Install time", "~5 minutes, no tools"],
         ["Warranty", "10 years / 100,000 miles"]
+      ]
+    },
+    "APX-LIN-UNIV-FLR" => {
+      features: [
+        "Rubberized composite liner with raised locking walls",
+        "Trim-to-fit cutting guide — one SKU covers most vehicles",
+        "Hoses clean; stays flexible from -40°F to 200°F",
+        "Two rows included (driver + passenger + rear set)"
+      ],
+      specs: [
+        ["Material", "Rubberized thermoplastic composite"],
+        ["Coverage", "Front + rear rows (trim-to-fit)"],
+        ["Cleanup", "Rinse with hose"],
+        ["Temp range", "-40°F to 200°F"],
+        ["Warranty", "Lifetime against cracking"]
+      ]
+    },
+    "APX-TOW-HITCH-F150" => {
+      features: [
+        "SAE J684 Class IV rating — 12,000 lb GTW, 1,200 lb tongue",
+        "2-inch receiver accepts ball mounts, bike racks and cargo carriers",
+        "Bolt-on to factory mount points — no drilling or welding",
+        "E-coated + powder-coated double finish resists road salt"
+      ],
+      specs: [
+        ["Class", "IV (SAE J684)"],
+        ["Receiver", "2 in square"],
+        ["Rating", "12,000 lb GTW / 1,200 lb tongue"],
+        ["Fitment", "F-150 2015+, factory mount points"],
+        ["Warranty", "Lifetime structural"]
+      ]
+    },
+    "APX-BRK-PAD-RR-4RN" => {
+      features: [
+        "Ceramic compound tuned for heavy-SUV rear-axle heat",
+        "Shimmed backing plates eliminate squeal and rattle",
+        "Chamfered edges prevent taper wear and uneven contact",
+        "Complete hardware kit for a full rear-axle service"
+      ],
+      specs: [
+        ["Compound", "Ceramic, low-dust"],
+        ["Position", "Rear axle"],
+        ["Fitment", "Toyota 4Runner 2010+"],
+        ["Includes", "Shims and hardware kit"],
+        ["Warranty", "2 years / 24,000 miles"]
+      ]
+    },
+    "APX-CAI-MST-EB" => {
+      features: [
+        "Sealed airbox design pulls cool outside air, blocks engine heat",
+        "Dyno-verified +12 hp / +16 lb-ft on the 2.3L EcoBoost",
+        "No tune required — keeps the stock ECU calibration",
+        "Washable conical filter, clean every 50k miles"
+      ],
+      specs: [
+        ["Gains", "+12 hp / +16 lb-ft @ wheels"],
+        ["Design", "Sealed airbox, rotomolded tube"],
+        ["Filter", "Washable conical, 50k-mile service"],
+        ["Fitment", "Mustang 2.3L EcoBoost 2015+"],
+        ["Warranty", "Lifetime limited (filter: 1 year)"]
+      ]
+    },
+    "APX-LGT-BAR-20-UNIV" => {
+      features: [
+        "14,400 raw lumens from 40 dual-row 5W LEDs",
+        "Combo beam: center spot for reach, outer flood for spread",
+        "IP68 die-cast aluminum housing with polycarbonate lens",
+        "Plug-and-play relay harness with illuminated switch included"
+      ],
+      specs: [
+        ["Light output", "14,400 lm (raw)"],
+        ["Beam", "Combo (spot + flood)"],
+        ["Length", "20 in dual-row"],
+        ["Ingress", "IP68 sealed"],
+        ["Warranty", "3 years against defect and moisture"]
+      ]
+    },
+    "APX-SUSP-LFT-4RN-2IN" => {
+      features: [
+        "Billet 6061-T6 strut spacers — true 2-inch front level",
+        "Keeps factory shocks and ride quality — no new hardware",
+        "Clears up to 32-inch tires after alignment",
+        "Anodized finish; install in 2–3 hours with hand tools"
+      ],
+      specs: [
+        ["Lift", "2.0 in front level"],
+        ["Material", "Billet 6061-T6, anodized"],
+        ["Tire clearance", "Up to 32 in (alignment required)"],
+        ["Fitment", "4Runner 2010+ (KDSS compatible)"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-BED-MAT-TAC" => {
+      features: [
+        "Custom-molded for the Tacoma 5-ft bed — no trimming",
+        "Nonslip ribs keep cargo from shifting and sliding",
+        "High-density rubber withstands tools, pets and weather",
+        "Rolls up for cleaning; won't trap water under the mat"
+      ],
+      specs: [
+        ["Material", "High-density rubber, molded"],
+        ["Fitment", "Tacoma 2016+ 5-ft bed"],
+        ["Surface", "Nonslip rib pattern"],
+        ["Cleanup", "Roll out and hose"],
+        ["Warranty", "5 years against defect"]
       ]
     }
   }.freeze

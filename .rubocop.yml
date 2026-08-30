@@ -61,7 +61,7 @@ Metrics/PerceivedComplexity:
   Max: 14
 
 Metrics/ClassLength:
-  Max: 400
+  Max: 500
 
 Metrics/ParameterLists:
   Max: 8

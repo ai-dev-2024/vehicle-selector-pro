@@ -98,6 +98,10 @@ Rails.application.routes.draw do
   get "demo/garage", to: "storefront_preview#garage"
   get "demo/admin", to: "storefront_preview#admin_dashboard"
   get "demo/admin/sync", to: "storefront_preview#admin_sync"
+  get "demo/admin/fitments", to: "storefront_preview#admin_fitments"
+  get "demo/admin/vehicles", to: "storefront_preview#admin_vehicles"
+  get "demo/admin/settings", to: "storefront_preview#admin_settings"
+  get "demo/admin/imports", to: "storefront_preview#admin_imports"
 
   # Public read-only JSON API for the demo storefront widget. The real
   # storefront uses the HMAC-signed App Proxy; the demo is served directly by

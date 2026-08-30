@@ -52,29 +52,59 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ## Screenshots
 
+### Storefront (live demo)
+
 <div align="center">
 
-**Merchant Admin Dashboard**
+**Home — cascading Year / Make / Model / Trim / Engine widget with shop-by-category and featured parts**
 
-<img src="demo/autoplay/frames_live/01_dashboard.png" alt="Admin dashboard with 100% catalog coverage, 7 mapped products, and live sync status" width="100%">
+<img src="demo/autoplay/frames_live/04_storefront_home.png" alt="Storefront home with hero, cascading vehicle selector widget, category tiles, and featured product cards" width="100%">
 
-**Vehicle Library (YMMTE Database)**
+**Vehicle-filtered results — 2023 Ford F-150 with Guaranteed Exact Fit badges**
 
-<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Vehicle database with 33 vehicles across BMW, Chevrolet, Ford, and Jeep with cascading filters" width="100%">
+<img src="demo/autoplay/frames_live/07_storefront_collection.png" alt="Collection page filtered to 2023 Ford F-150 showing matching parts with Guaranteed Exact Fit badges" width="100%">
 
-**Product Fitment Matrix**
+**Product detail — spec sheet, verified-fitment chips, and live fitment badge**
 
-<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Fitment rules matrix with 35 product-to-vehicle mappings, sync status, and edit controls" width="100%">
+<img src="demo/autoplay/frames_live/08_storefront_pdp.png" alt="Product detail page with photo, price, engineered features, specifications table, and verified fitment list" width="100%">
 
-**Widget Configuration**
+**My Garage — vehicles saved across pages in localStorage**
 
-<img src="demo/autoplay/frames_live/05_settings.png" alt="Widget and Garage configuration with brand color, selector depth, and My Garage settings" width="100%">
-
-**Bulk CSV Import**
-
-<img src="demo/autoplay/frames_live/06_bulk_imports.png" alt="Bulk CSV fitment import with file upload and paste options" width="100%">
+<img src="demo/autoplay/frames_live/09_storefront_garage.png" alt="My Garage page listing the shopper's saved vehicles with the selector widget above" width="100%">
 
 </div>
+
+### Merchant admin (live preview)
+
+<div align="center">
+
+**Dashboard — catalog coverage, mapped products, and live sync status**
+
+<img src="demo/autoplay/frames_live/01_dashboard.png" alt="Admin dashboard with catalog coverage percentage, mapped products, pending/synced fitment counts, and recent sync logs" width="100%">
+
+**Vehicle library — the YMMTE database with cascading filters**
+
+<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Vehicle library with 33 Year/Make/Model/Trim/Engine configurations across BMW, Chevrolet, Ford, and Jeep" width="100%">
+
+**Product fitment matrix — every product-to-vehicle mapping with sync status**
+
+<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Fitment matrix with 87 product-to-vehicle mappings, universal fits, sync badges, and edit controls" width="100%">
+
+**Widget & Garage configuration**
+
+<img src="demo/autoplay/frames_live/05_settings.png" alt="Widget settings with brand color, selector depth, button labels, and My Garage options" width="100%">
+
+**Bulk CSV import**
+
+<img src="demo/autoplay/frames_live/06_bulk_imports.png" alt="Bulk fitment CSV import with file upload and paste options" width="100%">
+
+**Metafield sync monitor**
+
+<img src="demo/autoplay/frames_live/10_admin_sync.png" alt="Sync monitor showing background metafield synchronization progress" width="100%">
+
+</div>
+
+Every screenshot above is a live capture of the running app — see the **[live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** and the **[live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)**.
 
 ---
 
@@ -147,7 +177,7 @@ Full system diagrams, data model, and request lifecycles: **[docs/ARCHITECTURE.m
 
 **[Live storefront demo →](https://vehicle-selector-pro.fly.dev/demo)** — cascading Year/Make/Model/Trim/Engine widget with guaranteed-fit badges against live data.
 
-**[Live admin preview →](https://vehicle-selector-pro.fly.dev/demo/admin)** — fitment matrix, vehicle library, sync monitor, and bulk CSV import.
+**[Live admin preview →](https://vehicle-selector-pro.fly.dev/demo/admin)** — dashboard, fitment matrix ([fitments](https://vehicle-selector-pro.fly.dev/demo/admin/fitments)), vehicle library ([vehicles](https://vehicle-selector-pro.fly.dev/demo/admin/vehicles)), widget settings ([settings](https://vehicle-selector-pro.fly.dev/demo/admin/settings)), bulk CSV import ([imports](https://vehicle-selector-pro.fly.dev/demo/admin/imports)), and the sync monitor ([sync](https://vehicle-selector-pro.fly.dev/demo/admin/sync)).
 
 ### Local development
 
