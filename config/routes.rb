@@ -87,26 +87,37 @@ Rails.application.routes.draw do
   # Healthcheck for load balancers and container orchestrators
   get 'up', to: proc { [200, { 'Content-Type' => 'application/json' }, ['{"status":"ok"}']] }
 
-  # Storefront preview harness (development only): renders the real Theme App
-  # Extension widget assets against this app's own API so the storefront
-  # experience can be demonstrated and recorded outside a Shopify theme.
+  # Public live-demo routes (all environments): read-only renders of the
+  # storefront selector and admin dashboard against the bundled demo catalog.
+  # No authentication required and no write operations are exposed, so anyone
+  # can try the full Year/Make/Model/Trim experience without a Shopify session.
+  get 'demo', to: 'storefront_preview#index'
+  get 'demo/collection', to: 'storefront_preview#collection'
+  get 'demo/admin', to: 'storefront_preview#admin_dashboard'
+  get 'demo/admin/sync', to: 'storefront_preview#admin_sync'
+
+  # Theme App Extension widget assets used by the demo pages. Filenames are
+  # sanitized with File.basename and served read-only from the bundled
+  # extension assets directory, so this is safe to expose in production.
+  ext_assets = Rails.root.join('extensions', 'vehicle-selector-pro-extension', 'assets')
+  get 'ext-assets/:filename', format: false, constraints: { filename: /[^\/]+/ },
+      to: lambda { |env|
+        filename = File.basename(env['action_dispatch.request.path_parameters'][:filename].to_s)
+        path = ext_assets.join(filename)
+        if File.file?(path)
+          type = filename.end_with?('.css') ? 'text/css' : 'application/javascript'
+          [200, { 'content-type' => type }, [File.read(path)]]
+        else
+          [404, { 'content-type' => 'text/plain' }, ['not found']]
+        end
+      }
+
+  # Legacy development preview paths, kept so local bookmarks keep working.
   if Rails.env.development?
     get 'storefront_preview', to: 'storefront_preview#index'
     get 'collections/storefront_preview', to: 'storefront_preview#collection'
     get 'admin_preview', to: 'storefront_preview#admin_dashboard'
     get 'admin_preview/sync', to: 'storefront_preview#admin_sync'
-    ext_assets = Rails.root.join('extensions', 'vehicle-selector-pro-extension', 'assets')
-    get 'ext-assets/:filename', format: false, constraints: { filename: /[^\/]+/ },
-        to: lambda { |env|
-          filename = File.basename(env['action_dispatch.request.path_parameters'][:filename].to_s)
-          path = ext_assets.join(filename)
-          if File.file?(path)
-            type = filename.end_with?('.css') ? 'text/css' : 'application/javascript'
-            [200, { 'content-type' => type }, [File.read(path)]]
-          else
-            [404, { 'content-type' => 'text/plain' }, ['not found']]
-          end
-        }
   end
 
   # Mounted last so application routes take precedence; the engine handles
