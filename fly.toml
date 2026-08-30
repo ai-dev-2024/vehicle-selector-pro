@@ -5,7 +5,7 @@ primary_region = "iad"
   dockerfile = "Dockerfile"
 
 [deploy]
-  release_command = "bundle exec rails db:migrate && bundle exec rails db:seed"
+  release_command = "bash -c 'bundle exec rails db:migrate && bundle exec rails db:seed'"
 
 [env]
   RAILS_ENV = "production"
