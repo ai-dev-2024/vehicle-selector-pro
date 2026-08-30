@@ -15,11 +15,14 @@ storage/*
 log/*
 tmp/*
 
-# Docs / demo assets not needed at runtime.
-docs/
+# Docs / demo assets not needed at runtime — EXCEPT docs/PRIVACY.md, which
+# is rendered by the public /privacy page (App Store requirement).
+docs/**
+!docs/PRIVACY.md
 demo/
 *.md
 !README.md
+!docs/PRIVACY.md
 
 # Coverage and editor junk.
 coverage/
