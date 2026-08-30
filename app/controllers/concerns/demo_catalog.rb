@@ -9,9 +9,11 @@ module DemoCatalog
   # "year|make|model|trim|engine" token.
   FILTER_PARAM = "filter.v.m.custom.vehicle_fitment".freeze
 
-  # Centralized SKU -> image map for the demo catalog. Views read p[:image]
-  # from distinct_products, so adding a product only means adding a seed row
-  # plus an entry here (photo first, category SVG fallback below).
+  # Centralized SKU -> real product-photo map for the demo catalog. Views read
+  # p[:image] from distinct_products, so adding a product only means adding a
+  # seed row plus an entry here. All files are freely-licensed photography
+  # (see public/demo-products/CREDITS.md; re-fetchable via
+  # scripts/fetch_product_photos.rb).
   DEMO_PRODUCT_IMAGES = {
     "APX-CAI-F150-EB" => "/demo-products/intake.jpg",
     "APX-BRK-HD-TRK" => "/demo-products/brakes.jpg",
@@ -20,33 +22,33 @@ module DemoCatalog
     "APX-BMP-JL-001" => "/demo-products/bumper.jpg",
     "APX-LGT-UNIV-POD" => "/demo-products/led-pods.jpg",
     "APX-STRUT-G20-CF" => "/demo-products/strut-brace.jpg",
-    "APX-OIL-KIT-0W20" => "/demo-products/oil-kit.svg",
-    "APX-WIP-BLD-24" => "/demo-products/wiper-blades.svg",
-    "APX-BAT-AGM-H7" => "/demo-products/battery.svg",
-    "APX-CAB-AIR-TAC" => "/demo-products/cabin-filter.svg",
-    "APX-BRK-PAD-FRT" => "/demo-products/brake-pads.svg",
-    "APX-SUSP-SHCK-JL" => "/demo-products/shocks.svg",
-    "APX-EXH-TIP-MST" => "/demo-products/exhaust-tips.svg",
-    "APX-AIR-FIL-F150" => "/demo-products/air-filter.svg",
-    "APX-LIN-UNIV-FLR" => "/demo-products/floor-liners.svg",
-    "APX-TOW-HITCH-F150" => "/demo-products/trailer-hitch.svg",
-    "APX-BRK-PAD-RR-4RN" => "/demo-products/brake-pads-rear.svg",
-    "APX-CAI-MST-EB" => "/demo-products/intake-mustang.svg",
-    "APX-LGT-BAR-20-UNIV" => "/demo-products/light-bar.svg",
-    "APX-SUSP-LFT-4RN-2IN" => "/demo-products/leveling-kit.svg",
-    "APX-BED-MAT-TAC" => "/demo-products/bed-mat.svg",
-    "APX-CAI-RAM-V8" => "/demo-products/intake-ram.svg",
-    "APX-EXH-RAM-V8" => "/demo-products/exhaust-ram.svg",
-    "APX-SUSP-LFT-RAM-25" => "/demo-products/leveling-ram.svg",
-    "APX-CAI-CIV-15T" => "/demo-products/intake-civic.svg",
-    "APX-CHP-SPR-CIV" => "/demo-products/springs-civic.svg",
-    "APX-EXT-RACK-OUT" => "/demo-products/roof-racks.svg",
-    "APX-BRK-PAD-OUT" => "/demo-products/pads-outback.svg",
-    "APX-CAI-BRN-27" => "/demo-products/intake-bronco.svg",
-    "APX-LGT-POD-BRN" => "/demo-products/pod-kit-bronco.svg",
-    "APX-TOW-HITCH-SLV" => "/demo-products/hitch-silverado.svg",
-    "APX-BRK-ROT-MST" => "/demo-products/rotors-mustang.svg",
-    "APX-SUSP-SHCK-TAC" => "/demo-products/shocks-tacoma.svg"
+    "APX-OIL-KIT-0W20" => "/demo-products/oil-kit.jpg",
+    "APX-WIP-BLD-24" => "/demo-products/wiper-blades.jpg",
+    "APX-BAT-AGM-H7" => "/demo-products/battery.jpg",
+    "APX-CAB-AIR-TAC" => "/demo-products/cabin-filter.jpg",
+    "APX-BRK-PAD-FRT" => "/demo-products/brake-pads.jpg",
+    "APX-SUSP-SHCK-JL" => "/demo-products/shocks.jpg",
+    "APX-EXH-TIP-MST" => "/demo-products/exhaust-tips.jpg",
+    "APX-AIR-FIL-F150" => "/demo-products/air-filter.jpg",
+    "APX-LIN-UNIV-FLR" => "/demo-products/floor-liners.jpg",
+    "APX-TOW-HITCH-F150" => "/demo-products/trailer-hitch.jpg",
+    "APX-BRK-PAD-RR-4RN" => "/demo-products/brake-pads.jpg",
+    "APX-CAI-MST-EB" => "/demo-products/intake-mustang.jpg",
+    "APX-LGT-BAR-20-UNIV" => "/demo-products/light-bar.jpg",
+    "APX-SUSP-LFT-4RN-2IN" => "/demo-products/leveling-kit.jpg",
+    "APX-BED-MAT-TAC" => "/demo-products/bed-mat.jpg",
+    "APX-CAI-RAM-V8" => "/demo-products/intake-ram.jpg",
+    "APX-EXH-RAM-V8" => "/demo-products/exhaust-ram.jpg",
+    "APX-SUSP-LFT-RAM-25" => "/demo-products/leveling-kit.jpg",
+    "APX-CAI-CIV-15T" => "/demo-products/intake-civic.jpg",
+    "APX-CHP-SPR-CIV" => "/demo-products/springs-civic.jpg",
+    "APX-EXT-RACK-OUT" => "/demo-products/roof-racks.jpg",
+    "APX-BRK-PAD-OUT" => "/demo-products/brake-pads.jpg",
+    "APX-CAI-BRN-27" => "/demo-products/intake-bronco.jpg",
+    "APX-LGT-POD-BRN" => "/demo-products/pod-kit-bronco.jpg",
+    "APX-TOW-HITCH-SLV" => "/demo-products/trailer-hitch.jpg",
+    "APX-BRK-ROT-MST" => "/demo-products/rotors-mustang.jpg",
+    "APX-SUSP-SHCK-TAC" => "/demo-products/shocks.jpg"
   }.freeze
 
   # Spec sheets live in DemoProductSpecs (pure static data module).
