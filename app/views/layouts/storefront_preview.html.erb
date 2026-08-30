@@ -76,11 +76,13 @@
     <div class="sp-brand">APEX PERFORMANCE<small>Auto &amp; Truck Outfitters</small></div>
     <div class="sp-nav"><span>Shop</span><span>Collections</span><span>Garage</span><span>Support</span></div>
   </div>
-  <div class="sp-notice">
-    Storefront preview harness — this page renders the production Theme App Extension
-    assets (vehicle-selector.js / vehicle-selector.css) against the live Vehicle Selector Pro API.
-    On a real store, Shopify serves it inside the theme and signs every proxy request.
-  </div>
+  <% if Rails.env.development? %>
+    <div class="sp-notice">
+      Storefront preview harness — this page renders the production Theme App Extension
+      assets (vehicle-selector.js / vehicle-selector.css) against the live Vehicle Selector Pro API.
+      On a real store, Shopify serves it inside the theme and signs every proxy request.
+    </div>
+  <% end %>
 
   <%= yield %>
 
