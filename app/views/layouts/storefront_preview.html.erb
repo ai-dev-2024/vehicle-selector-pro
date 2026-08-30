@@ -28,13 +28,32 @@
     .sp-brand { font-weight: 800; font-size: 17px; letter-spacing: 0.06em; line-height: 1.15; }
     .sp-brand small { display: block; font-weight: 500; font-size: 10px; color: #8b93a7; letter-spacing: 0.14em; text-transform: uppercase; }
     .sp-nav { display: flex; gap: 26px; font-size: 13.5px; font-weight: 500; color: #aeb6c6; }
-    .sp-nav span { cursor: pointer; transition: color .18s ease; }
-    .sp-nav span:hover { color: #ffffff; }
+    .sp-nav a { color: inherit; text-decoration: none; transition: color .18s ease; position: relative; padding: 6px 0; }
+    .sp-nav a:hover { color: #ffffff; }
+    .sp-nav a.active { color: #4fd1b0; }
+    .sp-nav a.active::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+      border-radius: 99px; background: #4fd1b0;
+    }
+
+    /* product image fallback icon */
+    .sp-card-fallback { font-size: 52px; opacity: 0.75; filter: saturate(0.85); }
+    .sp-card-img:has(.sp-card-fallback) {
+      background: radial-gradient(circle at 50% 40%, #ffffff 0%, #eef1f5 70%);
+    }
 
     .sp-notice {
       background: #fffbe6; border-bottom: 1px solid #f5e6a8; color: #6d5a00;
       font-size: 12.5px; padding: 8px 32px;
     }
+
+    /* ---------- trust bar ---------- */
+    .sp-trustbar {
+      background: linear-gradient(90deg, #00805f, #00a37c);
+      color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+      padding: 8px 32px; display: flex; justify-content: center; gap: 34px;
+    }
+    .sp-trustbar span { display: inline-flex; align-items: center; gap: 6px; opacity: 0.95; }
 
     /* ---------- hero ---------- */
     .sp-hero {
@@ -43,7 +62,19 @@
         radial-gradient(900px 380px at 78% -40%, rgba(0,163,124,0.28), transparent 60%),
         radial-gradient(700px 320px at 8% 120%, rgba(31,111,235,0.18), transparent 60%),
         linear-gradient(115deg, #0a0f19 0%, #101c2e 55%, #0c2a24 100%);
-      color: #fff; padding: 64px 32px 96px;
+      color: #fff; padding: 72px 32px 110px;
+    }
+    .sp-hero-stats {
+      display: flex; flex-wrap: wrap; gap: 36px; margin-top: 34px;
+      padding-top: 26px; border-top: 1px solid rgba(255,255,255,0.09);
+    }
+    .sp-hero-stat b {
+      display: block; font-size: 24px; font-weight: 800; letter-spacing: -0.01em;
+      background: linear-gradient(90deg, #4fd1b0, #7ee7cc);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .sp-hero-stat span {
+      font-size: 11.5px; color: #8fa0b8; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
     }
     .sp-hero::after {
       content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -79,7 +110,34 @@
     .sp-section-title {
       max-width: 1120px; margin: 0 auto; padding: 4px 0 18px;
       font-size: 21px; font-weight: 800; letter-spacing: -0.01em; color: #101828;
+      display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
     }
+    .sp-section-title .sp-sub {
+      color: #6d7175; font-weight: 500; font-size: 13px;
+    }
+
+    /* ---------- category strip ---------- */
+    .sp-cats {
+      max-width: 1120px; margin: 0 auto 36px; padding: 0 0 6px;
+      display: flex; gap: 14px; flex-wrap: wrap;
+    }
+    .sp-cat {
+      flex: 1 1 150px; display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1px solid #e6e9ee; border-radius: 14px;
+      padding: 14px 16px; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      cursor: default;
+    }
+    .sp-cat:hover {
+      transform: translateY(-3px); border-color: #bcd9d0;
+      box-shadow: 0 14px 30px -14px rgba(10, 40, 30, 0.18);
+    }
+    .sp-cat-ico {
+      width: 40px; height: 40px; flex: none; border-radius: 11px; font-size: 19px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #eef6f3, #e2efe9);
+    }
+    .sp-cat b { display: block; font-size: 13px; color: #101828; font-weight: 700; }
+    .sp-cat small { font-size: 11px; color: #8a919e; }
     .sp-results-banner {
       max-width: 1120px; margin: 0 auto 24px; padding: 14px 20px; border-radius: 14px;
       background: linear-gradient(90deg, #ecfdf3, #f0fdf6);
@@ -127,34 +185,138 @@
     .sp-card-brand {
       font-size: 10.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: #0b6e5c;
     }
-    .sp-card-price { font-size: 15.5px; font-weight: 800; color: #101828; letter-spacing: -0.01em; }
+    .sp-card-price {
+      font-size: 15.5px; font-weight: 800; color: #101828; letter-spacing: -0.01em;
+    }
+    .sp-card-price::after {
+      content: "USD"; font-size: 9px; font-weight: 700; color: #9aa2af;
+      letter-spacing: 0.08em; margin-left: 4px; vertical-align: 2px;
+    }
     .sp-card-title { font-size: 14.5px; font-weight: 650; line-height: 1.38; color: #1a2433; }
     .sp-card-desc { font-size: 12.5px; color: #5d6675; line-height: 1.5; }
-    .sp-card-sku { font-size: 11px; color: #8a919e; letter-spacing: 0.05em; font-variant-numeric: tabular-nums; }
+    .sp-card-sku {
+      font-size: 10.5px; color: #8a919e; letter-spacing: 0.06em; font-variant-numeric: tabular-nums;
+      background: #f4f6f8; border-radius: 6px; padding: 3px 8px; align-self: flex-start; font-weight: 600;
+    }
     .sp-card .vsp-pdp-fitment-badge { margin-top: auto; }
 
     /* ---------- footer ---------- */
     .sp-footer {
-      border-top: 1px solid #e6e9ee; background: #fff;
-      padding: 28px 32px; text-align: center;
-      font-size: 12.5px; color: #8a919e;
+      margin-top: 24px;
+      background: linear-gradient(180deg, #0d1522, #0a0f19);
+      color: #97a3b8; padding: 44px 32px 28px; font-size: 12.5px;
     }
-    .sp-footer strong { color: #4d5563; font-weight: 600; }
+    .sp-footer-grid {
+      max-width: 1120px; margin: 0 auto 32px; display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px;
+    }
+    .sp-footer-brand { font-weight: 800; font-size: 16px; color: #fff; letter-spacing: 0.06em; line-height: 1.3; }
+    .sp-footer-brand small { display: block; font-weight: 500; font-size: 10px; color: #6b7685; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px; }
+    .sp-footer p { margin: 10px 0 0; line-height: 1.6; max-width: 300px; }
+    .sp-footer h4 {
+      margin: 0 0 12px; font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; color: #d5dce8;
+    }
+    .sp-footer li { list-style: none; padding: 3px 0; }
+    .sp-footer ul { margin: 0; padding: 0; }
+    .sp-footer-bottom {
+      max-width: 1120px; margin: 0 auto; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08); text-align: center; color: #66738a;
+    }
+    .sp-footer-bottom strong { color: #aab4c6; font-weight: 600; }
+    .sp-trustpill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,163,124,0.14); border: 1px solid rgba(0,163,124,0.4); color: #4fd1b0;
+      border-radius: 99px; padding: 4px 12px; font-size: 11px; font-weight: 600; margin: 12px 6px 0 0;
+    }
+
+    /* ---------- product detail page ---------- */
+    .sp-pdp {
+      max-width: 1120px; margin: 24px auto 48px; padding: 0 32px;
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start;
+    }
+    .sp-pdp-media {
+      position: relative; border-radius: 18px; overflow: hidden; height: 400px;
+      background: linear-gradient(135deg, #f4f6f8, #e9edf2);
+      border: 1px solid #e6e9ee;
+    }
+    .sp-pdp-info { padding-top: 4px; }
+    .sp-pdp-cta {
+      display: inline-block; width: 100%; text-align: center;
+      background: linear-gradient(135deg, #008060, #00a37c); color: #fff;
+      font-size: 15px; font-weight: 700; padding: 14px 24px; border-radius: 12px;
+      letter-spacing: 0.01em; transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .sp-pdp-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px rgba(0,128,96,0.5); }
+    .sp-detail-grid {
+      max-width: 1120px; margin: 0 auto 40px; padding: 0 32px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+    }
+    .sp-detail-card {
+      background: #fff; border: 1px solid #e6e9ee; border-radius: 16px; padding: 22px 24px;
+    }
+    .sp-feature-list { margin: 0; padding: 0 0 0 18px; color: #3a4453; font-size: 13.5px; line-height: 1.75; }
+    .sp-spec-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .sp-spec-table td { padding: 7px 0; border-bottom: 1px solid #eef1f5; color: #5d6675; }
+    .sp-spec-table td:last-child { text-align: right; color: #101828; }
+    .sp-spec-table tr:last-child td { border-bottom: none; }
+    .sp-fitment-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .sp-fitment-chip {
+      font-size: 12.5px; font-weight: 600; color: #14532d;
+      background: linear-gradient(90deg, #ecfdf3, #f0fdf6); border: 1px solid #bbe4c9;
+      padding: 7px 14px; border-radius: 99px;
+    }
+    a { color: #0b6e5c; }
+    a:hover { color: #0a5d4d; }
+
+    /* mobile nav */
+    .sp-menu-btn {
+      display: none; background: none; border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 16px; cursor: pointer;
+    }
+    @media (max-width: 720px) {
+      .sp-menu-btn { display: block; }
+      .sp-nav {
+        display: none; position: absolute; top: 64px; left: 0; right: 0;
+        flex-direction: column; gap: 0; padding: 8px 0;
+        background: rgba(10, 15, 25, 0.98); backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .sp-nav a { padding: 12px 24px; }
+      .sp-nav a.active::after { display: none; }
+      .sp-nav.open { display: flex; }
+    }
 
     @media (max-width: 720px) {
       .sp-header { padding: 0 18px; }
-      .sp-nav { display: none; }
-      .sp-hero { padding: 44px 18px 84px; }
+      .sp-hero { padding: 44px 18px 96px; }
       .sp-widget-wrap { margin: -56px 16px 28px; padding: 20px; }
       .sp-section-title, .sp-results-banner { margin-left: 16px; margin-right: 16px; }
       .sp-grid { padding: 0 16px 48px; grid-template-columns: 1fr; }
+      .sp-cats { padding: 0 16px 6px; }
+      .sp-footer-grid { grid-template-columns: 1fr; gap: 22px; }
+      .sp-trustbar { gap: 16px; font-size: 10.5px; flex-wrap: wrap; }
+      .sp-pdp { grid-template-columns: 1fr; padding: 0 16px; gap: 22px; }
+      .sp-pdp-media { height: 260px; }
+      .sp-detail-grid { grid-template-columns: 1fr; padding: 0 16px; }
     }
   </style>
 </head>
 <body>
+  <div class="sp-trustbar">
+    <span>🚚 Free shipping over $99</span>
+    <span>↩️ 60-day returns</span>
+    <span>🇺🇸 Ships from the USA</span>
+    <span>🛡️ 100% fitment guarantee</span>
+  </div>
   <div class="sp-header">
     <div class="sp-brand">APEX PERFORMANCE<small>Auto &amp; Truck Outfitters</small></div>
-    <div class="sp-nav"><span>Shop</span><span>Collections</span><span>Garage</span><span>Support</span></div>
+    <div class="sp-nav" id="sp-nav">
+      <a href="/demo" class="<%= 'active' if request.path == '/demo' %>">Shop</a>
+      <a href="/demo/collection" class="<%= 'active' if request.path == '/demo/collection' %>">Collections</a>
+      <a href="/demo/garage" class="<%= 'active' if request.path == '/demo/garage' %>">Garage</a>
+      <a href="/demo/support" class="<%= 'active' if request.path == '/demo/support' %>">Support</a>
+    </div>
+    <button class="sp-menu-btn" aria-label="Menu" onclick="document.getElementById('sp-nav').classList.toggle('open')">☰</button>
   </div>
   <% if Rails.env.development? %>
     <div class="sp-notice">
@@ -167,8 +329,43 @@
   <%= yield %>
 
   <div class="sp-footer">
-    <strong>Apex Performance</strong> demo storefront · Fitment powered by
-    <strong>Vehicle Selector Pro</strong> · Theme App Extension + App Proxy + Metafields
+    <div class="sp-footer-grid">
+      <div>
+        <div class="sp-brand">APEX PERFORMANCE<small>Auto &amp; Truck Outfitters</small></div>
+        <p>Upgrade parts engineered to fit right the first time. Every SKU is verified against our vehicle fitment database before it ships.</p>
+        <span class="sp-trustpill">🔒 Secure checkout</span>
+        <span class="sp-trustpill">🛡️ Fitment guaranteed</span>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="/demo/collection?category=Brakes" style="color:inherit;">Brakes</a></li>
+          <li><a href="/demo/collection?category=Suspension" style="color:inherit;">Suspension</a></li>
+          <li><a href="/demo/collection?category=Exhaust" style="color:inherit;">Exhaust</a></li>
+          <li><a href="/demo/collection?category=Maintenance" style="color:inherit;">Maintenance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/demo/support" style="color:inherit;">Contact us</a></li>
+          <li><a href="/demo/support" style="color:inherit;">Shipping &amp; returns</a></li>
+          <li><a href="/demo/support" style="color:inherit;">Fitment help</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/demo" style="color:inherit;">About Apex</a></li>
+          <li><a href="/demo/support" style="color:inherit;">Install guides</a></li>
+          <li><a href="/demo/garage" style="color:inherit;">My Garage</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sp-footer-bottom">
+      <strong>Apex Performance</strong> demo storefront · Fitment powered by
+      <strong>Vehicle Selector Pro</strong> · Theme App Extension + App Proxy + Metafields
+    </div>
   </div>
 
   <script src="/ext-assets/vehicle-selector.js" defer="defer"></script>

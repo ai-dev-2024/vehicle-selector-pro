@@ -4,56 +4,36 @@
     <h1>Parts guaranteed to fit your exact vehicle</h1>
     <p>Select your Year, Make and Model below — every part shown is verified against
        our fitment database before it reaches your cart.</p>
+    <div class="sp-hero-stats">
+      <div class="sp-hero-stat"><b>50K+</b><span>Verified fitments</span></div>
+      <div class="sp-hero-stat"><b>12,400+</b><span>Parts in stock</span></div>
+      <div class="sp-hero-stat"><b>4.9★</b><span>18k customer reviews</span></div>
+      <div class="sp-hero-stat"><b>60-Day</b><span>Free returns</span></div>
+    </div>
   </div>
 </div>
 
-<div class="sp-widget-wrap">
+<div class="sp-widget-wrap" id="vehicle-selector">
   <%= render 'widget' %>
 </div>
 
-<div class="sp-section-title">Featured Parts <span style="color:#6d7175; font-weight:500; font-size:13px;">— fitment badges update live when you select a vehicle</span></div>
+<div class="sp-section-title" id="categories">Shop by Category <span class="sp-sub">Browse the garage-ready essentials</span></div>
+
+<div class="sp-cats">
+  <a class="sp-cat" href="/demo/collection?category=Brakes" style="text-decoration:none;"><div class="sp-cat-ico">🛑</div><div><b>Brakes</b><small>Rotors &amp; pads</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Suspension" style="text-decoration:none;"><div class="sp-cat-ico">🌀</div><div><b>Suspension</b><small>Lift kits &amp; shocks</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Exhaust" style="text-decoration:none;"><div class="sp-cat-ico">💨</div><div><b>Exhaust</b><small>Cat-backs &amp; tips</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Air%20Intake" style="text-decoration:none;"><div class="sp-cat-ico">🔩</div><div><b>Intakes</b><small>Cold-air systems</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Lighting" style="text-decoration:none;"><div class="sp-cat-ico">💡</div><div><b>Lighting</b><small>LED bars &amp; pods</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Maintenance" style="text-decoration:none;"><div class="sp-cat-ico">🛢️</div><div><b>Maintenance</b><small>Oils &amp; service kits</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Filters" style="text-decoration:none;"><div class="sp-cat-ico">🌬️</div><div><b>Filters</b><small>Engine &amp; cabin</small></div></a>
+  <a class="sp-cat" href="/demo/collection?category=Electrical" style="text-decoration:none;"><div class="sp-cat-ico">🔋</div><div><b>Electrical</b><small>Batteries &amp; wiring</small></div></a>
+</div>
+
+<div class="sp-section-title" id="featured">Featured Parts <span class="sp-sub">— fitment badges update live when you select a vehicle</span></div>
 
 <div class="sp-grid">
-  <% product_images = {
-       "APX-CAI-F150-EB"  => "/demo-products/intake.jpg",
-       "APX-BRK-HD-TRK"   => "/demo-products/brakes.jpg",
-       "APX-SUSP-TACO-3IN" => "/demo-products/suspension.jpg",
-       "APX-EXH-MUST-V8"  => "/demo-products/exhaust.jpg",
-       "APX-BMP-JL-001"   => "/demo-products/bumper.jpg",
-       "APX-LGT-UNIV-POD" => "/demo-products/led-pods.jpg",
-       "APX-STRUT-G20-CF" => "/demo-products/strut-brace.jpg"
-     } %>
   <% @products.each do |p| %>
-    <div class="sp-card">
-      <div class="sp-card-img">
-        <% if product_images[p[:sku]] %>
-          <img src="<%= product_images[p[:sku]] %>" alt="<%= p[:title] %>" class="sp-card-photo" loading="lazy">
-        <% end %>
-        <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
-      </div>
-      <div class="sp-card-body">
-        <div class="sp-card-brand-row">
-          <% if p[:brand].present? %><span class="sp-card-brand"><%= p[:brand] %></span><% end %>
-          <% if p[:price_cents] %><span class="sp-card-price"><%= number_to_currency(p[:price_cents] / 100.0, precision: (p[:price_cents] % 100).zero? ? 0 : 2) %></span><% end %>
-        </div>
-        <div class="sp-card-title"><%= p[:title] %></div>
-        <% if p[:short_description].present? %>
-          <div class="sp-card-desc"><%= p[:short_description] %></div>
-        <% end %>
-        <div class="sp-card-sku">PART # <%= p[:sku] %></div>
-        <!-- Identical markup to blocks/product_fitment_badge.liquid -->
-        <div
-          class="vsp-pdp-fitment-badge vsp-fit-unselected"
-          data-product-id="<%= p[:product_id] %>"
-          data-universal="<%= p[:universal] %>"
-        >
-          <div class="vsp-badge-icon">🚗</div>
-          <div class="vsp-badge-content">
-            <div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>
-            <div class="vsp-badge-description">100% Fitment Guarantee. Free returns if verified fitment fails.</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= render 'product_card', p: p %>
   <% end %>
 </div>

@@ -1,0 +1,65 @@
+<%
+  title = p[:title] || p[:product_title]
+  vehicle_name = local_assigns[:vehicle_name]
+  # Fallback icon per category when no photo is mapped for the SKU
+  cat_icons = {
+    'Air Intake' => '🔩', 'Brakes' => '🛑', 'Suspension' => '🌀',
+    'Exhaust' => '💨', 'Bumpers & Armor' => '🛡️', 'Lighting' => '💡',
+    'Chassis & Handling' => '⚙️', 'Maintenance' => '🛢️', 'Electrical' => '🔋',
+    'Wipers & Visibility' => '🌧️', 'Filters' => '🌬️'
+  }
+  cat_icon = cat_icons[p[:category]] || '🚗'
+%>
+<div class="sp-card">
+  <%# product_id is a Shopify GID like gid://shopify/Product/123 — URL-encode it
+      so the slashes don't break the /demo/products/:product_id route. Rails
+      decodes params, so the controller lookup still matches the raw GID. %>
+  <a href="/demo/products/<%= ERB::Util.url_encode(p[:product_id]) %>" style="text-decoration:none; color:inherit; display:block;">
+    <div class="sp-card-img">
+      <% if p[:image] %>
+        <img src="<%= p[:image] %>" alt="<%= title %>" class="sp-card-photo" loading="lazy">
+      <% else %>
+        <span class="sp-card-fallback" aria-hidden="true"><%= cat_icon %></span>
+      <% end %>
+      <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
+    </div>
+    <div class="sp-card-body">
+      <div class="sp-card-brand-row">
+        <% if p[:brand].present? %><span class="sp-card-brand"><%= p[:brand] %></span><% end %>
+        <% if p[:price_cents] %><span class="sp-card-price"><%= number_to_currency(p[:price_cents] / 100.0, precision: (p[:price_cents] % 100).zero? ? 0 : 2) %></span><% end %>
+      </div>
+      <div class="sp-card-title"><%= title %></div>
+      <% if p[:short_description].present? %>
+        <div class="sp-card-desc"><%= p[:short_description] %></div>
+      <% end %>
+      <div class="sp-card-sku">PART # <%= p[:sku] %><%= ' · Universal Fit' if p[:universal] %></div>
+    </div>
+  </a>
+  <% if vehicle_name %>
+    <div
+      class="vsp-pdp-fitment-badge <%= p[:universal] ? 'vsp-fit-universal' : 'vsp-fit-exact' %>"
+      data-product-id="<%= p[:product_id] %>"
+      data-universal="<%= p[:universal] %>"
+    >
+      <div class="vsp-badge-icon"><%= p[:universal] ? '🌐' : '✔' %></div>
+      <div class="vsp-badge-content">
+        <div class="vsp-badge-title">
+          <%= p[:universal] ? 'Universal Fitment' : "Guaranteed Exact Fit for #{vehicle_name}" %>
+        </div>
+        <div class="vsp-badge-description"><%= p[:fitment_notes].presence || '100% Fitment Guarantee. Ready for installation.' %></div>
+      </div>
+    </div>
+  <% else %>
+    <div
+      class="vsp-pdp-fitment-badge vsp-fit-unselected"
+      data-product-id="<%= p[:product_id] %>"
+      data-universal="<%= p[:universal] %>"
+    >
+      <div class="vsp-badge-icon">🚗</div>
+      <div class="vsp-badge-content">
+        <div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>
+        <div class="vsp-badge-description">100% Fitment Guarantee. Free returns if verified fitment fails.</div>
+      </div>
+    </div>
+  <% end %>
+</div>

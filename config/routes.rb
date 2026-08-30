@@ -93,6 +93,9 @@ Rails.application.routes.draw do
   # can try the full Year/Make/Model/Trim experience without a Shopify session.
   get 'demo', to: 'storefront_preview#index'
   get 'demo/collection', to: 'storefront_preview#collection'
+  get 'demo/products/:product_id', to: 'storefront_preview#product', as: :demo_product
+  get 'demo/support', to: 'storefront_preview#support'
+  get 'demo/garage', to: 'storefront_preview#garage'
   get 'demo/admin', to: 'storefront_preview#admin_dashboard'
   get 'demo/admin/sync', to: 'storefront_preview#admin_sync'
 
@@ -130,6 +133,8 @@ Rails.application.routes.draw do
   if Rails.env.development?
     get 'storefront_preview', to: 'storefront_preview#index'
     get 'collections/storefront_preview', to: 'storefront_preview#collection'
+    get 'storefront_preview/products/:product_id', to: 'storefront_preview#product'
+    get 'storefront_preview/support', to: 'storefront_preview#support'
     get 'admin_preview', to: 'storefront_preview#admin_dashboard'
     get 'admin_preview/sync', to: 'storefront_preview#admin_sync'
   end

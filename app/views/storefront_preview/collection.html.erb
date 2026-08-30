@@ -1,13 +1,13 @@
 <div class="sp-hero">
   <div class="sp-hero-inner">
     <span class="sp-hero-eyebrow">✓ 100% Fitment Guarantee</span>
-    <h1>Parts guaranteed to fit your exact vehicle</h1>
+    <h1><%= @category.presence || 'Parts guaranteed to fit your exact vehicle' %></h1>
     <p>Select your Year, Make and Model below — every part shown is verified against
        our fitment database before it reaches your cart.</p>
   </div>
 </div>
 
-<div class="sp-widget-wrap">
+<div class="sp-widget-wrap" id="vehicle-selector">
   <%= render 'widget' %>
 </div>
 
@@ -15,61 +15,21 @@
   <div class="sp-results-banner">
     ✔ Showing parts that fit your <strong><%= @vehicle[:display_name] %></strong>
     — <strong><%= @products.size %></strong> matching part<%= 's' unless @products.size == 1 %>
-    <% home_path = request.path.start_with?('/demo') ? '/demo' : '/storefront_preview' %>
-    <a href="<%= home_path %>" style="float:right; color:#14532d;">Clear vehicle</a>
+    <a href="/demo" style="float:right; color:#14532d;">Clear vehicle</a>
   </div>
-
   <div class="sp-section-title">Compatible Parts for <%= @vehicle[:display_name] %></div>
-
-  <div class="sp-grid">
-    <% product_images = {
-         "APX-CAI-F150-EB"  => "/demo-products/intake.jpg",
-         "APX-BRK-HD-TRK"   => "/demo-products/brakes.jpg",
-         "APX-SUSP-TACO-3IN" => "/demo-products/suspension.jpg",
-         "APX-EXH-MUST-V8"  => "/demo-products/exhaust.jpg",
-         "APX-BMP-JL-001"   => "/demo-products/bumper.jpg",
-         "APX-LGT-UNIV-POD" => "/demo-products/led-pods.jpg",
-         "APX-STRUT-G20-CF" => "/demo-products/strut-brace.jpg"
-       } %>
-    <% if @products.any? %>
-      <% @products.each do |p| %>
-        <div class="sp-card">
-          <div class="sp-card-img">
-            <% if product_images[p[:sku]] %>
-              <img src="<%= product_images[p[:sku]] %>" alt="<%= p[:product_title] %>" class="sp-card-photo" loading="lazy">
-            <% end %>
-            <% if p[:category].present? %><span class="sp-card-cat"><%= p[:category] %></span><% end %>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-brand-row">
-              <% if p[:brand].present? %><span class="sp-card-brand"><%= p[:brand] %></span><% end %>
-              <% if p[:price_cents] %><span class="sp-card-price"><%= number_to_currency(p[:price_cents] / 100.0, precision: (p[:price_cents] % 100).zero? ? 0 : 2) %></span><% end %>
-            </div>
-            <div class="sp-card-title"><%= p[:product_title] %></div>
-            <% if p[:short_description].present? %>
-              <div class="sp-card-desc"><%= p[:short_description] %></div>
-            <% end %>
-            <div class="sp-card-sku">PART # <%= p[:sku] %><%= ' · Universal Fit' if p[:universal] %></div>
-            <div
-              class="vsp-pdp-fitment-badge <%= p[:universal] ? 'vsp-fit-universal' : 'vsp-fit-exact' %>"
-              data-product-id="<%= p[:product_id] %>"
-              data-universal="<%= p[:universal] %>"
-            >
-              <div class="vsp-badge-icon"><%= p[:universal] ? '🌐' : '✔' %></div>
-              <div class="vsp-badge-content">
-                <div class="vsp-badge-title">
-                  <%= p[:universal] ? 'Universal Fitment' : "Guaranteed Exact Fit for #{@vehicle[:display_name]}" %>
-                </div>
-                <div class="vsp-badge-description"><%= p[:fitment_notes].presence || '100% Fitment Guarantee. Ready for installation.' %></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <p style="grid-column:1/-1; color:#6d7175; padding:20px;">No parts in the demo catalog match this exact vehicle. Try another Year / Make / Model.</p>
-    <% end %>
-  </div>
+<% elsif @category %>
+  <div class="sp-section-title"><%= @category %> <span class="sp-sub"><%= @products.size %> part<%= 's' unless @products.size == 1 %> in this collection</span></div>
 <% else %>
-  <div class="sp-section-title">Select a vehicle above to filter compatible parts.</div>
+  <div class="sp-section-title">All Parts <span class="sp-sub">Select a vehicle above to filter compatible parts</span></div>
 <% end %>
+
+<div class="sp-grid">
+  <% if @products.any? %>
+    <% @products.each do |p| %>
+      <%= render 'product_card', p: p, vehicle_name: @vehicle && @vehicle[:display_name] %>
+    <% end %>
+  <% else %>
+    <p style="grid-column:1/-1; color:#6d7175; padding:20px;">No parts in the demo catalog match this filter. Try another Year / Make / Model or collection.</p>
+  <% end %>
+</div>

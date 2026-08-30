@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="262" rx="140" ry="12" fill="#000" opacity="0.06"/>
+  <rect x="90" y="110" width="70" height="140" rx="10" fill="#1f2937"/>
+  <rect x="98" y="130" width="54" height="60" rx="6" fill="#f59e0b"/>
+  <rect x="105" y="88" width="40" height="26" rx="4" fill="#374151"/>
+  <text x="125" y="200" font-family="Arial" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">0W-20</text>
+  <rect x="180" y="70" width="90" height="130" rx="8" fill="#0b6e5c"/>
+  <rect x="188" y="90" width="74" height="70" rx="6" fill="#fff" opacity="0.9"/>
+  <text x="225" y="132" font-family="Arial" font-size="12" fill="#0b6e5c" text-anchor="middle" font-weight="bold">OIL</text>
+  <rect x="192" y="52" width="66" height="20" rx="4" fill="#065f46"/>
+  <circle cx="310" cy="180" r="42" fill="#e5e7eb" stroke="#9ca3af" stroke-width="6"/>
+  <circle cx="310" cy="180" r="18" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+  <circle cx="310" cy="180" r="5" fill="#9ca3af"/>
+</svg>

@@ -1,0 +1,87 @@
+<% content_for(:page_title, "#{@product[:title]} — Apex Performance") %>
+
+<div style="max-width:1120px; margin:28px auto 0; padding:0 32px; font-size:12.5px; color:#6d7175;">
+  <a href="/demo" style="color:#6d7175; text-decoration:none;">Home</a> &rsaquo;
+  <% if @product[:category].present? %>
+    <a href="/demo/collection?category=<%= CGI.escape(@product[:category]) %>" style="color:#6d7175; text-decoration:none;"><%= @product[:category] %></a> &rsaquo;
+  <% end %>
+  <span style="color:#101828;"><%= @product[:title].to_s[0, 60] %></span>
+</div>
+
+<div class="sp-pdp">
+  <div class="sp-pdp-media">
+    <% if @product[:image] %>
+      <img src="<%= @product[:image] %>" alt="<%= @product[:title] %>" style="width:100%; height:100%; object-fit:cover;">
+    <% else %>
+      <span style="font-size:80px;" aria-hidden="true">🚗</span>
+    <% end %>
+    <% if @product[:category].present? %><span class="sp-card-cat"><%= @product[:category] %></span><% end %>
+  </div>
+
+  <div class="sp-pdp-info">
+    <% if @product[:brand].present? %><div class="sp-card-brand"><%= @product[:brand] %></div><% end %>
+    <h1 style="margin:6px 0 10px; font-size:26px; font-weight:800; letter-spacing:-0.02em; line-height:1.2; color:#101828;"><%= @product[:title] %></h1>
+    <% if @product[:price_cents] %>
+      <div class="sp-card-price" style="font-size:24px; margin-bottom:6px;"><%= number_to_currency(@product[:price_cents] / 100.0, precision: (@product[:price_cents] % 100).zero? ? 0 : 2) %></div>
+    <% end %>
+    <div style="font-size:13px; color:#14532d; font-weight:600; margin-bottom:14px;">✔ In stock · Free shipping over $99 · 60-day returns</div>
+    <% if @product[:short_description].present? %>
+      <p style="font-size:14.5px; color:#3a4453; line-height:1.65; margin:0 0 18px;"><%= @product[:short_description] %></p>
+    <% end %>
+
+    <!-- Identical markup to blocks/product_fitment_badge.liquid -->
+    <div
+      class="vsp-pdp-fitment-badge vsp-fit-unselected"
+      data-product-id="<%= @product[:product_id] %>"
+      data-universal="<%= @product[:universal] %>"
+      style="margin:0 0 20px;"
+    >
+      <div class="vsp-badge-icon">🚗</div>
+      <div class="vsp-badge-content">
+        <div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>
+        <div class="vsp-badge-description">100% Fitment Guarantee. Free returns if verified fitment fails.</div>
+      </div>
+    </div>
+
+    <a href="/demo" class="sp-pdp-cta" style="text-decoration:none;">Configure Your Vehicle →</a>
+    <div class="sp-card-sku" style="margin-top:14px;">PART # <%= @product[:sku] %><%= ' · Universal Fit' if @product[:universal] %></div>
+  </div>
+</div>
+
+<% if @specs[:features].present? %>
+<div class="sp-section-title">Highlights <span class="sp-sub">Engineered features you can verify on the bench</span></div>
+<div class="sp-detail-grid">
+  <div class="sp-detail-card">
+    <h3 style="margin:0 0 12px; font-size:15px; color:#101828;">Key Features</h3>
+    <ul class="sp-feature-list">
+      <% @specs[:features].each do |f| %><li><%= f %></li><% end %>
+    </ul>
+  </div>
+  <div class="sp-detail-card">
+    <h3 style="margin:0 0 12px; font-size:15px; color:#101828;">Specifications</h3>
+    <table class="sp-spec-table">
+      <% @specs[:specs].each do |label, value| %>
+        <tr><td><%= label %></td><td><strong><%= value %></strong></td></tr>
+      <% end %>
+      <tr><td>Category</td><td><strong><%= @product[:category].presence || '—' %></strong></td></tr>
+      <tr><td>Part number</td><td><strong><%= @product[:sku] %></strong></td></tr>
+    </table>
+  </div>
+</div>
+<% end %>
+
+<div class="sp-section-title">Verified Fitment <span class="sp-sub">Vehicles this part is cataloged to fit</span></div>
+<div class="sp-detail-card" style="max-width:1120px; margin:0 auto 56px;">
+  <% if @fitments.any? %>
+    <div class="sp-fitment-chips">
+      <% @fitments.each do |v| %>
+        <span class="sp-fitment-chip"><%= v.start_with?('Universal') ? '🌐' : '✔' %> <%= v %></span>
+      <% end %>
+    </div>
+    <p style="font-size:12.5px; color:#6d7175; margin:14px 0 0;">
+      Don't see your vehicle? Use the selector above — our fitment database checks Year / Make / Model / Trim / Engine before anything reaches your cart.
+    </p>
+  <% else %>
+    <p style="margin:0; color:#6d7175; font-size:13px;">Fitment data is being cataloged for this part. Contact support for a guaranteed answer within one business day.</p>
+  <% end %>
+</div>

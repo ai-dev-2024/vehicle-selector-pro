@@ -1,0 +1,52 @@
+<% content_for(:page_title, 'My Garage — Apex Performance') %>
+
+<div class="sp-hero" style="padding:56px 32px 72px;">
+  <div class="sp-hero-inner">
+    <span class="sp-hero-eyebrow">🔧 My Garage</span>
+    <h1>Your saved vehicles</h1>
+    <p>Vehicles you pick in the selector are saved here — switch between them
+       on any page without starting over.</p>
+  </div>
+</div>
+
+<div style="max-width:1120px; margin:-32px auto 48px; padding:0 32px; position:relative; z-index:5;">
+  <div class="sp-widget-wrap" id="vehicle-selector" style="margin:0 0 32px; max-width:none;">
+    <%= render 'widget' %>
+  </div>
+
+  <div class="sp-detail-card" id="garage-page-list">
+    <h3 style="margin:0 0 12px; font-size:15px; color:#101828;">🚗 Saved vehicles</h3>
+    <p id="garage-page-empty" style="margin:0; color:#6d7175; font-size:13.5px;">
+      Garage is empty. Pick a vehicle in the selector above (or on the
+      <a href="/demo">main page</a>) and it will appear here — the list is stored
+      in your browser, so it survives page reloads.
+    </p>
+    <div id="garage-page-items" class="sp-fitment-chips" style="margin-top:12px;"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:32px;">
+    <a href="/demo" class="sp-pdp-cta" style="text-decoration:none;">← Back to the Shop</a>
+  </div>
+</div>
+
+<script>
+  // Renders the localStorage garage on the dedicated page. The selector widget
+  // keeps its own dropdown in sync; this page is a read-only view of the same
+  // storage, refreshed on the widget's vsp:vehicleChanged event.
+  (function () {
+    var KEY = 'vsp_customer_garage';
+    var list = document.getElementById('garage-page-items');
+    var empty = document.getElementById('garage-page-empty');
+    function render() {
+      var garage = [];
+      try { garage = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+      if (!Array.isArray(garage)) garage = [];
+      empty.style.display = garage.length ? 'none' : '';
+      list.innerHTML = garage.map(function (v) {
+        return '<span class="sp-fitment-chip">✔ ' + (v.display_name || [v.year, v.make, v.model].join(' ')) + '</span>';
+      }).join('');
+    }
+    window.addEventListener('vsp:vehicleChanged', render);
+    document.addEventListener('DOMContentLoaded', render);
+  })();
+</script>

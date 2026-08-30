@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="250" rx="130" ry="10" fill="#000" opacity="0.06"/>
+  <rect x="95" y="95" width="210" height="120" rx="12" fill="#0b6e5c"/>
+  <rect x="107" y="107" width="186" height="96" rx="8" fill="#fef3c7"/>
+  <g stroke="#d97706" stroke-width="6">
+    <line x1="120" y1="122" x2="280" y2="122"/>
+    <line x1="120" y1="142" x2="280" y2="142"/>
+    <line x1="120" y1="162" x2="280" y2="162"/>
+    <line x1="120" y1="182" x2="280" y2="182"/>
+  </g>
+  <text x="200" y="245" font-family="Arial" font-size="12" fill="#6b7280" text-anchor="middle">HIGH-FLOW WASHABLE · 100K MILES</text>
+</svg>
