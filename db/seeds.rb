@@ -97,6 +97,12 @@ end
 puts "✓ Seeded #{vehicles.count} distinct Year/Make/Model/Trim/Engine vehicle configurations"
 
 # 4. Seed Product Fitment Catalog
+# Self-healing: remove any legacy placeholder-GID fitments (8192019283xxx)
+# left over from earlier seed runs so the catalog maps 1:1 to real store
+# products. Idempotent and safe to run on every deploy.
+legacy = VehicleProductFitment.where("product_id LIKE ?", "%8192019283%")
+puts "✓ Removed #{legacy.count} legacy placeholder-GID fitment rows" if legacy.delete_all > 0
+
 catalog_products = [
   {
     product_id: "gid://shopify/Product/8192019283001",
