@@ -8,7 +8,7 @@ RSpec.describe "App Proxy endpoints", type: :request do
   # Build the query string first, then send it byte-for-byte.
   def signed_get(path, params:)
     query = params.compact.map { |k, v| "#{k}=#{v}" }.join("&")
-    signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), secret, query)
+    OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), secret, query)
     get path, params: params, headers: { "X-Shopify-Test-Signature" => "valid" }
   end
 
@@ -42,7 +42,7 @@ RSpec.describe "App Proxy endpoints", type: :request do
     it "returns the distinct years for the shop's fitments" do
       signed_get "/apps/vehicle-selector/years", params: { shop: shop.shopify_domain }
       expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body["years"]).to include(2020)
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe "App Proxy endpoints", type: :request do
     it "returns makes scoped to the requested year" do
       signed_get "/apps/vehicle-selector/makes", params: { shop: shop.shopify_domain, year: 2020 }
       expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body["makes"]).to include("Ford")
     end
   end
@@ -60,7 +60,7 @@ RSpec.describe "App Proxy endpoints", type: :request do
     it "returns matching product IDs" do
       signed_get "/apps/vehicle-selector/search", params: { shop: shop.shopify_domain, year: 2020, make: "Ford", model: "F-150" }
       expect(response).to have_http_status(:ok)
-      body = JSON.parse(response.body)
+      body = response.parsed_body
       expect(body["success"]).to be(true)
       expect(body["data"]["products"] || body["data"]["product_ids"]).to be_present
     end

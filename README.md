@@ -20,6 +20,15 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 **[Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** · **[Live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[Architecture](#architecture)**
 
+<div align="center">
+
+| | | | |
+|---|---|---|---|
+| **33** YMMTE configurations | **143** verified fitments | **28** mapped products | **5** brands represented |
+
+</div>
+
+
 > **Installing on your own store** — this is a custom (unlisted) app, so Shopify requires installation through the Partners distribution link. Open an issue or request access and we will generate an install link for your store. The live demo above needs no installation.
 
 ---
@@ -56,9 +65,9 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 <div align="center">
 
-**Home — cascading Year / Make / Model / Trim / Engine widget with shop-by-category and featured parts**
+**Home — cascading Year / Make / Model / Trim / Engine selector with live fitment data and shop-by-category**
 
-<img src="demo/autoplay/frames_live/04_storefront_home.png" alt="Storefront home with hero, cascading vehicle selector widget, category tiles, and featured product cards" width="100%">
+<img src="demo/autoplay/frames_live/04_storefront_home.png" alt="Storefront home with catalog header, cascading vehicle selector widget, shop-by-category tiles, and live fitment data" width="100%">
 
 **Vehicle-filtered results — 2023 Ford F-150 with Guaranteed Exact Fit badges**
 
@@ -84,11 +93,11 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 **Vehicle library — the YMMTE database with cascading filters**
 
-<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Vehicle library with 33 Year/Make/Model/Trim/Engine configurations across BMW, Chevrolet, Ford, and Jeep" width="100%">
+<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Admin vehicle library with 33 Year/Make/Model/Trim/Engine configurations across Ford, Toyota, BMW, Chevrolet, and Jeep" width="100%">
 
 **Product fitment matrix — every product-to-vehicle mapping with sync status**
 
-<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Fitment matrix with 87 product-to-vehicle mappings, universal fits, sync badges, and edit controls" width="100%">
+<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Product fitment matrix with 143 product-to-vehicle mappings, direct-fit and universal fits, sync badges, and edit controls" width="100%">
 
 **Widget & Garage configuration**
 

@@ -25,6 +25,6 @@ RSpec.describe Webhooks::ProductsUpdateJob, type: :job do
     shop.mark_as_uninstalled!
     allow(Rails.logger).to receive(:warn).and_call_original
     described_class.perform_now(shop_domain: shop.shopify_domain, webhook: { "id" => 100 })
-    expect(Rails.logger).to have_received(:warn).with(/Dropped webhook for missing\/inactive shop/)
+    expect(Rails.logger).to have_received(:warn).with(%r{Dropped webhook for missing/inactive shop})
   end
 end

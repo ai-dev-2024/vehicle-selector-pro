@@ -100,7 +100,7 @@ module Shopify
     # Exponential backoff with jitter so concurrent jobs don't retry in lockstep
     # and re-throttle together.
     def jittered_backoff(attempts, base: 2.0)
-      base**(attempts + 1) * (1.0 + rand * 0.5)
+      (base**(attempts + 1)) * (1.0 + (rand * 0.5))
     end
 
     def extract_restore_rate(parsed)

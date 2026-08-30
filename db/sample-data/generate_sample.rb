@@ -21,4 +21,4 @@ CSV.open("db/sample-data/bulk_fitment_sample.csv", "w") do |csv|
   rows.each { |r| csv << r }
 end
 
-puts "Wrote #{rows.size} fitment rows to db/sample-data/bulk_fitment_sample.csv"
+Rails.logger.debug { "Wrote #{rows.size} fitment rows to db/sample-data/bulk_fitment_sample.csv" }

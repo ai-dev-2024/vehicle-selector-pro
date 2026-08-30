@@ -54,7 +54,7 @@ RSpec.describe Shopify::MetafieldSyncService do
 
   describe "#sync_all" do
     it "marks the sync log completed" do
-      fitment = make_fitment(2023, "Toyota", "Tacoma")
+      make_fitment(2023, "Toyota", "Tacoma")
       log = instance_spy(MetafieldSyncLog)
       allow(MetafieldSyncLog).to receive(:new).and_return(log)
 

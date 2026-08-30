@@ -12,9 +12,11 @@ RSpec.describe "Webhook endpoints", type: :request do
       "X-Shopify-Topic" => "products/update",
       "X-Shopify-Webhook-Id" => SecureRandom.uuid
     }
-    headers["X-Shopify-Hmac-Sha256"] = Base64.strict_encode64(
-      OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), secret, body)
-    ) if sign
+    if sign
+      headers["X-Shopify-Hmac-Sha256"] = Base64.strict_encode64(
+        OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), secret, body)
+      )
+    end
 
     post path, params: body, headers: headers
   end
@@ -35,8 +37,8 @@ RSpec.describe "Webhook endpoints", type: :request do
       body = { id: 1 }.to_json
       forged = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), "wrong-secret", body))
       post "/webhooks/products_update", params: body,
-           headers: { "Content-Type" => "application/json", "X-Shopify-Hmac-Sha256" => forged,
-                      "X-Shopify-Shop-Domain" => shop.shopify_domain }
+                                        headers: { "Content-Type" => "application/json", "X-Shopify-Hmac-Sha256" => forged,
+                                                   "X-Shopify-Shop-Domain" => shop.shopify_domain }
       expect(response).to have_http_status(:unauthorized)
     end
   end
