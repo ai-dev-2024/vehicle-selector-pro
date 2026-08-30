@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 class AppProxySignatureVerifierTest < Minitest::Test
   def setup
@@ -16,7 +16,7 @@ class AppProxySignatureVerifierTest < Minitest::Test
 
     # Sorted order: make=Fordpath_prefix=/apps/vehicle-selectorshop=apex-parts.myshopify.comtimestamp=1724900000year=2024
     expected_message = "make=Fordpath_prefix=/apps/vehicle-selectorshop=apex-parts.myshopify.comtimestamp=1724900000year=2024"
-    expected_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @secret, expected_message)
+    expected_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), @secret, expected_message)
 
     params_with_signature = params.merge("signature" => expected_signature)
 

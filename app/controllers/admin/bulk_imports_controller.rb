@@ -6,7 +6,7 @@ module Admin
 
     def create
       if params[:csv_file].blank? && params[:csv_raw_text].blank?
-        return redirect_to admin_bulk_imports_path, alert: "Please choose a CSV file or paste CSV text."
+        return redirect_to admin_bulk_imports_path, alert: t("admin.bulk_imports.choose_file_or_paste")
       end
 
       csv_content = if params[:csv_file].present?
@@ -19,20 +19,26 @@ module Admin
       results = importer.import!
 
       if results[:error_count].zero?
-        redirect_to admin_product_fitments_path, notice: "Successfully imported #{results[:success_count]} vehicle fitments across #{results[:product_ids].size} products! Metafield background sync queued."
+        redirect_to admin_product_fitments_path,
+                    notice: t("admin.bulk_imports.import_success",
+                              count: results[:success_count], products: results[:product_ids].size)
       else
         @results = results
-        flash.now[:alert] = "Import completed with #{results[:error_count]} error(s). #{results[:success_count]} fitments imported."
-        render :index, status: :unprocessable_entity
+        flash.now[:alert] =
+          t("admin.bulk_imports.import_partial", error_count: results[:error_count], count: results[:success_count])
+        render :index, status: :unprocessable_content
       end
     end
 
     def sample_template
       csv_data = CSV.generate(headers: true) do |csv|
         csv << %w[product_id product_handle product_title sku year make model trim engine universal notes position]
-        csv << ["gid://shopify/Product/8192019283001", "cold-air-intake-f150", "Stage 2 Cold Air Intake", "CAI-F150", "2024", "Ford", "F-150", "Lariat", "3.5L EcoBoost V6", "false", "Fits twin-turbo models only", "Engine Bay"]
-        csv << ["gid://shopify/Product/8192019283002", "heavy-duty-brake-kit", "Severe Duty Brake Rotor Kit", "BRK-HD-01", "2024", "Chevrolet", "Silverado 1500", "LTZ", "6.2L EcoTec3 V8", "false", "Front axle 6-lug", "Front Axle"]
-        csv << ["gid://shopify/Product/8192019283006", "universal-led-fog-lights", "High-Power Amber LED Fog Pods", "LED-FOG-UNIV", "", "", "", "", "", "true", "Universal mounting bracket included", "Auxiliary"]
+        csv << ["gid://shopify/Product/8192019283001", "cold-air-intake-f150", "Stage 2 Cold Air Intake", "CAI-F150",
+                "2024", "Ford", "F-150", "Lariat", "3.5L EcoBoost V6", "false", "Fits twin-turbo models only", "Engine Bay"]
+        csv << ["gid://shopify/Product/8192019283002", "heavy-duty-brake-kit", "Severe Duty Brake Rotor Kit",
+                "BRK-HD-01", "2024", "Chevrolet", "Silverado 1500", "LTZ", "6.2L EcoTec3 V8", "false", "Front axle 6-lug", "Front Axle"]
+        csv << ["gid://shopify/Product/8192019283006", "universal-led-fog-lights", "High-Power Amber LED Fog Pods",
+                "LED-FOG-UNIV", "", "", "", "", "", "true", "Universal mounting bracket included", "Auxiliary"]
       end
 
       send_data csv_data, filename: "vehicle_selector_pro_fitment_template.csv", type: "text/csv"

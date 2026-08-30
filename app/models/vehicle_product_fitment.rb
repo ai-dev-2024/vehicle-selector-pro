@@ -9,13 +9,13 @@ class VehicleProductFitment < ApplicationRecord
   validates :product_id, presence: true
   validates :vehicle, presence: true, unless: :universal_fit?
   validates :vehicle_id, uniqueness: {
-    scope: [:shop_id, :product_id],
-    message: "fitment already exists for this vehicle and product in your store",
+    scope: %i[shop_id product_id],
+    message: :fitment_already_exists,
     unless: :universal_fit?
   }
   validates :product_id, uniqueness: {
     scope: :shop_id,
-    message: "is already marked as universal fit",
+    message: :already_marked_universal,
     if: :universal_fit?
   }
 
@@ -28,10 +28,10 @@ class VehicleProductFitment < ApplicationRecord
   scope :for_vehicle, ->(vehicle_id) { where(vehicle_id: vehicle_id) }
 
   # Callbacks
-  after_commit :enqueue_metafield_sync, on: [:create, :update, :destroy]
+  after_commit :enqueue_metafield_sync, on: %i[create update destroy]
 
   def direct_fit?
-    fitment_type == 'direct_fit'
+    fitment_type == "direct_fit"
   end
 
   def universal_fit?
@@ -68,7 +68,9 @@ class VehicleProductFitment < ApplicationRecord
   end
 
   def mark_synced!
+    # rubocop:disable Rails/SkipsModelValidations -- status bookkeeping; must skip callbacks to avoid re-enqueuing sync jobs
     update_columns(synced_to_metafield: true, last_synced_at: Time.current)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 
   private

@@ -7,10 +7,10 @@ module Admin
     def update
       @settings = current_shop.settings
       if @settings.update(settings_params)
-        redirect_to admin_settings_path, notice: "Widget and garage settings saved successfully!"
+        redirect_to admin_settings_path, notice: t("admin.settings.saved")
       else
-        flash.now[:alert] = @settings.errors.full_messages.join(', ')
-        render :show, status: :unprocessable_entity
+        flash.now[:alert] = @settings.errors.full_messages.join(", ")
+        render :show, status: :unprocessable_content
       end
     end
 

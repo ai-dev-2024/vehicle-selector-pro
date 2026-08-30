@@ -2,7 +2,7 @@ module Webhooks
   class AppUninstalledJob < ApplicationJob
     queue_as :webhooks
 
-    def perform(shop_domain:, webhook:)
+    def perform(shop_domain:, _webhook:)
       shop = Shop.find_by(shopify_domain: shop_domain)
       return unless shop
 

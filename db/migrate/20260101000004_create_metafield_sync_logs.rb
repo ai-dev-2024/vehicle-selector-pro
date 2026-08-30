@@ -15,7 +15,7 @@ class CreateMetafieldSyncLogs < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :metafield_sync_logs, [:shop_id, :status]
-    add_index :metafield_sync_logs, [:shop_id, :created_at]
+    add_index :metafield_sync_logs, %i[shop_id status]
+    add_index :metafield_sync_logs, %i[shop_id created_at]
   end
 end

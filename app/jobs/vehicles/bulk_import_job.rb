@@ -9,7 +9,10 @@ module Vehicles
       importer = BulkFitmentImporter.new(shop, csv_content)
       results = importer.import!
 
-      Rails.logger.info("[BulkImportJob] Finished import for #{shop.shopify_domain}: #{results[:success_count]} success, #{results[:error_count]} errors")
+      Rails.logger.info(
+        "[BulkImportJob] Finished import for #{shop.shopify_domain}: " \
+        "#{results[:success_count]} success, #{results[:error_count]} errors"
+      )
       results
     rescue StandardError => e
       Rails.logger.error("[BulkImportJob] Failed: #{e.message}")

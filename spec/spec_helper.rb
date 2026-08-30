@@ -1,12 +1,10 @@
-ENV['RAILS_ENV'] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require 'minitest/autorun'
-require 'json'
-require 'openssl'
-require 'base64'
-require 'set'
-require 'stringio'
-require 'ostruct'
+require "minitest/autorun"
+require "json"
+require "openssl"
+require "base64"
+require "stringio"
 
 # Core Object extensions for standalone test execution
 class Object
@@ -62,19 +60,17 @@ module Rails
       @store = {}
     end
 
-    def fetch(key, options = {}, &block)
+    def fetch(key, _options = {}, &block)
       if @store.key?(key)
         @store[key]
       elsif block_given?
         val = block.call
         @store[key] = val
         val
-      else
-        nil
       end
     end
 
-    def write(key, value, options = {})
+    def write(key, value, _options = {})
       @store[key] = value
     end
 
@@ -106,11 +102,27 @@ module Rails
     @logger ||= Logger.new
   end
 
+  # Minimal environment object for standalone tests. A plain Struct with
+  # predicate methods (avoiding OpenStruct, which RuboCop discourages).
+  Env = Struct.new(:environment) do
+    def test?
+      environment == :test
+    end
+
+    def development?
+      environment == :development
+    end
+
+    def production?
+      environment == :production
+    end
+  end
+
   def self.env
-    OpenStruct.new(test?: true, development?: false, production?: false)
+    @env ||= Env.new(:test)
   end
 end
 
 # Load Service Objects
-require_relative '../app/services/app_proxy_signature_verifier'
-require_relative '../app/services/bulk_fitment_importer'
+require_relative "../app/services/app_proxy_signature_verifier"
+require_relative "../app/services/bulk_fitment_importer"

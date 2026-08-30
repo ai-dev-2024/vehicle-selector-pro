@@ -14,7 +14,8 @@ class CreateAppSettings < ActiveRecord::Migration[7.1]
       t.integer :max_garage_vehicles, default: 5
       t.boolean :auto_filter_collections, default: true, null: false
       t.string :filter_query_param, default: "filter.v.m.custom.vehicle_fitment"
-      t.text :fitment_guarantee_text, default: "100% Fitment Guaranteed. If this part doesn't fit your verified vehicle, returns are free."
+      t.text :fitment_guarantee_text,
+             default: "100% Fitment Guaranteed. If this part doesn't fit your verified vehicle, returns are free."
       t.boolean :show_badge_on_product_page, default: true, null: false
 
       t.timestamps

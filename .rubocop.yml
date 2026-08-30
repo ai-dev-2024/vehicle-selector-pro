@@ -1,0 +1,79 @@
+# RuboCop configuration for Vehicle Selector Pro.
+#
+# The codebase is developed on Windows (CRLF line endings) and consistently
+# uses double-quoted strings without frozen-string-literal comments; the
+# settings below keep that existing style instead of churning every file.
+# Metric thresholds are set so the current, tested code passes while still
+# flagging genuinely bloated new code.
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'demo/**/*'
+    - 'extensions/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+# Windows checkout keeps CRLF; don't fight it.
+Layout/EndOfLine:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 140
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+# Routes and specs legitimately use long blocks.
+Metrics/BlockLength:
+  Exclude:
+    - 'config/routes.rb'
+    - 'spec/**/*'
+
+# Specs are allowed to be verbose; they read as fixtures + assertions.
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
+Metrics/ClassLength:
+  Max: 400
+
+Metrics/ParameterLists:
+  Max: 8
+
+# secure_compare is a boolean-returning API by design (constant-time compare).
+Naming/PredicateMethod:
+  AllowedMethods:
+    - secure_compare
+
+# Numbered method names like render_demo_404 are intentional here.
+Naming/VariableNumber:
+  Enabled: false
+
+# Test harnesses print to stdout on purpose.
+Rails/Output:
+  Exclude:
+    - 'spec/**/*'
+    - 'db/seeds.rb'

@@ -56,10 +56,12 @@ module Shopify
       end
 
       # Update local records
+      # rubocop:disable Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
       @shop.vehicle_product_fitments.where(product_id: product_ids).update_all(
         synced_to_metafield: true,
         last_synced_at: Time.current
       )
+      # rubocop:enable Rails/SkipsModelValidations
 
       { success: true, count: product_ids.size }
     rescue StandardError => e
@@ -119,6 +121,7 @@ module Shopify
       ymm_keys = fitments.map do |f|
         next "universal" if f.universal_fit?
         next unless f.vehicle
+
         "#{f.vehicle.year}|#{f.vehicle.make.downcase}|#{f.vehicle.model.downcase}"
       end.compact.uniq
 
@@ -144,14 +147,14 @@ module Shopify
 
     def execute_batch(batch)
       result = @client.mutate(METAFIELDS_SET_MUTATION, { metafields: batch })
-      user_errors = result.dig('metafieldsSet', 'userErrors') || []
+      user_errors = result.dig("metafieldsSet", "userErrors") || []
 
       if user_errors.any?
         Rails.logger.error("[MetafieldSyncService] Metafield batch error: #{user_errors.inspect}")
         raise GraphQLError, "Failed to set metafields: #{user_errors.map { |e| e['message'] }.join('; ')}"
       end
 
-      result.dig('metafieldsSet', 'metafields')
+      result.dig("metafieldsSet", "metafields")
     end
   end
 end

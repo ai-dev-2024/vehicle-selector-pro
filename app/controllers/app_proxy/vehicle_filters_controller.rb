@@ -13,9 +13,7 @@ module AppProxy
     # GET /apps/vehicle-selector/makes?year=2024
     def makes
       year = params[:year]
-      if year.blank?
-        return render json: { success: false, error: "Parameter 'year' is required" }, status: :bad_request
-      end
+      return render json: { success: false, error: "Parameter 'year' is required" }, status: :bad_request if year.blank?
 
       available_makes = fitment_search_service.makes(year: year)
       render json: {
@@ -52,7 +50,8 @@ module AppProxy
       model = params[:model]
 
       if year.blank? || make.blank? || model.blank?
-        return render json: { success: false, error: "Parameters 'year', 'make', and 'model' are required" }, status: :bad_request
+        return render json: { success: false, error: "Parameters 'year', 'make', and 'model' are required" },
+                      status: :bad_request
       end
 
       available_trims = fitment_search_service.trims(year: year, make: make, model: model)
@@ -74,7 +73,8 @@ module AppProxy
       trim = params[:trim]
 
       if year.blank? || make.blank? || model.blank?
-        return render json: { success: false, error: "Parameters 'year', 'make', and 'model' are required" }, status: :bad_request
+        return render json: { success: false, error: "Parameters 'year', 'make', and 'model' are required" },
+                      status: :bad_request
       end
 
       available_engines = fitment_search_service.engines(year: year, make: make, model: model, trim: trim)
@@ -98,7 +98,8 @@ module AppProxy
       engine = params[:engine]
 
       if year.blank? || make.blank? || model.blank?
-        return render json: { success: false, error: "At minimum 'year', 'make', and 'model' are required" }, status: :bad_request
+        return render json: { success: false, error: "At minimum 'year', 'make', and 'model' are required" },
+                      status: :bad_request
       end
 
       results = fitment_search_service.search_products(

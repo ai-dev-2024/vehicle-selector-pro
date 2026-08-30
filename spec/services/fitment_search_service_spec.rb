@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 class FitmentSearchServiceTest < Minitest::Test
   class MockVehicle
@@ -9,7 +9,7 @@ class FitmentSearchServiceTest < Minitest::Test
     end
 
     def display_name
-      [year, make, model, trim, engine].compact.join(' ')
+      [year, make, model, trim, engine].compact.join(" ")
     end
 
     def to_h
@@ -26,7 +26,8 @@ class FitmentSearchServiceTest < Minitest::Test
   end
 
   class MockVehicleFitment
-    attr_accessor :id, :shop_id, :product_id, :product_handle, :product_title, :sku, :vehicle, :universal_fit, :fitment_type, :fitment_notes, :position
+    attr_accessor :id, :shop_id, :product_id, :product_handle, :product_title, :sku, :vehicle, :universal_fit,
+                  :fitment_type, :fitment_notes, :position
 
     def initialize(attrs)
       attrs.each { |k, v| send("#{k}=", v) }

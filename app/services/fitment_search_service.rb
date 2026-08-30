@@ -39,6 +39,7 @@ class FitmentSearchService
 
   def makes(year:)
     return [] if year.blank?
+
     cache_fetch("makes/#{year}") do
       @shop.vehicles.where(year: year).distinct.order(:make).pluck(:make)
     end
@@ -46,53 +47,56 @@ class FitmentSearchService
 
   def models(year:, make:)
     return [] if year.blank? || make.blank?
+
     cache_fetch("models/#{year}/#{make.downcase}") do
-      @shop.vehicles.where(year: year).where('LOWER(make) = ?', make.downcase.strip).distinct.order(:model).pluck(:model)
+      @shop.vehicles.where(year: year).where("LOWER(make) = ?",
+                                             make.downcase.strip).distinct.order(:model).pluck(:model)
     end
   end
 
   def trims(year:, make:, model:)
     return [] if year.blank? || make.blank? || model.blank?
+
     cache_fetch("trims/#{year}/#{make.downcase}/#{model.downcase}") do
       @shop.vehicles
            .where(year: year)
-           .where('LOWER(make) = ?', make.downcase.strip)
-           .where('LOWER(model) = ?', model.downcase.strip)
-           .where.not(trim: [nil, ''])
+           .where("LOWER(make) = ?", make.downcase.strip)
+           .where("LOWER(model) = ?", model.downcase.strip)
+           .where.not(trim: [nil, ""])
            .distinct.order(:trim).pluck(:trim)
     end
   end
 
   def engines(year:, make:, model:, trim: nil)
     return [] if year.blank? || make.blank? || model.blank?
+
     cache_key = "engines/#{year}/#{make.downcase}/#{model.downcase}/#{trim.to_s.downcase}"
     cache_fetch(cache_key) do
       query = @shop.vehicles
                    .where(year: year)
-                   .where('LOWER(make) = ?', make.downcase.strip)
-                   .where('LOWER(model) = ?', model.downcase.strip)
-      query = query.where('LOWER(trim) = ?', trim.downcase.strip) if trim.present?
-      query.where.not(engine: [nil, '']).distinct.order(:engine).pluck(:engine)
+                   .where("LOWER(make) = ?", make.downcase.strip)
+                   .where("LOWER(model) = ?", model.downcase.strip)
+      query = query.where("LOWER(trim) = ?", trim.downcase.strip) if trim.present?
+      query.where.not(engine: [nil, ""]).distinct.order(:engine).pluck(:engine)
     end
   end
 
+  # Search results are paginated with a hard cap so a page request never loads
+  # the whole catalog into memory. Only matching product IDs are plucked from
+  # the database (cheap), the unique ID list is paginated in Ruby, and full
+  # fitment rows are fetched only for the products on the requested page.
+  MAX_PAGE_SIZE = 100
+
   def search_products(year:, make:, model:, trim: nil, engine: nil, limit: 50, page: 1)
-    matching_vehicles = Vehicle.by_year(year).by_make(make).by_model(model)
-    matching_vehicles = matching_vehicles.by_trim(trim) if trim.present?
-    matching_vehicles = matching_vehicles.by_engine(engine) if engine.present?
+    limit = limit.to_i.clamp(1, MAX_PAGE_SIZE)
+    page = [page.to_i, 1].max
+    offset = (page - 1) * limit
 
-    vehicle_ids = matching_vehicles.pluck(:id)
+    vehicle_ids = matching_vehicle_ids(year: year, make: make, model: model, trim: trim, engine: engine)
+    product_ids = matching_product_ids(vehicle_ids)
 
-    # 1. Fetch specific fitments
-    specific_fitments = @shop.vehicle_product_fitments.where(vehicle_id: vehicle_ids)
-
-    # 2. Fetch universal fitments
-    universal_fitments = @shop.vehicle_product_fitments.universal
-
-    all_fitments = (specific_fitments + universal_fitments).uniq(&:product_id)
-
-    product_ids = all_fitments.map(&:product_id).uniq
-    numeric_ids = product_ids.map { |pid| pid.to_s.gsub('gid://shopify/Product/', '') }
+    products = build_products(product_ids.drop(offset).first(limit))
+    numeric_ids = product_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") }
 
     # Metafield filter tokens for storefront Liquid integration
     filter_tag = "#{year}|#{make.to_s.downcase}|#{model.to_s.downcase}"
@@ -104,27 +108,13 @@ class FitmentSearchService
         model: model,
         trim: trim,
         engine: engine,
-        display_name: [year, make, model, trim, engine].compact_blank.join(' ')
+        display_name: [year, make, model, trim, engine].compact_blank.join(" ")
       },
-      total_count: all_fitments.size,
+      total_count: product_ids.size,
       product_ids: product_ids,
       numeric_product_ids: numeric_ids,
       filter_token: filter_tag,
-      products: all_fitments.first(limit.to_i).map do |f|
-        {
-          product_id: f.product_id,
-          product_handle: f.product_handle,
-          product_title: f.product_title,
-          sku: f.sku,
-          brand: f.brand,
-          category: f.category,
-          price_cents: f.price_cents,
-          short_description: f.short_description,
-          universal: f.universal_fit?,
-          fitment_notes: f.fitment_notes,
-          position: f.position
-        }
-      end
+      products: products
     }
   end
 
@@ -136,10 +126,10 @@ class FitmentSearchService
     if universal.present?
       return {
         fits: true,
-        fitment_type: 'universal',
-        badge_text: 'Universal Fit',
-        badge_color: 'success',
-        notes: universal.fitment_notes.presence || 'This item is designed to fit all vehicles.',
+        fitment_type: "universal",
+        badge_text: "Universal Fit",
+        badge_color: "success",
+        notes: universal.fitment_notes.presence || "This item is designed to fit all vehicles.",
         product_id: product_id
       }
     end
@@ -154,7 +144,10 @@ class FitmentSearchService
       target_vehicle = query.first
     end
 
-    return { fits: false, status: 'vehicle_not_specified', badge_text: 'Select Vehicle', badge_color: 'warning' } if target_vehicle.nil?
+    if target_vehicle.nil?
+      return { fits: false, status: "vehicle_not_specified", badge_text: "Select Vehicle",
+               badge_color: "warning" }
+    end
 
     fitment = @shop.vehicle_product_fitments.find_by(product_id: pid_variants, vehicle_id: target_vehicle.id)
 
@@ -163,7 +156,7 @@ class FitmentSearchService
         fits: true,
         fitment_type: fitment.fitment_type,
         badge_text: "Guaranteed Exact Fit for #{target_vehicle.display_name}",
-        badge_color: 'success',
+        badge_color: "success",
         notes: fitment.fitment_notes,
         position: fitment.position,
         product_id: product_id,
@@ -172,9 +165,9 @@ class FitmentSearchService
     else
       {
         fits: false,
-        fitment_type: 'none',
+        fitment_type: "none",
         badge_text: "Does NOT fit #{target_vehicle.display_name}",
-        badge_color: 'critical',
+        badge_color: "critical",
         notes: "This part is not compatible with your selected vehicle.",
         product_id: product_id,
         vehicle: target_vehicle.to_h
@@ -184,8 +177,51 @@ class FitmentSearchService
 
   private
 
-  def cache_fetch(key, &block)
+  def matching_vehicle_ids(year:, make:, model:, trim: nil, engine: nil)
+    vehicles = Vehicle.by_year(year).by_make(make).by_model(model)
+    vehicles = vehicles.by_trim(trim) if trim.present?
+    vehicles = vehicles.by_engine(engine) if engine.present?
+    vehicles.pluck(:id)
+  end
+
+  # Unique, deterministically ordered product IDs across both specific and
+  # universal fitments, so pages are stable and a product listed in both sets
+  # appears only once.
+  def matching_product_ids(vehicle_ids)
+    specific_ids = @shop.vehicle_product_fitments.where(vehicle_id: vehicle_ids).pluck(:product_id)
+    universal_ids = @shop.vehicle_product_fitments.universal.pluck(:product_id)
+    (specific_ids + universal_ids).uniq.sort
+  end
+
+  # Fetches full fitment rows only for the requested page and returns one
+  # payload per product (a product may have both a specific and a universal
+  # row; the first is kept so each product appears once).
+  def build_products(paged_ids)
+    return [] if paged_ids.empty?
+
+    fitments = @shop.vehicle_product_fitments.where(product_id: paged_ids).order(:product_id)
+    by_product = fitments.to_a.group_by(&:product_id)
+    paged_ids.filter_map { |pid| by_product[pid]&.first }.map { |f| product_payload(f) }
+  end
+
+  def product_payload(f)
+    {
+      product_id: f.product_id,
+      product_handle: f.product_handle,
+      product_title: f.product_title,
+      sku: f.sku,
+      brand: f.brand,
+      category: f.category,
+      price_cents: f.price_cents,
+      short_description: f.short_description,
+      universal: f.universal_fit?,
+      fitment_notes: f.fitment_notes,
+      position: f.position
+    }
+  end
+
+  def cache_fetch(key, &)
     full_key = "vsp/shop/#{@shop.id}/v#{@version}/#{key}"
-    Rails.cache.fetch(full_key, expires_in: CACHE_TTL, &block)
+    Rails.cache.fetch(full_key, expires_in: CACHE_TTL, &)
   end
 end

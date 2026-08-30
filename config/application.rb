@@ -1,15 +1,15 @@
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails'
+require "rails"
 # Pick the frameworks you want:
-require 'active_model/railtie'
-require 'active_job/railtie'
-require 'active_record/railtie'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'action_view/railtie'
-require 'action_cable/engine'
-require 'sprockets/railtie'
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_view/railtie"
+require "action_cable/engine"
+require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
 
@@ -29,11 +29,11 @@ module VehicleSelectorPro
     config.active_job.queue_adapter = :sidekiq
 
     # Cache store: SolidCache (Postgres) in production, memory for dev/test
-    if ENV['REDIS_URL'].present?
-      config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], reconnect_attempts: 1 }
-    else
-      config.cache_store = :memory_store, { size: 64.megabytes }
-    end
+    config.cache_store = if ENV["REDIS_URL"].present?
+                           [:redis_cache_store, { url: ENV["REDIS_URL"], reconnect_attempts: 1 }]
+                         else
+                           [:memory_store, { size: 64.megabytes }]
+                         end
 
     # Active Record encryption (Shopify tokens are encrypted at rest).
     # Production must supply these via environment (Fly secrets); dev/test
@@ -41,16 +41,23 @@ module VehicleSelectorPro
     if Rails.env.local?
       config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"] || "local_dev_primary_key"
       config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"] || "local_dev_deterministic_key"
-      config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"] || "local_dev_key_derivation_salt"
+      config.active_record.encryption.key_derivation_salt =
+        ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"] || "local_dev_key_derivation_salt"
     else
-      config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY") { Rails.application.credentials.dig(:active_record_encryption, :primary_key) }
-      config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY") { Rails.application.credentials.dig(:active_record_encryption, :deterministic_key) }
-      config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT") { Rails.application.credentials.dig(:active_record_encryption, :key_derivation_salt) }
+      config.active_record.encryption.primary_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY") do
+        Rails.application.credentials.dig(:active_record_encryption, :primary_key)
+      end
+      config.active_record.encryption.deterministic_key = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY") do
+        Rails.application.credentials.dig(:active_record_encryption, :deterministic_key)
+      end
+      config.active_record.encryption.key_derivation_salt = ENV.fetch("ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT") do
+        Rails.application.credentials.dig(:active_record_encryption, :key_derivation_salt)
+      end
     end
 
     # Shopify embedded app: allow framing by Shopify admin
-    config.action_dispatch.default_headers.delete('X-Frame-Options')
-    config.action_dispatch.default_headers['X-Frame-Options'] = ''
+    config.action_dispatch.default_headers.delete("X-Frame-Options")
+    config.action_dispatch.default_headers["X-Frame-Options"] = ""
     config.content_security_policy do |policy|
       policy.frame_ancestors :self, "https://*.myshopify.com", "https://admin.shopify.com"
     end

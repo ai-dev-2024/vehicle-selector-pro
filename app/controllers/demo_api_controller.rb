@@ -35,7 +35,8 @@ class DemoApiController < ActionController::Base
     return missing_params!(%w[year make]) if params[:year].blank? || params[:make].blank?
 
     available_models = search.models(year: params[:year], make: params[:make])
-    render json: { success: true, year: params[:year].to_i, make: params[:make], models: available_models, count: available_models.size }
+    render json: { success: true, year: params[:year].to_i, make: params[:make], models: available_models,
+                   count: available_models.size }
   end
 
   # GET /demo/api/trims?year=2024&make=Ford&model=F-150
@@ -53,7 +54,8 @@ class DemoApiController < ActionController::Base
   def engines
     return missing_params!(%w[year make model]) if params[:year].blank? || params[:make].blank? || params[:model].blank?
 
-    available_engines = search.engines(year: params[:year], make: params[:make], model: params[:model], trim: params[:trim])
+    available_engines = search.engines(year: params[:year], make: params[:make], model: params[:model],
+                                       trim: params[:trim])
     render json: {
       success: true, year: params[:year].to_i, make: params[:make], model: params[:model],
       trim: params[:trim], engines: available_engines, count: available_engines.size
@@ -92,7 +94,8 @@ class DemoApiController < ActionController::Base
                          .includes(:vehicle)
                          .where(product_id: params[:product_id])
                          .limit(200)
-    render json: { success: true, product_id: params[:product_id], fitments: fitments.map(&:to_fitment_hash), count: fitments.size }
+    render json: { success: true, product_id: params[:product_id], fitments: fitments.map(&:to_fitment_hash),
+                   count: fitments.size }
   end
 
   private
@@ -102,21 +105,18 @@ class DemoApiController < ActionController::Base
   end
 
   def set_demo_shop
-    demo_domain = ENV.fetch('SHOPIFY_STORE_DOMAIN', 'vehicle-selector-pro.myshopify.com')
-    @demo_shop = Shop.find_by(shopify_domain: demo_domain) ||
-                 Shop.active.left_joins(:vehicle_product_fitments)
-                     .group(:id).order(Arel.sql('COUNT(vehicle_product_fitments.id) DESC')).first ||
-                 Shop.active.first || Shop.first
+    @demo_shop = DemoShopResolver.resolve
     return if @demo_shop
 
-    render json: { success: false, error: 'Demo catalog unavailable' }, status: :service_unavailable
+    render json: { success: false, error: "Demo catalog unavailable" }, status: :service_unavailable
   end
 
   def set_cache_headers
-    response.headers['Cache-Control'] = 'public, max-age=180, stale-while-revalidate=360'
+    response.headers["Cache-Control"] = "public, max-age=180, stale-while-revalidate=360"
   end
 
   def missing_params!(required)
-    render json: { success: false, error: "Missing required parameter(s): #{required.join(', ')}" }, status: :bad_request
+    render json: { success: false, error: "Missing required parameter(s): #{required.join(', ')}" },
+           status: :bad_request
   end
 end

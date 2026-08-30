@@ -1,5 +1,6 @@
 class Shop < ApplicationRecord
   include ShopifyApp::ShopSessionStorage
+
   encrypts :shopify_token, deterministic: false if respond_to?(:encrypts)
 
   # Associations
@@ -23,12 +24,12 @@ class Shop < ApplicationRecord
     ShopifyApp.configuration.api_version
   end
 
-  def with_shopify_session(&block)
+  def with_shopify_session(&)
     session = ShopifyAPI::Auth::Session.new(
       shop: shopify_domain,
       access_token: shopify_token
     )
-    ShopifyAPI::Utils::SessionUtils.with_session(session, &block)
+    ShopifyAPI::Utils::SessionUtils.with_session(session, &)
   rescue StandardError => e
     Rails.logger.error("[ShopifySession] Failed for #{shopify_domain}: #{e.message}")
     raise

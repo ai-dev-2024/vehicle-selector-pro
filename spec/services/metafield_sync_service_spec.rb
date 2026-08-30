@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 class MetafieldSyncServiceTest < Minitest::Test
   def test_metafield_json_structure_and_serialization

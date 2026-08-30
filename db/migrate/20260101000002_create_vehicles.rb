@@ -16,10 +16,10 @@ class CreateVehicles < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :vehicles, [:year, :make, :model, :trim, :engine], unique: true, name: 'index_vehicles_on_ymmte_unique'
+    add_index :vehicles, %i[year make model trim engine], unique: true, name: "index_vehicles_on_ymmte_unique"
     add_index :vehicles, :year
-    add_index :vehicles, [:year, :make]
-    add_index :vehicles, [:year, :make, :model]
+    add_index :vehicles, %i[year make]
+    add_index :vehicles, %i[year make model]
     add_index :vehicles, :make
     add_index :vehicles, :model
   end

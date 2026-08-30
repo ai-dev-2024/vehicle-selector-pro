@@ -3,7 +3,8 @@ class AppSetting < ApplicationRecord
 
   validates :widget_title, presence: true
   validates :layout_style, inclusion: { in: %w[horizontal vertical popup compact] }
-  validates :max_garage_vehicles, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
+  validates :max_garage_vehicles,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
 
   def to_theme_config
     {

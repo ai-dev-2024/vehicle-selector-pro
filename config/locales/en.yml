@@ -1,0 +1,24 @@
+en:
+  admin:
+    bulk_imports:
+      choose_file_or_paste: "Please choose a CSV file or paste CSV text."
+      import_success: "Successfully imported %{count} vehicle fitments across %{products} products! Metafield background sync queued."
+      import_partial: "Import completed with %{error_count} error(s). %{count} fitments imported."
+    product_fitments:
+      assigned: "Fitment successfully assigned to %{product}!"
+      updated: "Fitment successfully updated."
+      removed: "Fitment mapping removed."
+      requires_product_and_vehicle: "Product ID and at least one vehicle must be selected."
+      bulk_assigned: "Successfully assigned %{count} vehicles to %{product}!"
+    settings:
+      saved: "Widget and garage settings saved successfully!"
+    sync:
+      full_queued: "Full shop metafield synchronization queued in background."
+      product_id_required: "Product ID is required."
+      product_queued: "Metafield sync queued for product %{product_id}."
+  activerecord:
+    errors:
+      messages:
+        vehicle_configuration_exists: "configuration already exists for this Year/Make/Model/Trim/Engine combination"
+        fitment_already_exists: "fitment already exists for this vehicle and product in your store"
+        already_marked_universal: "is already marked as universal fit"

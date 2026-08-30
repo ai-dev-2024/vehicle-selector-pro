@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 class VehicleHierarchyServiceTest < Minitest::Test
   def test_hierarchy_tree_structure_deduplication
@@ -24,7 +24,7 @@ class VehicleHierarchyServiceTest < Minitest::Test
     assert_includes tree[2024].keys, "Ford"
     assert_includes tree[2024]["Ford"].keys, "F-150"
     assert_includes tree[2024]["Ford"].keys, "Mustang"
-    assert_equal ["Lariat", "XLT"], tree[2024]["Ford"]["F-150"][:trims]
+    assert_equal %w[Lariat XLT], tree[2024]["Ford"]["F-150"][:trims]
     assert_equal ["3.5L EcoBoost V6", "2.7L EcoBoost V6"], tree[2024]["Ford"]["F-150"][:engines]
   end
 end

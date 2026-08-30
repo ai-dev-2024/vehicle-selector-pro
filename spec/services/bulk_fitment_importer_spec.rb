@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 class BulkFitmentImporterTest < Minitest::Test
   class MockFitmentsCollection
@@ -34,7 +34,8 @@ class BulkFitmentImporterTest < Minitest::Test
       attrs.each { |k, v| send("#{k}=", v) if respond_to?("#{k}=") }
     end
 
-    def save!
+    # Test double returning a boolean; name is intentional (ActiveRecord-compatible).
+    def save! # rubocop:disable Naming/PredicateMethod
       true
     end
   end
@@ -71,9 +72,7 @@ class BulkFitmentImporterTest < Minitest::Test
     importer = BulkFitmentImporter.new(@shop, csv_text)
     result = importer.import!
 
-    if result[:errors].any?
-      puts "Importer errors: #{result[:errors].inspect}"
-    end
+    puts "Importer errors: #{result[:errors].inspect}" if result[:errors].any?
 
     assert_equal 2, result[:success_count]
     assert_equal 0, result[:error_count]

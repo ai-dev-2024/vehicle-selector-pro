@@ -6,10 +6,10 @@ module Webhooks
       if shop.present?
         data = parsed_webhook_body
         shop.update(
-          name: data['name'],
-          email: data['email'],
-          currency: data['currency'],
-          iana_timezone: data['iana_timezone']
+          name: data["name"],
+          email: data["email"],
+          currency: data["currency"],
+          iana_timezone: data["iana_timezone"]
         )
       end
       head :ok

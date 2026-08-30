@@ -6,21 +6,24 @@ class Vehicle < ApplicationRecord
   has_many :shops, -> { distinct }, through: :vehicle_product_fitments
 
   # Validations
-  validates :year, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1900, less_than_or_equal_to: 2100 }
+  validates :year, presence: true,
+                   numericality: { only_integer: true, greater_than_or_equal_to: 1900, less_than_or_equal_to: 2100 }
   validates :make, presence: true
   validates :model, presence: true
   validates :year, uniqueness: {
-    scope: [:make, :model, :trim, :engine],
-    message: "configuration already exists for this Year/Make/Model/Trim/Engine combination"
+    scope: %i[make model trim engine],
+    message: :vehicle_configuration_exists
   }
 
-  # Scopes
+  # Scopes. Blank filters return `all` instead of nil so the scope chain
+  # stays a relation even when a caller passes an empty value (e.g.
+  # Vehicle.by_year(nil).by_make('Ford') no longer crashes with NoMethodError).
   scope :active, -> { where(active: true) }
-  scope :by_year, ->(y) { where(year: y) if y.present? }
-  scope :by_make, ->(m) { where('LOWER(make) = ?', m.to_s.downcase.strip) if m.present? }
-  scope :by_model, ->(mod) { where('LOWER(model) = ?', mod.to_s.downcase.strip) if mod.present? }
-  scope :by_trim, ->(t) { where('LOWER(trim) = ?', t.to_s.downcase.strip) if t.present? }
-  scope :by_engine, ->(e) { where('LOWER(engine) = ?', e.to_s.downcase.strip) if e.present? }
+  scope :by_year, ->(y) { y.present? ? where(year: y) : all }
+  scope :by_make, ->(m) { m.present? ? where("LOWER(make) = ?", m.to_s.downcase.strip) : all }
+  scope :by_model, ->(mod) { mod.present? ? where("LOWER(model) = ?", mod.to_s.downcase.strip) : all }
+  scope :by_trim, ->(t) { t.present? ? where("LOWER(trim) = ?", t.to_s.downcase.strip) : all }
+  scope :by_engine, ->(e) { e.present? ? where("LOWER(engine) = ?", e.to_s.downcase.strip) : all }
 
   # Class Methods for Cascading Dropdowns
   def self.distinct_years
@@ -37,20 +40,20 @@ class Vehicle < ApplicationRecord
 
   def self.distinct_trims_for(year:, make:, model:)
     active.by_year(year).by_make(make).by_model(model)
-          .where.not(trim: [nil, ''])
+          .where.not(trim: [nil, ""])
           .distinct.order(:trim).pluck(:trim)
   end
 
   def self.distinct_engines_for(year:, make:, model:, trim: nil)
     query = active.by_year(year).by_make(make).by_model(model)
     query = query.by_trim(trim) if trim.present?
-    query.where.not(engine: [nil, '']).distinct.order(:engine).pluck(:engine)
+    query.where.not(engine: [nil, ""]).distinct.order(:engine).pluck(:engine)
   end
 
   # Instance Methods
   def display_name
     parts = [year, make, model, trim, engine].compact_blank
-    parts.join(' ')
+    parts.join(" ")
   end
 
   def short_name
@@ -72,6 +75,6 @@ class Vehicle < ApplicationRecord
   end
 
   def to_ymm_key
-    [year, make.downcase, model.downcase, trim.to_s.downcase, engine.to_s.downcase].join('|')
+    [year, make.downcase, model.downcase, trim.to_s.downcase, engine.to_s.downcase].join("|")
   end
 end

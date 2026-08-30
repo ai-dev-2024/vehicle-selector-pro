@@ -3,21 +3,17 @@ module Admin
     def index
       @vehicles = Vehicle.active
 
-      if params[:year].present?
-        @vehicles = @vehicles.by_year(params[:year])
-      end
+      @vehicles = @vehicles.by_year(params[:year]) if params[:year].present?
 
-      if params[:make].present?
-        @vehicles = @vehicles.by_make(params[:make])
-      end
+      @vehicles = @vehicles.by_make(params[:make]) if params[:make].present?
 
-      if params[:model].present?
-        @vehicles = @vehicles.by_model(params[:model])
-      end
+      @vehicles = @vehicles.by_model(params[:model]) if params[:model].present?
 
       if params[:query].present?
         q = "%#{params[:query].strip.downcase}%"
-        @vehicles = @vehicles.where('LOWER(make) LIKE :q OR LOWER(model) LIKE :q OR LOWER(trim) LIKE :q OR LOWER(engine) LIKE :q', q: q)
+        @vehicles = @vehicles.where(
+          "LOWER(make) LIKE :q OR LOWER(model) LIKE :q OR LOWER(trim) LIKE :q OR LOWER(engine) LIKE :q", q: q
+        )
       end
 
       @page = (params[:page] || 1).to_i
@@ -54,7 +50,8 @@ module Admin
     end
 
     def engines
-      render json: Vehicle.distinct_engines_for(year: params[:year], make: params[:make], model: params[:model], trim: params[:trim])
+      render json: Vehicle.distinct_engines_for(year: params[:year], make: params[:make], model: params[:model],
+                                                trim: params[:trim])
     end
   end
 end

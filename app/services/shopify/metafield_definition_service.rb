@@ -63,13 +63,13 @@ module Shopify
 
     def find_definition
       response = @client.query(CHECK_DEFINITIONS_QUERY, {
-        ownerType: "PRODUCT",
-        namespace: NAMESPACE,
-        key: KEY
-      })
+                                 ownerType: "PRODUCT",
+                                 namespace: NAMESPACE,
+                                 key: KEY
+                               })
 
-      edges = response.dig('metafieldDefinitions', 'edges') || []
-      edges.first&.dig('node')
+      edges = response.dig("metafieldDefinitions", "edges") || []
+      edges.first&.dig("node")
     rescue StandardError => e
       Rails.logger.warn("[MetafieldDefinitionService] Lookup failed: #{e.message}")
       nil
@@ -92,18 +92,18 @@ module Shopify
       }
 
       result = @client.mutate(CREATE_DEFINITION_MUTATION, variables)
-      user_errors = result.dig('metafieldDefinitionCreate', 'userErrors') || []
+      user_errors = result.dig("metafieldDefinitionCreate", "userErrors") || []
 
       if user_errors.any?
         # If already taken, that's fine
-        if user_errors.any? { |e| e['code'] == 'TAKEN' || e['message'].to_s.include?('already exists') }
+        if user_errors.any? { |e| e["code"] == "TAKEN" || e["message"].to_s.include?("already exists") }
           Rails.logger.info("[MetafieldDefinitionService] Definition already exists on #{@shop.shopify_domain}")
           return find_definition
         end
         raise GraphQLError, "Failed to create metafield definition: #{user_errors.map { |e| e['message'] }.join(', ')}"
       end
 
-      result.dig('metafieldDefinitionCreate', 'createdDefinition')
+      result.dig("metafieldDefinitionCreate", "createdDefinition")
     end
   end
 end

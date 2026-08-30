@@ -242,7 +242,7 @@
             model: modelSelect.value,
             trim: trimSelect ? trimSelect.value : '',
             engine: engineSelect ? engineSelect.value : '',
-            display_name: [yearSelect.value, makeSelect.value, modelSelect.value, trimSelect?.value, engineSelect?.value].compactBlank().join(' ')
+            display_name: compactBlank([yearSelect.value, makeSelect.value, modelSelect.value, trimSelect?.value, engineSelect?.value]).join(' ')
           };
 
           this.saveActiveVehicle(selected);
@@ -307,7 +307,7 @@
             <div class="vsp-garage-item ${this.activeVehicle && this.activeVehicle.display_name === veh.display_name ? 'active' : ''}" data-index="${idx}">
               <div>
                 <strong>${veh.year} ${veh.make} ${veh.model}</strong>
-                ${veh.trim || veh.engine ? `<div style="font-size: 11px; color: #888;">${[veh.trim, veh.engine].compactBlank().join(' • ')}</div>` : ''}
+                ${veh.trim || veh.engine ? `<div style="font-size: 11px; color: #888;">${compactBlank([veh.trim, veh.engine]).join(' • ')}</div>` : ''}
               </div>
               <button class="vsp-garage-remove" data-remove-index="${idx}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 16px;">×</button>
             </div>
@@ -427,10 +427,11 @@
     }
   }
 
-  // Array helper
-  Array.prototype.compactBlank = function() {
-    return this.filter(item => item !== null && item !== undefined && item !== '');
-  };
+  // Module-local helper (no Array.prototype patch: a global monkey-patch
+  // could collide with the merchant theme or other apps on the storefront).
+  function compactBlank(arr) {
+    return arr.filter(item => item !== null && item !== undefined && item !== '');
+  }
 
   // Auto-init on DOMContentLoaded
   if (document.readyState === 'loading') {

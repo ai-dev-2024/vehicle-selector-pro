@@ -19,11 +19,12 @@ class CreateVehicleProductFitments < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :vehicle_product_fitments, [:shop_id, :product_id]
-    add_index :vehicle_product_fitments, [:shop_id, :vehicle_id]
-    add_index :vehicle_product_fitments, [:shop_id, :vehicle_id, :product_id], unique: true, name: 'index_fitments_on_shop_vehicle_product_unique'
-    add_index :vehicle_product_fitments, [:shop_id, :universal_fit]
-    add_index :vehicle_product_fitments, [:shop_id, :synced_to_metafield]
+    add_index :vehicle_product_fitments, %i[shop_id product_id]
+    add_index :vehicle_product_fitments, %i[shop_id vehicle_id]
+    add_index :vehicle_product_fitments, %i[shop_id vehicle_id product_id], unique: true,
+                                                                            name: "index_fitments_on_shop_vehicle_product_unique"
+    add_index :vehicle_product_fitments, %i[shop_id universal_fit]
+    add_index :vehicle_product_fitments, %i[shop_id synced_to_metafield]
     add_index :vehicle_product_fitments, :product_id
   end
 end

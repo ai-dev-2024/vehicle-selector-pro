@@ -1,5 +1,4 @@
-require 'csv'
-require 'set'
+require "csv"
 
 class BulkFitmentImporter
   REQUIRED_HEADERS = %w[product_id year make model].freeze
@@ -7,9 +6,7 @@ class BulkFitmentImporter
   attr_reader :shop, :file_content, :results
 
   def initialize(shop, file_content)
-    @shop = if defined?(Shop) && shop.is_a?(Shop)
-              shop
-            elsif defined?(Shop) && shop.is_a?(String)
+    @shop = if defined?(Shop) && shop.is_a?(String)
               Shop.find_by!(shopify_domain: shop.to_s)
             else
               shop
@@ -50,25 +47,25 @@ class BulkFitmentImporter
   private
 
   def process_row(row, line_num)
-    product_id = row['product_id'].presence || row['product_handle'].presence || row['sku'].presence
+    product_id = row["product_id"].presence || row["product_handle"].presence || row["sku"].presence
     if product_id.blank?
       @results[:errors] << "Row #{line_num}: Missing product identifier"
       @results[:error_count] += 1
       return
     end
 
-    is_universal = %w[true 1 yes y universal].include?(row['universal'].to_s.downcase)
+    is_universal = %w[true 1 yes y universal].include?(row["universal"].to_s.downcase)
 
     if is_universal
       fitment = @shop.vehicle_product_fitments.find_or_initialize_by(
         product_id: product_id,
         universal_fit: true
       )
-      fitment.product_handle = row['product_handle'] if row['product_handle'].present?
-      fitment.product_title = row['product_title'] if row['product_title'].present?
-      fitment.sku = row['sku'] if row['sku'].present?
-      fitment.fitment_notes = row['notes'] || row['fitment_notes']
-      fitment.position = row['position']
+      fitment.product_handle = row["product_handle"] if row["product_handle"].present?
+      fitment.product_title = row["product_title"] if row["product_title"].present?
+      fitment.sku = row["sku"] if row["sku"].present?
+      fitment.fitment_notes = row["notes"] || row["fitment_notes"]
+      fitment.position = row["position"]
       fitment.save!
 
       @results[:success_count] += 1
@@ -76,11 +73,11 @@ class BulkFitmentImporter
       return
     end
 
-    year = row['year'].to_i
-    make = row['make'].to_s.strip
-    model = row['model'].to_s.strip
-    trim = row['trim'].to_s.strip.presence
-    engine = row['engine'].to_s.strip.presence
+    year = row["year"].to_i
+    make = row["make"].to_s.strip
+    model = row["model"].to_s.strip
+    trim = row["trim"].to_s.strip.presence
+    engine = row["engine"].to_s.strip.presence
 
     if year <= 0 || make.blank? || model.blank?
       @results[:errors] << "Row #{line_num}: Non-universal fitment requires Year, Make, and Model"
@@ -98,8 +95,8 @@ class BulkFitmentImporter
         trim: trim,
         engine: engine
       ) do |v|
-        v.drivetrain = row['drivetrain'].to_s.strip.presence
-        v.body_style = row['body_style'].to_s.strip.presence
+        v.drivetrain = row["drivetrain"].to_s.strip.presence
+        v.body_style = row["body_style"].to_s.strip.presence
         v.active = true
       end
     end
@@ -109,13 +106,13 @@ class BulkFitmentImporter
       product_id: product_id,
       vehicle: vehicle
     )
-    fitment.product_handle = row['product_handle'] if row['product_handle'].present?
-    fitment.product_title = row['product_title'] if row['product_title'].present?
-    fitment.sku = row['sku'] if row['sku'].present?
+    fitment.product_handle = row["product_handle"] if row["product_handle"].present?
+    fitment.product_title = row["product_title"] if row["product_title"].present?
+    fitment.sku = row["sku"] if row["sku"].present?
     fitment.universal_fit = false
-    fitment.fitment_type = row['fitment_type'].presence || 'direct_fit'
-    fitment.fitment_notes = row['notes'] || row['fitment_notes']
-    fitment.position = row['position']
+    fitment.fitment_type = row["fitment_type"].presence || "direct_fit"
+    fitment.fitment_notes = row["notes"] || row["fitment_notes"]
+    fitment.position = row["position"]
     fitment.save!
 
     @results[:success_count] += 1

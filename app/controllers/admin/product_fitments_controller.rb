@@ -1,22 +1,22 @@
 module Admin
   class ProductFitmentsController < BaseController
-    before_action :set_fitment, only: [:edit, :update, :destroy]
+    before_action :set_fitment, only: %i[edit update destroy]
 
     def index
       @fitments = current_shop.vehicle_product_fitments.includes(:vehicle)
 
       if params[:query].present?
         q = "%#{params[:query].strip.downcase}%"
-        @fitments = @fitments.joins('LEFT JOIN vehicles ON vehicles.id = vehicle_product_fitments.vehicle_id')
-                             .where('LOWER(product_title) LIKE :q OR LOWER(sku) LIKE :q OR LOWER(product_handle) LIKE :q OR LOWER(vehicles.make) LIKE :q OR LOWER(vehicles.model) LIKE :q', q: q)
+        @fitments = @fitments.joins("LEFT JOIN vehicles ON vehicles.id = vehicle_product_fitments.vehicle_id")
+                             .where("LOWER(product_title) LIKE :q OR LOWER(sku) LIKE :q OR LOWER(product_handle) LIKE :q OR LOWER(vehicles.make) LIKE :q OR LOWER(vehicles.model) LIKE :q", q: q)
       end
 
       if params[:fitment_type].present?
-        if params[:fitment_type] == 'universal'
-          @fitments = @fitments.universal
-        else
-          @fitments = @fitments.specific
-        end
+        @fitments = if params[:fitment_type] == "universal"
+                      @fitments.universal
+                    else
+                      @fitments.specific
+                    end
       end
 
       @page = (params[:page] || 1).to_i
@@ -30,8 +30,12 @@ module Admin
       @years = Vehicle.distinct_years
     end
 
+    def edit
+      @years = Vehicle.distinct_years
+    end
+
     def create
-      if params[:universal_fit] == '1' || params[:universal_fit] == 'true'
+      if %w[1 true].include?(params[:universal_fit])
         @fitment = current_shop.vehicle_product_fitments.new(universal_fitment_params)
         @fitment.universal_fit = true
         @fitment.vehicle = nil
@@ -41,32 +45,30 @@ module Admin
       end
 
       if @fitment.save
-        redirect_to admin_product_fitments_path, notice: "Fitment successfully assigned to #{@fitment.product_title.presence || @fitment.product_id}!"
+        redirect_to admin_product_fitments_path,
+                    notice: t("admin.product_fitments.assigned",
+                              product: @fitment.product_title.presence || @fitment.product_id)
       else
         @years = Vehicle.distinct_years
-        flash.now[:alert] = @fitment.errors.full_messages.join(', ')
-        render :new, status: :unprocessable_entity
+        flash.now[:alert] = @fitment.errors.full_messages.join(", ")
+        render :new, status: :unprocessable_content
       end
-    end
-
-    def edit
-      @years = Vehicle.distinct_years
     end
 
     def update
       if @fitment.update(fitment_params)
-        redirect_to admin_product_fitments_path, notice: "Fitment successfully updated."
+        redirect_to admin_product_fitments_path, notice: t("admin.product_fitments.updated")
       else
         @years = Vehicle.distinct_years
-        flash.now[:alert] = @fitment.errors.full_messages.join(', ')
-        render :edit, status: :unprocessable_entity
+        flash.now[:alert] = @fitment.errors.full_messages.join(", ")
+        render :edit, status: :unprocessable_content
       end
     end
 
     def destroy
-      product_id = @fitment.product_id
+      @fitment.product_id
       @fitment.destroy
-      redirect_to admin_product_fitments_path, notice: "Fitment mapping removed."
+      redirect_to admin_product_fitments_path, notice: t("admin.product_fitments.removed")
     end
 
     # POST /admin/product_fitments/bulk_assign
@@ -76,7 +78,8 @@ module Admin
       vehicle_ids = params[:vehicle_ids] || []
 
       if product_id.blank? || vehicle_ids.empty?
-        return redirect_to new_admin_product_fitment_path, alert: "Product ID and at least one vehicle must be selected."
+        return redirect_to new_admin_product_fitment_path,
+                           alert: t("admin.product_fitments.requires_product_and_vehicle")
       end
 
       created_count = 0
@@ -91,12 +94,13 @@ module Admin
         fitment.position = params[:position] if params[:position].present?
         fitment.universal_fit = false
 
-        if fitment.save
-          created_count += 1
-        end
+        created_count += 1 if fitment.save
       end
 
-      redirect_to admin_product_fitments_path, notice: "Successfully assigned #{created_count} vehicles to #{product_title.presence || product_id}!"
+      redirect_to admin_product_fitments_path,
+                  notice: t("admin.product_fitments.bulk_assigned",
+                            count: created_count,
+                            product: product_title.presence || product_id)
     end
 
     private
