@@ -6,8 +6,8 @@
 
 ### Fitment intelligence for Shopify automotive stores
 
-[![Live App](https://img.shields.io/badge/Live_App-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/)
-[![Install](https://img.shields.io/badge/Install_on_Your_Store-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)
+[![Live Demo](https://img.shields.io/badge/Live_Storefront_Demo-008060?style=flat-square&logo=shopify&logoColor=white)](https://vehicle-selector-pro.fly.dev/demo)
+[![Admin Preview](https://img.shields.io/badge/Live_Admin_Preview-1f6feb?style=flat-square)](https://vehicle-selector-pro.fly.dev/demo/admin)
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
@@ -18,7 +18,23 @@
 
 Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data to their products. Customers filter the catalog with cascading dropdowns and see **"Guaranteed Exact Fit"** badges on product pages — powered by Shopify App Proxy, Product Metafields, and a Theme App Extension.
 
-**[Live app](https://vehicle-selector-pro.fly.dev/)** · **[Install on your store](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro)**
+**[Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** · **[Live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[Architecture](#architecture)**
+
+> **Installing on your own store** — this is a custom (unlisted) app, so Shopify requires installation through the Partners distribution link. Open an issue or request access and we will generate an install link for your store. The live demo above needs no installation.
+
+---
+
+## Demo
+
+<div align="center">
+
+<video src="demo/Vehicle_Selector_Pro_Demo_v3.mp4" controls width="100%" poster="docs/assets/screenshot-hero.png">
+  Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo_v3.mp4">download the .mp4</a>.
+</video>
+
+**[▶ Watch the 2.5-minute walkthrough](demo/Vehicle_Selector_Pro_Demo_v3.mp4)** — real screen recording of the working app with studio AI voiceover and background score · [script](docs/DEMO_SCRIPT.md) · [interactive walkthrough](demo/index.html)
+
+</div>
 
 ---
 
@@ -62,23 +78,76 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ---
 
-## Demo
+## Architecture
 
-<video src="demo/Vehicle_Selector_Pro_Demo_v3.mp4" controls width="100%" poster="docs/assets/screenshot-hero.png">
-  Your browser does not support the video tag — <a href="demo/Vehicle_Selector_Pro_Demo_v3.mp4">download the .mp4</a>.
-</video>
+```mermaid
+graph TB
+    subgraph Storefront ["Shopify Online Store"]
+        TAE["Theme App Extension<br/>vehicle_selector_filter.liquid"]
+        PFC["Product Fitment Badge<br/>product_fitment_badge.liquid"]
+        StoreJS["vehicle-selector.js<br/>LocalStorage Garage + DOM Sync"]
+    end
 
-<sup>2.5-minute professional walkthrough — real screen recording of the working app with studio AI voiceover (ElevenLabs) and background score · [script](docs/DEMO_SCRIPT.md) · [interactive walkthrough](demo/index.html)</sup>
+    subgraph Shopify ["Shopify Platform"]
+        Proxy["App Proxy<br/>/apps/vehicle-selector"]
+        GQL["GraphQL Admin API<br/>metafieldsSet"]
+        WH["Webhook Engine"]
+    end
+
+    subgraph App ["Vehicle Selector Pro — Fly.io"]
+        subgraph ProxyLayer ["App Proxy API (HMAC Verified)"]
+            Auth["AppProxySignatureVerifier"]
+            Filters["VehicleFiltersController"]
+            Fitments["FitmentsController"]
+            Cache["Redis Cache"]
+        end
+
+        subgraph Admin ["Admin Dashboard"]
+            Dashboard["DashboardController"]
+            FitCtrl["ProductFitmentsController"]
+            Vehicles["VehiclesController"]
+            Bulk["BulkImportsController"]
+        end
+
+        subgraph Jobs ["Sidekiq Background Jobs"]
+            Batch["BatchSyncJob"]
+            Product["ProductMetafieldSyncJob"]
+            WebhookJobs["Webhooks::*Job"]
+        end
+
+        subgraph Data ["PostgreSQL (multi-tenant)"]
+            Shop["Shop"]
+            Vehicle["Vehicle"]
+            Fitment["VehicleProductFitment"]
+            SyncLog["MetafieldSyncLog"]
+        end
+    end
+
+    TAE --> StoreJS
+    PFC --> StoreJS
+    StoreJS -->|GET /apps/vehicle-selector/*| Proxy
+    Proxy --> Auth
+    Auth --> Filters
+    Auth --> Fitments
+    Filters <--> Cache
+    Filters <--> Data
+    FitCtrl -->|enqueues| Batch
+    Batch -->|metafieldsSet| GQL
+    WH --> WebhookJobs
+    WebhookJobs --> Data
+```
+
+Full system diagrams, data model, and request lifecycles: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
 
 ---
 
 ## Quick start
 
-### Try it now
+### Try it now — no install required
 
-**[Open live app →](https://vehicle-selector-pro.fly.dev/)** — click "Install on your store" to connect your Shopify store.
+**[Live storefront demo →](https://vehicle-selector-pro.fly.dev/demo)** — cascading Year/Make/Model/Trim/Engine widget with guaranteed-fit badges against live data.
 
-**[Install on your store →](https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com)** — OAuth flow installs the app with all permissions.
+**[Live admin preview →](https://vehicle-selector-pro.fly.dev/demo/admin)** — fitment matrix, vehicle library, sync monitor, and bulk CSV import.
 
 ### Local development
 
