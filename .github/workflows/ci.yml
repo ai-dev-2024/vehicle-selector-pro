@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests (unit + integration)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Prepare test database
+        run: bundle exec rails db:prepare RAILS_ENV=test
+
+      - name: Unit test harness
+        run: ruby spec/test_runner.rb
+
+      - name: Integration tests (boots the real app)
+        run: ruby spec/integration/app_proxy_integration_test.rb
+
+      - name: Eager-load check (zeitwerk)
+        run: bundle exec rails zeitwerk:check
+
+  lint:
+    name: RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Lint
+        run: bundle exec rubocop

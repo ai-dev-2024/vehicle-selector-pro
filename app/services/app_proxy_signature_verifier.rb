@@ -12,7 +12,7 @@ rescue LoadError
         l = left.unpack "C#{left.bytesize}"
         res = 0
         right.each_byte { |byte| res |= byte ^ l.shift }
-        res == 0
+        res.zero?
       end
     end
   end

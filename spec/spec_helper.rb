@@ -79,11 +79,13 @@ module Rails
       @store[key]
     end
 
-    def delete(key)
+    # Explicit delegations (not `delegate`) — this standalone harness does not
+    # load ActiveSupport, so Module#delegate is unavailable.
+    def delete(key) # rubocop:disable Rails/Delegate
       @store.delete(key)
     end
 
-    def clear
+    def clear # rubocop:disable Rails/Delegate
       @store.clear
     end
   end

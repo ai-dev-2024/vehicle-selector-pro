@@ -67,6 +67,6 @@ class Shop < ApplicationRecord
   private
 
   def initialize_settings
-    create_app_setting unless app_setting.present?
+    create_app_setting if app_setting.blank?
   end
 end

@@ -1,9 +1,9 @@
 module Shopify
   class MetafieldDefinitionService
-    NAMESPACE = "custom"
-    KEY = "vehicle_fitment"
+    NAMESPACE = "custom".freeze
+    KEY = "vehicle_fitment".freeze
 
-    CREATE_DEFINITION_MUTATION = <<~GRAPHQL
+    CREATE_DEFINITION_MUTATION = <<~GRAPHQL.freeze
       mutation CreateMetafieldDefinition($definition: MetafieldDefinitionInput!) {
         metafieldDefinitionCreate(definition: $definition) {
           createdDefinition {
@@ -24,7 +24,7 @@ module Shopify
       }
     GRAPHQL
 
-    CHECK_DEFINITIONS_QUERY = <<~GRAPHQL
+    CHECK_DEFINITIONS_QUERY = <<~GRAPHQL.freeze
       query GetMetafieldDefinitions($ownerType: MetafieldOwnerType!, $namespace: String!, $key: String!) {
         metafieldDefinitions(first: 5, ownerType: $ownerType, namespace: $namespace, key: $key) {
           edges {
@@ -100,7 +100,7 @@ module Shopify
           Rails.logger.info("[MetafieldDefinitionService] Definition already exists on #{@shop.shopify_domain}")
           return find_definition
         end
-        raise GraphQLError, "Failed to create metafield definition: #{user_errors.map { |e| e['message'] }.join(', ')}"
+        raise GraphQLError, "Failed to create metafield definition: #{user_errors.pluck('message').join(', ')}"
       end
 
       result.dig("metafieldDefinitionCreate", "createdDefinition")

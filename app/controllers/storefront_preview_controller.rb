@@ -3,7 +3,7 @@
 # Used for demos, screenshots and the walkthrough video.
 # The extension assets themselves are served by the Rack endpoint defined
 # next to these routes in config/routes.rb.
-class StorefrontPreviewController < ActionController::Base
+class StorefrontPreviewController < ApplicationController
   layout "storefront_preview"
   helper_method :current_shop
 
@@ -59,19 +59,22 @@ class StorefrontPreviewController < ActionController::Base
       )
       @vehicle = results[:vehicle]
       @products = results[:products]
-      @products = @products.select { |p| p[:category] == @category } if @category
     else
       @vehicle = nil
       @products = distinct_products
-      @products = @products.select { |p| p[:category] == @category } if @category
     end
+    @products = @products.select { |p| p[:category] == @category } if @category
   end
 
   # Product detail page — same data the Shopify PDP would carry (title, price,
   # brand, SKU, description) plus demo-only spec sheet and the compatible
   # vehicle list served by the fitment API.
   def product
-    @product = distinct_products.find { |p| p[:product_id].to_s == params[:product_id].to_s }
+    # Route params carry only the bare numeric id; the DB stores GraphQL GIDs.
+    # Match either form (mirrors FitmentSearchService.product_id_variants).
+    pid = params[:product_id].to_s
+    candidates = [pid, "gid://shopify/Product/#{pid}"]
+    @product = distinct_products.find { |p| candidates.include?(p[:product_id].to_s) }
     return render_demo_404 unless @product
 
     @specs = PRODUCT_SPECS[@product[:sku]] || {}
@@ -343,6 +346,7 @@ class StorefrontPreviewController < ActionController::Base
   def render_demo_404
     html = '<p style="padding:48px;text-align:center;font-family:sans-serif">' \
            'Product not found. <a href="/demo">Back to shop</a></p>'
+    # rubocop:disable-next Rails/OutputSafety -- fixed demo string, no user input
     render html: html.html_safe, layout: false, status: :not_found
   end
 

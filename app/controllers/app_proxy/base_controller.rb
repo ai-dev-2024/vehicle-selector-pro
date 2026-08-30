@@ -1,5 +1,5 @@
 module AppProxy
-  class BaseController < ActionController::Base
+  class BaseController < ApplicationController
     skip_before_action :verify_authenticity_token
     before_action :verify_proxy_signature, unless: -> { Rails.env.development? && params[:skip_proxy_verify] == "true" }
     before_action :set_current_shop
@@ -21,9 +21,7 @@ module AppProxy
       return if AppProxySignatureVerifier.valid?(request.query_parameters)
 
       # In test environment, allow simulated signature or header
-      if Rails.env.test? && (request.headers["X-Shopify-Test-Signature"] == "valid" || params[:signature] == "test_valid_signature")
-        return
-      end
+      return if Rails.env.test? && (request.headers["X-Shopify-Test-Signature"] == "valid" || params[:signature] == "test_valid_signature")
 
       render json: { error: "Invalid Shopify App Proxy signature" }, status: :unauthorized
     end

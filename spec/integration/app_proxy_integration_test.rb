@@ -149,8 +149,9 @@ class AppProxyIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal page1["product_ids"], page1["product_ids"].sort, "product_ids must be deterministically ordered"
     assert_equal 2, page1["products"].size
     assert_equal 2, page2["products"].size
-    assert_empty page1["products"].map { |p| p["product_id"] } & page2["products"].map { |p| p["product_id"] },
-                 "page 1 and page 2 must not overlap"
+    ids1 = page1["products"].map { |p| p["product_id"] } # rubocop:disable Rails/Pluck -- plain hashes, not AR
+    ids2 = page2["products"].map { |p| p["product_id"] } # rubocop:disable Rails/Pluck -- plain hashes, not AR
+    assert_empty ids1 & ids2, "page 1 and page 2 must not overlap"
   end
 
   test "shop/redact webhook erases all shop-scoped data" do

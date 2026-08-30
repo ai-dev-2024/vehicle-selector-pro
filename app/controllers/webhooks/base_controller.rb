@@ -3,7 +3,7 @@ require "base64"
 require "active_support/security_utils"
 
 module Webhooks
-  class BaseController < ActionController::Base
+  class BaseController < ApplicationController
     skip_before_action :verify_authenticity_token
     before_action :verify_webhook_hmac, unless: -> { Rails.env.local? }
 

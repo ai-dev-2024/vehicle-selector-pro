@@ -68,9 +68,8 @@ class VehicleProductFitment < ApplicationRecord
   end
 
   def mark_synced!
-    # rubocop:disable Rails/SkipsModelValidations -- status bookkeeping; must skip callbacks to avoid re-enqueuing sync jobs
+    # rubocop:disable-next Rails/SkipsModelValidations -- status bookkeeping; must skip callbacks to avoid re-enqueuing sync jobs
     update_columns(synced_to_metafield: true, last_synced_at: Time.current)
-    # rubocop:enable Rails/SkipsModelValidations
   end
 
   private

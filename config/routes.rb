@@ -126,7 +126,9 @@ Rails.application.routes.draw do
                                 path = ext_assets.join(filename)
                                 if File.file?(path)
                                   type = filename.end_with?(".css") ? "text/css" : "application/javascript"
-                                  [200, { "content-type" => type, "cache-control" => "public, max-age=31536000, immutable" }, [File.read(path)]]
+                                  headers = { "content-type" => type,
+                                              "cache-control" => "public, max-age=31536000, immutable" }
+                                  [200, headers, [File.read(path)]]
                                 else
                                   [404, { "content-type" => "text/plain" }, ["not found"]]
                                 end

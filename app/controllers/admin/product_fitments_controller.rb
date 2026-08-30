@@ -8,7 +8,9 @@ module Admin
       if params[:query].present?
         q = "%#{params[:query].strip.downcase}%"
         @fitments = @fitments.joins("LEFT JOIN vehicles ON vehicles.id = vehicle_product_fitments.vehicle_id")
-                             .where("LOWER(product_title) LIKE :q OR LOWER(sku) LIKE :q OR LOWER(product_handle) LIKE :q OR LOWER(vehicles.make) LIKE :q OR LOWER(vehicles.model) LIKE :q", q: q)
+                             .where("LOWER(product_title) LIKE :q OR LOWER(sku) LIKE :q OR " \
+                                    "LOWER(product_handle) LIKE :q OR LOWER(vehicles.make) LIKE :q OR " \
+                                    "LOWER(vehicles.model) LIKE :q", q: q)
       end
 
       if params[:fitment_type].present?

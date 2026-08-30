@@ -123,59 +123,71 @@ class FitmentSearchService
 
     # Check if universal fit first
     universal = @shop.vehicle_product_fitments.universal.find_by(product_id: pid_variants)
-    if universal.present?
-      return {
-        fits: true,
-        fitment_type: "universal",
-        badge_text: "Universal Fit",
-        badge_color: "success",
-        notes: universal.fitment_notes.presence || "This item is designed to fit all vehicles.",
-        product_id: product_id
-      }
-    end
+    return universal_fit_response(universal, product_id) if universal.present?
 
-    target_vehicle = nil
-    if vehicle_id.present?
-      target_vehicle = Vehicle.find_by(id: vehicle_id)
-    elsif year.present? && make.present? && model.present?
-      query = Vehicle.by_year(year).by_make(make).by_model(model)
-      query = query.by_trim(trim) if trim.present?
-      query = query.by_engine(engine) if engine.present?
-      target_vehicle = query.first
-    end
-
-    if target_vehicle.nil?
-      return { fits: false, status: "vehicle_not_specified", badge_text: "Select Vehicle",
-               badge_color: "warning" }
-    end
+    target_vehicle = resolve_target_vehicle(vehicle_id: vehicle_id, year: year, make: make,
+                                            model: model, trim: trim, engine: engine)
+    return vehicle_not_specified_response if target_vehicle.nil?
 
     fitment = @shop.vehicle_product_fitments.find_by(product_id: pid_variants, vehicle_id: target_vehicle.id)
-
     if fitment.present?
-      {
-        fits: true,
-        fitment_type: fitment.fitment_type,
-        badge_text: "Guaranteed Exact Fit for #{target_vehicle.display_name}",
-        badge_color: "success",
-        notes: fitment.fitment_notes,
-        position: fitment.position,
-        product_id: product_id,
-        vehicle: target_vehicle.to_h
-      }
+      exact_fit_response(fitment, target_vehicle, product_id)
     else
-      {
-        fits: false,
-        fitment_type: "none",
-        badge_text: "Does NOT fit #{target_vehicle.display_name}",
-        badge_color: "critical",
-        notes: "This part is not compatible with your selected vehicle.",
-        product_id: product_id,
-        vehicle: target_vehicle.to_h
-      }
+      no_fit_response(target_vehicle, product_id)
     end
   end
 
   private
+
+  def resolve_target_vehicle(vehicle_id: nil, year: nil, make: nil, model: nil, trim: nil, engine: nil)
+    return Vehicle.find_by(id: vehicle_id) if vehicle_id.present?
+    return nil unless year.present? && make.present? && model.present?
+
+    query = Vehicle.by_year(year).by_make(make).by_model(model)
+    query = query.by_trim(trim) if trim.present?
+    query = query.by_engine(engine) if engine.present?
+    query.first
+  end
+
+  def universal_fit_response(universal, product_id)
+    {
+      fits: true,
+      fitment_type: "universal",
+      badge_text: "Universal Fit",
+      badge_color: "success",
+      notes: universal.fitment_notes.presence || "This item is designed to fit all vehicles.",
+      product_id: product_id
+    }
+  end
+
+  def vehicle_not_specified_response
+    { fits: false, status: "vehicle_not_specified", badge_text: "Select Vehicle", badge_color: "warning" }
+  end
+
+  def exact_fit_response(fitment, target_vehicle, product_id)
+    {
+      fits: true,
+      fitment_type: fitment.fitment_type,
+      badge_text: "Guaranteed Exact Fit for #{target_vehicle.display_name}",
+      badge_color: "success",
+      notes: fitment.fitment_notes,
+      position: fitment.position,
+      product_id: product_id,
+      vehicle: target_vehicle.to_h
+    }
+  end
+
+  def no_fit_response(target_vehicle, product_id)
+    {
+      fits: false,
+      fitment_type: "none",
+      badge_text: "Does NOT fit #{target_vehicle.display_name}",
+      badge_color: "critical",
+      notes: "This part is not compatible with your selected vehicle.",
+      product_id: product_id,
+      vehicle: target_vehicle.to_h
+    }
+  end
 
   def matching_vehicle_ids(year:, make:, model:, trim: nil, engine: nil)
     vehicles = Vehicle.by_year(year).by_make(make).by_model(model)
@@ -201,22 +213,22 @@ class FitmentSearchService
 
     fitments = @shop.vehicle_product_fitments.where(product_id: paged_ids).order(:product_id)
     by_product = fitments.to_a.group_by(&:product_id)
-    paged_ids.filter_map { |pid| by_product[pid]&.first }.map { |f| product_payload(f) }
+    paged_ids.filter_map { |pid| by_product[pid]&.first }.map { |fitment| product_payload(fitment) }
   end
 
-  def product_payload(f)
+  def product_payload(fitment)
     {
-      product_id: f.product_id,
-      product_handle: f.product_handle,
-      product_title: f.product_title,
-      sku: f.sku,
-      brand: f.brand,
-      category: f.category,
-      price_cents: f.price_cents,
-      short_description: f.short_description,
-      universal: f.universal_fit?,
-      fitment_notes: f.fitment_notes,
-      position: f.position
+      product_id: fitment.product_id,
+      product_handle: fitment.product_handle,
+      product_title: fitment.product_title,
+      sku: fitment.sku,
+      brand: fitment.brand,
+      category: fitment.category,
+      price_cents: fitment.price_cents,
+      short_description: fitment.short_description,
+      universal: fitment.universal_fit?,
+      fitment_notes: fitment.fitment_notes,
+      position: fitment.position
     }
   end
 

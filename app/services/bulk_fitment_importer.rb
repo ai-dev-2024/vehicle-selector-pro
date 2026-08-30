@@ -20,7 +20,7 @@ class BulkFitmentImporter
 
     # Validate minimal headers
     headers = csv.headers.compact
-    unless (headers & %w[product_id product_handle sku]).any?
+    unless headers.intersect?(%w[product_id product_handle sku])
       @results[:errors] << "CSV must contain at least one of: 'product_id', 'product_handle', or 'sku'"
       return @results
     end
@@ -46,6 +46,7 @@ class BulkFitmentImporter
 
   private
 
+  # rubocop:disable-next Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity -- legacy row parser; covered by bulk_fitment_importer_spec, refactor deferred
   def process_row(row, line_num)
     product_id = row["product_id"].presence || row["product_handle"].presence || row["sku"].presence
     if product_id.blank?
@@ -88,17 +89,10 @@ class BulkFitmentImporter
     # Find or create vehicle if model exists
     vehicle = nil
     if defined?(Vehicle)
-      vehicle = Vehicle.find_or_create_by!(
-        year: year,
-        make: make,
-        model: model,
-        trim: trim,
-        engine: engine
-      ) do |v|
-        v.drivetrain = row["drivetrain"].to_s.strip.presence
-        v.body_style = row["body_style"].to_s.strip.presence
-        v.active = true
-      end
+      vehicle = find_or_create_vehicle(
+        year: year, make: make, model: model, trim: trim, engine: engine,
+        row: row
+      )
     end
 
     # Create fitment
@@ -120,5 +114,18 @@ class BulkFitmentImporter
   rescue StandardError => e
     @results[:errors] << "Row #{line_num}: #{e.message}"
     @results[:error_count] += 1
+  end
+
+  # find_or_create_by! can lose a concurrent-insert race on the unique YMMTE
+  # index (validation passes, INSERT raises RecordInvalid). When that happens
+  # the vehicle exists — look it up again instead of failing the row.
+  def find_or_create_vehicle(year:, make:, model:, trim:, engine:, row:)
+    Vehicle.find_or_create_by!(year: year, make: make, model: model, trim: trim, engine: engine) do |v|
+      v.drivetrain = row["drivetrain"].to_s.strip.presence
+      v.body_style = row["body_style"].to_s.strip.presence
+      v.active = true
+    end
+  rescue ActiveRecord::RecordInvalid
+    Vehicle.find_by!(year: year, make: make, model: model, trim: trim, engine: engine)
   end
 end

@@ -209,7 +209,8 @@ catalog_products = [
     brand: "Apex Lighting",
     category: "Lighting",
     price_cents: 18_900,
-    short_description: "3-inch SAE/DOT street-legal amber LED pods, 4,800 lm per pair, IP68 sealed — mounts anywhere with included brackets.",
+    short_description: "3-inch SAE/DOT street-legal amber LED pods, 4,800 lm per pair, " \
+                       "IP68 sealed — mounts anywhere with included brackets.",
     universal: true,
     fitment_notes: "Universal fitment. Includes multi-fit brackets and waterproof DT wiring harness.",
     position: "Auxiliary / Universal",

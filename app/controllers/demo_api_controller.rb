@@ -11,7 +11,7 @@
 # - Demo-scope only: data is always resolved against the demo shop (see
 #   demo_shop), never against arbitrary shop domains supplied by callers.
 # - Responses carry the same short-lived public cache headers as the proxy.
-class DemoApiController < ActionController::Base
+class DemoApiController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_demo_shop
   before_action :set_cache_headers

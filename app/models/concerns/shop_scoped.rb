@@ -3,7 +3,6 @@ module ShopScoped
 
   included do
     belongs_to :shop
-    validates :shop, presence: true
 
     scope :for_shop, lambda { |shop_or_id|
       shop_id = shop_or_id.is_a?(Shop) ? shop_or_id.id : shop_or_id

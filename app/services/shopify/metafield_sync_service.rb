@@ -5,12 +5,12 @@ module Shopify
     # Definition is ensured by MetafieldDefinitionService; we always send
     # namespace + type explicitly so metafieldsSet works even before the
     # definition exists.
-    NAMESPACE = "custom"
-    KEY = "vehicle_fitment"
-    TYPE = "json"
+    NAMESPACE = "custom".freeze
+    KEY = "vehicle_fitment".freeze
+    TYPE = "json".freeze
     BATCH_SIZE = 25
 
-    METAFIELDS_SET_MUTATION = <<~GRAPHQL
+    METAFIELDS_SET_MUTATION = <<~GRAPHQL.freeze
       mutation MetafieldsSet($metafields: [MetafieldsSetInput!]!) {
         metafieldsSet(metafields: $metafields) {
           metafields {
@@ -56,12 +56,11 @@ module Shopify
       end
 
       # Update local records
-      # rubocop:disable Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
+      # rubocop:disable-next Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
       @shop.vehicle_product_fitments.where(product_id: product_ids).update_all(
         synced_to_metafield: true,
         last_synced_at: Time.current
       )
-      # rubocop:enable Rails/SkipsModelValidations
 
       { success: true, count: product_ids.size }
     rescue StandardError => e
@@ -88,6 +87,7 @@ module Shopify
 
     private
 
+    # rubocop:disable-next Metrics/MethodLength -- payload assembly mirrors the Shopify JSON schema section by section
     def build_metafield_payload_for_product(product_id)
       fitments = @shop.vehicle_product_fitments.where(product_id: product_id).includes(:vehicle)
       return nil if fitments.empty?
@@ -151,7 +151,7 @@ module Shopify
 
       if user_errors.any?
         Rails.logger.error("[MetafieldSyncService] Metafield batch error: #{user_errors.inspect}")
-        raise GraphQLError, "Failed to set metafields: #{user_errors.map { |e| e['message'] }.join('; ')}"
+        raise GraphQLError, "Failed to set metafields: #{user_errors.pluck('message').join('; ')}"
       end
 
       result.dig("metafieldsSet", "metafields")
