@@ -9,6 +9,12 @@ jobs:
   test:
     name: Tests (unit + integration)
     runs-on: ubuntu-latest
+    # Dummy Shopify credentials so the app environment can boot — the same
+    # approach the Dockerfile uses at image-build time. Real values are never
+    # needed in CI: tests HMAC-sign with whatever secret the app booted with.
+    env:
+      SHOPIFY_API_KEY: ci-dummy-api-key
+      SHOPIFY_API_SECRET: ci-dummy-api-secret
     steps:
       - uses: actions/checkout@v4
 
