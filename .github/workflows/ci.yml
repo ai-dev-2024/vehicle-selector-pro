@@ -20,11 +20,8 @@ jobs:
       - name: Prepare test database
         run: bundle exec rails db:prepare RAILS_ENV=test
 
-      - name: Unit test harness
+      - name: Full test suite (RSpec + App Proxy integration)
         run: ruby spec/test_runner.rb
-
-      - name: Integration tests (boots the real app)
-        run: ruby spec/integration/app_proxy_integration_test.rb
 
       - name: Eager-load check (zeitwerk)
         run: bundle exec rails zeitwerk:check
