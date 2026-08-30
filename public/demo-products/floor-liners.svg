@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="262" rx="140" ry="11" fill="#000" opacity="0.06"/>
+  <path d="M60 120 Q62 96 86 96 L120 96 L128 112 L232 112 L240 96 L314 96 Q338 96 340 120 L340 220 Q340 236 324 236 L76 236 Q60 236 60 220 Z" fill="#0b6e5c"/>
+  <path d="M74 130 Q76 112 94 112 L122 112 L130 126 L228 126 L236 112 L306 112 Q324 112 326 130 L326 210 Q326 222 312 222 L88 222 Q74 222 74 210 Z" fill="#111827"/>
+  <path d="M64 210 L120 210 L130 228 L244 228 L254 210 L336 210" fill="none" stroke="#4fd1b0" stroke-width="5"/>
+  <text x="200" y="258" font-family="Arial" font-size="12" fill="#6b7280" text-anchor="middle">ALL-WEATHER LINERS · 2 ROWS</text>
+</svg>

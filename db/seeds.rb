@@ -343,6 +343,106 @@ catalog_products = [
     fitment_notes: "Fits F-150 (2015+) stock airbox, all engines. Washable, no oiling mess.",
     position: "Engine Bay / Airbox",
     matching_vehicles: Vehicle.where(make: "Ford", model: "F-150")
+  },
+
+  # ---- Расширенный каталог 2: интерьер, буксировка, вторая волна ТО ----
+  {
+    product_id: "gid://shopify/Product/10358754214009",
+    product_handle: "apex-trailguard-floor-liners-universal",
+    product_title: "Apex TrailGuard Trim-to-Fit All-Weather Floor Liners (2 rows)",
+    sku: "APX-LIN-UNIV-FLR",
+    brand: "Apex TrailGuard",
+    category: "Interior & Comfort",
+    price_cents: 6900,
+    short_description: "Rubberized trim-to-fit liners with raised walls — traps slush, mud and spills, hoses clean.",
+    universal: true,
+    fitment_notes: "Trim-to-fit for most cars, trucks and SUVs. Cutting guide printed on liner.",
+    position: "Floor / Interior",
+    matching_vehicles: []
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214010",
+    product_handle: "apex-towmaster-class4-hitch-f150",
+    product_title: "Apex TowMaster Class IV Trailer Hitch Receiver (Ford F-150)",
+    sku: "APX-TOW-HITCH-F150",
+    brand: "Apex TowMaster",
+    category: "Towing",
+    price_cents: 24900,
+    short_description: "2-inch Class IV receiver, 12,000 lb GTW / 1,200 lb tongue — bolt-on with factory hardware.",
+    universal: false,
+    fitment_notes: "Fits F-150 (2015+). Uses factory mount points, no drilling. Pin & clip included.",
+    position: "Rear Chassis",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214011",
+    product_handle: "apex-quietstop-rear-pads-4runner",
+    product_title: "Apex QuietStop Ceramic Rear Brake Pads (Toyota 4Runner)",
+    sku: "APX-BRK-PAD-RR-4RN",
+    brand: "Apex Performance",
+    category: "Brakes",
+    price_cents: 6900,
+    short_description: "Low-dust ceramic rear pads with shims — quiet, even wear for heavy SUVs.",
+    universal: false,
+    fitment_notes: "Rear axle, 4Runner (2010+). Hardware kit included.",
+    position: "Rear Axle",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "4Runner")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214012",
+    product_handle: "apex-stage1-cai-mustang-ecoboost",
+    product_title: "Apex Stage-1 Cold Air Intake (Mustang 2.3L EcoBoost)",
+    sku: "APX-CAI-MST-EB",
+    brand: "Apex Performance",
+    category: "Air Intake",
+    price_cents: 29900,
+    short_description: "Sealed airbox intake with washable filter — +12 hp on the 2.3L EcoBoost, no tune required.",
+    universal: false,
+    fitment_notes: "Fits Mustang 2.3L EcoBoost (2015+). CARB-pending; keeps stock ECU calibration.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "Mustang").where("engine LIKE ?", "%EcoBoost%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214013",
+    product_handle: "apex-ultrabeam-20in-light-bar-universal",
+    product_title: "Apex UltraBeam 20-Inch Dual-Row LED Light Bar (Universal)",
+    sku: "APX-LGT-BAR-20-UNIV",
+    brand: "Apex Lighting",
+    category: "Lighting",
+    price_cents: 12900,
+    short_description: "14,400 lm combo-beam light bar with IP68 housing, wiring harness and switch included.",
+    universal: true,
+    fitment_notes: "Universal mounts: bumpers, racks, grilles. Relay harness + switch included.",
+    position: "Auxiliary / Universal",
+    matching_vehicles: []
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214014",
+    product_handle: "apex-trailrunner-leveling-kit-4runner",
+    product_title: "Apex TrailRunner 2-Inch Front Leveling Kit (Toyota 4Runner)",
+    sku: "APX-SUSP-LFT-4RN-2IN",
+    brand: "Apex TrailRunner",
+    category: "Suspension",
+    price_cents: 14900,
+    short_description: "Billet strut spacers level the nose, clears 32-inch tires — keeps factory ride quality.",
+    universal: false,
+    fitment_notes: "Fits 4Runner (2010+). Front strut spacers, anodized 6061-T6. No new shocks needed.",
+    position: "Front Suspension",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "4Runner")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214015",
+    product_handle: "apex-trailbed-rubber-bed-mat-tacoma",
+    product_title: "Apex TrailBed Rubber Bed Mat (Toyota Tacoma 5-ft bed)",
+    sku: "APX-BED-MAT-TAC",
+    brand: "Apex TrailBed",
+    category: "Interior & Comfort",
+    price_cents: 18900,
+    short_description: "Heavy rubber bed mat with nonslip ribs — protects the bed and keeps cargo from sliding.",
+    universal: false,
+    fitment_notes: "Fits Tacoma (2016+) 5-ft bed. Custom-molded, no trimming required.",
+    position: "Truck Bed",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma")
   }
 ]
 

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/><stop offset="1" stop-color="#e8edf2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="256" rx="130" ry="10" fill="#000" opacity="0.06"/>
+  <g>
+    <ellipse cx="140" cy="150" rx="64" ry="40" fill="#0b6e5c"/>
+    <ellipse cx="140" cy="142" rx="64" ry="40" fill="#0f8a6a"/>
+    <circle cx="140" cy="142" r="12" fill="#111827"/>
+    <circle cx="112" cy="128" r="5" fill="#111827"/>
+    <circle cx="168" cy="128" r="5" fill="#111827"/>
+    <circle cx="112" cy="158" r="5" fill="#111827"/>
+    <circle cx="168" cy="158" r="5" fill="#111827"/>
+  </g>
+  <g transform="translate(120,0)">
+    <ellipse cx="140" cy="150" rx="64" ry="40" fill="#0b6e5c"/>
+    <ellipse cx="140" cy="142" rx="64" ry="40" fill="#0f8a6a"/>
+    <circle cx="140" cy="142" r="12" fill="#111827"/>
+    <circle cx="112" cy="128" r="5" fill="#111827"/>
+    <circle cx="168" cy="128" r="5" fill="#111827"/>
+    <circle cx="112" cy="158" r="5" fill="#111827"/>
+    <circle cx="168" cy="158" r="5" fill="#111827"/>
+  </g>
+  <text x="200" y="78" font-family="Arial" font-size="12" fill="#6b7280" text-anchor="middle">BILLET SPACERS · 2-INCH LEVEL</text>
+</svg>
