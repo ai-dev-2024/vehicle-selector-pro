@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get 'dashboard', to: 'dashboard#index'
 
-    resources :product_fitments do
+    resources :product_fitments, only: [:index, :new, :create, :edit, :update, :destroy] do
       collection do
         post :bulk_assign
         post :bulk_delete
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :vehicles do
+    resources :vehicles, only: [:index, :show] do
       collection do
         get :ymm_tree
         get :years
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :bulk_imports, only: [:index, :create, :show] do
+    resources :bulk_imports, only: [:index, :create] do
       collection do
         get :sample_template
       end
@@ -93,6 +93,8 @@ Rails.application.routes.draw do
   if Rails.env.development?
     get 'storefront_preview', to: 'storefront_preview#index'
     get 'collections/storefront_preview', to: 'storefront_preview#collection'
+    get 'admin_preview', to: 'storefront_preview#admin_dashboard'
+    get 'admin_preview/sync', to: 'storefront_preview#admin_sync'
     ext_assets = Rails.root.join('extensions', 'vehicle-selector-pro-extension', 'assets')
     get 'ext-assets/:filename', format: false, constraints: { filename: /[^\/]+/ },
         to: lambda { |env|

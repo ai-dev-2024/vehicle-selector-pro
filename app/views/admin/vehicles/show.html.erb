@@ -1,0 +1,59 @@
+<div class="cc-page-head">
+  <div>
+    <a href="<%= admin_vehicles_path %>" class="btn" style="margin-bottom:12px">← Back to Vehicles</a>
+    <h2 style="margin:0"><%= @vehicle.display_name %></h2>
+    <p style="margin:4px 0 0;color:var(--muted)"><%= @vehicle.year %> · <%= @vehicle.make %> · <%= @vehicle.model %><% if @vehicle.trim.present? %> · <%= @vehicle.trim %><% end %><% if @vehicle.engine.present? %> · <%= @vehicle.engine %><% end %></p>
+  </div>
+  <div class="cc-actions">
+    <a href="<%= ymm_tree_admin_vehicles_path(format: :json) %>" target="_blank" class="btn">Export JSON Tree</a>
+  </div>
+</div>
+
+<div class="cc-metrics" style="margin-top:16px">
+  <div class="cc-stat"><label>Year</label><b><%= @vehicle.year %></b><em>Model year</em></div>
+  <div class="cc-stat"><label>Trim</label><b><%= @vehicle.trim.presence || "—" %></b><em>Trim level</em></div>
+  <div class="cc-stat"><label>Engine</label><b><%= @vehicle.engine.presence || "—" %></b><em>Powertrain</em></div>
+  <div class="cc-stat"><label>Mapped parts</label><b><%= @associated_fitments.count %></b><em>Products fit this vehicle</em></div>
+</div>
+
+<div class="cc-card" style="margin-top:16px">
+  <div class="cc-card-pad"><h3 style="margin:0">Vehicle details</h3></div>
+  <table class="cc-table">
+    <tbody>
+      <tr><th style="width:180px">Make</th><td><strong><%= @vehicle.make %></strong></td></tr>
+      <tr><th>Model</th><td><%= @vehicle.model %></td></tr>
+      <tr><th>Trim</th><td><%= @vehicle.trim.presence || "—" %></td></tr>
+      <tr><th>Engine</th><td><%= @vehicle.engine.presence || "—" %></td></tr>
+      <tr><th>Drivetrain</th><td><%= @vehicle.drivetrain.presence || "—" %></td></tr>
+      <tr><th>Body style</th><td><%= @vehicle.body_style.presence || "—" %></td></tr>
+      <tr><th>Status</th><td><% if @vehicle.active? %><span class="badge badge-live">Active</span><% else %><span class="badge">Inactive</span><% end %></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="cc-card" style="margin-top:16px">
+  <div class="cc-card-pad" style="display:flex;justify-content:space-between;align-items:center">
+    <h3 style="margin:0">Products mapped to this vehicle</h3>
+    <a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">+ Add fitment</a>
+  </div>
+  <% if @associated_fitments.any? %>
+    <table class="cc-table">
+      <thead>
+        <tr><th>Product</th><th>SKU</th><th>Type</th><th>Metafield</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @associated_fitments.includes(:shop).each do |fitment| %>
+          <tr>
+            <td><strong><%= fitment.product_title.presence || fitment.product_id %></strong><div style="font-size:12px;color:var(--muted)"><%= fitment.product_handle %></div></td>
+            <td><%= fitment.sku.presence || "—" %></td>
+            <td><span class="badge badge-live"><%= fitment.fitment_type.to_s.humanize %></span></td>
+            <td><% if fitment.synced_to_metafield? %><span class="badge badge-live">Synced</span><% else %><span class="badge badge-review">Pending</span><% end %></td>
+            <td><a href="<%= edit_admin_product_fitment_path(fitment) %>" class="btn">Edit</a></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div style="padding:32px;text-align:center;color:var(--muted)">No products mapped to this vehicle yet.<div style="margin-top:12px"><a href="<%= new_admin_product_fitment_path %>" class="btn btn-primary">Assign first fitment</a></div></div>
+  <% end %>
+</div>

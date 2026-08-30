@@ -1,0 +1,23 @@
+{
+  "name": "vehicle-selector-pro",
+  "version": "1.0.0",
+  "description": "Vehicle Selector Pro — demo video capture tooling (Puppeteer). The Rails app itself does not require Node; this package is only for generating demo video frames in demo/video.",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "capture": "node tmp/video/capture.js",
+    "test": "echo \"No JS tests — run: ruby spec/test_runner.rb\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ai-dev-2024/vehicle-selector-pro.git"
+  },
+  "keywords": ["shopify", "rails", "vehicle-fitment", "demo"],
+  "homepage": "https://github.com/ai-dev-2024/vehicle-selector-pro#readme",
+  "dependencies": {
+    "puppeteer": "^25.9.0"
+  },
+  "allowScripts": {
+    "puppeteer@25.9.0": true
+  }
+}

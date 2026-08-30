@@ -5,6 +5,11 @@
 # next to these routes in config/routes.rb.
 class StorefrontPreviewController < ActionController::Base
   layout 'storefront_preview'
+  helper_method :current_shop
+
+  def current_shop
+    @current_shop
+  end
 
   FILTER_PARAM = 'filter.v.m.custom.vehicle_fitment'.freeze
 
@@ -33,6 +38,33 @@ class StorefrontPreviewController < ActionController::Base
       @vehicle = nil
       @products = []
     end
+  end
+
+  # Dev-only renders of the REAL admin views (same templates + data the
+  # authenticated admin sees), used for demos/screenshots. The real /admin
+  # routes keep their embedded-session requirement unchanged.
+  def admin_dashboard
+    @current_shop = shop
+    @total_fitments = shop.vehicle_product_fitments.count
+    @unique_products = shop.unique_products_count
+    @total_vehicles = shop.vehicles.count
+    @universal_products = shop.vehicle_product_fitments.universal.count
+    @pending_sync_count = shop.vehicle_product_fitments.pending_sync.count
+    @synced_count = shop.vehicle_product_fitments.synced.count
+    @coverage_pct = ((@synced_count.to_f / [shop.vehicle_product_fitments.count, 1].max) * 100).round(1)
+    @recent_fitments = shop.vehicle_product_fitments.includes(:vehicle).order(created_at: :desc).limit(10)
+    @recent_sync_logs = shop.metafield_sync_logs.recent.limit(5)
+    render template: 'admin/dashboard/index', layout: 'embedded_app'
+  end
+
+  def admin_sync
+    @current_shop = shop
+    @pending_count = shop.vehicle_product_fitments.pending_sync.count
+    @synced_count = shop.vehicle_product_fitments.synced.count
+    @total_products = shop.unique_products_count
+    @sync_logs = shop.metafield_sync_logs.recent.limit(20)
+    @pending_sync_count = @pending_count
+    render template: 'admin/sync/show', layout: 'embedded_app'
   end
 
   private

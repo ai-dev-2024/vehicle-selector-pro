@@ -73,3 +73,7 @@ flyctl.exe
 
 # Redis infra config contains a generated password
 infra/redis/fly.toml
+
+# Node.js demo tooling (puppeteer for video capture)
+node_modules/
+npm-debug.log*

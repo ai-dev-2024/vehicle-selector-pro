@@ -43,9 +43,9 @@
         <% @vehicles.each do |vehicle| %>
           <% mapped_count = current_shop.vehicle_product_fitments.where(vehicle_id: vehicle.id).count %>
           <tr>
-            <td><strong><%= vehicle.year %></strong></td>
+            <td><a href="<%= admin_vehicle_path(vehicle) %>"><strong><%= vehicle.year %></strong></a></td>
             <td><strong><%= vehicle.make %></strong></td>
-            <td><%= vehicle.model %></td>
+            <td><a href="<%= admin_vehicle_path(vehicle) %>"><%= vehicle.model %></a></td>
             <td><%= vehicle.trim.presence || '—' %></td>
             <td><%= vehicle.engine.presence || '—' %></td>
             <td>
