@@ -50,7 +50,8 @@ class MarkdownRenderer
     end
     out << render_table(table_buffer) unless table_buffer.empty?
 
-    out.join("\n")
+    # Wrap consecutive <li> elements in <ul> and collapse blank lines.
+    out.join("\n").gsub(%r{(?:<li>.*?</li>\n?)+}) { "<ul>\n#{Regexp.last_match(0)}</ul>" }
   end
 
   def table_row?(line)
@@ -62,6 +63,8 @@ class MarkdownRenderer
       "<li>#{stripped.delete_prefix('- ')}</li>"
     elsif stripped.empty?
       ""
+    elsif stripped.match?(/\A<(?:h[123]|table|ul|ol|li)\b/)
+      stripped # already block-level HTML (heading, table, wrapped list)
     else
       "<p>#{stripped}</p>"
     end
