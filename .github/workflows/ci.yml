@@ -45,3 +45,13 @@ jobs:
 
       - name: Lint
         run: bundle exec rubocop
+
+  docs-links:
+    name: Markdown link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify README + docs links
+        run: python3 scripts/check_links.py
+
