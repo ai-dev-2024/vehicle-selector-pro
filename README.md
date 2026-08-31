@@ -235,6 +235,20 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 ---
 
+## Roadmap & future development
+
+Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite:
+
+- **Shopify Billing API** — recurring and one-time plans with managed merchant billing
+- **Supersession & OE-number matching** — a richer part-catalog engine with cross-references
+- **Fitment confidence scoring** — a smarter universal-vs-exact priority model
+- **White-label theming** — storefront theming, translation support, deeper widget controls
+- **Merchant analytics** — widget conversion lift, per-fitment demand, and drop-off reports
+
+Because the entire project was built with free AI tooling on a single consumer-class laptop, each of these represents meaningful headroom — the same foundation accelerates dramatically once proper development hardware and paid frontier models are applied.
+
+---
+
 ## Documentation
 
 | | |
