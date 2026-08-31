@@ -45,6 +45,7 @@ class VehicleProductFitment < ApplicationRecord
       category: category,
       price_cents: price_cents,
       short_description: short_description,
+      product_image: product_image,
       universal_fit: universal_fit,
       fitment_type: fitment_type,
       fitment_notes: fitment_notes,

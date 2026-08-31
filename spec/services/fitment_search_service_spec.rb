@@ -66,6 +66,16 @@ RSpec.describe FitmentSearchService do
       result = service.search_products(year: nil, make: "Ford", model: "F-150", limit: 50, page: 1)
       expect(result[:product_ids]).to be_empty
     end
+
+    it "prefers the synced Shopify product image over the demo photo map" do
+      fitment = make_fitment(2024, "Ford", "F-150")
+      fitment.update!(sku: "APX-CAI-F150-EB", category: "Air Intake",
+                      product_image: "https://cdn.shopify.com/s/files/1/0000/files/merchant.jpg")
+      Rails.cache.clear
+
+      result = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 50, page: 1)
+      expect(result[:products].first[:image]).to eq("https://cdn.shopify.com/s/files/1/0000/files/merchant.jpg")
+    end
   end
 
   describe ".invalidate_shop_cache" do

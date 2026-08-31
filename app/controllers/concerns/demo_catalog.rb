@@ -52,7 +52,9 @@ module DemoCatalog
         price_cents: f.price_cents,
         short_description: f.short_description,
         universal: f.universal_fit?,
-        image: DemoProductImages.image_for(f.sku, f.category)
+        # The merchant's own Shopify product photo wins when synced; otherwise
+        # fall back to the bundled demo photography (SKU, then category).
+        image: f.product_image.presence || DemoProductImages.image_for(f.sku, f.category)
       }
     end
     seen.values

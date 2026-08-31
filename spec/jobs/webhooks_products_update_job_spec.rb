@@ -15,6 +15,25 @@ RSpec.describe Webhooks::ProductsUpdateJob, type: :job do
     expect(fitment.reload.product_title).to eq("New Title")
   end
 
+  it "syncs the merchant's product photo from the webhook payload" do
+    webhook = {
+      "id" => 100,
+      "image" => { "src" => "https://cdn.shopify.com/s/files/1/0000/files/intake.jpg?v=1" },
+      "images" => [{ "src" => "https://cdn.shopify.com/s/files/1/0000/files/alt.jpg" }]
+    }
+
+    described_class.perform_now(shop_domain: shop.shopify_domain, webhook: webhook)
+    expect(fitment.reload.product_image).to eq("https://cdn.shopify.com/s/files/1/0000/files/intake.jpg?v=1")
+  end
+
+  it "falls back to the first image when the payload has no primary image" do
+    described_class.perform_now(
+      shop_domain: shop.shopify_domain,
+      webhook: { "id" => 100, "images" => [{ "src" => "https://cdn.shopify.com/s/files/1/0000/files/alt.jpg" }] }
+    )
+    expect(fitment.reload.product_image).to eq("https://cdn.shopify.com/s/files/1/0000/files/alt.jpg")
+  end
+
   it "does nothing when the shop is unknown" do
     expect do
       described_class.perform_now(shop_domain: "ghost.myshopify.com", webhook: { "id" => 100 })

@@ -65,6 +65,7 @@ class BulkFitmentImporter
       fitment.product_handle = row["product_handle"] if row["product_handle"].present?
       fitment.product_title = row["product_title"] if row["product_title"].present?
       fitment.sku = row["sku"] if row["sku"].present?
+      fitment.product_image = row["image"].presence || row["image_url"].presence
       fitment.fitment_notes = row["notes"] || row["fitment_notes"]
       fitment.position = row["position"]
       fitment.save!
@@ -103,6 +104,7 @@ class BulkFitmentImporter
     fitment.product_handle = row["product_handle"] if row["product_handle"].present?
     fitment.product_title = row["product_title"] if row["product_title"].present?
     fitment.sku = row["sku"] if row["sku"].present?
+    fitment.product_image = row["image"].presence || row["image_url"].presence
     fitment.universal_fit = false
     fitment.fitment_type = row["fitment_type"].presence || "direct_fit"
     fitment.fitment_notes = row["notes"] || row["fitment_notes"]

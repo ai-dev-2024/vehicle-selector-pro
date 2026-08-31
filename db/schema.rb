@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_01_000006) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
   create_table "app_settings", force: :cascade do |t|
     t.integer "shop_id", null: false
     t.string "widget_title", default: "Select Your Vehicle"
@@ -88,6 +88,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000006) do
     t.string "category"
     t.integer "price_cents"
     t.string "short_description"
+    t.string "product_image"
     t.index ["product_id"], name: "index_vehicle_product_fitments_on_product_id"
     t.index ["shop_id", "product_id"], name: "index_vehicle_product_fitments_on_shop_id_and_product_id"
     t.index ["shop_id", "synced_to_metafield"], name: "index_vehicle_product_fitments_on_shop_id_and_synced"
