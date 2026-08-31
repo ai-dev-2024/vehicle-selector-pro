@@ -44,25 +44,29 @@ FREE_AI_STATEMENT = (
 )
 
 RESOURCE_STATEMENT = (
-    "Built at the ceiling of a 2018 ultrabook. This entire project — the Rails application, the "
+    "Built at the ceiling of a consumer notebook. This entire project — the Rails application, the "
     "Shopify integration, the storefront, every diagram, this report, and even the two narrated "
     "walkthrough videos — was designed, coded, tested, and rendered on a single "
     "ASUS ZenBook "
-    "UX433FA: an Intel Core i7-8565U at 1.80 GHz (4 cores, ~15 W), 16 GB RAM, and only Intel UHD 620 "
-    "integrated graphics. No GPU. No cluster. No cloud IDE. Every frame of video and every page of "
-    "this report was produced on the CPU of that one machine. That constraint is deliberate and it "
-    "is the strongest evidence of the opportunity: so far the ceiling was set by the tooling, not by "
-    "the ambition. Put this same foundation on a proper workstation with a GPU and paid, frontier "
-    "AI models, and the architecture scales into a far richer, faster, store-ready solution. The "
-    "headroom is the opportunity."
+    "UX433FA: a 2018-vintage, netbook-class consumer laptop. An Intel Core i7-8565U at 1.80 GHz "
+    "(4 cores, ~15 W), 16 GB RAM, and only Intel UHD 620 integrated graphics. No GPU. No "
+    "dedicated developer workstation. No cloud IDE. It is not a developer machine — it is the kind "
+    "of everyday notebook you buy for browsing and documents — and every frame of video and every "
+    "page of this report was produced on the CPU of that one machine. That constraint is deliberate "
+    "and it is the strongest evidence of the opportunity: so far the ceiling was set by the "
+    "hardware, not by the ambition. Put this same foundation on a proper development workstation "
+    "with a GPU and paid, frontier AI models, and the architecture scales into a far richer, "
+    "faster, store-ready solution. The headroom — and the case for investing in proper developer "
+    "tools — is the opportunity."
 )
 
 HARDWARE_SPECS = [
     ("Device", "ASUS ZenBook UX433FA"),
+    ("Class", "Netbook-class consumer laptop — not a developer machine"),
     ("CPU", "Intel Core i7-8565U @ 1.80 GHz (4 cores, ~15 W)"),
     ("Memory", "16 GB RAM"),
     ("Graphics", "Intel UHD 620 — integrated only, no GPU"),
-    ("Origin", "2018-vintage ultrabook"),
+    ("Origin", "2018-vintage consumer notebook"),
 ]
 
 CLOSING = (
@@ -607,9 +611,13 @@ def build_pdf() -> None:
                  Spacer(1, 5),
                  callout(FREE_AI_STATEMENT),
                  Spacer(1, 14),
-                 H2("The build machine: a 2018 ASUS ZenBook"),
-                 P("Everything in this report was produced locally, on hardware with no dedicated "
-                   "GPU and a 15-watt CPU — details verified from the machine itself, not inferred."),
+                 H2("The build machine: a 2018 ASUS ZenBook (netbook-class)"),
+                 P("Everything in this report was produced locally on an everyday consumer notebook — "
+                   "no dedicated GPU, no developer-grade workstation — with details verified from the "
+                   "machine itself, not inferred. This is not a developer tool; it is the kind of "
+                   "laptop you would buy for browsing and documents, which is exactly the point: the "
+                   "result speaks to the headroom available once proper development hardware and "
+                   "tooling are allocated."),
                  KeepTogether([spec_tbl]),
                  Spacer(1, 6),
                  P(RESOURCE_STATEMENT))
@@ -799,9 +807,10 @@ def build_docx() -> None:
     pPr.insert(0, shd)
     P("Both choices are deliberate — free tooling and minimal local compute — and together they "
       "make the strongest argument this project can offer: output was capped by resources, not by "
-      "ambition, so the headroom with proper hardware and paid frontier models is the opportunity.",
+      "ambition, so the headroom once proper development hardware and paid frontier models are "
+      "allocated is the opportunity.",
       color=DARK)
-    sub("The build machine: a 2018 ASUS ZenBook")
+    sub("The build machine: a 2018 ASUS ZenBook (netbook-class)")
     P("Specs verified from the machine itself:", color=GREY)
     spec_t = doc.add_table(rows=0, cols=2); spec_t.style = "Light Grid Accent 6"
     spec_t.alignment = WD_TABLE_ALIGNMENT.CENTER
