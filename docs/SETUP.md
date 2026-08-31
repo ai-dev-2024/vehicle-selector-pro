@@ -28,14 +28,11 @@ bundle install
 
 ### 3. Setup Database
 ```bash
-# Create database
-bundle exec rake db:create
+# Prepare database (creates it and runs migrations)
+bundle exec rails db:prepare
 
-# Run migrations
-bundle exec rake db:migrate
-
-# Seed demo data
-bundle exec rake db:seed
+# Seed demo data (safe to re-run)
+bundle exec rails db:seed
 ```
 
 ### 4. Configure Environment Variables
@@ -47,7 +44,7 @@ SHOPIFY_STORE_DOMAIN=your-store.myshopify.com  # e.g. vehicle-selector-pro.mysho
 HOST=http://localhost:3000
 # Production only (Fly secrets): DATABASE_URL, REDIS_URL, SECRET_KEY_BASE, ACTIVE_RECORD_ENCRYPTION_* 
 ```
-Generate `HOST` as your ngrok URL for local tunnels (`ngrok http 3000`) or keep `http://localhost:3000` for `storefront_preview` (bypasses HMAC with `?skip_proxy_verify=true` in dev). For full parsing run `bundle exec rails db:prepare db:seed` which loads 33 vehicles + 35 fitments.
+Set `HOST` to your ngrok URL for local Shopify OAuth testing (`ngrok http 3000`), or keep `http://localhost:3000` for the public local demo routes. For a fresh demo database run `bundle exec rails db:prepare db:seed`; the seed catalog is safe to re-run and currently provides 48 YMMTE configurations, 204 fitments and 40 mapped products. The `/demo` routes do not require Shopify HMAC because they are read-only demo pages; the real `/apps/vehicle-selector/*` App Proxy routes remain HMAC-protected.
 
 **Sidekiq is required** for metafield sync & webhooks — run `bundle exec sidekiq -C config/sidekiq.yml` alongside `rails server` (otherwise `VehicleProductFitment` after_commit enqueue silently warns).
 
@@ -62,6 +59,15 @@ bundle exec puma -C config/puma.rb
 ```bash
 bundle exec sidekiq -C config/sidekiq.yml
 ```
+
+### What to open locally
+
+- **Public shopper storefront:** `http://localhost:3000/demo`
+- **Read-only merchant preview:** `http://localhost:3000/demo/admin`
+- **Authenticated merchant app:** `http://localhost:3000` (requires a Shopify OAuth session)
+- **Legacy development storefront route:** `http://localhost:3000/storefront_preview`
+
+The `/demo` pages are presentation fixtures backed by the local seeded catalog. They are not a substitute for installing the app in Shopify; the actual storefront integration uses the Theme App Extension and HMAC-verified App Proxy routes.
 
 ## Development Workflow
 

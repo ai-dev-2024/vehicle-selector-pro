@@ -125,7 +125,7 @@ flyctl machine run registry.fly.io/vehicle-selector-pro:<image-tag> \
 
 ---
 
-## 5. Register the app on Shopify
+## 5. Register and install the app on Shopify
 
 `shopify.app.toml` carries the application URL, OAuth redirect URLs, App Proxy
 mapping and webhook subscriptions. Push it (plus the Theme App Extension) with:
@@ -144,18 +144,29 @@ Notes learned the hard way:
 - Theme-app-extension block schemas must use `"target": "section"` (or
   `head`/`body`) — `"target": "block"` is rejected.
 
-Then install the app on the dev store:
+### Install for a merchant store
+
+The client does **not** receive or paste their Shopify password or API secret
+into this project. The deployer configures the app's Partner credentials once,
+then gives the merchant the OAuth install URL:
 
 ```
 https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com
 ```
 
-Approve the scopes in the Shopify admin; the OAuth callback stores the shop's
-access token (encrypted) and opens the embedded admin dashboard.
+The merchant signs in to Shopify in their own browser and approves the scopes.
+Shopify redirects back to the deployed app; the OAuth callback stores that
+store's access token encrypted and opens the embedded admin dashboard. Each
+store gets its own shop-scoped database records and fitments.
+
+For a public/unlisted app, configure the distribution/install link in the
+Shopify Partners Dashboard. For a development store, the store must be owned
+by or transferred to the Partner organization. Never share `SHOPIFY_API_SECRET`,
+`DATABASE_URL`, `RAILS_MASTER_KEY`, or Fly tokens with the merchant.
 
 ---
 
-## 6. Verify
+## 6. Verify the deployment and installation
 
 ```bash
 # Health

@@ -26,13 +26,14 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
 2. **Live Deployment & Verification**:
    - **Live link to submit:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
    - **Install:** `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
-   - Installed via OAuth on real dev store `vehicle-selector-pro.myshopify.com` with 7 products / 35 fitments; `custom.vehicle_fitment` read-back verified 7/7
+   - The public demo currently contains 40 mapped products, 48 YMMTE configurations and 204 fitments. These demo pages require no Shopify login and are read-only.
+   - To install the actual app for a merchant, use the Shopify OAuth URL `https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com` after configuring the merchant's store domain and approving the requested scopes.
    - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 
 3. **Demo Assets — what to submit:**
-   - **Recorded video (2.5 min, narrated):** [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4) — also at `https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/Vehicle_Selector_Pro_Demo_v3.mp4` (raw: `/raw/main/...`) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Real screen recording of the working app, ElevenLabs studio voiceover synced per scene, background score, loudness-normalized.
-   - `/storefront_preview` (dev harness) + `admin_preview` render the real extension widget against live API for local re-recording via `npm run capture` (puppeteer)
-   - `demo/index.html` — Play 2.5-min walkthrough button (Web Speech API + tab capture)
+   - **Inline GitHub walkthroughs:** the two narrated videos play directly on the repository homepage from GitHub attachment assets; the [video gallery](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) is the fullscreen alternative.
+   - **Recorded MP4 fallback:** [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4) + script [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md).
+   - `/demo` and `/demo/admin` are the current public live previews. `/storefront_preview` and `admin_preview` are development-only legacy routes for local re-recording.
 
 4. **Production Documentation**:
    - Clean [`README.md`](README.md) — features, quick start, tech stack, links to all docs
@@ -51,7 +52,7 @@ Use the professional voiceover script in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIP
 - **Continuous read version** for single-take recording
 - **Recording setup** recommendations (OBS Studio + mic, or Loom)
 
-The 2.5-minute demo video is at [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4) — [watch on GitHub](https://github.com/ai-dev-2024/vehicle-selector-pro/blob/main/demo/Vehicle_Selector_Pro_Demo_v3.mp4).
+The narrated walkthroughs play inline on the [GitHub repository homepage](https://github.com/ai-dev-2024/vehicle-selector-pro#demo). For fullscreen playback, use the [GitHub Pages video gallery](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html). The original MP4 remains available at [`demo/Vehicle_Selector_Pro_Demo_v3.mp4`](demo/Vehicle_Selector_Pro_Demo_v3.mp4).
 
 ---
 

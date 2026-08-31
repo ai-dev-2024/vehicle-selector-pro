@@ -9,7 +9,7 @@ Everything needed to submit this app to the Shopify App Store, in order. Items m
 - [x] Privacy policy hosted or linkable (`docs/PRIVACY.md` — must be publicly reachable at submission; see step 3)
 - [x] App deployed and healthy (Fly.io, `https://vehicle-selector-pro.fly.dev`)
 - [x] Session-based admin auth (App Bridge / OAuth session required for every admin route)
-- [x] Theme App Extension released via `shopify app deploy` (2 blocks + snippet)
+- [ ] Theme App Extension released via `shopify app deploy` (2 blocks + snippet) — run this against the target Shopify Partner app before submitting
 
 ## 1. [Dashboard] App information
 
@@ -68,7 +68,7 @@ flyctl deploy   # after adding a /privacy route, or:
 
 **Screenshots (already produced, in `demo/autoplay/frames_live/`):** dashboard with coverage stats, vehicle library, fitment matrix, widget settings, bulk import, storefront widget + garage + PDP badges.
 
-**Demo video:** `demo/Vehicle_Selector_Pro_Demo_v3.mp4` (2.5 min, narrated).
+**Demo video:** [Inline narrated walkthroughs on the GitHub repository](https://github.com/ai-dev-2024/vehicle-selector-pro#demo) · [fullscreen GitHub Pages video gallery](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html). The original MP4 is also included at `demo/Vehicle_Selector_Pro_Demo_v3.mp4`.
 
 ## 5. [Dashboard] Review notes (paste into "Notes for reviewers")
 
@@ -98,7 +98,7 @@ No paid plan / billing during review; the app is fully functional in demo mode.
 - [ ] Mandatory GDPR webhooks registered (step 2)
 - [ ] App URL / redirect URLs correct (step 1)
 - [ ] Review staff account created on the demo store
-- [ ] `shopify app deploy` run so the released extension version matches the repo
+- [ ] `shopify app deploy` run so the released extension version matches the repo (required before submission)
 - [ ] Submit for review
 
 ## 7. After approval

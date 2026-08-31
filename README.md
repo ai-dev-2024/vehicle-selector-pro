@@ -20,7 +20,7 @@
 
 Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data to their products. Customers filter the catalog with cascading dropdowns and see **"Guaranteed Exact Fit"** badges on product pages — powered by Shopify App Proxy, Product Metafields, and a Theme App Extension.
 
-**[Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** · **[Live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[Architecture](#architecture)**
+**[Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** · **[Live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)** · **[Demo video](#demo)** · **[Setup guide](docs/SETUP.md)** · **[Merchant installation](docs/MERCHANT_INSTALL.md)** · **[Architecture](#architecture)**
 
 <div align="center">
 
@@ -209,11 +209,12 @@ git clone https://github.com/ai-dev-2024/vehicle-selector-pro.git
 cd vehicle-selector-pro
 bundle install
 cp .env.example .env    # fill in SHOPIFY_API_KEY / SHOPIFY_API_SECRET / SHOPIFY_STORE_DOMAIN
-bundle exec rails db:prepare db:seed
+bundle exec rails db:prepare
+bundle exec rails db:seed
 bundle exec rails server
 ```
 
-Then open `http://localhost:3000` for the admin dashboard, or `http://localhost:3000/storefront_preview` to see the Theme App Extension widget against live data.
+Then open `http://localhost:3000/demo` for the public storefront preview, or `http://localhost:3000/demo/admin` for the read-only admin preview. The legacy `/storefront_preview` route is also available in development.
 
 ---
 
@@ -234,7 +235,8 @@ Then open `http://localhost:3000` for the admin dashboard, or `http://localhost:
 
 | | |
 |---|---|
-| [Setup guide](docs/SETUP.md) | Local development environment |
+| [Setup guide](docs/SETUP.md) | Local development environment and public demo routes |
+| [Merchant installation](docs/MERCHANT_INSTALL.md) | Safe client handoff, OAuth install and theme setup |
 | [Deployment](docs/DEPLOYMENT.md) | Fly.io runbook with provisioning commands |
 | [API reference](docs/API.md) | App Proxy endpoints and webhook topics |
 | [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model |
