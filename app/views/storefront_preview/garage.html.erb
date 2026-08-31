@@ -31,21 +31,65 @@
 
 <script>
   // Renders the localStorage garage on the dedicated page. The selector widget
-  // keeps its own dropdown in sync; this page is a read-only view of the same
-  // storage, refreshed on the widget's vsp:vehicleChanged event.
+  // keeps its own dropdown in sync; this page mirrors the same storage across
+  // the vsp:vehicleChanged event. Each saved vehicle carries an ✕ button that
+  // removes it; if the removed vehicle was the active selection, configuration
+  // is cleared everywhere too.
   (function () {
     var KEY = 'vsp_customer_garage';
+    var ACTIVE_KEY = 'vsp_active_vehicle';
     var list = document.getElementById('garage-page-items');
     var empty = document.getElementById('garage-page-empty');
+
+    function loadGarage() {
+      var g = [];
+      try { g = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+      return Array.isArray(g) ? g : [];
+    }
+    function loadActive() {
+      try { return JSON.parse(localStorage.getItem(ACTIVE_KEY) || 'null'); } catch (e) { return null; }
+    }
+    function sameVehicle(a, b) {
+      return a && b &&
+        a.year === b.year &&
+        String(a.make || '').toLowerCase() === String(b.make || '').toLowerCase() &&
+        String(a.model || '').toLowerCase() === String(b.model || '').toLowerCase();
+    }
     function render() {
-      var garage = [];
-      try { garage = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
-      if (!Array.isArray(garage)) garage = [];
+      var garage = loadGarage();
       empty.style.display = garage.length ? 'none' : '';
-      list.innerHTML = garage.map(function (v) {
-        return '<span class="sp-fitment-chip">✔ ' + (v.display_name || [v.year, v.make, v.model].join(' ')) + '</span>';
+      list.innerHTML = garage.map(function (v, i) {
+        var name = v.display_name || [v.year, v.make, v.model].filter(Boolean).join(' ');
+        var esc = name.replace(/["&'<>]/g, function (c) {
+          return { '"': '&quot;', '&': '&amp;', "'": '&#39;', '<': '&lt;', '>': '&gt;' }[c];
+        });
+        return '<span class="sp-fitment-chip" style="display:inline-flex; align-items:center; gap:8px; padding-right:4px;">'
+          + '✔ ' + esc
+          + '<button type="button" class="sp-chip-remove" data-index="' + i + '" aria-label="Remove ' + esc + '" '
+          + 'style="background:none; border:none; color:#FF4A00; cursor:pointer; font-size:15px; line-height:1; padding:0 2px;"'
+          + ' title="Remove ' + esc + '">✕</button>'
+          + '</span>';
       }).join('');
     }
+    function removeAt(index) {
+      var garage = loadGarage();
+      if (!garage.length || index < 0 || index >= garage.length) return;
+      var removed = garage.splice(index, 1)[0];
+      try { localStorage.setItem(KEY, JSON.stringify(garage)); } catch (e) {}
+      // If the removed vehicle was the active configuration, clear it everywhere
+      // so other pages (and this page's widget) forget the stale selection.
+      if (sameVehicle(loadActive(), removed)) {
+        try { localStorage.removeItem(ACTIVE_KEY); } catch (e) {}
+        window.dispatchEvent(new CustomEvent('vsp:vehicleChanged', { detail: { vehicle: null } }));
+        var bar = document.querySelector('.vsp-active-vehicle-bar');
+        if (bar) bar.style.display = 'none';
+      }
+      render();
+    }
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('.sp-chip-remove') : null;
+      if (btn) removeAt(parseInt(btn.dataset.index, 10));
+    });
     window.addEventListener('vsp:vehicleChanged', render);
     document.addEventListener('DOMContentLoaded', render);
   })();

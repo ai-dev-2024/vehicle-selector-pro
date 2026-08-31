@@ -43,7 +43,10 @@
       </div>
     </div>
 
-    <a href="/demo" class="sp-pdp-cta" style="text-decoration:none;">Configure Your Vehicle →</a>
+    <button type="button" class="sp-pdp-cta sp-pdp-config-toggle" id="sp-pdp-config-toggle" aria-expanded="false">Configure Your Vehicle →</button>
+    <div class="sp-widget-wrap sp-pdp-config" id="sp-pdp-config" hidden>
+      <%= render 'widget' %>
+    </div>
     <div class="sp-card-sku" style="margin-top:14px;">PART # <%= @product[:sku] %><%= ' · Universal Fit' if @product[:universal] %></div>
   </div>
 </div>
@@ -85,3 +88,46 @@
     <p style="margin:0; color:#6d7175; font-size:13px;">Fitment data is being cataloged for this part. Contact support for a guaranteed answer within one business day.</p>
   <% end %>
 </div>
+
+<script>
+  // PDP "Configure Your Vehicle" — opens the embedded vehicle selector so the
+  // shopper can pick / change their vehicle right on this page. The selector's
+  // fitment badge updates itself live via the widget's vsp:vehicleChanged event;
+  // here we only drive the drawer (show/hide) and keep the button label in sync.
+  (function () {
+    var STORAGE_KEY = 'vsp_active_vehicle';
+    var toggle = document.getElementById('sp-pdp-config-toggle');
+    var panel = document.getElementById('sp-pdp-config');
+    if (!toggle || !panel) return;
+
+    function activeVehicle() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); }
+      catch (e) { return null; }
+    }
+
+    function updateToggle() {
+      var v = activeVehicle();
+      if (v && v.display_name) {
+        toggle.textContent = '✔ Configuration: ' + v.display_name + ' — Change';
+        toggle.classList.add('configured');
+      } else {
+        toggle.textContent = 'Configure Your Vehicle →';
+        toggle.classList.remove('configured');
+      }
+    }
+
+    toggle.addEventListener('click', function () {
+      if (panel.hidden) {
+        panel.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    window.addEventListener('vsp:vehicleChanged', updateToggle);
+    updateToggle();
+  })();
+</script>

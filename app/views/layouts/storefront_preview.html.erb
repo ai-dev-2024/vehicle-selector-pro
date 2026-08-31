@@ -451,6 +451,11 @@
       transition: filter .15s ease, transform .15s ease;
     }
     .sp-pdp-cta:hover { filter: brightness(1.08); transform: translateY(-2px); color: #fff; }
+    /* Configure-your-vehicle button toggles an embedded selector drawer on the PDP */
+    button.sp-pdp-cta { cursor: pointer; border: none; font-family: "IBM Plex Mono", monospace; }
+    .sp-pdp-cta.configured { background: var(--cert); }
+    .sp-pdp-config { margin: 14px 0 0; padding: 18px; }
+    .sp-pdp-config .vsp-widget-container { margin-top: 0; }
     .sp-detail-grid {
       max-width: 1120px; margin: 0 auto 40px; padding: 0 32px;
       display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
