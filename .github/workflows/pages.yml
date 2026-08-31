@@ -32,8 +32,11 @@ jobs:
       - name: Assemble report site
         run: |
           mkdir -p _site
+          # Client deliverables: full report (PDF + DOCX) and pitch deck (PDF + PPTX)
           cp report/Vehicle_Selector_Pro_Project_Report.pdf _site/
           cp report/Vehicle_Selector_Pro_Project_Report.docx _site/
+          cp report/Vehicle_Selector_Pro_Pitch_Deck.pdf _site/
+          cp report/Vehicle_Selector_Pro_Pitch_Deck.pptx _site/
           cp report/site/index.html _site/index.html
 
       - name: Upload artifact
