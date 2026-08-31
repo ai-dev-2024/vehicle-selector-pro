@@ -612,6 +612,8 @@ def build_pdf() -> None:
         ]))
     dep.append(Spacer(1, 8))
     dep.append(H2("Where it grows next — roadmap"))
+    dep.append(P("Every item below sits <b>beyond the original spec's requirement</b> — it is an "
+                 "optional growth path, not part of the agreed scope."))
     dep += [BL(p) for p in ROADMAP]
     dep.append(P("Each item is production-feasible on the current architecture — built to grow "
                  "without a rewrite."))
@@ -845,6 +847,8 @@ def build_docx() -> None:
 
     # 13
     heading("13. Roadmap")
+    P("Every item below sits beyond the original spec's requirement — it is an optional "
+      "growth path, not part of the agreed scope.")
     for s in ROADMAP: B(s)
 
     # 14

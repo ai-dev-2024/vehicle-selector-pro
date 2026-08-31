@@ -237,7 +237,7 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 ## Roadmap & future development
 
-Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite:
+Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite. **Every item sits beyond the original spec's requirement — it is an optional growth path, not part of the agreed scope:**
 
 - **Shopify Billing API** — recurring and one-time plans with managed merchant billing
 - **Supersession & OE-number matching** — a richer part-catalog engine with cross-references
