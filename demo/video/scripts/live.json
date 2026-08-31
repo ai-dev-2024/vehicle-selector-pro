@@ -1,7 +1,7 @@
 {
   "title": "Vehicle Selector Pro — Live Application Walkthrough",
   "voice": "chatterbox-turbo (built-in)",
-  "duration_seconds": 87,
+  "duration_seconds": 145,
   "scenes": [
     {"id":"home","narration":"This is Vehicle Selector Pro, running live in production. Everything you see is the real deployed application."},
     {"id":"cascade","narration":"Everything begins with the vehicle. Pick the year, the make, the model - each dropdown narrows to what actually exists."},
@@ -10,6 +10,10 @@
     {"id":"garage","narration":"My Garage remembers every vehicle you own. Switch between a truck and a sedan without ever starting over."},
     {"id":"admin","narration":"Behind the scenes, merchants command everything from a Polaris dashboard - the same deployment, live."},
     {"id":"fitments","narration":"Every product-to-vehicle rule lives in one matrix: direct fit, universal, or held for review."},
+    {"id":"vehicles","narration":"The normalized vehicle library sits behind it all - year, make, model, trim, and engine, kept fast for instant filtering."},
+    {"id":"imports","narration":"Bulk CSV import loads hundreds of fitments in a single pass, staged and reviewed before anything reaches the storefront."},
+    {"id":"settings","narration":"Widget settings ship straight to the extension - labels, brand color, selector depth, all merchant controlled."},
+    {"id":"support","narration":"Fitment questions land in one clear place - honest part data and a real support path after checkout."},
     {"id":"outro","narration":"Vehicle Selector Pro. The right part for the right vehicle - first time, every time."}
   ]
 }

@@ -43,11 +43,15 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
     { id: 'garage',     at: 43500, len: 10000, run: async () => { await page.goto(BASE + '/demo/garage', { waitUntil: 'domcontentloaded' }); } },
     { id: 'admin',      at: 53500, len: 12000, run: async () => { await page.goto(BASE + '/demo/admin', { waitUntil: 'domcontentloaded' }); } },
     { id: 'fitments',   at: 65500, len: 11000, run: async () => { await page.goto(BASE + '/demo/admin/fitments', { waitUntil: 'domcontentloaded' }); } },
-    { id: 'outro',      at: 76500, len: 9000,  run: async () => { await page.goto(BASE + '/demo', { waitUntil: 'domcontentloaded' }); } },
+    { id: 'vehicles',   at: 76500, len: 11000, run: async () => { await page.goto(BASE + '/demo/admin/vehicles', { waitUntil: 'domcontentloaded' }); } },
+    { id: 'imports',    at: 87500, len: 10000, run: async () => { await page.goto(BASE + '/demo/admin/imports', { waitUntil: 'domcontentloaded' }); } },
+    { id: 'settings',   at: 97500, len: 10000, run: async () => { await page.goto(BASE + '/demo/admin/settings', { waitUntil: 'domcontentloaded' }); } },
+    { id: 'support',    at: 107500, len: 12000, run: async () => { await page.goto(BASE + '/demo/support', { waitUntil: 'domcontentloaded' }); } },
+    { id: 'outro',      at: 119500, len: 25500, run: async () => { await page.goto(BASE + '/demo', { waitUntil: 'domcontentloaded' }); } },
   ];
 
   const start = Date.now();
-  const TOTAL = 86500;
+  const TOTAL = 145000;
   const endAt = start + TOTAL;
   const measured = {};
   for (const s of scenes) {

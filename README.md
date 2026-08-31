@@ -50,15 +50,15 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 **▶ Watch the three narrated walkthroughs — they play right here on the repo page (no links, no download):**
 
-<video controls preload="metadata" width="100%" poster="https://github.com/user-attachments/assets/bb035a32-6200-4d28-9bb6-a060e115683f" src="https://github.com/user-attachments/assets/bb035a32-6200-4d28-9bb6-a060e115683f"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-live-poster.png" src="https://github.com/user-attachments/assets/bb035a32-6200-4d28-9bb6-a060e115683f"></video>
 
 *The live application, recorded against the real deployment · 2:25*
 
-<video controls preload="metadata" width="100%" poster="https://github.com/user-attachments/assets/6e2c2337-54d6-491f-a630-674c72c35937" src="https://github.com/user-attachments/assets/6e2c2337-54d6-491f-a630-674c72c35937"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://github.com/user-attachments/assets/6e2c2337-54d6-491f-a630-674c72c35937"></video>
 
 *For merchants — the fitment command center · 2:34*
 
-<video controls preload="metadata" width="100%" poster="https://github.com/user-attachments/assets/7ee3a8cb-da83-4dba-a211-bd7a49d93f7c" src="https://github.com/user-attachments/assets/7ee3a8cb-da83-4dba-a211-bd7a49d93f7c"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.png" src="https://github.com/user-attachments/assets/7ee3a8cb-da83-4dba-a211-bd7a49d93f7c"></video>
 
 *For shoppers — from vehicle selector to guaranteed-fit checkout · 2:44*
 

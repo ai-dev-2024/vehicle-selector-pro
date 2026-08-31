@@ -185,9 +185,9 @@ SLIDES = [
         "kicker": "SEE IT LIVE",
         "title": "Watch the three narrated walkthroughs",
         "bullets": [
-            "Live application — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4'><font color='#E04B33'><b>watch the real deployment</b></font></a> · 1:27",
-            "Merchant command center — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:09",
-            "Shopper experience — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:21",
+            "Live application — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4'><font color='#E04B33'><b>watch the real deployment</b></font></a> · 2:25",
+            "Merchant command center — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:34",
+            "Shopper experience — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:44",
         ],
     },
     {
