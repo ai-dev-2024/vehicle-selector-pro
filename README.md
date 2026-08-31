@@ -46,14 +46,17 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <div align="center">
 
-**▶ Watch the walkthroughs — streamable in-browser (seek, fullscreen, no download):**
+**▶ Watch the walkthroughs — they play right here on the repo page:**
 
-**[Merchant command center ▶ 2:09](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant) · [Shopper experience ▶ 2:21](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper)**
+https://github.com/user-attachments/assets/8966a45d-d46b-4b19-84c3-0cfe4d6282fa
 
-[![Merchant walkthrough video — watch streamable](demo/vehicle-selector-merchant-poster.png)](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant)
-[![Shopper walkthrough video — watch streamable](demo/vehicle-selector-shopper-poster.png)](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper)
+*For merchants — the fitment command center · 2:09*
 
-[Merchant ▶ watch](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant) · [Shopper ▶ watch](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html)
+https://github.com/user-attachments/assets/545171d8-a8f4-49f8-894b-f82f353bcc1f
+
+*For shoppers — from vehicle selector to guaranteed-fit checkout · 2:21*
+
+[Narration script](docs/DEMO_SCRIPT.md) · [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html)
 
 </div>
 
