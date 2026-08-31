@@ -697,6 +697,14 @@ def seed_fitment_row(shop:, prod:, detail_attrs:, vehicle: nil)
   1
 end
 
+# Prune fitments for products that are no longer part of the demo catalog
+# (e.g. rows left over from an older seed). Keeps the demo shop's catalog
+# exactly aligned with catalog_products so the storefront never renders
+# half-populated cards.
+catalog_ids = catalog_products.pluck(:product_id)
+pruned = shop.vehicle_product_fitments.where.not(product_id: catalog_ids).delete_all
+puts "✓ Pruned #{pruned} stale fitment rows no longer in the demo catalog" if pruned.positive?
+
 fitment_count = 0
 catalog_products.each do |prod|
   fitment_count += seed_fitment(shop, prod)

@@ -26,7 +26,7 @@ By combining a **normalized, high-speed multi-tenant local cache** with **Shopif
 2. **Live Deployment & Verification**:
    - **Live link to submit:** **https://vehicle-selector-pro.fly.dev** — health `https://vehicle-selector-pro.fly.dev/up` → `{"status":"ok"}` (Fly: `iad`, Puma + Sidekiq + Postgres + private Redis `vsp-redis`)
    - **Install:** `https://vehicle-selector-pro.fly.dev/login?shop=vehicle-selector-pro.myshopify.com` (OAuth `shopify_app` 22.0, tokens encrypted)
-   - The public demo currently contains 40 mapped products, 48 YMMTE configurations and 204 fitments. These demo pages require no Shopify login and are read-only.
+   - The public demo currently contains 34 mapped products, 48 YMMTE configurations and 169 fitments. These demo pages require no Shopify login and are read-only.
    - To install the actual app for a merchant, use the Shopify OAuth URL `https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com` after configuring the merchant's store domain and approving the requested scopes.
    - Full evidence trail in [`REQUIREMENTS-VERIFICATION.md`](REQUIREMENTS-VERIFICATION.md).
 

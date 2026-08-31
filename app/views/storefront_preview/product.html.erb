@@ -11,7 +11,7 @@
 <div class="sp-pdp">
   <div class="sp-pdp-media">
     <% if @product[:image] %>
-      <img src="<%= @product[:image] %>" alt="<%= @product[:title] %>" style="width:100%; height:100%; object-fit:cover;">
+      <img src="<%= @product[:image] %>" alt="<%= @product[:title] %>" style="width:100%; height:100%; object-fit:contain; padding:16px; box-sizing:border-box;">
     <% else %>
       <span style="font-size:80px;" aria-hidden="true">🚗</span>
     <% end %>

@@ -315,16 +315,17 @@
       box-shadow: 0 22px 44px -18px rgba(11,16,22,0.28);
     }
     .sp-card-img {
-      height: 180px; position: relative; overflow: hidden;
+      height: 200px; position: relative; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #E7EBF0, #F3F5F8);
       border-bottom: 1px solid var(--line);
     }
     .sp-card-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+      padding: 12px;
       transition: transform .35s ease;
     }
-    .sp-card:hover .sp-card-photo { transform: scale(1.045); }
+    .sp-card:hover .sp-card-photo { transform: scale(1.03); }
     .sp-card-cat {
       position: absolute; top: 10px; left: 10px; z-index: 2;
       font-family: "IBM Plex Mono", monospace;
