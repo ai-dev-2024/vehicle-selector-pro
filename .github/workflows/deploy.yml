@@ -22,4 +22,11 @@ jobs:
       - name: Deploy to Fly.io
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: flyctl deploy --remote-only
+          GIT_SHA: ${{ github.sha }}
+        run: flyctl deploy --remote-only --build-arg GIT_SHA=$GIT_SHA
+
+      - name: Verify health after deploy
+        run: |
+          sleep 30
+          curl -fsS https://vehicle-selector-pro.fly.dev/health/deep
+          curl -fsS https://vehicle-selector-pro.fly.dev/up

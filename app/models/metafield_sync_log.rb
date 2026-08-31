@@ -19,10 +19,11 @@ class MetafieldSyncLog < ApplicationRecord
     )
   end
 
-  def mark_completed!(synced = total_products)
+  def mark_completed!(synced = total_products, failed: 0)
     update!(
       status: "completed",
       synced_products: synced,
+      failed_products: failed,
       completed_at: Time.current
     )
   end

@@ -82,9 +82,11 @@ class FitmentSearchService
   end
 
   # Search results are paginated with a hard cap so a page request never loads
-  # the whole catalog into memory. Only matching product IDs are plucked from
-  # the database (cheap), the unique ID list is paginated in Ruby, and full
-  # fitment rows are fetched only for the products on the requested page.
+  # the whole catalog into memory. Matching product IDs are computed with a
+  # single SQL UNION (specific + universal fitments), the total is a cheap
+  # COUNT, and full fitment rows are fetched only for the products on the
+  # requested page. The full sorted ID list is still returned so the storefront
+  # Liquid integration can filter the collection in one pass.
   MAX_PAGE_SIZE = 100
 
   def search_products(year:, make:, model:, trim: nil, engine: nil, limit: 50, page: 1)
@@ -95,7 +97,8 @@ class FitmentSearchService
     vehicle_ids = matching_vehicle_ids(year: year, make: make, model: model, trim: trim, engine: engine)
     product_ids = matching_product_ids(vehicle_ids)
 
-    products = build_products(product_ids.drop(offset).first(limit))
+    paged_ids = matching_product_ids(vehicle_ids, limit: limit, offset: offset)
+    products = build_products(paged_ids)
     numeric_ids = product_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") }
 
     # Metafield filter tokens for storefront Liquid integration
@@ -111,6 +114,8 @@ class FitmentSearchService
         display_name: [year, make, model, trim, engine].compact_blank.join(" ")
       },
       total_count: product_ids.size,
+      page: page,
+      page_size: limit,
       product_ids: product_ids,
       numeric_product_ids: numeric_ids,
       filter_token: filter_tag,
@@ -198,11 +203,22 @@ class FitmentSearchService
 
   # Unique, deterministically ordered product IDs across both specific and
   # universal fitments, so pages are stable and a product listed in both sets
-  # appears only once.
-  def matching_product_ids(vehicle_ids)
-    specific_ids = @shop.vehicle_product_fitments.where(vehicle_id: vehicle_ids).pluck(:product_id)
-    universal_ids = @shop.vehicle_product_fitments.universal.pluck(:product_id)
-    (specific_ids + universal_ids).uniq.sort
+  # appears only once. When limit/offset are given the UNION itself is
+  # paginated in SQL, so a page request never materializes the whole catalog
+  # just to pick a slice.
+  def matching_product_ids(vehicle_ids, limit: nil, offset: nil)
+    # OR-combined query: specific fitments for the vehicle UNION universal
+    # fitments, deduped and ordered deterministically. `.or` works on both
+    # SQLite (dev/test) and Postgres (prod); LIMIT/OFFSET keep page requests
+    # from materializing the whole catalog in Ruby.
+    base = @shop.vehicle_product_fitments
+    specific = base.where(vehicle_id: vehicle_ids)
+    universal = base.universal
+    combined = specific.or(universal).distinct.order(:product_id)
+
+    combined = combined.limit(limit) if limit
+    combined = combined.offset(offset) if offset
+    combined.pluck(:product_id)
   end
 
   # Fetches full fitment rows only for the requested page and returns one
@@ -216,6 +232,8 @@ class FitmentSearchService
     paged_ids.filter_map { |pid| by_product[pid]&.first }.map { |fitment| product_payload(fitment) }
   end
 
+  # Public so the app proxy's OE-number search can reuse the exact same product
+  # payload shape as vehicle-based search.
   def product_payload(fitment)
     {
       product_id: fitment.product_id,
@@ -229,7 +247,8 @@ class FitmentSearchService
       universal: fitment.universal_fit?,
       image: fitment.product_image.presence || DemoProductImages.image_for(fitment.sku, fitment.category),
       fitment_notes: fitment.fitment_notes,
-      position: fitment.position
+      position: fitment.position,
+      confidence_score: fitment.confidence_score.to_f
     }
   end
 

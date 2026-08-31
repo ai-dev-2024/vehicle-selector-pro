@@ -8,7 +8,7 @@ Rails.application.configure do
 
   # Enable caching
   config.action_controller.perform_caching = true
-  config.cache_store = :memory_store, { size: 64.megabytes }
+  config.cache_store = :solid_cache_store
 
   # Active Storage / Mailer placeholders
   config.active_support.deprecation = :log

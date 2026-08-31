@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_01_000006) do
   create_table "app_settings", force: :cascade do |t|
     t.integer "shop_id", null: false
     t.string "widget_title", default: "Select Your Vehicle"
@@ -32,6 +32,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.index ["shop_id"], name: "index_app_settings_on_shop_id", unique: true
   end
 
+  create_table "fitment_analytics", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "dimension", default: "all", null: false
+    t.string "metric", default: "checks", null: false
+    t.bigint "value", default: 0, null: false
+    t.date "day", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id", "dimension", "metric", "day"], name: "index_fitment_analytics_shop_dim_metric_day", unique: true
+    t.index ["shop_id"], name: "index_fitment_analytics_on_shop_id"
+  end
+
   create_table "metafield_sync_logs", force: :cascade do |t|
     t.integer "shop_id", null: false
     t.string "sync_type", default: "batch"
@@ -50,6 +62,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.index ["shop_id"], name: "index_metafield_sync_logs_on_shop_id"
   end
 
+  create_table "oe_numbers", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "product_id", null: false
+    t.string "oe_number", null: false
+    t.string "source", default: "manual"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id", "oe_number"], name: "index_oe_numbers_on_shop_and_oe_number", unique: true
+    t.index ["shop_id", "product_id"], name: "index_oe_numbers_on_shop_and_product_id"
+    t.index ["shop_id"], name: "index_oe_numbers_on_shop_id"
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
     t.string "shopify_token", null: false
@@ -63,8 +87,22 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.datetime "uninstalled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "billing_plan", default: "free", null: false
+    t.datetime "billing_activated_at"
+    t.datetime "billing_expires_at"
     t.index ["active"], name: "index_shops_on_active"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
+  end
+
+  create_table "solid_cache_entries", force: :cascade do |t|
+    t.binary "key", limit: 1024, null: false
+    t.binary "value", limit: 536870912, null: false
+    t.datetime "created_at", null: false
+    t.integer "key_hash", limit: 8, null: false
+    t.integer "byte_size", limit: 4, null: false
+    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
+    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "vehicle_product_fitments", force: :cascade do |t|
@@ -89,9 +127,14 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.integer "price_cents"
     t.string "short_description"
     t.string "product_image"
+    t.decimal "confidence_score", precision: 3, scale: 2, default: "1.0", null: false
+    t.index ["product_id", "shop_id"], name: "index_fitments_product_shop"
     t.index ["product_id"], name: "index_vehicle_product_fitments_on_product_id"
+    t.index ["shop_id", "fitment_type"], name: "index_fitments_shop_fitment_type"
     t.index ["shop_id", "product_id"], name: "index_vehicle_product_fitments_on_shop_id_and_product_id"
+    t.index ["shop_id", "synced_to_metafield", "last_synced_at"], name: "index_fitments_shop_synced_last_synced"
     t.index ["shop_id", "synced_to_metafield"], name: "index_vehicle_product_fitments_on_shop_id_and_synced"
+    t.index ["shop_id", "universal_fit", "product_id"], name: "index_fitments_shop_universal_product"
     t.index ["shop_id", "universal_fit"], name: "index_vehicle_product_fitments_on_shop_id_and_universal_fit"
     t.index ["shop_id", "vehicle_id", "product_id"], name: "index_fitments_on_shop_vehicle_product_unique", unique: true
     t.index ["shop_id", "vehicle_id"], name: "index_vehicle_product_fitments_on_shop_id_and_vehicle_id"
@@ -113,6 +156,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["make", "model"], name: "index_vehicles_on_make_and_model"
     t.index ["make"], name: "index_vehicles_on_make"
     t.index ["model"], name: "index_vehicles_on_model"
     t.index ["year", "make", "model", "trim", "engine"], name: "index_vehicles_on_ymmte_unique", unique: true
@@ -121,8 +165,24 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_000007) do
     t.index ["year"], name: "index_vehicles_on_year"
   end
 
+  create_table "webhook_deliveries", force: :cascade do |t|
+    t.string "shop_domain", null: false
+    t.string "topic", null: false
+    t.string "webhook_id", null: false
+    t.string "processed_by"
+    t.string "status", default: "processed", null: false
+    t.text "error_details"
+    t.datetime "processed_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["processed_at"], name: "index_webhook_deliveries_on_processed_at"
+    t.index ["shop_domain", "webhook_id"], name: "index_webhook_deliveries_on_shop_and_webhook_id", unique: true
+  end
+
   add_foreign_key "app_settings", "shops", on_delete: :cascade
+  add_foreign_key "fitment_analytics", "shops", on_delete: :cascade
   add_foreign_key "metafield_sync_logs", "shops", on_delete: :cascade
+  add_foreign_key "oe_numbers", "shops", on_delete: :cascade
   add_foreign_key "vehicle_product_fitments", "shops", on_delete: :cascade
   add_foreign_key "vehicle_product_fitments", "vehicles", on_delete: :cascade
 end

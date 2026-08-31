@@ -37,9 +37,10 @@ gem "active_model_serializers", "~> 0.10.14"
 gem "oj", "~> 3.16"
 
 # Caching & Performance
-# NOTE: solid_cache was removed — the SolidCache fallback in production.rb
-# needed a solid_cache_entries migration this app never shipped. Production
-# caching runs on Redis (Fly private Redis) via redis_cache_store.
+# SolidCache (Postgres-backed) is the production default cache store so
+# FitmentSearchService caching works across machines even without Redis.
+# When REDIS_URL is set (Fly private Redis), redis_cache_store is preferred.
+gem "solid_cache", "~> 0.4"
 
 # HTTP Client for Shopify GraphQL & REST
 gem "faraday", "~> 2.9"
@@ -56,6 +57,13 @@ gem "polaris_view_components", "~> 2.5"
 gem "rack-attack", "~> 6.7"
 gem "sprockets-rails", ">= 3.0.0"
 
+# Structured JSON request logging (production)
+gem "lograge", "~> 0.14"
+
+# Error tracking (Sentry free tier); no-op without SENTRY_DSN
+gem "sentry-rails", "~> 5.18"
+gem "sentry-ruby", "~> 5.18"
+gem "sentry-sidekiq", "~> 5.18"
 group :production do
   # PostgreSQL driver (production database; dev/test use SQLite3)
   gem "pg", "~> 1.5"

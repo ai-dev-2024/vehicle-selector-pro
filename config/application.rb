@@ -28,12 +28,9 @@ module VehicleSelectorPro
     # Configuration for the application, engines, and railties goes here.
     config.active_job.queue_adapter = :sidekiq
 
-    # Cache store: SolidCache (Postgres) in production, memory for dev/test
-    config.cache_store = if ENV["REDIS_URL"].present?
-                           [:redis_cache_store, { url: ENV["REDIS_URL"], reconnect_attempts: 1 }]
-                         else
-                           [:memory_store, { size: 64.megabytes }]
-                         end
+    # Cache store: Redis when REDIS_URL is set, otherwise SolidCache
+    # (Postgres-backed). Dev/test use per-environment stores (solid_cache_store
+    # in development, null_store in test).
 
     # Active Record encryption (Shopify tokens are encrypted at rest).
     # Production must supply these via environment (Fly secrets); dev/test

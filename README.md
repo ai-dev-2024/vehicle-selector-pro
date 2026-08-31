@@ -256,6 +256,7 @@ Because the entire project was built with free AI tooling on a single consumer-c
 | [Setup guide](docs/SETUP.md) | Local development environment and public demo routes |
 | [Merchant installation](docs/MERCHANT_INSTALL.md) | Safe client handoff, OAuth install and theme setup |
 | [Deployment](docs/DEPLOYMENT.md) | Fly.io runbook with provisioning commands |
+| [Operations runbook](docs/OPERATIONS.md) | Health checks, backups/restore, monitoring, incidents |
 | [API reference](docs/API.md) | App Proxy endpoints and webhook topics |
 | [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model |
 | [Privacy policy](docs/PRIVACY.md) | GDPR coverage, data inventory, retention (also served at /privacy) |

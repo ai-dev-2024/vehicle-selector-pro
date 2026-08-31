@@ -15,6 +15,21 @@ module AppProxy
         engine: params[:engine]
       )
 
+      # Fire-and-forget analytics (off the hot path). Loses on crash are
+      # acceptable for analytics; the job aggregates into daily counters.
+      Vehicles::RecordFitmentAnalyticJob.perform_later(
+        shop_id: current_shop.id,
+        metric: if fitment_result[:fits]
+                  "fits"
+                else
+                  (fitment_result[:fitment_type] == "universal" ? "universal" : "no_fit")
+                end
+      )
+      Vehicles::RecordFitmentAnalyticJob.perform_later(
+        shop_id: current_shop.id,
+        metric: "checks"
+      )
+
       render json: {
         success: true,
         data: fitment_result

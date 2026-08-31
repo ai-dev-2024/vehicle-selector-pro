@@ -41,6 +41,22 @@ module AppProxy
       # Dynamic App Proxy responses are cached with stale-while-revalidate
       response.headers["Cache-Control"] = "public, max-age=180, stale-while-revalidate=360"
       response.headers["Vary"] = "Accept, X-Shopify-Shop-Domain"
+
+      # ETag lets Shopify's proxy layer and browser/CDN caches return 304
+      # Not Modified when nothing changed, saving bandwidth on the cascading
+      # dropdown and search endpoints. Fresh responses get a strong ETag;
+      # conditional requests (If-None-Match) short-circuit in the middleware.
+      etag = response_etag
+      response.headers["ETag"] = %("#{etag}") if etag
+      return unless request.headers["If-None-Match"] == %("#{etag}") && etag
+
+      response.status = 304
+      response.body = ""
+    end
+
+    def response_etag
+      shop_version = FitmentSearchService.shop_version(current_shop.id)
+      [shop_version, current_shop.id, params.permit!.to_h.sort].join("|")
     end
 
     def handle_standard_error(exception)

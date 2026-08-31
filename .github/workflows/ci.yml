@@ -46,6 +46,22 @@ jobs:
       - name: Lint
         run: bundle exec rubocop
 
+  security:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: bundler-audit
+        run: |
+          gem install bundler-audit --no-document
+          bundle audit check --update
+
   docs-links:
     name: Markdown link check
     runs-on: ubuntu-latest

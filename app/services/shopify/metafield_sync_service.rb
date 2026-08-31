@@ -51,17 +51,18 @@ module Shopify
         metafields_payload << payload if payload.present?
       end
 
-      # Slice into batches of 25 for Shopify GraphQL limitations
+      # Slice into batches of 25 for Shopify GraphQL limitations. Each batch is
+      # marked synced immediately after it succeeds, so if a later batch fails
+      # the earlier products stay marked and a retry only re-syncs the failures
+      # instead of replaying the whole catalog.
       metafields_payload.each_slice(BATCH_SIZE) do |batch|
         execute_batch(batch)
+        # rubocop:disable-next Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
+        @shop.vehicle_product_fitments.where(product_id: batch.map { |m| m[:ownerId] }).update_all(
+          synced_to_metafield: true,
+          last_synced_at: Time.current
+        )
       end
-
-      # Update local records
-      # rubocop:disable-next Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
-      @shop.vehicle_product_fitments.where(product_id: product_ids).update_all(
-        synced_to_metafield: true,
-        last_synced_at: Time.current
-      )
 
       { success: true, count: product_ids.size }
     rescue StandardError => e
@@ -69,9 +70,13 @@ module Shopify
       raise
     end
 
+    # Syncs every product that still needs it (pending_sync). A retry after a
+    # partial failure therefore only replays the failures — successfully synced
+    # products stay marked and are skipped.
     def sync_all(log: nil)
-      product_ids = @shop.vehicle_product_fitments.distinct.pluck(:product_id)
-      log&.mark_in_progress!(product_ids.size)
+      product_ids = @shop.vehicle_product_fitments.pending_sync.distinct.pluck(:product_id)
+      total = @shop.vehicle_product_fitments.distinct.count(:product_id)
+      log&.mark_in_progress!(total)
 
       synced = 0
       product_ids.each_slice(BATCH_SIZE) do |batch_ids|

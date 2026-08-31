@@ -64,6 +64,51 @@ RSpec.describe "Webhook endpoints", type: :request do
     end
   end
 
+  describe "delivery deduplication (replayed webhooks)" do
+    it "processes the first delivery and ignores the replay with 200" do
+      body = { id: 123, title: "Brake Kit", handle: "brake-kit" }
+      headers = {
+        "Content-Type" => "application/json",
+        "X-Shopify-Shop-Domain" => shop.shopify_domain,
+        "X-Shopify-Topic" => "products/update",
+        "X-Shopify-Webhook-Id" => "fixed-webhook-id-1"
+      }
+      headers["X-Shopify-Hmac-Sha256"] = Base64.strict_encode64(
+        OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), secret, body.to_json)
+      )
+
+      expect do
+        post "/webhooks/products_update", params: body.to_json, headers: headers
+      end.to have_enqueued_job(Webhooks::ProductsUpdateJob)
+      expect(response).to have_http_status(:ok)
+
+      # Same webhook_id redelivered (Shopify replay) — must NOT enqueue again.
+      expect do
+        post "/webhooks/products_update", params: body.to_json, headers: headers
+      end.not_to have_enqueued_job(Webhooks::ProductsUpdateJob)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "treats different webhook_ids as distinct deliveries" do
+      body = { id: 1, title: "A" }
+      2.times do |i|
+        headers = {
+          "Content-Type" => "application/json",
+          "X-Shopify-Shop-Domain" => shop.shopify_domain,
+          "X-Shopify-Topic" => "products/update",
+          "X-Shopify-Webhook-Id" => "distinct-#{i}"
+        }
+        headers["X-Shopify-Hmac-Sha256"] = Base64.strict_encode64(
+          OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), secret, body.to_json)
+        )
+        expect do
+          post "/webhooks/products_update", params: body.to_json, headers: headers
+        end.to have_enqueued_job(Webhooks::ProductsUpdateJob)
+      end
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "POST /webhooks/shop_redact (GDPR)" do
     it "destroys the shop and returns 200" do
       create(:vehicle_product_fitment, shop: shop)

@@ -5,6 +5,7 @@ class Shop < ApplicationRecord
 
   # Associations
   has_many :vehicle_product_fitments, dependent: :destroy
+  has_many :oe_numbers, dependent: :destroy
   has_many :metafield_sync_logs, dependent: :destroy
   has_one :app_setting, dependent: :destroy
   has_many :vehicles, -> { distinct }, through: :vehicle_product_fitments
@@ -56,6 +57,13 @@ class Shop < ApplicationRecord
 
   def unique_products_count
     vehicle_product_fitments.distinct.count(:product_id)
+  end
+
+  # Billing foundation (beyond the original spec). A shop is on a paid plan
+  # when billing_plan is not "free" and the subscription has not lapsed.
+  def on_paid_plan?
+    billing_plan.present? && billing_plan != "free" &&
+      (billing_expires_at.nil? || billing_expires_at > Time.current)
   end
 
   def settings

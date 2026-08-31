@@ -33,4 +33,25 @@ FactoryBot.define do
     universal_fit { true }
     fitment_type { "universal" }
   end
+
+  factory :oe_number do
+    association :shop
+    product_id { "gid://shopify/Product/#{rand(1_000_000)}" }
+    sequence(:oe_number) { |n| "OE-#{n}-#{SecureRandom.hex(4).upcase}" }
+  end
+
+  factory :webhook_delivery do
+    shop_domain { "shop-1.myshopify.com" }
+    topic { "products/update" }
+    sequence(:webhook_id) { |n| "wh-#{n}" }
+    processed_at { Time.current }
+  end
+
+  factory :fitment_analytic do
+    association :shop
+    dimension { "all" }
+    metric { "checks" }
+    value { 1 }
+    day { Time.zone.today }
+  end
 end

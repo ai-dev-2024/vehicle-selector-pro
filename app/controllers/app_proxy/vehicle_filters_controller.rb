@@ -90,7 +90,12 @@ module AppProxy
     end
 
     # GET /apps/vehicle-selector/search?year=2024&make=Ford&model=F-150&trim=Lariat&engine=3.5L
+    # Also supports ?oe=<OE number> which resolves products by factory part
+    # number cross-reference instead of by vehicle.
     def search
+      oe = params[:oe].to_s.strip
+      return render_oe_search(oe) if oe.present?
+
       year = params[:year]
       make = params[:make]
       model = params[:model]
@@ -115,6 +120,27 @@ module AppProxy
       render json: {
         success: true,
         data: results
+      }
+    end
+
+    private
+
+    def render_oe_search(oe_term)
+      product_ids = OeNumber.product_ids_for(current_shop, oe_term)
+      products = current_shop.vehicle_product_fitments
+                             .where(product_id: product_ids)
+                             .includes(:vehicle)
+                             .order(:product_id)
+                             .map { |f| fitment_search_service.product_payload(f) }
+      render json: {
+        success: true,
+        data: {
+          vehicle: { oe: oe_term },
+          total_count: product_ids.size,
+          product_ids: product_ids,
+          numeric_product_ids: product_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") },
+          products: products
+        }
       }
     end
   end

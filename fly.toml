@@ -27,6 +27,13 @@ primary_region = "iad"
     method = "GET"
     path = "/up"
 
+  [[http_service.checks]]
+    interval = "60s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/health/deep"
+
 [processes]
   app = "bundle exec puma -C config/puma.rb"
   worker = "bundle exec sidekiq -C config/sidekiq.yml"

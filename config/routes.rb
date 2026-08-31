@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
   # Healthcheck for load balancers and container orchestrators
   get "up", to: proc { [200, { "Content-Type" => "application/json" }, ['{"status":"ok"}']] }
+  get "health/deep", to: "health#deep"
 
   # Public live-demo routes (all environments): read-only renders of the
   # storefront selector and admin dashboard against the bundled demo catalog.
