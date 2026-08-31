@@ -48,19 +48,17 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <div align="center">
 
-**▶ Full-resolution walkthroughs — click a frame to play the narrated video (1080p):**
+**▶ The two narrated walkthroughs play inline, right on this page — just press play:**
 
-<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" alt="Merchant walkthrough — click to play the full narrated video at 1080p" width="100%"></a>
+<video src="https://github.com/user-attachments/assets/8966a45d-d46b-4b19-84c3-0cfe4d6282fa" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" width="100%"></video>
 
-<sup>▻ **For merchants** — the fitment command center · 1:29 · male voiceover · warm music bed · *click the frame to play*</sup>
+<sup>▻ **For merchants** — the fitment command center · 1:29 · male voiceover · warm music bed</sup>
 
 <br>
 
-<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" alt="Shopper walkthrough — click to play the full narrated video at 1080p" width="100%"></a>
+<video src="https://github.com/user-attachments/assets/545171d8-a8f4-49f8-894b-f82f353bcc1f" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" width="100%"></video>
 
-<sup>▻ **For shoppers** — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed · *click the frame to play*</sup>
-
-Every push re-publishes these files to GitHub Pages, so the previews stay current automatically.
+<sup>▻ **For shoppers** — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed</sup>
 
 [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html) · [Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)
 
