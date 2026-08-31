@@ -48,17 +48,19 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <div align="center">
 
-**▶ The two narrated walkthroughs — previews play right here, narrated versions open in a player:**
+**▶ Full-resolution walkthroughs — click a frame to play the narrated video (1080p):**
 
-<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant.webp" alt="Merchant walkthrough preview — click to play the narrated video" width="100%"></a>
+<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" alt="Merchant walkthrough — click to play the full narrated video at 1080p" width="100%"></a>
 
-**▻ For merchants — the fitment command center · 1:29 · male voiceover · warm music bed** · [open narrated video](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#merchant)
+<sup>▻ **For merchants** — the fitment command center · 1:29 · male voiceover · warm music bed · *click the frame to play*</sup>
 
-<hr>
+<br>
 
-<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper.webp" alt="Shopper walkthrough preview — click to play the narrated video" width="100%"></a>
+<a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" alt="Shopper walkthrough — click to play the full narrated video at 1080p" width="100%"></a>
 
-**▻ For shoppers — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed** · [open narrated video](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html#shopper)
+<sup>▻ **For shoppers** — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed · *click the frame to play*</sup>
+
+Every push re-publishes these files to GitHub Pages, so the previews stay current automatically.
 
 [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html) · [Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)
 

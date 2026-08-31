@@ -44,6 +44,8 @@ jobs:
           cp demo/command-center.css _site/demo/command-center.css
           cp demo/vehicle-selector-merchant-poster.png _site/demo/
           cp demo/vehicle-selector-shopper-poster.png _site/demo/
+          cp demo/vehicle-selector-merchant-poster.jpg _site/demo/
+          cp demo/vehicle-selector-shopper-poster.jpg _site/demo/
           cp demo/vehicle-selector-pro-merchant.mp4 _site/demo/
           cp demo/vehicle-selector-pro-shopper.mp4 _site/demo/
           cp demo/vehicle-selector-merchant.webp _site/demo/
