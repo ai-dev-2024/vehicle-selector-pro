@@ -251,18 +251,22 @@ If the demo or the project saved you time or inspired an idea, you can **buy me 
 
 <div align="center">
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?style=flat-square&logo=kofi&logoColor=white)](https://ko-fi.com/ai_dev_2024) &nbsp; https://ko-fi.com/ai_dev_2024
+[![Buy me a coffee](https://img.shields.io/badge/Support_on_Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/ai_dev_2024)
+
+[**Support the project on Ko-fi →**](https://ko-fi.com/ai_dev_2024) · [**Open a support issue →**](https://github.com/ai-dev-2024/vehicle-selector-pro/issues/new?labels=support&template=blank_issue)
 
 </div>
 
 ---
 
-## License
+## License & contribution
 
-[MIT](LICENSE) © 2026 Vehicle Selector Pro contributors.
+This project is released under the [MIT License](LICENSE) © 2026 Vehicle Selector Pro contributors.
 
 <div align="center">
 
-[Report an issue](https://github.com/ai-dev-2024/vehicle-selector-pro/issues) · [Request a feature](https://github.com/ai-dev-2024/vehicle-selector-pro/issues/new)
+[![MIT License](https://img.shields.io/badge/License-MIT-2ea44f?style=for-the-badge)](LICENSE)
+
+[**Read the license →**](LICENSE) · [**Report an issue →**](https://github.com/ai-dev-2024/vehicle-selector-pro/issues/new?labels=bug&template=bug_report.md) · [**Request a feature →**](https://github.com/ai-dev-2024/vehicle-selector-pro/issues/new?labels=enhancement&template=feature_request.md)
 
 </div>
