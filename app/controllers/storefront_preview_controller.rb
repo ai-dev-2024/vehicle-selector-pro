@@ -163,4 +163,47 @@ class StorefrontPreviewController < ApplicationController
     @recent_fitments_count = shop.vehicle_product_fitments.count
     render template: "admin/bulk_imports/index", layout: "embedded_app"
   end
+
+  # Read-only renders of the v1.2/v1.3 pages for the public demo (screenshots
+  # and walkthroughs). They mirror the Admin controllers' instance variables
+  # but never mutate anything: the billing page is rendered against the demo
+  # shop's real (free) plan without touching Shopify, and analytics reads the
+  # demo shop's daily aggregates.
+  def admin_analytics
+    @current_shop = shop
+    range = { "7d" => 7.days, "90d" => 90.days }.fetch(params[:range], 30.days)
+    @range = { "7d" => "7d", "90d" => "90d" }.fetch(params[:range], "30d")
+    @to = Time.zone.today
+    @from = (@to - range + 1.day)
+
+    @checks = FitmentAnalytic.total(shop, "checks", from: @from, to: @to)
+    @fits = FitmentAnalytic.total(shop, "fits", from: @from, to: @to)
+    @no_fit = FitmentAnalytic.total(shop, "no_fit", from: @from, to: @to)
+    @universal = FitmentAnalytic.total(shop, "universal", from: @from, to: @to)
+    @fit_rate = @checks.positive? ? ((@fits.to_f / @checks) * 100).round(1) : 0
+    @checks_series = FitmentAnalytic.series(shop, "checks", from: @from, to: @to)
+    @fits_series = FitmentAnalytic.series(shop, "fits", from: @from, to: @to)
+    @by_make = FitmentAnalytic.by_make(shop, metric: "checks", from: @from, to: @to, count: 12)
+    @make_fits = FitmentAnalytic.by_make(shop, metric: "fits", from: @from, to: @to, count: 12)
+                                .to_h { |r| [r[:make], r[:value]] }
+    render template: "admin/analytics/index", layout: "embedded_app"
+  end
+
+  def admin_billing
+    @current_shop = shop
+    @plans = BillingPlan.all
+    @current_plan = shop.billing_plan_key
+    @current_plan_obj = BillingPlan.find(@current_plan)
+    render template: "admin/billing/show", layout: "embedded_app"
+  end
+
+  def admin_oe_numbers
+    @current_shop = shop
+    @oe_numbers = shop.oe_numbers.order(created_at: :desc)
+    @page = 1
+    @per_page = 25
+    @total_count = @oe_numbers.count
+    @oe_numbers = @oe_numbers.limit(@per_page)
+    render template: "admin/oe_numbers/index", layout: "embedded_app"
+  end
 end

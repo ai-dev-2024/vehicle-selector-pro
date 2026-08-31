@@ -15,6 +15,9 @@ Storefront analytics dashboard.
 - **`FitmentAnalytic` query helpers** (`total`, `series`, `by_make`) over the daily aggregates,
   and a new `dimension_value` column so makes/values are stored as their own rows instead of
   colliding under a bare dimension name. All reads stay per-shop scoped.
+- **Public demo routes** for the new pages: `/demo/admin/analytics`, `/demo/admin/billing`,
+  and `/demo/admin/oe-numbers` render the real admin views read-only against the demo shop
+  (billing never touches Shopify from the demo path).
 
 ## [1.2.0] — 2026-09-01
 
