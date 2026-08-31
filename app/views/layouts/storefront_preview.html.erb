@@ -85,7 +85,9 @@
       font-weight: 800; font-size: 24px; letter-spacing: 0.04em; line-height: 1;
       color: var(--chrome);
       text-transform: uppercase;
+      text-decoration: none;
     }
+    .sp-brand:hover small { color: var(--torch); }
     .sp-brand small {
       display: block; font-family: "IBM Plex Mono", monospace;
       font-weight: 500; font-size: 9px; color: var(--steel);
@@ -522,7 +524,7 @@
     <span>100% fitment guarantee</span>
   </div>
   <div class="sp-header">
-    <div class="sp-brand">APEX PERFORMANCE<small>Auto &amp; Truck Outfitters</small></div>
+    <a class="sp-brand" href="/demo" aria-label="Apex Performance — home">APEX PERFORMANCE<small>Auto &amp; Truck Outfitters</small></a>
     <div class="sp-nav" id="sp-nav">
       <a href="/demo" class="<%= 'active' if request.path == '/demo' %>">Shop</a>
       <a href="/demo/collection" class="<%= 'active' if request.path == '/demo/collection' %>">Collections</a>
