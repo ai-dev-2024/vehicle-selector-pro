@@ -137,6 +137,19 @@ SLIDES = [
     },
     {
         "kind": "content",
+        "kicker": "GET STARTED",
+        "title": "Deploy & install on your own store",
+        "bullets": [
+            "Create the app in Shopify Partners — copy the API key & secret, set the app and redirect URLs.",
+            "Deploy the Rails app to Fly.io / Render with PostgreSQL, Redis and Sidekiq; boot with rails db:prepare.",
+            "Register the App Proxy subpath /apps/vehicle-selector, then install on the store via OAuth (webhooks auto-register).",
+            "Create the one-time custom.vehicle_fitment metafield definition in Admin (Product, JSON, Public read).",
+            "Drop in the Theme App Extension blocks (vehicle selector + fitment badge) and publish the theme.",
+            "Bulk-import fitments, run the sync, verify PDP badges & filters, and go live.",
+        ],
+    },
+    {
+        "kind": "content",
         "kicker": "ROADMAP",
         "title": "A foundation built to grow",
         "bullets": [

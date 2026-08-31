@@ -283,3 +283,15 @@ body.cc-body {
 .badge-success { background: #e4f4ea; color: #108043; }
 .badge-warning { background: #fff5ea; color: #c06a1e; }
 .badge-alert { background: #fde8e6; color: var(--danger); }
+
+/* ---------------------------------------------------------------- */
+/* Overflow hardening: icon + label rows never let text escape the   */
+/* box on long names (shop/store names, nav labels).                 */
+/* ---------------------------------------------------------------- */
+.cc-brand > div, .cc-store > div { min-width: 0; flex: 1 1 auto; }
+.cc-brand h1, .cc-brand p, .cc-store strong, .cc-store span {
+  overflow-wrap: anywhere;
+}
+.cc-nav a, .cc-nav button { min-width: 0; overflow-wrap: anywhere; }
+.cc-nav a .cc-count, .cc-nav button .cc-count { flex: none; margin-left: 8px; }
+.cc-sidebar { min-width: 0; }

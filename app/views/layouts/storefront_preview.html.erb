@@ -477,6 +477,19 @@
       padding: 7px 12px 7px 14px;
     }
 
+    /* ---------- overflow hardening: icons + labels never escape their box ---------- */
+    .sp-cat, .sp-brand, .vsp-widget-header, .vsp-garage-wrapper { min-width: 0; }
+    .sp-cat > div:last-child { min-width: 0; flex: 1 1 auto; }
+    .sp-cat b, .sp-cat small, .vsp-widget-title > span, .vsp-garage-btn > span {
+      overflow-wrap: anywhere;
+    }
+    .sp-header { flex-wrap: nowrap; gap: 16px; }
+    .sp-brand { min-width: 0; }
+    .sp-brand small { white-space: normal; }
+    .sp-nav { flex: 1 1 auto; justify-content: flex-end; min-width: 0; }
+    .vsp-widget-header, .vsp-garage-wrapper { flex-wrap: wrap; }
+    .vsp-widget-title { min-width: 0; }
+
     /* mobile nav */
     .sp-menu-btn {
       display: none; background: none; border: 1px solid var(--line-d);
