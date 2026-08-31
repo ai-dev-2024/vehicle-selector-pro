@@ -13,20 +13,45 @@ All storefront requests route through Shopify App Proxy at `/apps/vehicle-select
 | `GET /models` | `year, make` | Models for year + make |
 | `GET /trims` | `year, make, model` | Trims for year + make + model |
 | `GET /engines` | `year, make, model[, trim]` | Engines for the selected combination |
-| `GET /search` | `year, make, model[, trim, engine, limit, page]` | Matching product IDs/handles + Shopify filter token |
-| `GET /check_fitment` | `product_id` (numeric or GraphQL GID) `+ vehicle params` | Fit verdict (`exact_fit`, `universal`, `none`), badge text/color, notes |
+| `GET /search` | `year, make, model[, trim, engine, limit, page]` — or `oe=<OE number>` | Matching product IDs/handles + Shopify filter token. The `oe` variant resolves products via the OE part-number cross-reference instead of vehicle fitment |
+| `GET /check_fitment` | `product_id` (numeric or GraphQL GID) `+ vehicle params` | Fit verdict (`exact_fit`, `universal`, `none`), badge text/color, notes. Each check records daily analytics (checks / fits / no_fit, plus a per-make breakout) asynchronously |
 | `GET /product_fitments` | `product_id` | All fitment records for a product |
 | `GET /garage` | `vehicle_ids=1,2,3` | Vehicle details for stored IDs |
 
 ### Response caching
 
-Responses are cached per-shop with `Cache-Control: public, max-age=180, stale-while-revalidate=360`. Cache is invalidated when fitment data changes via `FitmentSearchService.invalidate_shop_cache`.
+Responses are cached per-shop with `Cache-Control: public, max-age=180, stale-while-revalidate=360` and a strong **ETag** derived from the shop's fitment version + request params. Conditional requests (`If-None-Match`) return **304 Not Modified**. Cache is invalidated when fitment data changes via `FitmentSearchService.invalidate_shop_cache`.
+
+---
+
+## Admin endpoints (embedded app, session-authenticated)
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/admin/analytics` | GET | Storefront analytics dashboard: fitment checks, guaranteed fits, fit rate, no-fit and universal counts; zero-filled daily series and a checks-by-make breakdown. Range selector: `?range=7d\|30d\|90d` (default 30d) |
+| `/admin/billing` | GET | Plans & billing page (Free / Pro / Pro Plus cards, current plan) |
+| `/admin/billing` | POST | Start a Shopify Billing subscription for `plan` — redirects to Shopify's native `confirmationUrl` |
+| `/admin/billing/return` | GET | Post-checkout callback; reconciles `shops.billing_plan` from `currentAppInstallation.activeSubscriptions` |
+| `/admin/oe_numbers` | GET / POST / DELETE | OE part-number registry: search (`?query=`), add single, remove |
+| `/admin/oe_numbers/import` | POST | CSV bulk import (`product_id,oe_number`), duplicates skipped |
+| `/admin/oe_numbers/sample_template` | GET | Downloadable CSV template |
+| `/admin/bulk_imports` | POST | Bulk fitment CSV import — gated by the shop's plan ceiling (`BillingPlan.max_fitments`); over-limit imports redirect to billing |
+
+### Billing plans
+
+| Plan | Price | Trial | Max fitments |
+|---|---|---|---|
+| Free | $0 | — | 500 |
+| Pro | $9.99/mo | 14 days | 5,000 |
+| Pro Plus | $29.99/mo | 14 days | 100,000 |
+
+Subscriptions are created via the Shopify Billing GraphQL API (`appSubscriptionCreate`) and reconciled from `currentAppInstallation.activeSubscriptions`.
 
 ---
 
 ## Webhooks
 
-All webhook endpoints verify `X-Shopify-Hmac-Sha256` (Base64 HMAC-SHA256 of the raw body) with constant-time comparison, then enqueue work to Sidekiq (`queue: webhooks`, priority 3).
+All webhook endpoints verify `X-Shopify-Hmac-Sha256` (Base64 HMAC-SHA256 of the raw body) with constant-time comparison, then enqueue work to Sidekiq (`queue: webhooks`, priority 3). Every delivery is deduplicated via the `webhook_deliveries` table (unique `(shop_domain, webhook_id)`): Shopify replays ack 200 without double-processing. Stale rows are pruned after 7 days.
 
 | Topic | Endpoint | Async job |
 |---|---|---|

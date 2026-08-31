@@ -6,21 +6,27 @@
 Vehicle Selector Pro/
 ├── app/                              # Main Rails application
 │   ├── controllers/                   # Application controllers
-│   │   ├── admin/                    # Admin dashboard controllers
+│   │   ├── admin/                    # Admin dashboard (dashboard, fitments, vehicles, bulk imports,
+│   │   │                             #   OE numbers, billing, analytics, sync, settings)
 │   │   ├── app_proxy/                # Shopify App Proxy controllers
+│   │   ├── health_controller.rb      # /health/deep (DB + cache checks)
 │   │   └── webhooks/                 # Webhook handlers
 │   ├── jobs/                         # Background jobs
 │   │   ├── metafields/               # Metafield sync jobs
 │   │   ├── vehicles/                 # Vehicle management jobs
 │   │   └── webhooks/                 # Webhook processing jobs
 │   ├── models/                       # ActiveRecord models
-│   │   ├── shop.rb                    # Shopify shop model
+│   │   ├── shop.rb                    # Shopify shop model (incl. billing plan helpers)
 │   │   ├── vehicle.rb                 # Vehicle model
-│   │   ├── vehicle_product_fitment.rb # Fitment mapping
+│   │   ├── vehicle_product_fitment.rb # Fitment mapping (+ confidence scoring)
 │   │   ├── metafield_sync_log.rb      # Sync tracking
+│   │   ├── billing_plan.rb            # Plan catalogue (Free/Pro/Pro Plus tiers)
+│   │   ├── fitment_analytic.rb        # Daily storefront analytics aggregates
+│   │   ├── oe_number.rb               # OE part-number cross-reference
+│   │   ├── webhook_delivery.rb        # Webhook replay dedup
 │   │   └── app_setting.rb             # App configuration
 │   ├── services/                     # Business logic services
-│   │   ├── shopify/                   # Shopify API services
+│   │   ├── shopify/                   # Shopify API services (GraphQL client, metafield sync, billing)
 │   │   ├── app_proxy_signature_verifier.rb
 │   │   ├── bulk_fitment_importer.rb
 │   │   ├── fitment_search_service.rb

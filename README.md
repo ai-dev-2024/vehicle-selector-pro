@@ -70,9 +70,13 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 - **Cascading storefront widget** — Year, Make, Model, Trim, Engine dropdowns driven by HMAC-signed App Proxy queries
 - **Product fitment badges** — Guaranteed Exact Fit / Does NOT Fit / Universal Fit on any product page
 - **My Garage** — shoppers save multiple vehicles and switch between them across pages
+- **OE part-number search** — shoppers find parts by the factory OE number printed on the part they own
 - **Merchant admin** — fitment matrix, vehicle library, bulk CSV import, sync monitor, widget settings
-- **Metafield sync** — fitment JSON synced to `custom.vehicle_fitment` via `metafieldsSet` in batches of 25
-- **Webhook pipeline** — `products/*`, `app/uninstalled`, `shop/update` processed asynchronously via Sidekiq
+- **Storefront analytics** — daily checks, fit rate, and checks-by-make dashboard (7/30/90-day range) reading async daily aggregates
+- **Plans & billing** — Free / Pro / Pro Plus tiers via the Shopify Billing API with 14-day trials; plan ceiling gates bulk imports
+- **Metafield sync** — fitment JSON synced to `custom.vehicle_fitment` via `metafieldsSet` in batches of 25 (debounced, resilient)
+- **Webhook pipeline** — `products/*`, `app/uninstalled`, `shop/update` processed asynchronously via Sidekiq, replay-protected
+- **Production-grade ops** — Solid Cache, ETag caching, structured JSON logging, Sentry, CSP headers, deep health checks, ops runbook
 - **Multi-tenant** — per-shop data isolation, encrypted tokens, HMAC-SHA256 verification on every request
 
 ---
@@ -257,8 +261,10 @@ Because the entire project was built with free AI tooling on a single consumer-c
 | [Merchant installation](docs/MERCHANT_INSTALL.md) | Safe client handoff, OAuth install and theme setup |
 | [Deployment](docs/DEPLOYMENT.md) | Fly.io runbook with provisioning commands |
 | [Operations runbook](docs/OPERATIONS.md) | Health checks, backups/restore, monitoring, incidents |
-| [API reference](docs/API.md) | App Proxy endpoints and webhook topics |
-| [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model |
+| [API reference](docs/API.md) | App Proxy endpoints, admin endpoints, billing plans, webhook topics |
+| [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model (incl. billing, analytics, OE) |
+| [Requirements verification](REQUIREMENTS-VERIFICATION.md) | Spec-to-evidence mapping incl. post-spec features |
+| [Project structure](PROJECT-STRUCTURE.md) | Directory tree and module map |
 | [Privacy policy](docs/PRIVACY.md) | GDPR coverage, data inventory, retention (also served at /privacy) |
 | [App Store submission](docs/APP_STORE_SUBMISSION.md) | Partners Dashboard steps, listing copy, review notes |
 | [Demo script](docs/DEMO_SCRIPT.md) | Voiceover narration for the walkthrough video |
