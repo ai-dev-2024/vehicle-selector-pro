@@ -38,8 +38,10 @@ jobs:
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pdf _site/
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pptx _site/
           cp report/site/index.html _site/index.html
-          # Demo videos: streamable walkthroughs served from the same Pages site
+          # Demo videos + interactive walkthrough served from the same Pages site
           cp demo/videos.html _site/demo/videos.html
+          cp demo/index.html _site/demo/index.html
+          cp demo/command-center.css _site/demo/command-center.css
           cp demo/vehicle-selector-merchant-poster.png _site/demo/
           cp demo/vehicle-selector-shopper-poster.png _site/demo/
           cp demo/vehicle-selector-pro-merchant.mp4 _site/demo/
