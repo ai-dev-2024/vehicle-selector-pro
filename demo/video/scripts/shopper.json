@@ -1,6 +1,6 @@
 {
   "title": "Vehicle Selector Pro — Shopper Experience",
-  "voice": "en-US-AriaNeural",
+  "voice": "chatterbox-turbo (built-in)",
   "duration_seconds": 140,
   "scenes": [
     {"id":"title","frame":null,"capt":null,"narration":"Finding the right part for your exact vehicle — that is what Vehicle Selector Pro does."},

@@ -1,6 +1,6 @@
 {
   "title": "Vehicle Selector Pro — Merchant Command Center",
-  "voice": "en-US-GuyNeural",
+  "voice": "chatterbox-turbo (built-in)",
   "duration_seconds": 150,
   "scenes": [
     {"id":"title","frame":null,"capt":null,"narration":"Vehicle Selector Pro. The fitment command center for Shopify automotive stores."},
