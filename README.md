@@ -241,13 +241,13 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 ## Roadmap & future development
 
-Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite. **Every item sits beyond the original spec's requirement — it is an optional growth path, not part of the agreed scope:**
+Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite. **Every item sits beyond the original spec's requirement — it is an optional growth path, not part of the agreed scope.** Several roadmap foundations (billing columns, OE cross-reference, confidence scoring, analytics aggregates) already shipped in v1.1.0–v1.3.0; the items below are the remaining growth path built on top of them:
 
-- **Shopify Billing API** — recurring and one-time plans with managed merchant billing
-- **Supersession & OE-number matching** — a richer part-catalog engine with cross-references
-- **Fitment confidence scoring** — a smarter universal-vs-exact priority model
+- **Full billing rollout** — the Shopify Billing API flow (Free / Pro / Pro Plus tiers, 14-day trials, plan-gated imports) is implemented and tested; what remains is flipping `SHOPIFY_BILLING_TEST=false` on a production Partner app and App Store listing approval
+- **Supersession chains** — a richer part-catalog engine on top of the shipped OE-number cross-reference
+- **Deeper analytics** — per make+model and per-product rollups, conversion lift and drop-off reports on top of the shipped daily aggregates
 - **White-label theming** — storefront theming, translation support, deeper widget controls
-- **Merchant analytics** — widget conversion lift, per-fitment demand, and drop-off reports
+- **Rails 7.1 → 7.2 upgrade** — resolves the remaining (non-applicable here) dependency-audit advisories; tracked in `.bundler-audit.yml`
 
 Because the entire project was built with free AI tooling on a single consumer-class laptop, each of these represents meaningful headroom — the same foundation accelerates dramatically once proper development hardware and paid frontier models are applied.
 
