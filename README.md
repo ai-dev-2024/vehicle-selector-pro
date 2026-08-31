@@ -247,7 +247,7 @@ Shipped as a production-grade foundation, the following are on the roadmap — e
 - **Supersession chains** — a richer part-catalog engine on top of the shipped OE-number cross-reference
 - **Deeper analytics** — per make+model and per-product rollups, conversion lift and drop-off reports on top of the shipped daily aggregates
 - **White-label theming** — storefront theming, translation support, deeper widget controls
-- **Rails 7.1 → 7.2 upgrade** — resolves the remaining (non-applicable here) dependency-audit advisories; tracked in `.bundler-audit.yml`
+- **Rails 7.1 → 7.2 upgrade** — resolves the remaining (non-applicable here) dependency-audit advisories; plan in [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
 
 Because the entire project was built with free AI tooling on a single consumer-class laptop, each of these represents meaningful headroom — the same foundation accelerates dramatically once proper development hardware and paid frontier models are applied.
 
@@ -264,6 +264,7 @@ Because the entire project was built with free AI tooling on a single consumer-c
 | [API reference](docs/API.md) | App Proxy endpoints, admin endpoints, billing plans, webhook topics |
 | [Architecture](docs/ARCHITECTURE.md) | System diagrams and data model (incl. billing, analytics, OE) |
 | [Requirements verification](REQUIREMENTS-VERIFICATION.md) | Spec-to-evidence mapping incl. post-spec features |
+| [Rails 7.2 upgrade plan](docs/RAILS_7_2_UPGRADE_PLAN.md) | Resolves remaining dependency-audit advisories |
 | [Project structure](PROJECT-STRUCTURE.md) | Directory tree and module map |
 | [Privacy policy](docs/PRIVACY.md) | GDPR coverage, data inventory, retention (also served at /privacy) |
 | [App Store submission](docs/APP_STORE_SUBMISSION.md) | Partners Dashboard steps, listing copy, review notes |
