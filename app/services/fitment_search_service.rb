@@ -227,6 +227,7 @@ class FitmentSearchService
       price_cents: fitment.price_cents,
       short_description: fitment.short_description,
       universal: fitment.universal_fit?,
+      image: DemoProductImages.image_for(fitment.sku, fitment.category),
       fitment_notes: fitment.fitment_notes,
       position: fitment.position
     }
