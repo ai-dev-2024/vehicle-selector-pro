@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_09_01_000006) do
+ActiveRecord::Schema[7.1].define(version: 2026_09_01_000007) do
   create_table "app_settings", force: :cascade do |t|
     t.integer "shop_id", null: false
     t.string "widget_title", default: "Select Your Vehicle"
@@ -40,7 +40,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_09_01_000006) do
     t.date "day", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["shop_id", "dimension", "metric", "day"], name: "index_fitment_analytics_shop_dim_metric_day", unique: true
+    t.string "dimension_value"
+    t.index ["shop_id", "dimension", "dimension_value", "metric", "day"], name: "index_fitment_analytics_shop_dim_val_metric_day", unique: true
     t.index ["shop_id"], name: "index_fitment_analytics_on_shop_id"
   end
 

@@ -1,0 +1,131 @@
+<div style="max-width: 1080px; margin: 0 auto;">
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Storefront analytics</h2>
+      <p style="margin: 0; color: #6d7175;">
+        Fitment checks, guaranteed fits, and fit rate captured from the storefront selector.
+      </p>
+    </div>
+    <div style="display: flex; gap: 6px; background: #f6f6f7; border: 1px solid #e3e3e3; border-radius: 8px; padding: 4px;">
+      <%= %w[7d 30d 90d].map do |key| %>
+        <% active = @range == key %>
+        <%= link_to "#{key} view", admin_analytics_path(range: key), style: "padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; #{active ? 'background:#fff;color:#1a1a1a;box-shadow:0 1px 2px rgba(0,0,0,.08);' : 'color:#6d7175;'}" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="cc-metrics" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="cc-stat">
+      <label>Fitment checks</label>
+      <b><%= number_with_delimiter(@checks) %></b>
+      <em>Storefront selections</em>
+    </div>
+    <div class="cc-stat">
+      <label>Guaranteed fits</label>
+      <b><%= number_with_delimiter(@fits) %></b>
+      <em>Exact + universal matches</em>
+    </div>
+    <div class="cc-stat">
+      <label>Fit rate</label>
+      <b><%= @fit_rate %>%</b>
+      <em>Fits ÷ checks</em>
+    </div>
+    <div class="cc-stat">
+      <label>No fit</label>
+      <b><%= number_with_delimiter(@no_fit) %></b>
+      <em>Not compatible</em>
+    </div>
+    <div class="cc-stat">
+      <label>Universal</label>
+      <b><%= number_with_delimiter(@universal) %></b>
+      <em>One-size-fit-all parts</em>
+    </div>
+  </div>
+
+  <%
+    max_checks = @checks_series.map { |r| r[:value] }.max.to_i
+    max_checks = 1 if max_checks.zero?
+  %>
+  <div class="cc-card" style="margin-top: 18px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+      <h3 style="margin:0; font-size:16px; font-weight:600;">Fitment checks by day</h3>
+      <span style="font-size:12px; color:#6d7175;"><%= @from.strftime("%b %e") %> — <%= @to.strftime("%b %e, %Y") %></span>
+    </div>
+    <p style="font-size:13px; color:#6d7175; margin:0 0 20px 0;">Average <%= number_with_delimiter((@checks.to_f / @checks_series.length).round(1)) %> selections per day.</p>
+
+    <% if @checks.zero? %>
+      <div style="padding: 40px; text-align:center; color:#6d7175;">
+        No storefront fitment checks in this range yet.
+        <div style="margin-top:8px; font-size:13px;">Share your storefront selector and shoppers' selections will appear here.</div>
+      </div>
+    <% else %>
+      <div style="display:flex; align-items:flex-end; gap:3px; height:180px;">
+        <% @checks_series.each do |r| %>
+          <% pct = ((r[:value].to_f / max_checks) * 100).round(0)
+             pct = 1 if r[:value].positive? && pct.zero? %>
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; height:100%; gap:4px;" title="<%= r[:date].strftime("%b %e") %>: <%= r[:value] %> checks">
+            <div style="width:100%; max-width:26px; background:linear-gradient(180deg,#7aa2c9,#3e5f80); border-radius:3px 3px 0 0; height:<%= r[:value].zero? ? 2 : pct %>%"></div>
+          </div>
+        <% end %>
+      </div>
+      <div style="display:flex; gap:3px; margin-top:6px;">
+        <% @checks_series.each_slice((@checks_series.length / 6.0).ceil) do |slice| %>
+          <div style="flex:1; text-align:center; font-size:10px; color:#6d7175;"><%= slice.first[:date].strftime("%b %e") %></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:18px;">
+    <div class="cc-card" style="margin-top:0;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline;">
+        <h3 style="margin:0; font-size:16px; font-weight:600;">Checks by make</h3>
+        <span style="font-size:12px; color:#6d7175;">Top <%= @by_make.length %></span>
+      </div>
+      <% if @by_make.any? %>
+        <table class="cc-table" style="margin-top:12px;">
+          <tbody>
+            <% max_make = @by_make.map { |r| r[:value] }.max.to_i
+               max_make = 1 if max_make.zero? %>
+            <% @by_make.each do |row| %>
+              <tr>
+                <td style="width:28%;"><strong><%= row[:make] %></strong></td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="cc-bar" style="flex:1; max-width:180px;"><span style="width:<%= ((row[:value].to_f / max_make) * 100).round(0) %>%"></span></div>
+                    <span style="font-size:12px; color:#6d7175;"><%= number_with_delimiter(row[:value]) %></span>
+                  </div>
+                </td>
+                <td style="width:18%; text-align:right;">
+                  <% fits_count = @make_fits.fetch(row[:make], 0)
+                     rate = row[:value].positive? ? ((fits_count.to_f / row[:value]) * 100).round(0) : 0 %>
+                  <span class="badge <%= rate >= 50 ? 'badge-live' : 'badge-info' %>"><%= rate %>% fit</span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div style="padding:32px; text-align:center; color:#6d7175; font-size:13px;">Data will appear once shoppers make selections with a vehicle make on the storefront.</div>
+      <% end %>
+    </div>
+
+    <div class="cc-card" style="margin-top:0;">
+      <h3 style="margin:0 0 12px 0; font-size:16px; font-weight:600;">About this data</h3>
+      <p style="font-size:13px; line-height:1.6; color:#6d7175; margin:0 0 16px 0;">
+        Counts come from the daily <code>fitment_analytics</code> aggregates, written asynchronously right after each storefront "check fitment" call — so the storefront hot path is never slowed by the tracking.
+      </p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="background:#f6f6f7; border-radius:8px; padding:12px;">
+          <div style="font-size:12px; color:#6d7175;">Checks recorded as</div>
+          <div style="font-weight:600; font-size:13px;">fits · no_fit · universal</div>
+        </div>
+        <div style="background:#f6f6f7; border-radius:8px; padding:12px;">
+          <div style="font-size:12px; color:#6d7175;">Kept per shop, per day</div>
+          <div style="font-weight:600; font-size:13px;">dimension + metric</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

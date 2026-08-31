@@ -33,6 +33,7 @@
         <a href="<%= admin_vehicles_path %>" class="<%= 'active' if controller_name == 'vehicles' %>">Vehicle library <span class="cc-count"><%= Vehicle.active.count %></span></a>
         <a href="<%= admin_product_fitments_path %>" class="<%= 'active' if controller_name == 'product_fitments' %>">Fitment rules <span class="cc-count"><%= current_shop&.vehicle_product_fitments&.count || 0 %></span></a>
         <a href="<%= admin_sync_path %>" class="<%= 'active' if controller_name == 'sync' %>">Sync activity</a>
+        <a href="<%= admin_analytics_path %>" class="<%= 'active' if controller_name == 'analytics' %>">Analytics</a>
       </nav>
       <div class="cc-nav-label">Configure</div>
       <nav class="cc-nav">

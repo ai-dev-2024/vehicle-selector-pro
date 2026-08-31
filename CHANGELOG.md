@@ -2,6 +2,20 @@
 
 All notable changes to Vehicle Selector Pro are documented here.
 
+## [1.3.0] — 2026-09-01
+
+Storefront analytics dashboard.
+
+### Analytics
+- **Admin analytics dashboard** (`/admin/analytics`) in the command-center UI: metric tiles
+  (checks, guarantees fits, fit rate, no-fit, universal) and a zero-filled daily checks chart
+  with a 7/30/90-day range selector.
+- **Per-make breakdown**: the storefront check path now records a `make` dimension alongside
+  the overall total, and the dashboard renders a checks-by-make bar list with per-make fit rates.
+- **`FitmentAnalytic` query helpers** (`total`, `series`, `by_make`) over the daily aggregates,
+  and a new `dimension_value` column so makes/values are stored as their own rows instead of
+  colliding under a bare dimension name. All reads stay per-shop scoped.
+
 ## [1.2.0] — 2026-09-01
 
 Shopify Billing API subscription flow with free trial + paid tiers.
