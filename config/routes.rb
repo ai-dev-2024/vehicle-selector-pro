@@ -95,6 +95,8 @@ Rails.application.routes.draw do
   get "demo/collection", to: "storefront_preview#collection"
   get "demo/products/:product_id", to: "storefront_preview#product", as: :demo_product
   get "demo/support", to: "storefront_preview#support"
+  get "demo/about", to: "storefront_preview#about"
+  get "demo/guides", to: "storefront_preview#guides"
   get "privacy", to: "storefront_preview#privacy"
   get "demo/garage", to: "storefront_preview#garage"
   get "demo/admin", to: "storefront_preview#admin_dashboard"

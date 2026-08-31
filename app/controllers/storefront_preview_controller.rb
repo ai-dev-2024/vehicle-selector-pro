@@ -62,6 +62,27 @@ class StorefrontPreviewController < ApplicationController
 
   def support; end
 
+  def about; end
+
+  # Install-guides index: every catalog product with its install time,
+  # difficulty band and fitment scope, pulled from the same spec sheets the
+  # product pages render.
+  def guides
+    @guides = distinct_products.map do |p|
+      specs = PRODUCT_SPECS[p[:sku]] || {}
+      install_row = (specs[:specs] || []).find do |label, _|
+        label.to_s.match?(/\AInstall( time)?\z/i)
+      end
+      {
+        **p,
+        install: install_row&.last || "Full guide on the product page",
+        minutes: (install_row&.last.to_s.match(/(\d+)\D*(\d+)?/) && Regexp.last_match[1]&.to_i) || 999,
+        highlights: (specs[:features] || []).first(2)
+      }
+    end
+    @guides.sort_by! { |g| [g[:minutes], g[:title].to_s] }
+  end
+
   # Public privacy policy (App Store submission requires a public URL).
   # Rendered from docs/PRIVACY.md; MarkdownRenderer supports exactly the
   # constructs that document uses (headings, tables, lists, bold, links) and
