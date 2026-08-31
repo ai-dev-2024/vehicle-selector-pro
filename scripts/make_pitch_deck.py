@@ -383,8 +383,12 @@ def build_pptx() -> None:
         for label, url in SLIDES[0]["links"]:
             tb = s.shapes.add_textbox(Inches(1.2), Inches(y), Inches(11), Inches(0.4))
             tf = tb.text_frame; tf.word_wrap = True
-            p = tf.paragraphs[0]; r = p.add_run(); r.text = f"{label}:  {url}"
-            r.font.size = Pt(13); r.font.color.rgb = ACC; r.font.name = "Calibri"
+            p = tf.paragraphs[0]
+            rl = p.add_run(); rl.text = f"{label}:  "; rl.font.size = Pt(13)
+            rl.font.bold = True; rl.font.color.rgb = DARKC; rl.font.name = "Calibri"
+            ru = p.add_run(); ru.text = url; ru.font.size = Pt(13)
+            ru.font.color.rgb = ACC; ru.font.name = "Calibri"; ru.font.underline = True
+            ru.hyperlink.address = url
             y += 0.5
 
     def content_slide(kick, title):
@@ -507,7 +511,12 @@ def build_pptx() -> None:
             for lab, url in zip(s["lines"], s["links"]):
                 add_rect(sl, 1.0, y, 0.4, 0.4, ACC, None, "›", bold=True, font=18, color=RGBColor(255,255,255),
                          align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-                add_rect(sl, 1.5, y - 0.05, 11, 0.5, None, None, lab, bold=True, font=16, color=DARKC)
+                lab_box = add_rect(sl, 1.5, y - 0.05, 11, 0.5, None, None, lab,
+                                   bold=True, font=16, color=DARKC)
+                try:
+                    lab_box.text_frame.paragraphs[0].runs[0].hyperlink.address = url
+                except Exception:
+                    pass
                 y += 0.8
             add_rect(sl, 1.0, y + 0.2, 11, 0.4, None, None,
                      "Both the live storefront and merchant admin are running right now.",

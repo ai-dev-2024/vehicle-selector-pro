@@ -29,6 +29,28 @@ GREY_HEX = "#6E6E6E"
 LIGHT_HEX = "#FBEEE9"
 RAIL = "#E04B33"
 
+import re as _re
+
+
+def linkify(text: str) -> str:
+    """Make bare http(s) URLs in reportlab markup clickable.
+
+    Escapes XML-special characters before wrapping the URL in an <a> link so a
+    placeholder like https://<your-host>/... stays forward-compatible with
+    reportlab's mini-markup parser.
+    """
+    esc = _re.sub(
+        r"[&<\"]",
+        lambda m: {"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;"}.get(m.group(0), m.group(0)),
+        text,
+    )
+    return _re.sub(
+        r"(https?://[^\s)]+)",
+        lambda m: f"<a href='{m.group(1)}'><font color='{ACCENT_HEX}'><b>{m.group(1)}</b></font></a>",
+        esc,
+    )
+
+
 TITLE = "Vehicle Selector Pro"
 SUBTITLE = "A Production-Grade Shopify App for Vehicle Fitment"
 DATE_LINE = "Project Report  /  August 2026"
@@ -586,7 +608,7 @@ def build_pdf() -> None:
     for i, (h, d) in enumerate(INSTALL_STEPS, 1):
         dep.append(KeepTogether([
             step(f"<font color='{ACCENT_HEX}'>{i:02d}</font>&nbsp;&nbsp;{h}"),
-            P(d),
+            P(linkify(d)),
         ]))
     dep.append(Spacer(1, 8))
     dep.append(H2("Where it grows next — roadmap"))
@@ -691,6 +713,34 @@ def build_docx() -> None:
         p.paragraph_format.space_after = Pt(space_after)
         return p
 
+    from docx.oxml.ns import qn
+    from docx.opc.constants import RELATIONSHIP_TYPE as REL
+
+    def HLink(text, url):
+        """Return a clickable hyperlink run for python-docx paragraphs."""
+        rel_id = doc.part.relate_to(url, REL.HYPERLINK, is_external=True)
+        anchor = doc.part.element.makeelement(qn("w:hyperlink"),
+                                             {qn("r:id"): rel_id})
+        new_run = doc.part.element.makeelement(qn("w:r"), {})
+        rPr = doc.part.element.makeelement(qn("w:rPr"), {})
+        style = doc.part.element.makeelement(qn("w:rStyle"),
+                                            {qn("w:val"): "Hyperlink"})
+        rPr.append(style)
+        t = doc.part.element.makeelement(qn("w:t"), {})
+        t.text = text
+        new_run.append(rPr)
+        new_run.append(t)
+        anchor.append(new_run)
+        return anchor
+
+    def PLink(label, url, size=11, space_after=6):
+        """A paragraph containing a clickable hyperlink."""
+        p = doc.add_paragraph()
+        r = p.add_run(label + ": "); r.font.size = Pt(size); r.bold = True; r.font.color.rgb = DARK
+        p._p.append(HLink(url, url))
+        p.paragraph_format.space_after = Pt(space_after)
+        return p
+
     def B(t):
         p = doc.add_paragraph(style="List Bullet")
         r = p.add_run(t); r.font.size = Pt(11); r.font.color.rgb = DARK
@@ -785,7 +835,7 @@ def build_docx() -> None:
         add_img(name, capit)
     sub("Narrated demo videos")
     for lab, url in VIDEO_LINKS:
-        P(f"{lab}: {url}", color=GREY)
+        PLink(lab, url)
 
     # 12
     heading("12. Deployment & Operations")
