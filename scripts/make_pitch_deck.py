@@ -39,163 +39,39 @@ SLIDES = [
         "links": [("Live demo", DEMO), ("Merchant admin", ADMIN), ("Repository", REPO)],
     },
     {
-        "kind": "content",
-        "kicker": "THE OPPORTUNITY",
-        "title": "Aftermarket parts sell badly online",
+        "kind": "screens2",
+        "kicker": "THE PROBLEM",
+        "title": "Aftermarket parts sell badly online — compatibility is the whole sale",
+        "lead": "A brake pad or wiper blade only fits an exact Year / Make / Model / Trim / Engine. Wrong-fit means wrong parts, angry customers, and costly returns — so fitment data becomes the product.",
         "bullets": [
-            "A brake pad or wiper blade only fits an exact Year / Make / Model / Trim / Engine (YMMTE) — compatibility is the whole sale.",
-            "Wrong-fit means wrong parts, angry customers, and costly returns. Merchants either bury the data in dense tables or hard-code rules per product.",
-            "Commercial fitment feeds lock merchants into contracts and ongoing per-part fees.",
-            "Verdict: fitment data is kept in silos, rots quickly, and never pays for itself.",
+            "Dense compatibility tables bury the answer",
+            "Per-product manual rules rot and cost hours",
+            "Paid fitment feeds lock merchants into contracts",
         ],
-    },
-    {
-        "kind": "content",
-        "kicker": "THE SOLUTION",
-        "title": "One dataset, synced everywhere",
-        "bullets": [
-            "Fitments are entered once into a normalized multi-tenant cache, then pushed to Shopify metafields automatically.",
-            "Customers pick Year → Make → Model → Trim → Engine behind an HMAC-signed App Proxy and only ever see parts that fit.",
-            "Product pages render their own Guaranteed Exact / Does NOT Fit / Universal Fit badge.",
-            "Merchants manage everything from a Polaris admin — no per-part fees, no brittle scripts, no vendor lock-in.",
-        ],
+        "shots": [("04_storefront_home.png", "Cascading selector"),
+                  ("08_storefront_pdp.png", "Fitment badge on PDP"),
+                  ("03_fitment_rules.png", "Fitment matrix"),
+                  ("01_dashboard.png", "Command center")],
     },
     {
         "kind": "metrics",
-        "kicker": "WHY IT WORKS",
-        "title": "A real, browsable demo catalog",
+        "kicker": "THE SOLUTION · ONE DATASET, SYNCED EVERYWHERE",
+        "title": "A real, browsable demo catalog already in production",
         "metrics": [("48", "YMMTE configurations"), ("204", "verified fitments"),
                     ("40", "mapped products"), ("8", "brands represented")],
-    },
-    {
-        "kind": "content",
-        "kicker": "HOW IT WORKS",
-        "title": "A cascading fitment engine",
-        "bullets": [
-            "Shopper selects Year → Make → Model → Trim → Engine; each request is HMAC-verified by the App Proxy.",
-            "The local PostgreSQL cache answers instantly — the storefront never waits on Shopify.",
-            "Synced fitments are written to custom.vehicle_fitment via GraphQL metafieldsSet in batches of 25.",
-            "Product pages, collection filters, and the My Garage feature all stay perfectly in sync.",
-        ],
-    },
-    {
-        "kind": "content",
-        "kicker": "FEATURES",
-        "title": "Built to convert and to administer",
-        "cols": [
-            ("Storefront",
-             ["Cascading Y/M/M/T/E widget", "Exact / No-fit / Universal badges",
-              "My Garage (saved vehicles)", "Mobile-first, theme-friendly widget"]),
-            ("Merchant admin",
-             ["Fitment matrix & vehicle library", "Bulk CSV import", "Metafield sync monitor",
-              "Widget theming & settings"]),
-        ],
+        "foot": "Fitments entered once into a normalized cache, pushed to Shopify metafields, and served to shoppers behind an HMAC-signed App Proxy — Guaranteed Exact / Does-NOT-Fit / Universal badges on every product page.",
     },
     {
         "kind": "arch",
-        "kicker": "ARCHITECTURE",
-        "title": "Three clean layers, zero ScriptTag",
-    },
-    {
-        "kind": "screens",
-        "kicker": "PRODUCT · STOREFRONT",
-        "title": "What shoppers see",
-        "shots": [("04_storefront_home.png", "Cascading selector"),
-                  ("07_storefront_collection.png", "Filtered collection"),
-                  ("08_storefront_pdp.png", "Fitment badge on PDP"),
-                  ("09_storefront_garage.png", "My Garage")],
-    },
-    {
-        "kind": "screens",
-        "kicker": "PRODUCT · MERCHANT",
-        "title": "What merchants control",
-        "shots": [("01_dashboard.png", "Command center"),
-                  ("03_fitment_rules.png", "Fitment matrix"),
-                  ("06_bulk_imports.png", "Bulk import"),
-                  ("10_admin_sync.png", "Sync monitor")],
-    },
-    {
-        "kind": "content",
-        "kicker": "TRUST & SECURITY",
-        "title": "Safe, multi-tenant, App-Store ready",
-        "bullets": [
-            "Standard OAuth 2.0 with encrypted tokens and per-shop data isolation.",
-            "HMAC-SHA256 verification on every App Proxy and webhook request (constant-time).",
-            "rack-attack throttling and CSP frame-ancestors locked to myshopify.com.",
-            "Full GDPR coverage: data-request, redact, and shop/redact handlers plus a public privacy policy.",
-        ],
-    },
-    {
-        "kind": "content",
-        "kicker": "TECHNOLOGY",
-        "title": "Engineering-grade stack",
-        "cols": [
-            ("Core", ["Rails 7.1 · Ruby 3.2", "PostgreSQL cache · SQLite dev", "Polaris · ERB"]),
-            ("Shopify & jobs", ["shopify_app 22 · GraphQL API", "Theme App Extension", "Sidekiq 7 + Redis 5"]),
-            ("Quality", ["RSpec 7 · FactoryBot", "RuboCop · Bullet · CI on push", "Auto-deploy to Fly.io"]),
-        ],
-    },
-    {
-        "kind": "content",
-        "kicker": "GET STARTED",
-        "title": "Deploy & install on your own store",
-        "bullets": [
-            "Create the app in Shopify Partners — copy the API key & secret, set the app and redirect URLs.",
-            "Deploy the Rails app to Fly.io / Render with PostgreSQL, Redis and Sidekiq; boot with rails db:prepare.",
-            "Register the App Proxy subpath /apps/vehicle-selector, then install on the store via OAuth (webhooks auto-register).",
-            "Create the one-time custom.vehicle_fitment metafield definition in Admin (Product, JSON, Public read).",
-            "Drop in the Theme App Extension blocks (vehicle selector + fitment badge) and publish the theme.",
-            "Bulk-import fitments, run the sync, verify PDP badges & filters, and go live.",
-        ],
-    },
-    {
-        "kind": "content",
-        "kicker": "ROADMAP",
-        "title": "A foundation built to grow",
-        "bullets": [
-            "Shopify Billing API for recurring and one-time plans.",
-            "Supersession & OE-number matching for a richer part engine.",
-            "Fitment confidence scoring and smarter universal/exact priority.",
-            "White-label theming, translations, and merchant analytics.",
-        ],
-    },
-    {
-        "kind": "content",
-        "kicker": "BUILD · PROVENANCE",
-        "title": "Built at the ceiling of a 2018 ultrabook",
-        "bullets": [
-            "The entire project — Rails app, Shopify integration, storefront, diagrams, this deck, and both demo videos — was produced on one machine.",
-            "ASUS ZenBook UX433FA · Intel Core i7-8565U @ 1.80 GHz · 16 GB RAM.",
-            "Intel UHD 620 integrated graphics only — no GPU, no cluster; every frame of both demo videos was rendered on the CPU.",
-            "The output was capped by tooling, not ambition. Given a real workstation, a GPU, and paid frontier models, the same foundation leaps a level.",
-        ],
-    },
-    {
-        "kind": "statement",
-        "kicker": "BUILD · PROVENANCE",
-        "title": "Free tools, minimal hardware — maximum headroom",
-        "text": ("No paid AI models, APIs, or commercial tooling were used anywhere — and the whole "
-                 "result was built and rendered on a 15-watt 2018 ultrabook with no GPU. Both are "
-                 "deliberate. They prove what free tooling on minimal local compute already "
-                 "achieves, and set up a fast leap forward: with proper hardware and paid frontier "
-                 "models, the ceiling lifts dramatically."),
-    },
-    {
-        "kind": "content",
-        "kicker": "SEE IT LIVE",
-        "title": "Watch the three narrated walkthroughs",
-        "bullets": [
-            "Live application — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4'><font color='#E04B33'><b>watch the real deployment</b></font></a> · 2:25",
-            "Merchant command center — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:34",
-            "Shopper experience — <a href='https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4'><font color='#E04B33'><b>watch</b></font></a> · 2:44",
-        ],
+        "kicker": "HOW IT WORKS",
+        "title": "A cascading fitment engine, engineered for production",
     },
     {
         "kind": "cta",
         "kicker": "READY WHEN YOU ARE",
-        "title": "Let's take the next step together",
-        "lines": ["Try the live demo", "Explore the merchant admin", "Open the repository"],
-        "links": [DEMO, ADMIN, REPO],
+        "title": "See it live — watch it run",
+        "lines": ["Try the live storefront demo", "Explore the merchant admin", "Open the repository", "Watch the three narrated walkthroughs"],
+        "links": [DEMO, ADMIN, REPO, "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html"],
     },
 ]
 
@@ -282,7 +158,6 @@ def build_pdf() -> None:
     for l, u in SLIDES[0]["links"]:
         story.append(P(f"<b>{l}:</b> <a href='{u}'><font color='{ACCENT}'>{u}</font></a>",
                        fontSize=12, leading=18))
-    add_slide()
 
     page_num = 1
     for s in SLIDES[1:]:
@@ -296,6 +171,34 @@ def build_pdf() -> None:
                 story.append(two_cols(s["cols"]))
             else:
                 bullets(s["bullets"])
+        elif kind == "screens2":
+            story.append(P(s["lead"], fontSize=12, leading=17, textColor=DARKC, spaceAfter=8))
+            for it in s["bullets"]:
+                story.append(P(f"<font color='{ACCENT}'>•</font>  {it}", fontSize=11.5, leading=16,
+                               textColor=DARKC, leftIndent=6, spaceAfter=4))
+            story.append(Spacer(1, 0.15 * inch))
+            # 2x2 grid of landscape screenshots, each ~0.23 of page height.
+            sw = (W - 2 * M - 40) / 4
+            rows = []
+            for r_i in range(2):
+                row = []
+                for c_i in range(2):
+                    name, cap_txt = s["shots"][r_i * 2 + c_i]
+                    p = shot(name)
+                    cell = []
+                    if os.path.exists(p):
+                        cell.append(RLImage(p, width=sw, height=sw * 0.36))
+                    cell.append(Spacer(1, 1))
+                    cell.append(P(cap_txt, fontSize=8.4, leading=10, textColor=GREYC, alignment=1))
+                    row.append(cell)
+                rows.append(row)
+            t = Table(rows, colWidths=[sw * 2, sw * 2])
+            t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),
+                                   ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                                   ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                                   ("TOPPADDING", (0, 0), (-1, -1), 4),
+                                   ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+            story.append(t)
         elif kind == "metrics":
             data = [[""] * 4]
             heads = [Paragraph(f"<font color='{ACCENT}'><font size='28'><b>{m[0]}</b></font></font><br/><font size='12'>{m[1]}</font>",
@@ -310,7 +213,7 @@ def build_pdf() -> None:
             story.append(Spacer(1, 0.8 * inch))
             story.append(t)
             story.append(Spacer(1, 0.5 * inch))
-            story.append(P("Try it live — no setup required. Every number above is visible in the running app.",
+            story.append(P(s.get("foot", "Try it live — no setup required. Every number above is visible in the running app."),
                            fontSize=12, textColor=GREYC))
         elif kind == "arch":
             from reportlab.graphics.shapes import Line, Polygon
@@ -547,8 +450,28 @@ def build_pptx() -> None:
                 two_col_box(sl, s["cols"])
             else:
                 bullets_box(sl, s["bullets"])
+        elif kind == "screens2":
+            sl = content_slide(s["kicker"], s["title"])
+            tb = sl.shapes.add_textbox(Inches(1.0), Inches(2.1), Inches(11.2), Inches(1.1))
+            tf = tb.text_frame; tf.word_wrap = True
+            p = tf.paragraphs[0]; r = p.add_run(); r.text = s["lead"]
+            r.font.size = Pt(13); r.font.color.rgb = GREYC; r.font.name = "Calibri"
+            bb = bullets_box(sl, s["bullets"], l=1.0, t=2.9, w=11.2, h=1.3, size=12, leading=1.5)
+            cw = (11.2 - 0.6) / 2; colw = (cw - 0.25) / 2
+            for idx, (name, capt) in enumerate(s["shots"]):
+                col = idx % 2; row = int(idx / 2)
+                x = 1.0 + col * (colw + 0.25)
+                y = 4.0 + row * (1.6)
+                p = shot(name)
+                if not os.path.exists(p): continue
+                from PIL import Image
+                sl.shapes.add_picture(p, Inches(x), Inches(y), width=Inches(colw - 0.1), height=Inches((colw - 0.1) * 0.5625))
         elif kind == "metrics":
             sl = content_slide(s["kicker"], s["title"]); metrics_slide(sl, s)
+            tb = sl.shapes.add_textbox(Inches(1.0), Inches(6.1), Inches(11.2), Inches(1.0))
+            tf = tb.text_frame; tf.word_wrap = True
+            p = tf.paragraphs[0]; r = p.add_run(); r.text = s.get("foot", "")
+            r.font.size = Pt(12); r.font.color.rgb = GREYC; r.font.name = "Calibri"
         elif kind == "arch":
             sl = content_slide(s["kicker"], s["title"])
             nodes = ["Storefront", "App Proxy", "Controllers", "Sidekiq/Redis", "PostgreSQL", "GraphQL"]

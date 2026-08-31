@@ -333,7 +333,7 @@ def build_pdf() -> None:
     h1s = PS(fontSize=15, leading=18, textColor=DARK, spaceBefore=2, spaceAfter=2, fontName="Helvetica-Bold")
     h2s = PS(fontSize=12, leading=15, textColor=ACC, spaceBefore=4, spaceAfter=3, fontName="Helvetica-Bold")
     cap_ = PS(fontSize=8.6, leading=11, textColor=GREY, alignment=TA_CENTER, spaceAfter=10)
-    step_ = PS(fontSize=11.5, leading=15, textColor=DARK, spaceAfter=2, spaceBefore=6, fontName="Helvetica-Bold")
+    step_ = PS(fontSize=10.6, leading=13.5, textColor=DARK, spaceAfter=1, spaceBefore=4, fontName="Helvetica-Bold")
 
     def step(t): return Paragraph(t, step_)
 
@@ -419,54 +419,55 @@ def build_pdf() -> None:
     story = []
 
     # COVER
-    story.append(Spacer(1, 1.7 * inch))
+    story.append(Spacer(1, 0.2 * inch))
     story.append(Paragraph("C L I E N T   D E L I V E R A B L E",
-                 PS(fontSize=11, leading=16, textColor=ACC, fontName="Helvetica-Bold", spaceAfter=18)))
-    story.append(Paragraph(TITLE, PS(fontSize=40, leading=44, textColor=DARK, fontName="Helvetica-Bold", spaceAfter=6)))
-    story.append(Paragraph(SUBTITLE, PS(fontSize=17, leading=22, textColor=DARK, fontName="Helvetica-Bold", spaceAfter=6)))
-    story.append(HRFlowable(width="55%", thickness=3, color=ACC, spaceBefore=6, spaceAfter=16))
-    story.append(Paragraph(DATE_LINE, PS(fontSize=11, textColor=GREY, spaceAfter=26)))
+                 PS(fontSize=11, leading=16, textColor=ACC, fontName="Helvetica-Bold", spaceAfter=10)))
+    story.append(Paragraph(TITLE, PS(fontSize=36, leading=40, textColor=DARK, fontName="Helvetica-Bold", spaceAfter=4)))
+    story.append(Paragraph(SUBTITLE, PS(fontSize=16, leading=20, textColor=DARK, fontName="Helvetica-Bold", spaceAfter=4)))
+    story.append(HRFlowable(width="55%", thickness=3, color=ACC, spaceBefore=4, spaceAfter=12))
+    story.append(Paragraph(DATE_LINE, PS(fontSize=11, textColor=GREY, spaceAfter=12)))
     for label, url in [("Live storefront demo", "https://vehicle-selector-pro.fly.dev/demo"),
                        ("Live merchant admin", "https://vehicle-selector-pro.fly.dev/demo/admin"),
                        ("Source repository", "https://github.com/ai-dev-2024/vehicle-selector-pro")]:
         story.append(Paragraph(
             f"<b>{label}:</b> <a href='{url}'><font color='{ACCENT_HEX}'>{url}</font></a>",
-            PS(fontSize=11, leading=18)))
-    story.append(Spacer(1, 0.5 * inch))
+            PS(fontSize=10, leading=15)))
+    story.append(Spacer(1, 0.12 * inch))
     story.append(Paragraph("A detailed engineering and delivery report — architecture, workflows, "
                            "data model, security, quality, the live demo catalog, and the free-AI "
-                           "build provenance.", PS(fontSize=10.5, leading=15, textColor=GREY)))
-    story.append(PageBreak())
-
-    # CONTENTS
-    toc = ["Executive Summary", "The Problem", "The Solution at a Glance", "Feature Highlights",
+                           "build provenance.", PS(fontSize=10, leading=14, textColor=GREY)))
+    # CONTENTS (same page as cover, to keep the report tight at 15 pages)
+    story.append(Spacer(1, 0.22 * inch))
+    story.append(H1("Contents"))
+    story.append(rule())
+    toc = ["Executive Summary", "The Problem & The Solution", "Feature Highlights",
            "Architecture", "Data Model & Multi-tenancy", "Key Workflows",
            "Technology Stack", "Security & Hardening", "Quality Engineering",
-           "Live Demo Catalog & Screenshots", "Deployment & Operations", "Roadmap",
+           "Live Demo Catalog & Screenshots", "Deployment, Installation & Roadmap",
            "Built With Free AI Tools on Minimal Hardware", "Conclusion"]
-    cblock = [H1("Contents"), rule()]
     for i, t in enumerate(toc, 1):
-        cblock.append(Paragraph(f"{i:02d}&nbsp;&nbsp;{t}",
-                     PS(fontSize=11, leading=19, textColor=DARK)))
-    story += cblock
+        story.append(Paragraph(f"{i:02d}&nbsp;&nbsp;{t}",
+                     PS(fontSize=11, leading=16, textColor=DARK)))
     story.append(PageBreak())
 
-    # 1 Exec summary
+    # 1 Exec summary (start on page 2 since contents ended with a page break)
     story += sec(1, "Executive Summary", P(INTRO), Spacer(1, 5),
                  P("<b>Four pillars that make it production-grade:</b>"),
-                 *(BL(f"<b>{h}.</b> {d}") for h, d in PILLARS))
+                 *(BL(f"<b>{h}.</b> {d}") for h, d in PILLARS),
+                 new_page=False)
 
-    # 2 Problem
-    story += sec(2, "The Problem", P(PROBLEM), Spacer(1, 5),
-                 P("<b>Why existing shortcuts fall short.</b> Static compatibility tables bury "
-                   "the answer; manual per-product notes don't scale; paid fitment feeds lock "
-                   "merchants into contracts. Vehicle Selector Pro hands merchants control over "
-                   "their own fitment data — entered once, synced everywhere — without ongoing "
-                   "per-part fees or vendor lock-in."))
-
-    # 3 Solution
-    story += sec(3, "The Solution at a Glance", P(SOLUTION_AND_WHY), Spacer(1, 5),
-                 *(BL(f"<b>{h}.</b> {d}") for h, d in PILLARS))
+    # 2 Problem & The Solution
+    story += sec(2, "The Problem & The Solution",
+                P(PROBLEM), Spacer(1, 5),
+                P("<b>Why existing shortcuts fall short.</b> Static compatibility tables bury "
+                  "the answer; manual per-product notes don't scale; paid fitment feeds lock "
+                  "merchants into contracts. Vehicle Selector Pro hands merchants control over "
+                  "their own fitment data — entered once, synced everywhere — without ongoing "
+                  "per-part fees or vendor lock-in."),
+                Spacer(1, 5),
+                P(SOLUTION_AND_WHY), Spacer(1, 5),
+                P("<b>Four pillars that make it production-grade:</b>"),
+                *(BL(f"<b>{h}.</b> {d}") for h, d in PILLARS))
 
     # 4 Features
     fblk = []
@@ -475,11 +476,11 @@ def build_pdf() -> None:
             H2(f"{i}. {h}"),
             P(f"<font color='{GREY_HEX}'>{tag.upper()}</font> &mdash; {b}"),
         ]))
-    story += sec(4, "Feature Highlights", P("Every capability is implemented against the real "
+    story += sec(3, "Feature Highlights", P("Every capability is implemented against the real "
                                             "Shopify platform, not mocked."), *fblk)
 
     # 5 Architecture + diagram
-    story += sec(5, "Architecture", P(ARCH_DESC), Spacer(1, 6),
+    story += sec(4, "Architecture", P(ARCH_DESC), Spacer(1, 6),
                  diagram(
                      [("sf", "Shopify Storefront", "Theme App Extension"),
                       ("ap", "App Proxy", "HMAC JSON"),
@@ -497,7 +498,7 @@ def build_pdf() -> None:
               "first-class tenant; all fitment, settings, and sync data are scoped to it.")]
     for ent, desc in DATA_ENTITIES:
         dblk.append(KeepTogether([H2(ent), P(desc)]))
-    story += sec(6, "Data Model & Multi-tenancy", *dblk)
+    story += sec(5, "Data Model & Multi-tenancy", *dblk)
 
     # 7 Workflows
     wblk = [P("Two of the signature end-to-end flows, drawn step by step.")]
@@ -517,7 +518,7 @@ def build_pdf() -> None:
                  ("lc", "Local cache", "query"), ("r", "Matching parts", "collection")],
                 [("u", "pp"), ("pp", "lc"), ("lc", "r")], h=1.6 * inch))
         wblk.append(Spacer(1, 6))
-    story += sec(7, "Key Workflows", *wblk)
+    story += sec(6, "Key Workflows", *wblk)
 
     # 8 Tech stack
     tdata = [[Paragraph("<b>Layer</b>", h2s), Paragraph("<b>Stack</b>", h2s)]]
@@ -530,13 +531,13 @@ def build_pdf() -> None:
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#FAF9F8")]),
         ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
     ]))
-    story += sec(8, "Technology Stack", KeepTogether([tbl]))
+    story += sec(7, "Technology Stack", KeepTogether([tbl]))
 
     # 9 Security
-    story += sec(9, "Security & Hardening", *(BL(s) for s in SECURITY_ITEMS))
+    story += sec(8, "Security & Hardening", *(BL(s) for s in SECURITY_ITEMS))
 
     # 10 Quality
-    story += sec(10, "Quality Engineering", *(BL(s) for s in TESTING_ITEMS))
+    story += sec(9, "Quality Engineering", *(BL(s) for s in TESTING_ITEMS))
 
     # 11 Catalog + screenshots
     stat_tbl = Table([[num, label] for num, label, _ in METRICS], colWidths=[0.9 * inch, 5.8 * inch])
@@ -550,44 +551,59 @@ def build_pdf() -> None:
     catblk = [P("The live demo ships a real, browsable catalog — the numbers a merchant sees "
                 "immediately, no setup required."), KeepTogether([stat_tbl]), Spacer(1, 8),
               P("<b>Real screenshots of the running app</b> (storefront and merchant admin).")]
-    for name, capt in SHOT_LABELS:
-        pth = abs_shot(name)
-        if not os.path.exists(pth):
-            continue
-        img = RLImage(pth, width=6.2 * inch, height=6.2 * inch * (1080 / 1920))
-        img.hAlign = "CENTER"
-        catblk.append(Spacer(1, 4))
-        catblk.append(KeepTogether([img, cap(capt)]))
+    # Compact 2-column screenshot grid so the whole section fits on a page or two.
+    imgs = [p for p in SHOT_LABELS if os.path.exists(abs_shot(p[0]))]
+    pairW = (6.4 * inch - 0.25 * inch) / 2
+    for i in range(0, len(imgs), 2):
+        left = imgs[i]
+        right = imgs[i + 1] if i + 1 < len(imgs) else None
+        def cell(name, capt):
+            out = []
+            img = RLImage(abs_shot(name), width=pairW, height=pairW * 0.18)
+            img.hAlign = "CENTER"
+            out.append(img)
+            out.append(Spacer(1, 1))
+            out.append(Paragraph(capt, PS(fontSize=7.4, leading=9, textColor=GREY, alignment=1)))
+            return out
+        row = Table([[cell(*left), cell(*right) if right else ""]],
+                    colWidths=[pairW, pairW])
+        row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),
+                                 ("LEFTPADDING", (0, 0), (-1, -1), 4),
+                                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+                                 ("TOPPADDING", (0, 0), (-1, -1), 4),
+                                 ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+        catblk.append(KeepTogether([row]))
     catblk.append(Spacer(1, 10))
     catblk.append(H2("Narrated demo videos"))
     for lab, url in VIDEO_LINKS:
         catblk.append(P(f"<b>{lab}:</b> <a href='{url}'><font color='{ACCENT_HEX}'>{url}</font></a>"))
-    story += sec(11, "Live Demo Catalog & Screenshots", *catblk)
+    story += sec(10, "Live Demo Catalog & Screenshots", *catblk)
 
-    # 12 Deployment
-    story += sec(12, "Deployment, Installation & Operations",
-                 P("The app runs on Fly.io with a private Redis for Sidekiq and a managed "
-                   "PostgreSQL database. Every push to main runs CI (full RSpec suite + RuboCop + "
-                   "Zeitwerk eager-load check) and, on success, auto-deploys to production. A "
-                   "health endpoint (/up) backs the load balancer, and structured logs feed "
-                   "standard observability tooling."),
-                 *(BL(p) for p in OPS_ITEMS),
-                 Spacer(1, 6),
-                 H2("How to deploy & install on your own store"),
-                 P("Anyone can take this codebase and run it on their own Shopify store. The complete "
-                   "path, in order:"))
+    # 11 Deployment, Installation & Roadmap
+    dep = sec(11, "Deployment, Installation & Roadmap",
+              P("The app runs on Fly.io with a private Redis for Sidekiq and a managed "
+                "PostgreSQL database. Every push to main runs CI (full RSpec suite + RuboCop + "
+                "Zeitwerk eager-load check) and, on success, auto-deploys to production. A "
+                "health endpoint (/up) backs the load balancer, and structured logs feed "
+                "standard observability tooling."),
+              *(BL(p) for p in OPS_ITEMS),
+              Spacer(1, 6),
+              H2("How to deploy & install on your own store"),
+              P("Anyone can take this codebase and run it on their own Shopify store. The complete "
+                "path, in order:"))
     for i, (h, d) in enumerate(INSTALL_STEPS, 1):
-        story.append(KeepTogether([
+        dep.append(KeepTogether([
             step(f"<font color='{ACCENT_HEX}'>{i:02d}</font>&nbsp;&nbsp;{h}"),
             P(d),
         ]))
+    dep.append(Spacer(1, 8))
+    dep.append(H2("Where it grows next — roadmap"))
+    dep += [BL(p) for p in ROADMAP]
+    dep.append(P("Each item is production-feasible on the current architecture — built to grow "
+                 "without a rewrite."))
+    story += dep
 
-    # 13 Roadmap
-    story += sec(13, "Roadmap", *(BL(p) for p in ROADMAP), Spacer(1, 4),
-                 P("Each item is production-feasible on the current architecture — built to grow "
-                   "without a rewrite."))
-
-    # 14 Free AI + minimal hardware
+    # 12 Free AI + minimal hardware
     spec_tbl = Table([[Paragraph(f"<b>{k}</b>", body_), Paragraph(v, body_)] for k, v in HARDWARE_SPECS],
                      colWidths=[1.4 * inch, 5.3 * inch])
     spec_tbl.setStyle(TableStyle([
@@ -596,7 +612,7 @@ def build_pdf() -> None:
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
     ]))
-    story += sec(14, "Built With Free AI Tools on Minimal Hardware",
+    story += sec(12, "Built With Free AI Tools on Minimal Hardware",
                  P("No paid AI models, no commercial tooling — and the least compute you can imagine "
                    "doing serious work with. Both are deliberate, and together they combine into the "
                    "strongest case this project can make."),
@@ -610,8 +626,8 @@ def build_pdf() -> None:
                  Spacer(1, 6),
                  P(RESOURCE_STATEMENT))
 
-    # 15 Conclusion
-    story += sec(15, "Conclusion", P(CLOSING), Spacer(1, 12),
+    # 13 Conclusion
+    story += sec(13, "Conclusion", P(CLOSING), Spacer(1, 12),
                 Paragraph("Vehicle Selector Pro &nbsp;·&nbsp; "
                           "<a href='https://github.com/ai-dev-2024/vehicle-selector-pro'><font color='%s'>github.com/ai-dev-2024/vehicle-selector-pro</font></a> &nbsp;·&nbsp; "
                           "<a href='https://vehicle-selector-pro.fly.dev'><font color='%s'>vehicle-selector-pro.fly.dev</font></a>"
