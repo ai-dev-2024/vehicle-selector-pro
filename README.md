@@ -48,19 +48,19 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <div align="center">
 
-**▶ Watch the three narrated walkthroughs — they play right here on the repo page (no links, no download):**
+**▶ Watch the three narrated walkthroughs — they play right here on the repo page:**
 
-<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-live-poster.png" src="https://github.com/user-attachments/assets/bb035a32-6200-4d28-9bb6-a060e115683f"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-live-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4"></video>
 
-*The live application, recorded against the real deployment · 2:25*
+*The live application, recorded against the real deployment · 2:25 · light music bed*
 
-<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://github.com/user-attachments/assets/6e2c2337-54d6-491f-a630-674c72c35937"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"></video>
 
-*For merchants — the fitment command center · 2:34*
+*For merchants — the fitment command center · 2:34 · light music bed*
 
-<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.png" src="https://github.com/user-attachments/assets/7ee3a8cb-da83-4dba-a211-bd7a49d93f7c"></video>
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"></video>
 
-*For shoppers — from vehicle selector to guaranteed-fit checkout · 2:44*
+*For shoppers — from vehicle selector to guaranteed-fit checkout · 2:44 · light music bed*
 
 [Narration script](docs/DEMO_SCRIPT.md) · [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html)
 
