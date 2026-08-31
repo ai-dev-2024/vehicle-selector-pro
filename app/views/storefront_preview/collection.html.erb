@@ -14,17 +14,20 @@
 <% if @vehicle %>
   <div class="sp-results-banner">
     ✔ Showing parts that fit your <strong><%= @vehicle[:display_name] %></strong>
-    — <strong><%= @products.size %></strong> matching part<%= 's' unless @products.size == 1 %>
+    — <strong><%= @total %></strong> matching part<%= 's' unless @total == 1 %>
     <a href="/demo" style="float:right; color:#14532d;">Clear vehicle</a>
   </div>
   <div class="sp-section-title">Compatible Parts for <%= @vehicle[:display_name] %></div>
 <% elsif @category %>
-  <div class="sp-section-title"><%= @category %> <span class="sp-sub"><%= @products.size %> part<%= 's' unless @products.size == 1 %> in this collection</span></div>
+  <div class="sp-section-title"><%= @category %> <span class="sp-sub"><%= @total %> part<%= 's' unless @total == 1 %> in this collection</span></div>
 <% else %>
   <div class="sp-section-title">All Parts <span class="sp-sub">Select a vehicle above to filter compatible parts</span></div>
 <% end %>
 
-<div class="sp-grid">
+<div class="sp-grid" data-dynamic-catalog data-limit="<%= @per %>"
+     data-next-page="<%= @total && @products.size < @total ? 2 : -1 %>"
+     data-token="<%= h([@year, @make, @model, @trim, @engine].any?(&:present?) ? [@year, @make, @model, @trim, @engine].compact.join('|') : '') %>"
+     data-category="<%= h(@category) %>">
   <% if @products.any? %>
     <% @products.each do |p| %>
       <%= render 'product_card', p: p, vehicle_name: @vehicle && @vehicle[:display_name] %>

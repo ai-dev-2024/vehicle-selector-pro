@@ -116,6 +116,7 @@ Rails.application.routes.draw do
     get "trims", to: "/demo_api#trims"
     get "engines", to: "/demo_api#engines"
     get "search", to: "/demo_api#search_products"
+    get "products", to: "/demo_api#products"
     get "check_fitment", to: "/demo_api#check_fitment"
     get "product_fitments", to: "/demo_api#product_fitments"
   end

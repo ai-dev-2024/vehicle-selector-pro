@@ -35,8 +35,6 @@
 
 <div class="sp-section-title" id="featured">Featured Parts <span class="sp-sub">— fitment badges update live when you select a vehicle</span></div>
 
-<div class="sp-grid">
-  <% @products.each do |p| %>
-    <%= render 'product_card', p: p %>
-  <% end %>
+<div class="sp-grid" id="featured-grid" data-dynamic-catalog data-next-page="1" data-limit="24">
+  <p style="grid-column:1/-1; color:#6d7175; padding:20px;">Loading featured parts…</p>
 </div>

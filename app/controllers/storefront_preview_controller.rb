@@ -12,8 +12,9 @@ class StorefrontPreviewController < ApplicationController
   attr_reader :current_shop
 
   def index
+    # Featured Parts loads dynamically via /demo/api/products (see
+    # _dynamic_catalog), so no catalog is passed to the template here.
     @shop_name = shop&.name.presence || "Demo Auto Parts Store"
-    @products = distinct_products.first(12)
   end
 
   # My Garage page — vehicles saved by the shopper (localStorage), kept in
@@ -31,18 +32,28 @@ class StorefrontPreviewController < ApplicationController
     @model = pretty_case(@model)
     @category = params[:category].presence
 
+    # Initial page is rendered server-side (page 1 of a paginated set); the
+    # shared dynamic-catalog loader appends further pages from /demo/api/products
+    # as the shopper scrolls. @page drives the data-next-page attribute.
+    @per = 24
+    @page = 1
+
     if @year.present? && @make.present? && @model.present?
       results = FitmentSearchService.new(shop).search_products(
         year: @year, make: @make, model: @model,
-        trim: @trim.presence, engine: @engine.presence
+        trim: @trim.presence, engine: @engine.presence,
+        limit: @per, page: @page
       )
       @vehicle = results[:vehicle]
+      @total = results[:total_count]
       @products = results[:products]
     else
       @vehicle = nil
-      @products = distinct_products
+      all = distinct_products
+      all = all.select { |p| p[:category] == @category } if @category
+      @total = all.size
+      @products = all.first(@per)
     end
-    @products = @products.select { |p| p[:category] == @category } if @category
   end
 
   # Product detail page — same data the Shopify PDP would carry (title, price,

@@ -424,6 +424,12 @@
       document.addEventListener('click', () => {
         document.querySelectorAll('.vsp-garage-dropdown').forEach(d => d.classList.remove('vsp-show'));
       });
+
+      // Cards loaded later (AJAX featured grid / infinite scroll) carry the
+      // same badge markup but weren't present at init. Recompute fitment
+      // badges whenever a batch of cards lands so they match the active
+      // vehicle too.
+      window.addEventListener('vsp:refreshFitments', () => this.updateAllPdpBadges());
     }
   }
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= content_for(:page_title).presence || 'Vehicle Selector Pro — Storefront Preview' %></title>
-  <link rel="stylesheet" href="/ext-assets/vehicle-selector.css?v=1">
+  <link rel="stylesheet" href="/ext-assets/vehicle-selector.css?v=2">
   <% if content_for?(:head) %><%= yield :head %><% end %>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -304,6 +304,12 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
       gap: 22px; max-width: 1120px; margin: 0 auto; padding: 0 0 64px;
     }
+    .sp-loading-more {
+      max-width: 1120px; margin: -40px auto 0; padding: 4px 0 48px;
+      text-align: center; font-family: "IBM Plex Mono", monospace;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--steel);
+    }
     .sp-card {
       background: var(--card); border: 1px solid var(--line); border-radius: 10px;
       overflow: hidden; display: flex; flex-direction: column;
@@ -602,6 +608,7 @@
     </div>
   </div>
 
-  <script src="/ext-assets/vehicle-selector.js?v=1" defer="defer"></script>
+  <%= render 'storefront_preview/dynamic_catalog' %>
+  <script src="/ext-assets/vehicle-selector.js?v=2" defer="defer"></script>
 </body>
 </html>

@@ -1,0 +1,159 @@
+<script>
+  // Shared storefront catalog loader. Backs the dynamically-loaded featured
+  // parts grid and the infinite-scroll collection: fetches /demo/api/products
+  // page by page and renders product cards whose markup mirrors the
+  // _product_card partial (including the fitment badge attributes), so the
+  // widget's vsp:refreshFitments listener keeps badges in sync with the
+  // selected vehicle. Aligns with how a real Shopify storefront paginates a
+  // collection (page + limit against a filtered product set).
+  (function () {
+    if (window.VSPDynamicCards) return; // already defined
+    var CAT_ICONS = {
+      'Air Intake': '🔩', 'Brakes': '🛑', 'Suspension': '🌀', 'Exhaust': '💨',
+      'Bumpers & Armor': '🛡️', 'Lighting': '💡', 'Chassis & Handling': '⚙️',
+      'Maintenance': '🛢️', 'Electrical': '🔋', 'Wipers & Visibility': '🌧️',
+      'Filters': '🌬️', 'Interior & Comfort': '🧺', 'Towing': '🪝',
+      'Exterior & Racks': '🧳'
+    };
+
+    function esc(s) {
+      return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function money(c) {
+      if (c === undefined || c === null) return '';
+      var frac = (c % 100) ? 2 : 0;
+      return '$' + (c / 100).toLocaleString(undefined, { minimumFractionDigits: frac, maximumFractionDigits: frac });
+    }
+    function urlEncodeProductId(id) {
+      // Shopify GIDs contain slashes; URL-encode so the /demo/products/:id route
+      // stays intact (same encoding the server-side partial uses).
+      return encodeURIComponent(String(id));
+    }
+
+    // Mirrors app/views/storefront_preview/_product_card.html.erb
+    function renderCard(p) {
+      var title = esc(p.title || p.product_title || '');
+      var price = (p.price_cents === undefined || p.price_cents === null)
+        ? '' : '<span class="sp-card-price">' + money(p.price_cents) + '</span>';
+      var img = p.image
+        ? '<img src="' + esc(p.image) + '" alt="' + title + '" class="sp-card-photo" loading="lazy">'
+        : '<span class="sp-card-fallback" aria-hidden="true">' + (CAT_ICONS[p.category] || '🚗') + '</span>';
+      var cardBody =
+        '<div class="sp-card-img">' + img +
+          (p.category ? '<span class="sp-card-cat">' + esc(p.category) + '</span>' : '') +
+        '</div>' +
+        '<div class="sp-card-body">' +
+          '<div class="sp-card-brand-row">' +
+            (p.brand ? '<span class="sp-card-brand">' + esc(p.brand) + '</span>' : '') + price +
+          '</div>' +
+          '<div class="sp-card-title">' + title + '</div>' +
+          (p.short_description ? '<div class="sp-card-desc">' + esc(p.short_description) + '</div>' : '') +
+          '<div class="sp-card-sku">PART # ' + esc(p.sku || '') + (p.universal ? ' · Universal Fit' : '') + '</div>' +
+        '</div>';
+
+      // Universal = always correct. Everything else renders the neutral
+      // "select your vehicle" state; the widget refreshes it via
+      // vsp:refreshFitments so dynamically loaded badges match the active car.
+      var badge;
+      if (p.universal) {
+        badge = '<div class="vsp-pdp-fitment-badge vsp-fit-universal" data-product-id="' + esc(p.product_id) +
+          '" data-universal="true"><div class="vsp-badge-icon">🌐</div><div class="vsp-badge-content">' +
+          '<div class="vsp-badge-title">Universal Fitment</div>' +
+          '<div class="vsp-badge-description">' + esc(p.fitment_notes || '100% Fitment Guarantee. Ready for installation.') + '</div></div></div>';
+      } else {
+        badge = '<div class="vsp-pdp-fitment-badge vsp-fit-unselected" data-product-id="' + esc(p.product_id) +
+          '" data-universal="false"><div class="vsp-badge-icon">🚗</div><div class="vsp-badge-content">' +
+          '<div class="vsp-badge-title">Select Your Vehicle to Confirm Fitment</div>' +
+          '<div class="vsp-badge-description">100% Fitment Guarantee. Free returns if verified fitment fails.</div></div></div>';
+      }
+
+      return '<div class="sp-card"><a href="/demo/products/' + urlEncodeProductId(p.product_id) +
+        '" style="text-decoration:none; color:inherit; display:block;">' + cardBody +
+        '</a>' + badge + '</div>';
+    }
+
+    // Wrap card HTML in a real element so the fitment widget (which sees the
+    // DOM, not strings) refreshes correctly.
+    function cardElement(p) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = renderCard(p);
+      return tmp.firstElementChild;
+    }
+
+    // Infinite-scroll setup for any [data-dynamic-catalog] grid.
+    // - data-next-page: where to start fetching (1 for a JS-first grid like
+    //   Featured Parts; 2 when the server already rendered page 1).
+    // - data-limit / data-category / data-token: forwarded to the API.
+    function init(grid) {
+      var next = parseInt(grid.getAttribute('data-next-page') || '1', 10);
+      var limit = parseInt(grid.getAttribute('data-limit') || '24', 10);
+      var token = grid.getAttribute('data-token') || '';
+      var category = grid.getAttribute('data-category') || '';
+
+      if (!(next >= 1)) return; // -1 => nothing more to load (server renders all)
+
+      var state = { page: next, loading: false, done: false };
+      var sentinel = document.createElement('div');
+      sentinel.setAttribute('class', 'sp-loading-more');
+      grid.parentNode.insertBefore(sentinel, grid.nextSibling);
+
+      function setStatus(text) { sentinel.textContent = text || ''; }
+
+      function load() {
+        if (state.loading || state.done) return;
+        state.loading = true;
+        setStatus('Loading more parts…');
+
+        var qs = new URLSearchParams({ page: String(state.page), limit: String(limit) });
+        if (token) qs.set('token', token);
+        if (category) qs.set('category', category);
+
+        fetch('/demo/api/products?' + qs.toString(), { headers: { 'Accept': 'application/json' } })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (payload) {
+            state.loading = false;
+            if (!payload.success) { state.done = true; setStatus(''); return; }
+            (payload.products || []).forEach(function (p) { grid.appendChild(cardElement(p)); });
+            // Let the widget re-evaluate fitment badges for the new cards.
+            window.dispatchEvent(new CustomEvent('vsp:refreshFitments'));
+            state.page += 1;
+            if (!payload.has_more || !payload.products.length) { state.done = true; setStatus(''); return; }
+            setStatus('');
+          })
+          .catch(function () { state.loading = false; setStatus('Failed to load parts. Scroll to retry.'); });
+      }
+
+      // JS-first grid (featured): drop the placeholder and load page 1 now.
+      if (next === 1) { grid.innerHTML = ''; load(); }
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) load(); });
+        }, { rootMargin: '320px 0px' }).observe(sentinel);
+      } else {
+        // No IntersectionObserver: a manual "Load more" button.
+        sentinel.textContent = '';
+        var btn = document.createElement('button');
+        btn.className = 'sp-pdp-cta';
+        btn.textContent = 'Load more parts';
+        btn.style.marginTop = '24px';
+        btn.addEventListener('click', function () { this.remove(); load(); });
+        sentinel.appendChild(btn);
+      }
+    }
+
+    window.VSPDynamicCards = { renderCard: renderCard, cardElement: cardElement, init: init };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-dynamic-catalog]').forEach(init);
+      });
+    } else {
+      document.querySelectorAll('[data-dynamic-catalog]').forEach(init);
+    }
+  })();
+</script>

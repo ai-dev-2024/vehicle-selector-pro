@@ -12,6 +12,8 @@
 #   demo_shop), never against arbitrary shop domains supplied by callers.
 # - Responses carry the same short-lived public cache headers as the proxy.
 class DemoApiController < ApplicationController
+  include DemoCatalog
+
   skip_before_action :verify_authenticity_token
   before_action :set_demo_shop
   before_action :set_cache_headers
@@ -86,6 +88,45 @@ class DemoApiController < ApplicationController
     render json: { success: true, data: result }
   end
 
+  # GET /demo/api/products?page=1&limit=24[&category=X][&token=year|make|model|trim|engine]
+  #
+  # Backs the dynamically-loaded featured grid and the infinite-scroll
+  # collection: returns one page of product cards with enough metadata to know
+  # when to stop (has_more) so the client can keep fetching until the catalog
+  # is fully loaded. Mirrors how a real Shopify storefront paginates a
+  # collection (limit/page + a filtered product set).
+  def products
+    per = params[:limit].to_i.clamp(1, 100)
+    page = [params[:page].to_i, 1].max
+    offset = (page - 1) * per
+    category = params[:category].presence
+
+    year, make, model, trim, engine = params[:token].to_s.split("|")
+    if year.present? && make.present? && model.present?
+      results = search.search_products(
+        year: year, make: make, model: model,
+        trim: trim.presence, engine: engine.presence,
+        limit: per, page: page
+      )
+      products = results[:products].map { |p| card_payload(p) }
+      total = results[:total_count]
+    else
+      all = distinct_products
+      all = all.select { |p| p[:category] == category } if category
+      total = all.size
+      products = all.drop(offset).first(per).map { |p| card_payload(p) }
+    end
+
+    render json: {
+      success: true,
+      products: products,
+      total: total,
+      page: page,
+      limit: per,
+      has_more: (offset + products.size) < total
+    }
+  end
+
   # GET /demo/api/product_fitments?product_id=gid://...
   def product_fitments
     return missing_params!(%w[product_id]) if params[:product_id].blank?
@@ -99,6 +140,23 @@ class DemoApiController < ApplicationController
   end
 
   private
+
+  # Normalize either payload shape (distinct_products uses :title, the search
+  # service uses :product_title) into the single card shape the client renders.
+  def card_payload(product)
+    {
+      product_id: product[:product_id],
+      title: product[:title] || product[:product_title],
+      sku: product[:sku],
+      brand: product[:brand],
+      category: product[:category],
+      short_description: product[:short_description],
+      price_cents: product[:price_cents],
+      universal: product[:universal],
+      image: product[:image],
+      fitment_notes: product[:fitment_notes]
+    }
+  end
 
   def search
     @search ||= FitmentSearchService.new(@demo_shop)
