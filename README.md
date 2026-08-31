@@ -44,23 +44,21 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 ## Demo
 
-Two narrated walkthroughs — a merchant command-center tour and the shopper experience — cut from the live app against the shop-drawing redesign, voiced with natural neural narration.
+Two narrated walkthroughs — a merchant command-center tour and the shopper experience — cut from the live app against the shop-drawing redesign. Each video has its own distinct voiceover (male for merchants, female for shoppers) and its own music bed, with tight scene pacing — no dead air.
 
 <div align="center">
 
-**▶ Watch the three narrated walkthroughs — they play right here on the repo page:**
-
-<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-live-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4"></video>
-
-*The live application, recorded against the real deployment · 2:25 · light music bed*
+**▶ Watch the two narrated walkthroughs — they play right here on the repo page:**
 
 <video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"></video>
 
-*For merchants — the fitment command center · 2:34 · light music bed*
+*For merchants — the fitment command center · 1:29 · male voiceover · warm music bed*
 
 <video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"></video>
 
-*For shoppers — from vehicle selector to guaranteed-fit checkout · 2:44 · light music bed*
+*For shoppers — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed*
+
+Every push re-publishes these files to GitHub Pages, so the embeds above always stay current — swap the mp4s in `demo/` and the homepage updates automatically.
 
 [Narration script](docs/DEMO_SCRIPT.md) · [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html)
 

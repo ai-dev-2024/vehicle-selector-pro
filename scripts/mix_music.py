@@ -2,7 +2,9 @@
 """Add a light music bed (ducked under narration) to a rendered video, and
 output the final 1280x720 h264/aac mp4 with faststart.
 
-Usage: python scripts/mix_music.py IN.mp4 OUT.mp4
+Usage: python scripts/mix_music.py IN.mp4 OUT.mp4 [MUSIC_MP3 [VOL]]
+  MUSIC_MP3  explicit music bed file (default demo/autoplay/audio_v3/music_bed.mp3)
+  VOL        narration-room music volume 0..1 (default 0.24)
 """
 import os
 import shutil
@@ -20,15 +22,16 @@ if not os.path.exists(FF):
 assert FF, "ffmpeg not found"
 
 src, dst = sys.argv[1], sys.argv[2]
-music = os.path.join(ROOT, "demo", "autoplay", "audio_v3", "music_bed.mp3")
+music = sys.argv[3] if len(sys.argv) > 3 else os.path.join(ROOT, "demo", "autoplay", "audio_v3", "music_bed.mp3")
+vol = float(sys.argv[4]) if len(sys.argv) > 4 else 0.24
 if not os.path.exists(music):
-    raise SystemExit("music_bed.mp3 missing")
+    raise SystemExit(f"music file missing: {music}")
 
-# Duck music under narration via a sidechain on the narration channel.
+# Duck music under narration via a sidechain on the narration channel, kept low.
 fc = (
-    "[1:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.9[mus];"
+    f"[1:a]aresample=48000,aformat=channel_layouts=stereo,volume={vol:.2f}[mus];"
     "[0:a]aresample=48000,aformat=channel_layouts=stereo[nar];"
-    "[mus][nar]sidechaincompress=threshold=0.028:ratio=6:attack=15:release=350:makeup=1[duck];"
+    "[mus][nar]sidechaincompress=threshold=0.04:ratio=5:attack=20:release=400:makeup=1[duck];"
     "[duck][nar]amix=inputs=2:normalize=0[mix];"
     "[mix]alimiter=limit=0.95[aout]"
 )

@@ -45,7 +45,7 @@ FREE_AI_STATEMENT = (
 
 RESOURCE_STATEMENT = (
     "Built at the ceiling of a 2018 ultrabook. This entire project — the Rails application, the "
-    "Shopify integration, the storefront, every diagram, this report, and even the three narrated "
+    "Shopify integration, the storefront, every diagram, this report, and even the two narrated "
     "walkthrough videos — was designed, coded, tested, and rendered on a single "
     "ASUS ZenBook "
     "UX433FA: an Intel Core i7-8565U at 1.80 GHz (4 cores, ~15 W), 16 GB RAM, and only Intel UHD 620 "
@@ -67,8 +67,8 @@ HARDWARE_SPECS = [
 
 CLOSING = (
     "The application is live, deployed, and healthy. Both the storefront shopping experience and "
-    "the merchant command center are fully functional and can be explored immediately, and the three "
-    "narrated walkthrough videos — merchant, shopper, and a live walkthrough of the running app — "
+    "the merchant command center are fully functional and can be explored immediately, and the two "
+    "narrated walkthrough videos — merchant and shopper — "
     "demonstrate the complete flow from setup to purchase. Vehicle "
     "Selector Pro is ready for further development, App Store submission, or customization to a "
     "specific merchant catalog — and because it was built entirely with free AI tooling, the "
@@ -205,7 +205,6 @@ TECH_ROWS = [
 ]
 
 VIDEO_LINKS = [
-    ("Live application", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4"),
     ("Merchant command center", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"),
     ("Shopper experience", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"),
 ]

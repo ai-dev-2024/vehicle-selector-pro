@@ -68,7 +68,7 @@ SLIDES = [
         "kind": "cta",
         "kicker": "READY WHEN YOU ARE",
         "title": "See it live — watch it run",
-        "lines": ["Try the live storefront demo", "Explore the merchant admin", "Open the repository", "Watch the three narrated walkthroughs"],
+        "lines": ["Try the live storefront demo", "Explore the merchant admin", "Open the repository", "Watch the two narrated walkthroughs"],
         "links": [DEMO, ADMIN, REPO, "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html"],
     },
 ]
