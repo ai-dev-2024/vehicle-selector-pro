@@ -6,3 +6,10 @@ Rails.autoloaders.each do |autoloader|
     "graphql_client" => "GraphQLClient"
   )
 end
+
+# "billing" is a mass noun; Rails would otherwise pluralize the count noun and
+# route the `resource :billing` to a BillingsController. Keep it singular so
+# the controller is Admin::BillingController.
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.uncountable %w[billing]
+end

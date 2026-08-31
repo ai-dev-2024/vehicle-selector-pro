@@ -1,0 +1,63 @@
+<div style="max-width: 960px; margin: 0 auto;">
+  <div style="margin-bottom: 24px;">
+    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Plans &amp; billing</h2>
+    <p style="margin: 0; color: #6d7175;">
+      Choose a plan to unlock larger bulk imports and higher fitment limits. Billing is handled securely by Shopify.
+    </p>
+  </div>
+
+  <% if flash[:alert].present? %>
+    <div class="polaris-banner polaris-banner-alert" style="display: block; margin-bottom: 16px;"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice].present? %>
+    <div class="polaris-banner polaris-banner-info" style="display: block; margin-bottom: 16px;"><%= flash[:notice] %></div>
+  <% end %>
+
+  <div class="cc-card" style="margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <strong style="font-size: 15px;">Current plan:</strong>
+        <span style="font-weight: 700; color: #008060; margin-left: 6px;"><%= BillingPlan.find(@current_plan)&.name.to_s %></span>
+        <span style="font-size: 13px; color: #6d7175; margin-left: 8px;">
+          up to <%= number_with_delimiter(@current_plan_obj&.max_fitments.to_i) %> fitments per bulk import
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+    <% @plans.each do |plan| %>
+      <div class="cc-card" style="display: flex; flex-direction: column; border: 2px solid <%= plan.key == @current_plan ? '#008060' : '#e1e3e5' %>; position: relative;">
+        <% if plan.key == @current_plan %>
+          <div style="position: absolute; top: -12px; left: 16px; background: #008060; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">CURRENT</div>
+        <% end %>
+        <h3 style="margin: 0 0 4px 0; font-size: 18px; font-weight: 700;"><%= plan.name %></h3>
+        <div style="font-size: 22px; font-weight: 800; margin-bottom: 12px;"><%= plan.monthly_price_s %></div>
+        <ul style="list-style: none; margin: 0 0 20px 0; padding: 0; font-size: 13px; color: #202223; flex: 1;">
+          <% if plan.free? %>
+            <li style="padding: 6px 0; border-bottom: 1px solid #f1f2f3;">✓ Up to <%= number_with_delimiter(plan.max_fitments) %> fitments per import</li>
+            <li style="padding: 6px 0; border-bottom: 1px solid #f1f2f3;">✓ Core storefront widget &amp; fitment badges</li>
+            <li style="padding: 6px 0;">✗ Bulk CSV imports capped</li>
+          <% else %>
+            <li style="padding: 6px 0; border-bottom: 1px solid #f1f2f3;">✓ Up to <%= number_with_delimiter(plan.max_fitments) %> fitments per import</li>
+            <li style="padding: 6px 0; border-bottom: 1px solid #f1f2f3;">✓ Large catalog sync &amp; priority processing</li>
+            <li style="padding: 6px 0;">🎁 <%= plan.trial_days %>-day free trial</li>
+          <% end %>
+        </ul>
+
+        <% if plan.key == @current_plan %>
+          <div style="text-align: center; background: #f1f2f3; color: #6d7175; padding: 10px; border-radius: 6px; font-weight: 600;">Active plan</div>
+        <% else %>
+          <%= form_with url: admin_billing_path, method: :post, local: true do |f| %>
+            <%= hidden_field_tag :plan, plan.key %>
+            <%= f.submit plan.price.to_f.zero? ? "Downgrade to #{plan.name}" : "Upgrade to #{plan.name}", class: "btn btn-primary", style: "width: 100%;" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <p style="font-size: 12px; color: #6d7175; margin-top: 20px;">
+    Payments are processed and billed through your Shopify admin under <strong>Settings → Billing</strong>. You can cancel any time there.
+  </p>
+</div>

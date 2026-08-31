@@ -2,6 +2,24 @@
 
 All notable changes to Vehicle Selector Pro are documented here.
 
+## [1.2.0] — 2026-09-01
+
+Shopify Billing API subscription flow with free trial + paid tiers.
+
+### Billing
+- **Multi-tier plan catalogue** (`BillingPlan`): Free (0, capped), Pro ($9.99, 14-day trial),
+  and Pro Plus ($29.99, 14-day trial), each with a Shopify-native recurring subscription
+  charge and a fitment ceiling for bulk imports.
+- **`Shopify::BillingService`** creates subscriptions via the Shopify Billing GraphQL API
+  (`appSubscriptionCreate`), redirects the merchant to Shopify's native checkout
+  (`confirmationUrl`), and reconciles `shops.billing_plan` from the shop's
+  `currentAppInstallation.activeSubscriptions` (test-mode aware).
+- **Billing admin page** (`/admin/billing`): plan cards with price/trial, start-subscription
+  CTA, and a return callback that marks the shop paid after checkout. Refuses to stack a
+  second charge when a shop already has an active billable subscription.
+- **Bulk import gating**: `Admin::BulkImportsController` rejects (and routes to billing) any
+  import that would push the shop past its tier's plan ceiling; upgrading raises the limit.
+
 ## [1.1.0] — 2026-09-01
 
 Production-grade hardening pass (Phases 1–5).

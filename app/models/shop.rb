@@ -62,8 +62,23 @@ class Shop < ApplicationRecord
   # Billing foundation (beyond the original spec). A shop is on a paid plan
   # when billing_plan is not "free" and the subscription has not lapsed.
   def on_paid_plan?
-    billing_plan.present? && billing_plan != "free" &&
-      (billing_expires_at.nil? || billing_expires_at > Time.current)
+    billing_plan.present? && billing_plan != BillingPlan::FREE && on_active_plan?
+  end
+
+  # The merchant's current plan, resolved from the billing_plan column.
+  def billing_plan_key
+    billing_plan.presence || BillingPlan::FREE
+  end
+
+  def on_active_plan?
+    billing_expires_at.nil? || billing_expires_at > Time.current
+  end
+
+  # The fitment ceiling imposed by the merchant's plan (used to gate bulk
+  # imports). Free shops get a limited ceiling, paid tiers raise it.
+  def planned_fitment_limit
+    plan = BillingPlan.find(billing_plan_key)
+    plan ? plan.max_fitments : BillingPlan.default.max_fitments
   end
 
   def settings

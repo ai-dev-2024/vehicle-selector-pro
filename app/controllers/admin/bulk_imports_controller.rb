@@ -14,6 +14,15 @@ module Admin
                     else
                       params[:csv_raw_text]
                     end
+      # Gate bulk imports on the shop's plan ceiling. A paid tier raises the
+      # limit; the free tier is capped so the import is rejected upfront rather
+      # than partially applied.
+      if over_plan_limit?(current_shop, csv_content)
+        limit = current_shop.planned_fitment_limit
+        return redirect_to admin_billing_path,
+                           alert: t("admin.bulk_imports.plan_limit",
+                                    current: current_shop.vehicle_product_fitments.count, limit: limit)
+      end
 
       importer = BulkFitmentImporter.new(current_shop, csv_content)
       results = importer.import!
@@ -42,6 +51,16 @@ module Admin
       end
 
       send_data csv_data, filename: "vehicle_selector_pro_fitment_template.csv", type: "text/csv"
+    end
+
+    private
+
+    # True when adding every row in the CSV would push the shop past its plan
+    # ceiling. The check is conservative (counts all lines) and rejects the
+    # whole import upfront rather than partially applying it.
+    def over_plan_limit?(shop, csv_content)
+      import_size = csv_content.lines.count - 1
+      shop.vehicle_product_fitments.count + import_size > shop.planned_fitment_limit
     end
   end
 end

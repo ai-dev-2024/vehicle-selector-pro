@@ -4,6 +4,7 @@ en:
       choose_file_or_paste: "Please choose a CSV file or paste CSV text."
       import_success: "Successfully imported %{count} vehicle fitments across %{products} products! Metafield background sync queued."
       import_partial: "Import completed with %{error_count} error(s). %{count} fitments imported."
+      plan_limit: "This import would bring you past your plan's limit of %{limit} fitments (current: %{current}). Upgrade your plan to import more."
     product_fitments:
       assigned: "Fitment successfully assigned to %{product}!"
       updated: "Fitment successfully updated."
@@ -19,6 +20,12 @@ en:
       import_partial: "Imported %{added}; %{skipped} skipped. Errors: %{errors}"
     settings:
       saved: "Widget and garage settings saved successfully!"
+    billing:
+      invalid_plan: "Unknown plan selected."
+      already_subscribed: "Your store is already on a paid plan — no new charge was created."
+      activated: "You're now on the %{plan} plan! Your limits have been raised."
+      not_activated: "Your subscription wasn't activated. No charge was made — you can try again or select another plan."
+      error: "There was a problem processing billing: %{message}"
     sync:
       full_queued: "Full shop metafield synchronization queued in background."
       product_id_required: "Product ID is required."

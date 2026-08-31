@@ -49,6 +49,10 @@ Rails.application.routes.draw do
     end
 
     resource :settings, only: %i[show update]
+
+    resource :billing, only: %i[show create] do
+      get :return
+    end
   end
 
   # Shopify App Proxy Endpoints (Mounted at storefront path /apps/vehicle-selector)

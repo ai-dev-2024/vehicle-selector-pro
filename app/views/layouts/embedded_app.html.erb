@@ -40,6 +40,10 @@
         <a href="<%= admin_bulk_imports_path %>" class="<%= 'active' if controller_name == 'bulk_imports' %>">Bulk CSV import</a>
         <a href="<%= admin_oe_numbers_path %>" class="<%= 'active' if controller_name == 'oe_numbers' %>">OE part numbers <span class="cc-count"><%= current_shop&.oe_numbers&.count || 0 %></span></a>
       </nav>
+      <div class="cc-nav-label">Account</div>
+      <nav class="cc-nav">
+        <a href="<%= admin_billing_path %>" class="<%= 'active' if controller_name == 'billing' %>"><%= current_shop&.on_paid_plan? ? '💳 ' : '' %>Plans &amp; billing</a>
+      </nav>
       <div class="cc-sidebar-foot">
         <div class="cc-status">
           <span class="cc-dot"></span>
