@@ -31,13 +31,19 @@ jobs:
 
       - name: Assemble report site
         run: |
-          mkdir -p _site
+          mkdir -p _site/demo
           # Client deliverables: full report (PDF + DOCX) and pitch deck (PDF + PPTX)
           cp report/Vehicle_Selector_Pro_Project_Report.pdf _site/
           cp report/Vehicle_Selector_Pro_Project_Report.docx _site/
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pdf _site/
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pptx _site/
           cp report/site/index.html _site/index.html
+          # Demo videos: streamable walkthroughs served from the same Pages site
+          cp demo/videos.html _site/demo/videos.html
+          cp demo/vehicle-selector-merchant-poster.png _site/demo/
+          cp demo/vehicle-selector-shopper-poster.png _site/demo/
+          cp demo/vehicle-selector-pro-merchant.mp4 _site/demo/
+          cp demo/vehicle-selector-pro-shopper.mp4 _site/demo/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
