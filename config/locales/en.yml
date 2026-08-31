@@ -10,6 +10,13 @@ en:
       removed: "Fitment mapping removed."
       requires_product_and_vehicle: "Product ID and at least one vehicle must be selected."
       bulk_assigned: "Successfully assigned %{count} vehicles to %{product}!"
+    oe_numbers:
+      added: "OE number %{oe} added for %{product}."
+      removed: "OE number %{oe} removed."
+      not_found: "OE number not found."
+      choose_file_or_paste: "Please choose a CSV file or paste CSV text."
+      import_success: "Imported %{added} OE number(s); %{skipped} already existed and were skipped."
+      import_partial: "Imported %{added}; %{skipped} skipped. Errors: %{errors}"
     settings:
       saved: "Widget and garage settings saved successfully!"
     sync:

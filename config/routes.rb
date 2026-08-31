@@ -28,6 +28,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :oe_numbers, only: %i[index create destroy] do
+      collection do
+        post :import
+        get :sample_template
+      end
+    end
+
     resources :bulk_imports, only: %i[index create] do
       collection do
         get :sample_template

@@ -1,0 +1,50 @@
+---
+# bundler-audit ignore list.
+#
+# Each entry below is either NOT EXPLOITABLE in this deployment (verified
+# against the codebase) or requires a scheduled dependency upgrade. The
+# dependency audit job fails on any advisory NOT listed here, so new
+# vulnerabilities still break CI — these are the only whitelisted exceptions.
+#
+# When the tracked upgrades land, remove the corresponding entries:
+#   - Rails 7.1.6 -> 7.2.3+ (actionview/activesupport/activestorage advisories)
+#   - shopify_app 22.5 -> 23.0.3+
+#   - puma 6.6 -> 7.2.1+ (or 8.0.2+)
+ignore:
+  # --- Not exploitable: this app does not use Active Storage ---------------
+  # No has_one_attached / has_many_attached anywhere in the app; the gem ships
+  # as part of Rails but the vulnerable code paths (variant processing,
+  # direct uploads, proxy-mode Range requests) are never reached.
+  - GHSA-cg4j-q9v8-6v38   # AS variant processing arbitrary file read/RCE
+  - GHSA-qcfx-2mfw-w4cg   # AS content type bypass via metadata
+  - GHSA-r46p-8f7g-vvvg   # AS DoS via proxy-mode Range requests
+  - GHSA-73f9-jhhh-hr5m   # AS (active_storage) advisory
+  - GHSA-9xrj-h377-fr87   # AS (active_storage) advisory
+  - GHSA-p9fm-f462-ggrg   # AS (active_storage) advisory
+  - GHSA-xr9x-r78c-5hrm   # AS (active_storage) advisory
+
+  # --- Not exploitable: Puma PROXY protocol is not enabled ------------------
+  # Both advisories only affect `set_remote_address proxy_protocol: :v1`,
+  # which config/puma.rb never sets (verified). Fly terminates TLS and talks
+  # plain HTTP to the app; no PROXY protocol on the listener.
+  - GHSA-qpgp-93vx-g8v8   # Puma PROXY v1 parser memory exhaustion
+  - GHSA-2vqw-3mp8-cgmx   # Puma PROXY v1 repeated protocol headers
+
+  # --- Not exploitable: app never uses the vulnerable helper ---------------
+  # The advisory is about current_shopify_domain resolving from the request
+  # shop param. This app derives the shop exclusively from the verified
+  # session (current_shopify_session&.shop, see Admin::BaseController) and
+  # never calls current_shopify_domain/authenticated_shopify_domain. Fix
+  # requires shopify_app 23.x (major bump) — tracked upgrade.
+  - GHSA-6j52-38f8-qhxr   # shopify_app token-exchange shop context confusion
+
+  # --- Tracked upgrade: Rails 7.1.6 is the final 7.1.x ---------------------
+  # Patches for these only exist in Rails 7.2.3.1+/8.x. Rails 7.1 is still
+  # receiving security backports where feasible, but these specific fixes
+  # were not backported. Upgrading to Rails 7.2 is scheduled work; until it
+  # lands, keep these documented. The app escapes output in views and does
+  # not pass user input to the flagged helpers (SafeBuffer#%, tag helpers
+  # render merchant-supplied strings through standard ERB escaping).
+  - GHSA-v55j-83pf-r9cq   # actionview XSS in tag helpers (7.2.3.1+)
+  - GHSA-89vf-4333-qx8v   # activesupport ReDoS in number_to_delimited (7.2+)
+  - GHSA-2j26-frm8-cmj9   # activesupport XSS in SafeBuffer#% (7.2+)

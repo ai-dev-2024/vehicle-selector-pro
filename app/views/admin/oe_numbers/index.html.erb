@@ -1,0 +1,115 @@
+<div style="max-width: 960px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">OE Part Numbers</h2>
+      <p style="margin: 0; color: #6d7175;">
+        Cross-reference your products against factory part numbers so shoppers can find them by the OE number printed on the part they already have.
+      </p>
+    </div>
+    <a href="<%= sample_template_admin_oe_numbers_path %>" class="btn">📥 Download CSV Template</a>
+  </div>
+
+  <% if flash[:alert].present? %>
+    <div class="polaris-banner polaris-banner-alert" style="display: block; margin-bottom: 16px;"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice].present? %>
+    <div class="polaris-banner polaris-banner-info" style="display: block; margin-bottom: 16px;"><%= flash[:notice] %></div>
+  <% end %>
+
+  <div class="cc-card" style="margin-bottom: 20px;">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Add a single OE number</h3>
+    <%= form_with url: admin_oe_numbers_path, method: :post, local: true do |f| %>
+      <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+        <div style="flex: 2; min-width: 240px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Product ID</label>
+          <%= f.text_field :product_id, placeholder: "gid://shopify/Product/8192019283001", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+        <div style="flex: 1; min-width: 160px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">OE Number</label>
+          <%= f.text_field :oe_number, placeholder: "51372-TG7-A01", style: "width: 100%; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; box-sizing: border-box;" %>
+        </div>
+        <%= f.submit "Add OE Number", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="cc-card" style="margin-bottom: 20px;">
+    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Import from CSV</h3>
+    <p style="font-size: 13px; color: #6d7175; margin: 0 0 12px 0;">
+      Two columns: <code>product_id</code> and <code>oe_number</code> (header optional). Rows already present are skipped.
+    </p>
+    <%= form_with url: import_admin_oe_numbers_path, method: :post, multipart: true, local: true do |f| %>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <label style="cursor: pointer; display: inline-block;">
+          <span class="btn">Browse CSV File</span>
+          <%= f.file_field :csv_file, accept: ".csv,text/csv", style: "display: none;" %>
+        </label>
+        <span style="font-size: 13px; color: #6d7175;">or paste:</span>
+        <%= f.text_field :csv_raw_text, placeholder: "product_id,oe_number\ngid://shopify/Product/123,51372-TG7-A01", style: "flex: 1; min-width: 240px; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-family: monospace; font-size: 12px;" %>
+        <%= f.submit "Import OE Numbers", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="cc-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="font-size: 16px; font-weight: 600; margin: 0;">
+        OE number registry
+        <span class="cc-count" style="margin-left: 8px;"><%= @total_count %></span>
+      </h3>
+      <%= form_with url: admin_oe_numbers_path, method: :get, local: true do |f| %>
+        <div style="display: flex; gap: 8px;">
+          <%= f.text_field :query, value: params[:query], placeholder: "Search OE or product ID…", style: "padding: 8px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 13px;" %>
+          <%= f.submit "Search", class: "btn", style: "padding: 8px 14px;" %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @oe_numbers.any? %>
+      <table class="cc-table">
+        <thead>
+          <tr>
+            <th>OE Number</th>
+            <th>Product ID</th>
+            <th>Added</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @oe_numbers.each do |oe| %>
+            <tr>
+              <td style="font-family: monospace; font-weight: 600;"><%= oe.oe_number %></td>
+              <td style="font-family: monospace; font-size: 12px;"><%= oe.product_id %></td>
+              <td style="color: #6d7175; font-size: 13px;"><%= oe.created_at.strftime("%b %d, %Y") %></td>
+              <td style="text-align: right;">
+                <%= button_to "Remove", admin_oe_number_path(oe), method: :delete,
+                              data: { confirm: "Remove OE number #{oe.oe_number}?" },
+                              class: "btn btn-danger", style: "padding: 4px 10px; font-size: 12px;" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <% if @total_count > @per_page %>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+          <span style="font-size: 13px; color: #6d7175;">Page <%= @page %> of <%= (@total_count.to_f / @per_page).ceil %></span>
+          <div style="display: flex; gap: 8px;">
+            <% if @page > 1 %>
+              <%= link_to "← Previous", admin_oe_numbers_path(page: @page - 1, query: params[:query]), class: "btn", style: "padding: 4px 10px; font-size: 12px;" %>
+            <% end %>
+            <% if @page * @per_page < @total_count %>
+              <%= link_to "Next →", admin_oe_numbers_path(page: @page + 1, query: params[:query]), class: "btn", style: "padding: 4px 10px; font-size: 12px;" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div style="text-align: center; padding: 40px 20px; color: #6d7175;">
+        <div style="font-size: 36px; margin-bottom: 12px;">🔧</div>
+        <div style="font-weight: 600; color: #202223;">No OE numbers yet</div>
+        <div style="font-size: 13px; margin-top: 4px;">Add one above or import a CSV to let shoppers search by factory part number.</div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -48,6 +48,22 @@ Production-grade hardening pass (Phases 1–5).
 - **Analytics foundation** (daily `fitment_analytics` aggregates written
   off-request by a background job).
 
+### OE number admin UI
+- New **OE part numbers** page in the merchant admin (sidebar → Configure):
+  add a single OE number per product, search the registry, remove entries,
+  and bulk-import from CSV (`product_id,oe_number`, duplicates skipped) with
+  a downloadable template. Searchable in the storefront via the existing
+  `?oe=` app proxy endpoint.
+
+### Security
+- Upgraded **sqlite3 1.7 → 2.9.6** fixing two use-after-free advisories
+  (GHSA-mwm8-39rw-8826, GHSA-28hh-pr2h-2w89).
+- Added `.bundler-audit.yml` documenting the remaining advisories that are
+  not exploitable in this deployment (Active Storage unused, Puma PROXY
+  protocol not enabled, `current_shopify_domain` helper never used) and the
+  tracked Rails 7.1→7.2 / shopify_app 22→23 upgrade; the CI audit job still
+  fails on any advisory not whitelisted.
+
 ## [1.0.0] — 2026-08-30
 
 First production release — deployed and verified end-to-end on Fly.io against a

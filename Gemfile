@@ -22,8 +22,8 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 # Environment variables (.env loading)
 gem "dotenv-rails", "~> 3.1"
 
-# Database
-gem "sqlite3", "~> 1.7"
+# Database (dev/test only — production uses Postgres via the pg gem)
+gem "sqlite3", "~> 2.6"
 
 # Background Processing & Queuing
 gem "redis", "~> 5.1"
