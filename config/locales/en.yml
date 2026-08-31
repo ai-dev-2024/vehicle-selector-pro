@@ -16,6 +16,7 @@ en:
       full_queued: "Full shop metafield synchronization queued in background."
       product_id_required: "Product ID is required."
       product_queued: "Metafield sync queued for product %{product_id}."
+      backfill_queued: "Backfill from Shopify queued — product titles, handles, and images will refresh in the background."
   activerecord:
     errors:
       messages:

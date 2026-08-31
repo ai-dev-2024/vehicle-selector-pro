@@ -2,7 +2,7 @@ class MetafieldSyncLog < ApplicationRecord
   include ShopScoped
 
   STATUSES = %w[pending in_progress completed failed].freeze
-  SYNC_TYPES = %w[single batch full webhook].freeze
+  SYNC_TYPES = %w[single batch full webhook backfill].freeze
 
   validates :status, inclusion: { in: STATUSES }
   validates :sync_type, inclusion: { in: SYNC_TYPES }

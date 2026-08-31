@@ -27,6 +27,19 @@ module Admin
       redirect_to admin_sync_path, notice: t("admin.sync.product_queued", product_id: product_id)
     end
 
+    # One-click merchant backfill: pull product title/handle/image from Shopify
+    # and refresh already-mapped fitments, without waiting for webhooks.
+    def backfill
+      log = current_shop.metafield_sync_logs.create!(
+        sync_type: "backfill",
+        status: "pending",
+        total_products: current_shop.unique_products_count
+      )
+
+      Metafields::ProductBackfillJob.perform_later(current_shop.id, log.id)
+      redirect_to admin_sync_path, notice: t("admin.sync.backfill_queued")
+    end
+
     def status
       latest_log = current_shop.metafield_sync_logs.recent.first
       render json: {

@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     resource :sync, controller: "sync", only: [:show] do
       post :trigger_all
       post :trigger_product
+      post :backfill
       get :status
     end
 
