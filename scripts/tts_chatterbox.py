@@ -36,6 +36,7 @@ if not os.path.exists(FF):
 assert FF, "ffmpeg not found"
 
 os.makedirs(TMP_DIR, exist_ok=True)
+os.makedirs(AUDIO_DIR, exist_ok=True)
 
 turbo = ChatterboxTurboTTS.from_pretrained(device="cpu")
 sr = int(turbo.sr)

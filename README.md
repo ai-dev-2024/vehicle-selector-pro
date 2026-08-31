@@ -50,6 +50,10 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 **▶ Watch the walkthroughs — they play right here on the repo page:**
 
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-live-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4"></video>
+
+*The live application, recorded against the real deployment · 1:27*
+
 <video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"></video>
 
 *For merchants — the fitment command center · 2:09*

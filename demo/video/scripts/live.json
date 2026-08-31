@@ -1,0 +1,15 @@
+{
+  "title": "Vehicle Selector Pro — Live Application Walkthrough",
+  "voice": "chatterbox-turbo (built-in)",
+  "duration_seconds": 87,
+  "scenes": [
+    {"id":"home","narration":"This is Vehicle Selector Pro, running live in production. Everything you see is the real deployed application."},
+    {"id":"cascade","narration":"Everything begins with the vehicle. Pick the year, the make, the model - each dropdown narrows to what actually exists."},
+    {"id":"collection","narration":"Hit find parts, and the storefront routes through a signed App Proxy, returning only parts that fit the vehicle you chose."},
+    {"id":"pdp","narration":"Open any product, and the compatibility badge does the convincing - a guaranteed exact fit, live on the page."},
+    {"id":"garage","narration":"My Garage remembers every vehicle you own. Switch between a truck and a sedan without ever starting over."},
+    {"id":"admin","narration":"Behind the scenes, merchants command everything from a Polaris dashboard - the same deployment, live."},
+    {"id":"fitments","narration":"Every product-to-vehicle rule lives in one matrix: direct fit, universal, or held for review."},
+    {"id":"outro","narration":"Vehicle Selector Pro. The right part for the right vehicle - first time, every time."}
+  ]
+}

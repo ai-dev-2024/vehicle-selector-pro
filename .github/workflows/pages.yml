@@ -44,8 +44,10 @@ jobs:
           cp demo/command-center.css _site/demo/command-center.css
           cp demo/vehicle-selector-merchant-poster.png _site/demo/
           cp demo/vehicle-selector-shopper-poster.png _site/demo/
+          cp demo/vehicle-selector-live-poster.png _site/demo/
           cp demo/vehicle-selector-pro-merchant.mp4 _site/demo/
           cp demo/vehicle-selector-pro-shopper.mp4 _site/demo/
+          cp demo/vehicle-selector-pro-live.mp4 _site/demo/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

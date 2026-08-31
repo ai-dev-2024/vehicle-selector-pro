@@ -92,6 +92,9 @@ demo/autoplay/frames/03_storefront_filters.png
 demo/autoplay/frames/04_github_repo.png
 demo/autoplay/frames/05_github_readme.png
 /demo/autoplay/video_v3/
+/demo/autoplay/video_live/
+demo/autoplay/live_schedule.json
+demo/video/audio_tmp/
 
 # Agent/tooling working directories (not project source)
 .freebuff/

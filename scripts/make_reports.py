@@ -45,8 +45,9 @@ FREE_AI_STATEMENT = (
 
 RESOURCE_STATEMENT = (
     "Built at the ceiling of a 2018 ultrabook. This entire project — the Rails application, the "
-    "Shopify integration, the storefront, every diagram, this report, and even the two narrated "
-    "walkthrough videos — was designed, coded, tested, and rendered on a single ASUS ZenBook "
+    "Shopify integration, the storefront, every diagram, this report, and even the three narrated "
+    "walkthrough videos — was designed, coded, tested, and rendered on a single "
+    "ASUS ZenBook "
     "UX433FA: an Intel Core i7-8565U at 1.80 GHz (4 cores, ~15 W), 16 GB RAM, and only Intel UHD 620 "
     "integrated graphics. No GPU. No cluster. No cloud IDE. Every frame of video and every page of "
     "this report was produced on the CPU of that one machine. That constraint is deliberate and it "
@@ -66,8 +67,9 @@ HARDWARE_SPECS = [
 
 CLOSING = (
     "The application is live, deployed, and healthy. Both the storefront shopping experience and "
-    "the merchant command center are fully functional and can be explored immediately, and the two "
-    "narrated walkthrough videos demonstrate the complete flow from setup to purchase. Vehicle "
+    "the merchant command center are fully functional and can be explored immediately, and the three "
+    "narrated walkthrough videos — merchant, shopper, and a live walkthrough of the running app — "
+    "demonstrate the complete flow from setup to purchase. Vehicle "
     "Selector Pro is ready for further development, App Store submission, or customization to a "
     "specific merchant catalog — and because it was built entirely with free AI tooling, the "
     "ceiling on that next stage is exceptionally high."
@@ -200,6 +202,12 @@ TECH_ROWS = [
     ("Security & hardening", "rack-attack · HMAC signature checks · encrypted tokens"),
     ("Hosting", "Fly.io (auto-deploy via GitHub Actions)"),
     ("CI/CD", "GitHub Actions — CI on push · Fly deploy · GitHub Pages report"),
+]
+
+VIDEO_LINKS = [
+    ("Live application", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-live.mp4"),
+    ("Merchant command center", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"),
+    ("Shopper experience", "https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"),
 ]
 
 METRICS = [
@@ -550,6 +558,10 @@ def build_pdf() -> None:
         img.hAlign = "CENTER"
         catblk.append(Spacer(1, 4))
         catblk.append(KeepTogether([img, cap(capt)]))
+    catblk.append(Spacer(1, 10))
+    catblk.append(H2("Narrated demo videos"))
+    for lab, url in VIDEO_LINKS:
+        catblk.append(P(f"<b>{lab}:</b> <a href='{url}'><font color='{ACCENT_HEX}'>{url}</font></a>"))
     story += sec(11, "Live Demo Catalog & Screenshots", *catblk)
 
     # 12 Deployment
@@ -759,6 +771,9 @@ def build_docx() -> None:
     sub("Real screenshots of the running app")
     for name, capit in SHOT_LABELS:
         add_img(name, capit)
+    sub("Narrated demo videos")
+    for lab, url in VIDEO_LINKS:
+        P(f"{lab}: {url}", color=GREY)
 
     # 12
     heading("12. Deployment & Operations")
