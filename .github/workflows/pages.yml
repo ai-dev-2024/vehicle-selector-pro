@@ -46,6 +46,8 @@ jobs:
           cp demo/vehicle-selector-shopper-poster.png _site/demo/
           cp demo/vehicle-selector-pro-merchant.mp4 _site/demo/
           cp demo/vehicle-selector-pro-shopper.mp4 _site/demo/
+          cp demo/vehicle-selector-merchant.webp _site/demo/
+          cp demo/vehicle-selector-shopper.webp _site/demo/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

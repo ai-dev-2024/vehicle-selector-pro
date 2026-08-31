@@ -36,7 +36,7 @@
       <p>Two narrated tours: how merchants run the fitment command center and how shoppers go from vehicle selector to a guaranteed-fit checkout.</p>
     </header>
 
-    <section class="video-card" id="merchant">
+    <section class="video-card" id="merchant" style="scroll-margin-top:20px">
       <video controls preload="metadata" poster="vehicle-selector-merchant-poster.png" src="vehicle-selector-pro-merchant.mp4"></video>
       <div class="meta">
         <h2>For merchants — the fitment command center <span class="dur">· 1:29</span></h2>
@@ -45,7 +45,7 @@
       </div>
     </section>
 
-    <section class="video-card" id="shopper">
+    <section class="video-card" id="shopper" style="scroll-margin-top:20px">
       <video controls preload="metadata" poster="vehicle-selector-shopper-poster.png" src="vehicle-selector-pro-shopper.mp4"></video>
       <div class="meta">
         <h2>For shoppers — from vehicle selector to guaranteed-fit checkout <span class="dur">· 1:35</span></h2>
@@ -58,5 +58,15 @@
       <p><a href="https://vehicle-selector-pro.fly.dev/demo">Live storefront demo</a> · <a href="https://vehicle-selector-pro.fly.dev/demo/admin">Live admin preview</a> · <a href="index.html">Interactive walkthrough</a> · <a href="https://github.com/ai-dev-2024/vehicle-selector-pro">GitHub</a></p>
     </footer>
   </div>
+  <script>
+    // Deep-link autoplay: when arriving with #merchant or #shopper, start that video.
+    if (location.hash) {
+      const s = document.querySelector(location.hash);
+      if (s && s.tagName === "SECTION") {
+        const v = s.querySelector("video");
+        if (v) { v.muted = true; v.play && v.play().catch(function(){}); }
+      }
+    }
+  </script>
 </body>
 </html>
