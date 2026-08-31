@@ -30,22 +30,8 @@ class VehicleProductFitment < ApplicationRecord
   # Callbacks
   after_commit :enqueue_metafield_sync, on: %i[create update destroy]
 
-  def direct_fit?
-    fitment_type == "direct_fit"
-  end
-
   def universal_fit?
     universal_fit == true
-  end
-
-  def formatted_vehicle_title
-    if universal_fit?
-      "Universal Fit (All Vehicles)"
-    elsif vehicle.present?
-      vehicle.display_name
-    else
-      "Unknown Vehicle"
-    end
   end
 
   def to_fitment_hash
@@ -65,11 +51,6 @@ class VehicleProductFitment < ApplicationRecord
       position: position,
       vehicle: vehicle&.to_h
     }
-  end
-
-  def mark_synced!
-    # rubocop:disable-next Rails/SkipsModelValidations -- status bookkeeping; must skip callbacks to avoid re-enqueuing sync jobs
-    update_columns(synced_to_metafield: true, last_synced_at: Time.current)
   end
 
   private

@@ -56,10 +56,6 @@ class Vehicle < ApplicationRecord
     parts.join(" ")
   end
 
-  def short_name
-    "#{year} #{make} #{model}"
-  end
-
   def to_h
     {
       id: id,
@@ -72,9 +68,5 @@ class Vehicle < ApplicationRecord
       body_style: body_style,
       display_name: display_name
     }
-  end
-
-  def to_ymm_key
-    [year, make.downcase, model.downcase, trim.to_s.downcase, engine.to_s.downcase].join("|")
   end
 end

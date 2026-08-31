@@ -1,22 +1,5 @@
 require "openssl"
-
-begin
-  require "active_support/security_utils"
-rescue LoadError
-  # Fallback for standalone test runner
-  module ActiveSupport
-    module SecurityUtils
-      def self.secure_compare(left, right)
-        return false unless left.bytesize == right.bytesize
-
-        l = left.unpack "C#{left.bytesize}"
-        res = 0
-        right.each_byte { |byte| res |= byte ^ l.shift }
-        res.zero?
-      end
-    end
-  end
-end
+require "active_support/security_utils"
 
 class AppProxySignatureVerifier
   def self.valid?(query_params, secret = ShopifyApp.configuration.secret)

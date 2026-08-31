@@ -15,24 +15,12 @@ class Shop < ApplicationRecord
 
   # Scopes
   scope :active, -> { where(active: true) }
-  scope :uninstalled, -> { where(active: false) }
 
   # Callbacks
   after_create :initialize_settings
 
   def api_version
     ShopifyApp.configuration.api_version
-  end
-
-  def with_shopify_session(&)
-    session = ShopifyAPI::Auth::Session.new(
-      shop: shopify_domain,
-      access_token: shopify_token
-    )
-    ShopifyAPI::Utils::SessionUtils.with_session(session, &)
-  rescue StandardError => e
-    Rails.logger.error("[ShopifySession] Failed for #{shopify_domain}: #{e.message}")
-    raise
   end
 
   def mark_as_uninstalled!
@@ -64,10 +52,6 @@ class Shop < ApplicationRecord
     shop.uninstalled_at = nil
     shop.save!
     shop.id
-  end
-
-  def fitment_count
-    vehicle_product_fitments.count
   end
 
   def unique_products_count

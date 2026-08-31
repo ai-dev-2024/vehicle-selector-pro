@@ -43,42 +43,24 @@ RSpec.describe "Webhook endpoints", type: :request do
     end
   end
 
-  describe "POST /webhooks/products_update" do
-    it "enqueues ProductsUpdateJob with the shop domain and payload" do
-      payload = { id: 123, title: "Cold Air Intake", handle: "cold-air-intake" }
-      expect do
-        post_webhook "/webhooks/products_update", payload
-      end.to have_enqueued_job(Webhooks::ProductsUpdateJob).with(
-        shop_domain: shop.shopify_domain, webhook: hash_including("id" => 123)
-      )
-      expect(response).to have_http_status(:ok)
-    end
-  end
+  describe "topic dispatch" do
+    # [path, job, payload]
+    cases = [
+      ["/webhooks/products_update", Webhooks::ProductsUpdateJob,
+       { id: 123, title: "Cold Air Intake", handle: "cold-air-intake" }],
+      ["/webhooks/products_create", Webhooks::ProductsCreateJob, { id: 456, title: "New Part" }],
+      ["/webhooks/products_delete", Webhooks::ProductsDeleteJob, { id: 789 }],
+      ["/webhooks/app_uninstalled", Webhooks::AppUninstalledJob, { id: 1 }]
+    ]
 
-  describe "POST /webhooks/products_create" do
-    it "enqueues ProductsCreateJob" do
-      expect do
-        post_webhook "/webhooks/products_create", { id: 456, title: "New Part" }
-      end.to have_enqueued_job(Webhooks::ProductsCreateJob)
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
-  describe "POST /webhooks/products_delete" do
-    it "enqueues ProductsDeleteJob" do
-      expect do
-        post_webhook "/webhooks/products_delete", { id: 789 }
-      end.to have_enqueued_job(Webhooks::ProductsDeleteJob)
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
-  describe "POST /webhooks/app_uninstalled" do
-    it "enqueues AppUninstalledJob" do
-      expect do
-        post_webhook "/webhooks/app_uninstalled", { id: 1 }
-      end.to have_enqueued_job(Webhooks::AppUninstalledJob).with(shop_domain: shop.shopify_domain, webhook: anything)
-      expect(response).to have_http_status(:ok)
+    cases.each do |path, job, payload|
+      it "enqueues #{job.name.demodulize} for #{path} and acks with 200" do
+        expect { post_webhook path, payload }.to have_enqueued_job(job).with(
+          shop_domain: shop.shopify_domain,
+          webhook: hash_including("id" => payload[:id])
+        )
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 

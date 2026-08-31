@@ -19,42 +19,36 @@ RSpec.describe FitmentSearchService do
     fitment
   end
 
-  describe "#years" do
-    it "returns distinct years descending" do
-      make_fitment(2020, "Ford", "F-150")
-      make_fitment(2019, "Ford", "F-150")
-      expect(service.years).to eq([2020, 2019])
-    end
-
-    it "is shop-scoped" do
-      make_fitment(2020, "Ford", "F-150")
+  describe "cascading filter options" do
+    it "returns distinct values per level, ordered and shop-scoped" do
+      make_fitment(2021, "Ford", "F-150", trim: "Lariat", engine: "3.5L")
+      make_fitment(2020, "Ford", "F-150", trim: "XLT", engine: "2.7L")
+      make_fitment(2020, "Ford", "F-150", trim: "Lariat", engine: "3.5L")
+      make_fitment(2020, "Toyota", "Tacoma", trim: "TRD", engine: "3.5L")
       other = create(:shop)
-      create(:vehicle_product_fitment, shop: other, vehicle: create(:vehicle, year: 1999, make: "Dodge", model: "Ram"))
-      expect(service.years).to eq([2020])
-    end
-  end
+      create(:vehicle_product_fitment, shop: other,
+                                       vehicle: create(:vehicle, year: 1999, make: "Dodge", model: "Ram"))
 
-  describe "#makes" do
-    it "returns makes for a year, blank-safe" do
-      make_fitment(2021, "Ford", "F-150")
+      expect(service.years).to eq([2021, 2020])
       expect(service.makes(year: 2021)).to eq(["Ford"])
+      expect(service.makes(year: 2020)).to contain_exactly("Ford", "Toyota")
+      # make matching is case-insensitive
+      expect(service.models(year: 2020, make: "ford")).to contain_exactly("F-150")
+      expect(service.trims(year: 2020, make: "Ford", model: "F-150")).to contain_exactly("XLT", "Lariat")
+      expect(service.engines(year: 2020, make: "Ford", model: "F-150")).to contain_exactly("2.7L", "3.5L")
+    end
+
+    it "excludes blank trims and engines" do
+      make_fitment(2020, "Ford", "F-150", trim: nil, engine: nil)
+      expect(service.trims(year: 2020, make: "Ford", model: "F-150")).to eq([])
+      expect(service.engines(year: 2020, make: "Ford", model: "F-150")).to eq([])
+    end
+
+    it "returns [] when a required filter is missing" do
       expect(service.makes(year: nil)).to eq([])
-    end
-  end
-
-  describe "#models" do
-    it "returns models for year+make, case-insensitive on make" do
-      make_fitment(2022, "Ford", "Mustang")
-      make_fitment(2022, "Ford", "F-150")
-      expect(service.models(year: 2022, make: "ford")).to contain_exactly("F-150", "Mustang")
-    end
-  end
-
-  describe "#trims" do
-    it "excludes blank trims" do
-      make_fitment(2023, "Ford", "F-150", trim: "Lariat")
-      make_fitment(2023, "Ford", "F-150", trim: nil)
-      expect(service.trims(year: 2023, make: "Ford", model: "F-150")).to eq(["Lariat"])
+      expect(service.models(year: 2020, make: nil)).to eq([])
+      expect(service.trims(year: 2020, make: "Ford", model: nil)).to eq([])
+      expect(service.engines(year: 2020, make: "Ford", model: nil)).to eq([])
     end
   end
 
