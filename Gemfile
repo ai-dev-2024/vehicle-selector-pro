@@ -23,7 +23,7 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 gem "dotenv-rails", "~> 3.1"
 
 # Database
-gem "sqlite3", "~> 1.7"
+gem "sqlite3", "~> 2.9"
 
 # Background Processing & Queuing
 gem "redis", "~> 5.1"
