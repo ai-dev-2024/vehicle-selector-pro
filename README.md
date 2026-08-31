@@ -36,6 +36,8 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 ---
 
 > **Built entirely with free AI tools.** This project was designed, coded, and documented using no-cost AI assistance end to end — no paid AI models or paid tools were used anywhere in its development. Everything you see was produced with accessible, free tooling, which is why the potential for further growth is so large: with paid, frontier AI models and commercial tooling, this foundation can be extended into a far richer, production-grade solution with ease.
+>
+> **Built at the ceiling of a 2018 ultrabook.** The entire project — the Rails app, the Shopify wiring, the storefront, the diagrams, this README, and both narrated demo videos — was designed, coded, tested, and rendered on a single machine: an **ASUS ZenBook UX433FA** (Intel Core i7-8565U @ 1.80 GHz, 16 GB RAM, Intel UHD 620 integrated graphics — no GPU, no cluster; every frame of both videos was rendered on the CPU). That ceiling was set by tooling and hardware, not ambition — which is exactly why the headroom is so large once proper resources and paid frontier models are brought to bear.
 
 
 ---
@@ -48,11 +50,11 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 **▶ Watch the walkthroughs — they play right here on the repo page:**
 
-https://github.com/user-attachments/assets/8966a45d-d46b-4b19-84c3-0cfe4d6282fa
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"></video>
 
 *For merchants — the fitment command center · 2:09*
 
-https://github.com/user-attachments/assets/545171d8-a8f4-49f8-894b-f82f353bcc1f
+<video controls preload="metadata" width="100%" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.png" src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"></video>
 
 *For shoppers — from vehicle selector to guaranteed-fit checkout · 2:21*
 

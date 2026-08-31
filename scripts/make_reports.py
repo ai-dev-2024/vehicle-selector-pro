@@ -43,6 +43,27 @@ FREE_AI_STATEMENT = (
     "solution with ease."
 )
 
+RESOURCE_STATEMENT = (
+    "Built at the ceiling of a 2018 ultrabook. This entire project — the Rails application, the "
+    "Shopify integration, the storefront, every diagram, this report, and even the two narrated "
+    "walkthrough videos — was designed, coded, tested, and rendered on a single ASUS ZenBook "
+    "UX433FA: an Intel Core i7-8565U at 1.80 GHz (4 cores, ~15 W), 16 GB RAM, and only Intel UHD 620 "
+    "integrated graphics. No GPU. No cluster. No cloud IDE. Every frame of video and every page of "
+    "this report was produced on the CPU of that one machine. That constraint is deliberate and it "
+    "is the strongest evidence of the opportunity: so far the ceiling was set by the tooling, not by "
+    "the ambition. Put this same foundation on a proper workstation with a GPU and paid, frontier "
+    "AI models, and the architecture scales into a far richer, faster, store-ready solution. The "
+    "headroom is the opportunity."
+)
+
+HARDWARE_SPECS = [
+    ("Device", "ASUS ZenBook UX433FA"),
+    ("CPU", "Intel Core i7-8565U @ 1.80 GHz (4 cores, ~15 W)"),
+    ("Memory", "16 GB RAM"),
+    ("Graphics", "Intel UHD 620 — integrated only, no GPU"),
+    ("Origin", "2018-vintage ultrabook"),
+]
+
 CLOSING = (
     "The application is live, deployed, and healthy. Both the storefront shopping experience and "
     "the merchant command center are fully functional and can be explored immediately, and the two "
@@ -414,7 +435,7 @@ def build_pdf() -> None:
            "Architecture", "Data Model & Multi-tenancy", "Key Workflows",
            "Technology Stack", "Security & Hardening", "Quality Engineering",
            "Live Demo Catalog & Screenshots", "Deployment & Operations", "Roadmap",
-           "Built With Free AI Tools — No Paid Tooling", "Conclusion"]
+           "Built With Free AI Tools on Minimal Hardware", "Conclusion"]
     cblock = [H1("Contents"), rule()]
     for i, t in enumerate(toc, 1):
         cblock.append(Paragraph(f"{i:02d}&nbsp;&nbsp;{t}",
@@ -554,8 +575,28 @@ def build_pdf() -> None:
                  P("Each item is production-feasible on the current architecture — built to grow "
                    "without a rewrite."))
 
-    # 14 Free AI
-    story += sec(14, "Built With Free AI Tools — No Paid Tooling", callout(FREE_AI_STATEMENT))
+    # 14 Free AI + minimal hardware
+    spec_tbl = Table([[Paragraph(f"<b>{k}</b>", body_), Paragraph(v, body_)] for k, v in HARDWARE_SPECS],
+                     colWidths=[1.4 * inch, 5.3 * inch])
+    spec_tbl.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.4, GRID),
+        ("BACKGROUND", (0, 0), (-1, -1), LIGHT),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    story += sec(14, "Built With Free AI Tools on Minimal Hardware",
+                 P("No paid AI models, no commercial tooling — and the least compute you can imagine "
+                   "doing serious work with. Both are deliberate, and together they combine into the "
+                   "strongest case this project can make."),
+                 Spacer(1, 5),
+                 callout(FREE_AI_STATEMENT),
+                 Spacer(1, 14),
+                 H2("The build machine: a 2018 ASUS ZenBook"),
+                 P("Everything in this report was produced locally, on hardware with no dedicated "
+                   "GPU and a 15-watt CPU — details verified from the machine itself, not inferred."),
+                 KeepTogether([spec_tbl]),
+                 Spacer(1, 6),
+                 P(RESOURCE_STATEMENT))
 
     # 15 Conclusion
     story += sec(15, "Conclusion", P(CLOSING), Spacer(1, 12),
@@ -730,13 +771,26 @@ def build_docx() -> None:
     for s in ROADMAP: B(s)
 
     # 14
-    heading("14. Built With Free AI Tools — No Paid Tooling")
+    heading("14. Built With Free AI Tools on Minimal Hardware")
     callout_p = doc.add_paragraph(FREE_AI_STATEMENT)
     for r in callout_p.runs: r.font.color.rgb = RGBColor(0x5A, 0x2B, 0x20)
     from docx.oxml.ns import qn
     pPr = callout_p._p.get_or_add_pPr()
     shd = pPr.makeelement(qn("w:shd"), {}); shd.set(qn("w:fill"), "FBEEE9")
     pPr.insert(0, shd)
+    P("Both choices are deliberate — free tooling and minimal local compute — and together they "
+      "make the strongest argument this project can offer: output was capped by resources, not by "
+      "ambition, so the headroom with proper hardware and paid frontier models is the opportunity.",
+      color=DARK)
+    sub("The build machine: a 2018 ASUS ZenBook")
+    P("Specs verified from the machine itself:", color=GREY)
+    spec_t = doc.add_table(rows=0, cols=2); spec_t.style = "Light Grid Accent 6"
+    spec_t.alignment = WD_TABLE_ALIGNMENT.CENTER
+    for k, v in HARDWARE_SPECS:
+        row = spec_t.add_row(); row.cells[0].text = k; row.cells[1].text = v
+        for pa in row.cells[0].paragraphs:
+            for rr in pa.runs: rr.font.bold = True; rr.font.color.rgb = ACC
+    P(RESOURCE_STATEMENT, color=DARK)
 
     # 15
     heading("15. Conclusion"); P(CLOSING)

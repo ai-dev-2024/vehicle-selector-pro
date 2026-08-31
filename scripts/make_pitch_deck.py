@@ -160,12 +160,25 @@ SLIDES = [
         ],
     },
     {
+        "kind": "content",
+        "kicker": "BUILD · PROVENANCE",
+        "title": "Built at the ceiling of a 2018 ultrabook",
+        "bullets": [
+            "The entire project — Rails app, Shopify integration, storefront, diagrams, this deck, and both demo videos — was produced on one machine.",
+            "ASUS ZenBook UX433FA · Intel Core i7-8565U @ 1.80 GHz · 16 GB RAM.",
+            "Intel UHD 620 integrated graphics only — no GPU, no cluster; every frame of both demo videos was rendered on the CPU.",
+            "The output was capped by tooling, not ambition. Given a real workstation, a GPU, and paid frontier models, the same foundation leaps a level.",
+        ],
+    },
+    {
         "kind": "statement",
         "kicker": "BUILD · PROVENANCE",
-        "title": "Built entirely with free AI tools",
-        "text": ("Designed, coded, and documented using no paid AI models, APIs, or commercial "
-                 "tooling. That ceiling is deliberate — it proves what free tooling already "
-                 "achieves, and sets up the next stage for a rapid leap forward."),
+        "title": "Free tools, minimal hardware — maximum headroom",
+        "text": ("No paid AI models, APIs, or commercial tooling were used anywhere — and the whole "
+                 "result was built and rendered on a 15-watt 2018 ultrabook with no GPU. Both are "
+                 "deliberate. They prove what free tooling on minimal local compute already "
+                 "achieves, and set up a fast leap forward: with proper hardware and paid frontier "
+                 "models, the ceiling lifts dramatically."),
     },
     {
         "kind": "cta",
