@@ -52,13 +52,13 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <video src="https://github.com/user-attachments/assets/8966a45d-d46b-4b19-84c3-0cfe4d6282fa" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" width="100%"></video>
 
-<sup>▻ **For merchants** — the fitment command center · 1:29 · male voiceover · warm music bed</sup>
+<sup>**Merchant walkthrough**</sup>
 
 <br>
 
 <video src="https://github.com/user-attachments/assets/545171d8-a8f4-49f8-894b-f82f353bcc1f" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" width="100%"></video>
 
-<sup>▻ **For shoppers** — from vehicle selector to guaranteed-fit checkout · 1:35 · female voiceover · airy music bed</sup>
+<sup>**Shopper walkthrough**</sup>
 
 [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html) · [Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)
 
