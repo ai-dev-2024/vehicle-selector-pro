@@ -549,30 +549,19 @@ def build_pdf() -> None:
         ("TOPPADDING", (0, 0), (-1, -1), 6), ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
     ]))
     catblk = [P("The live demo ships a real, browsable catalog — the numbers a merchant sees "
-                "immediately, no setup required."), KeepTogether([stat_tbl]), Spacer(1, 8),
-              P("<b>Real screenshots of the running app</b> (storefront and merchant admin).")]
-    # Compact 2-column screenshot grid so the whole section fits on a page or two.
-    imgs = [p for p in SHOT_LABELS if os.path.exists(abs_shot(p[0]))]
-    pairW = (6.4 * inch - 0.25 * inch) / 2
-    for i in range(0, len(imgs), 2):
-        left = imgs[i]
-        right = imgs[i + 1] if i + 1 < len(imgs) else None
-        def cell(name, capt):
-            out = []
-            img = RLImage(abs_shot(name), width=pairW, height=pairW * 0.18)
-            img.hAlign = "CENTER"
-            out.append(img)
-            out.append(Spacer(1, 1))
-            out.append(Paragraph(capt, PS(fontSize=7.4, leading=9, textColor=GREY, alignment=1)))
-            return out
-        row = Table([[cell(*left), cell(*right) if right else ""]],
-                    colWidths=[pairW, pairW])
-        row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),
-                                 ("LEFTPADDING", (0, 0), (-1, -1), 4),
-                                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-                                 ("TOPPADDING", (0, 0), (-1, -1), 4),
-                                 ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
-        catblk.append(KeepTogether([row]))
+                "immediately, no setup required."), KeepTogether([stat_tbl]), Spacer(1, 10),
+              P("<b>Real screenshots of the running app</b> (storefront and merchant admin). Every "
+                "image below is a full-width, high-resolution capture at native 1920×1080 — open the "
+                "PDF to inspect it closely.")]
+    # Full-width, high-res screenshots, one per row, aligned with their captions.
+    for name, capt in SHOT_LABELS:
+        pth = abs_shot(name)
+        if not os.path.exists(pth):
+            continue
+        img = RLImage(pth, width=6.2 * inch, height=6.2 * inch * (1080 / 1920))
+        img.hAlign = "CENTER"
+        catblk.append(Spacer(1, 6))
+        catblk.append(KeepTogether([img, cap(capt)]))
     catblk.append(Spacer(1, 10))
     catblk.append(H2("Narrated demo videos"))
     for lab, url in VIDEO_LINKS:

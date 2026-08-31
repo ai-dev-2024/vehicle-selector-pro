@@ -48,10 +48,8 @@ SLIDES = [
             "Per-product manual rules rot and cost hours",
             "Paid fitment feeds lock merchants into contracts",
         ],
-        "shots": [("04_storefront_home.png", "Cascading selector"),
-                  ("08_storefront_pdp.png", "Fitment badge on PDP"),
-                  ("03_fitment_rules.png", "Fitment matrix"),
-                  ("01_dashboard.png", "Command center")],
+        "shots": [("04_storefront_home.png", "Cascading vehicle selector — storefront"),
+                  ("01_dashboard.png", "Polaris merchant command center")],
     },
     {
         "kind": "metrics",
@@ -172,32 +170,27 @@ def build_pdf() -> None:
             else:
                 bullets(s["bullets"])
         elif kind == "screens2":
-            story.append(P(s["lead"], fontSize=12, leading=17, textColor=DARKC, spaceAfter=8))
+            # Lead + bullets, then two proper-aspect screenshots sized to fit the remaining frame.
+            story.append(P(s["lead"], fontSize=12, leading=17, textColor=DARKC, spaceAfter=6))
             for it in s["bullets"]:
-                story.append(P(f"<font color='{ACCENT}'>•</font>  {it}", fontSize=11.5, leading=16,
-                               textColor=DARKC, leftIndent=6, spaceAfter=4))
-            story.append(Spacer(1, 0.15 * inch))
-            # 2x2 grid of landscape screenshots, each ~0.23 of page height.
-            sw = (W - 2 * M - 40) / 4
-            rows = []
-            for r_i in range(2):
-                row = []
-                for c_i in range(2):
-                    name, cap_txt = s["shots"][r_i * 2 + c_i]
-                    p = shot(name)
-                    cell = []
-                    if os.path.exists(p):
-                        cell.append(RLImage(p, width=sw, height=sw * 0.36))
-                    cell.append(Spacer(1, 1))
-                    cell.append(P(cap_txt, fontSize=8.4, leading=10, textColor=GREYC, alignment=1))
-                    row.append(cell)
-                rows.append(row)
-            t = Table(rows, colWidths=[sw * 2, sw * 2])
+                story.append(P(f"<font color='{ACCENT}'>•</font>  {it}", fontSize=11, leading=15,
+                               textColor=DARKC, leftIndent=6, spaceAfter=3))
+            # Cap image height to fit the remaining frame; derive width to keep native 16:9.
+            sh = 2.5 * inch
+            sw = sh * (1920 / 1080)
+            cells = []
+            for name, cap_txt in s["shots"]:
+                cell = []
+                p = shot(name)
+                if os.path.exists(p):
+                    cell.append(RLImage(p, width=sw, height=sh))
+                cell.append(Spacer(1, 1))
+                cell.append(P(cap_txt, fontSize=8, leading=10, textColor=GREYC, alignment=1))
+                cells.append(cell)
+            t = Table([cells], colWidths=[(W - 2 * M) / 2, (W - 2 * M) / 2])
             t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"),
                                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                                   ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-                                   ("TOPPADDING", (0, 0), (-1, -1), 4),
-                                   ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+                                   ("RIGHTPADDING", (0, 0), (-1, -1), 6)]))
             story.append(t)
         elif kind == "metrics":
             data = [[""] * 4]
