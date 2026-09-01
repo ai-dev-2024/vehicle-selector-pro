@@ -30,14 +30,38 @@ RSpec.describe "Admin billing", type: :request do
   end
 
   describe "POST /admin/billing" do
-    it "redirects to Shopify's confirmation URL for a valid plan" do
+    it "renders the embedded-safe breakout page pointing at Shopify's confirmation URL" do
       service = instance_double(Shopify::BillingService)
       allow(Shopify::BillingService).to receive(:new).and_return(service)
       allow(service).to receive(:create_subscription).and_return("https://checkout.example/confirm")
 
       post admin_billing_path, params: { plan: "pro" }
-      expect(response).to have_http_status(:redirect)
-      expect(response.location).to start_with("https://checkout.example/confirm")
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("https://checkout.example/confirm")
+      # The breakout page navigates the top window (the app is embedded in the
+      # Shopify admin iframe; Shopify's billing page refuses to render in a frame).
+      expect(response.body).to include("window.top.location.href")
+    end
+
+    it "passes the request origin as the returnUrl host" do
+      service = instance_double(Shopify::BillingService)
+      allow(Shopify::BillingService).to receive(:new).and_return(service)
+      allow(service).to receive(:create_subscription).and_return(nil)
+
+      post admin_billing_path, params: { plan: "pro" }
+      # request.base_url in a request spec is the test host (localhost:3000);
+      # the point is that the app's own origin is used, never a hardcoded fallback.
+      expect(service).to have_received(:create_subscription).with("pro", return_host: "http://localhost:3000")
+    end
+
+    it "still redirects back with a notice when the shop is already subscribed" do
+      service = instance_double(Shopify::BillingService)
+      allow(Shopify::BillingService).to receive(:new).and_return(service)
+      allow(service).to receive(:create_subscription).and_return(nil)
+
+      post admin_billing_path, params: { plan: "pro" }
+      expect(response).to redirect_to(admin_billing_path)
+      expect(flash[:notice]).to be_present
     end
 
     it "rejects an unknown plan without calling Shopify" do

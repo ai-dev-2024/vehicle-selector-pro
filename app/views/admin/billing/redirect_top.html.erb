@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opening Shopify billing…</title>
+  <style>
+    body { font-family: -apple-system, "Segoe UI", sans-serif; background: #f3eee4; color: #18202b;
+           display: grid; place-items: center; min-height: 100vh; margin: 0; text-align: center; }
+    a { color: #1f4ea8; font-weight: 600; }
+    p { color: #5c6573; }
+  </style>
+</head>
+<body>
+  <div>
+    <h2>Opening Shopify's secure billing page…</h2>
+    <p>Confirm your plan in the window that just opened.</p>
+    <p><a id="fallback" href="<%= url %>" target="_top" rel="noopener">If nothing opened, click here to continue</a></p>
+  </div>
+  <script>
+    // This app is embedded in the Shopify admin iframe; the billing
+    // confirmation page cannot render inside a frame. Navigate the TOP
+    // window so checkout opens full-page. If the browser blocks cross-frame
+    // navigation, the manual link above is the fallback.
+    (function () {
+      var url = <%= raw url.to_json %>;
+      try {
+        if (window.top === window.self) {
+          window.location.href = url;
+        } else {
+          window.top.location.href = url;
+        }
+      } catch (e) {
+        // Top-navigation blocked: surface the fallback link prominently.
+        var link = document.getElementById("fallback");
+        if (link) link.style.fontSize = "18px";
+      }
+    })();
+  </script>
+</body>
+</html>
