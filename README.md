@@ -48,17 +48,11 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <div align="center">
 
-**▶ The two narrated walkthroughs play inline, right on this page — just press play:**
+**▶ Click a poster to play — each walkthrough opens in GitHub's built-in video player:**
 
-<video src="https://raw.githubusercontent.com/ai-dev-2024/vehicle-selector-pro/main/demo/vehicle-selector-pro-merchant.mp4" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" width="100%"></video>
-
-<sup>**Merchant walkthrough**</sup>
-
-<br>
-
-<video src="https://github.com/ai-dev-2024/vehicle-selector-pro/releases/download/demo-media/vehicle-selector-pro-shopper.mp4" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" width="100%"></video>
-
-<sup>**Shopper walkthrough**</sup>
+| | |
+|---|---|
+| <a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" alt="Merchant walkthrough video — click to play" width="100%"></a><sup>**▶ Merchant walkthrough** — 1:29, male voiceover</sup> | <a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" alt="Shopper walkthrough video — click to play" width="100%"></a><sup>**▶ Shopper walkthrough** — 1:35, female voiceover</sup> |
 
 [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html) · [Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)
 
