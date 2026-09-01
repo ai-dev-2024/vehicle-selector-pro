@@ -16,6 +16,26 @@ module DemoCatalog
   # Spec sheets live in DemoProductSpecs (pure static data module).
   PRODUCT_SPECS = DemoProductSpecs::PRODUCT_SPECS
 
+  # Curated bestsellers for the shop page's Featured Parts grid — one strong
+  # product per category, so the shop reads as a hand-picked storefront while
+  # the collection page carries the full catalog (see /demo/collection).
+  FEATURED_SKUS = [
+    "APX-CAI-F150-EB",   # Air Intake
+    "APX-BRK-HD-TRK",    # Brakes
+    "APX-SUSP-TACO-3IN", # Suspension
+    "APX-EXH-MUST-V8",   # Exhaust
+    "APX-BMP-JL-001",    # Bumpers & Armor
+    "APX-LGT-UNIV-POD",  # Lighting
+    "APX-STRUT-G20-CF",  # Chassis & Handling
+    "APX-OIL-KIT-0W20",  # Maintenance
+    "APX-BAT-AGM-H7",    # Electrical
+    "APX-LIN-UNIV-FLR",  # Interior & Comfort
+    "APX-TOW-HITCH-F150", # Towing
+    "APX-EXT-RACK-OUT",  # Exterior & Racks
+    "APX-WIP-BLD-24",    # Wipers & Visibility
+    "APX-AIR-FIL-F150"   # Filters
+  ].freeze
+
   private
 
   def render_demo_404

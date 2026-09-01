@@ -158,6 +158,45 @@ class AppProxyIntegrationTest < ActionDispatch::IntegrationTest
                  "numeric_product_ids must mirror the page ids"
   end
 
+  test "oe search collapses multi-vehicle fitments to one card per product" do
+    other_vehicle = Vehicle.create!(year: 2023, make: "Ford", model: "Ranger", trim: "XL",
+                                    engine: "2.3L EcoBoost")
+    # One product fitted to TWO vehicles must still render a single card, and
+    # product_ids/numeric_product_ids/products must all describe the same page.
+    VehicleProductFitment.create!(
+      shop: @shop, vehicle: @vehicle,
+      product_id: "gid://shopify/Product/999000222", product_handle: "oe-brake-pad",
+      product_title: "OE Brake Pad", sku: "BRK-1234", category: "Brakes",
+      universal_fit: false, fitment_type: "direct_fit"
+    )
+    VehicleProductFitment.create!(
+      shop: @shop, vehicle: other_vehicle,
+      product_id: "gid://shopify/Product/999000222", product_handle: "oe-brake-pad",
+      product_title: "OE Brake Pad", sku: "BRK-1234", category: "Brakes",
+      universal_fit: false, fitment_type: "direct_fit"
+    )
+    VehicleProductFitment.create!(
+      shop: @shop, vehicle: @vehicle,
+      product_id: "gid://shopify/Product/999000223", product_handle: "oe-rotor",
+      product_title: "OE Rotor", sku: "ROT-5678", category: "Brakes",
+      universal_fit: false, fitment_type: "direct_fit"
+    )
+    OeNumber.create!(shop: @shop, product_id: "gid://shopify/Product/999000222", oe_number: "BRK-1234")
+    OeNumber.create!(shop: @shop, product_id: "gid://shopify/Product/999000223", oe_number: "ROT-5678")
+
+    proxy_get "search", oe: "BRK-1234"
+    assert_response :success
+    data = JSON.parse(response.body)["data"]
+    assert_equal 1, data["total_count"]
+    assert_equal 1, data["product_ids"].size
+    assert_equal 1, data["products"].size, "a product fitted to two vehicles must appear once"
+    assert_equal ["gid://shopify/Product/999000222"], data["product_ids"]
+    assert_equal data["product_ids"], data["products"].pluck("product_id"),
+                 "product_ids must match the products returned"
+    numeric_ids = data["product_ids"].map { |id| id.to_s.gsub("gid://shopify/Product/", "") }
+    assert_equal data["numeric_product_ids"], numeric_ids
+  end
+
   test "shop/redact webhook erases all shop-scoped data" do
     post "/webhooks/shop_redact", params: {}.to_json,
                                   headers: {

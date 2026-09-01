@@ -1,7 +1,6 @@
-# Rails-integrated RSpec setup. Unlike spec_helper.rb (the standalone mock
-# harness used by spec/test_runner.rb), this boots the full Rails app so
-# request specs exercise routing, middleware, HMAC verification, and JSON
-# responses through the real stack.
+# Rails-integrated RSpec setup, loaded via .rspec for every spec. Boots the
+# full Rails app so request specs exercise routing, middleware, HMAC
+# verification, and JSON responses through the real stack.
 ENV["RAILS_ENV"] ||= "test"
 
 require_relative "../config/environment"

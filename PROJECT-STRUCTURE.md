@@ -66,7 +66,6 @@ Vehicle Selector Pro/
 ├── spec/                             # Test suite
 │   ├── integration/                  # Full-stack request tests
 │   ├── services/                      # Service tests
-│   ├── spec_helper.rb                 # Test configuration
 │   └── test_runner.rb                 # Test runner
 ├── public/                           # Public assets
 │   └── command-center.css            # Demo styling

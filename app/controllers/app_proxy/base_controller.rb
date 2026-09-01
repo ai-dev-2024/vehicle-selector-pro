@@ -44,14 +44,12 @@ module AppProxy
 
       # ETag lets Shopify's proxy layer and browser/CDN caches return 304
       # Not Modified when nothing changed, saving bandwidth on the cascading
-      # dropdown and search endpoints. Fresh responses get a strong ETag;
-      # conditional requests (If-None-Match) short-circuit in the middleware.
+      # dropdown and search endpoints. Rack::ConditionalGet (default middleware)
+      # turns a matching If-None-Match into the 304 for us — doing it here in a
+      # before_action would not work anyway, since setting response.status/body
+      # does not halt the callback chain, so the action would re-render a 200.
       etag = response_etag
       response.headers["ETag"] = %("#{etag}") if etag
-      return unless request.headers["If-None-Match"] == %("#{etag}") && etag
-
-      response.status = 304
-      response.body = ""
     end
 
     def response_etag

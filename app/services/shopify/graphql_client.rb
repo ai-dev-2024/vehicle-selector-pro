@@ -66,8 +66,7 @@ module Shopify
         # Check if throttled
         is_throttled = parsed["errors"].any? { |err| err["extensions"] && err["extensions"]["code"] == "THROTTLED" }
         if is_throttled && attempts < MAX_RETRIES
-          sleep_time = extract_restore_rate(parsed) || (2**attempts)
-          sleep(sleep_time)
+          sleep(jittered_backoff(attempts))
           return execute_with_retry(query_string, variables, attempts + 1)
         end
 
@@ -98,17 +97,9 @@ module Shopify
     end
 
     # Exponential backoff with jitter so concurrent jobs don't retry in lockstep
-    # and re-throttle together.
+    # and re-throttle together. Used for both HTTP 429 and GraphQL THROTTLED.
     def jittered_backoff(attempts, base: 2.0)
       (base**(attempts + 1)) * (1.0 + (rand * 0.5))
-    end
-
-    def extract_restore_rate(parsed)
-      # Extract available points / restore rate if provided by Shopify
-      restore_rate = parsed.dig("extensions", "cost", "throttleStatus", "restoreRate")
-      return 1.0 if restore_rate.to_f <= 0
-
-      1.0
     end
   end
 end

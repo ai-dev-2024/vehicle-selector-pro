@@ -61,7 +61,10 @@ TARGETS = {
   "mud-flaps.jpg" => "mud flaps car",
   "winch.jpg" => "jeep winch",
   "trailer-wiring.jpg" => "trailer hitch 7-pin connector",
-  "fog-lights.jpg" => "car fog lights"
+  "fog-lights.jpg" => "car fog lights",
+  # Catalog wave 5
+  "tonneau.jpg" => "tonneau cover pickup truck",
+  "tail-light.jpg" => "car tail light"
 }.freeze
 
 UA = "VehicleSelectorPro-demo/1.0 (contact: support@vehicleselectorpro.example)".freeze

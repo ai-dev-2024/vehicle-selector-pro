@@ -85,12 +85,13 @@
     // Infinite-scroll setup for any [data-dynamic-catalog] grid.
     // - data-next-page: where to start fetching (1 for a JS-first grid like
     //   Featured Parts; 2 when the server already rendered page 1).
-    // - data-limit / data-category / data-token: forwarded to the API.
+    // - data-limit / data-category / data-token / data-featured: forwarded to the API.
     function init(grid) {
       var next = parseInt(grid.getAttribute('data-next-page') || '1', 10);
       var limit = parseInt(grid.getAttribute('data-limit') || '24', 10);
       var token = grid.getAttribute('data-token') || '';
       var category = grid.getAttribute('data-category') || '';
+      var featured = grid.getAttribute('data-featured') || '';
 
       if (!(next >= 1)) return; // -1 => nothing more to load (server renders all)
 
@@ -109,6 +110,7 @@
         var qs = new URLSearchParams({ page: String(state.page), limit: String(limit) });
         if (token) qs.set('token', token);
         if (category) qs.set('category', category);
+        if (featured) qs.set('featured', featured);
 
         fetch('/demo/api/products?' + qs.toString(), { headers: { 'Accept': 'application/json' } })
           .then(function (res) {

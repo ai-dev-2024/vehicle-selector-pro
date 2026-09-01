@@ -143,6 +143,26 @@ class FitmentSearchService
     end
   end
 
+  # Public so the app proxy's OE-number search can reuse the exact same product
+  # payload shape as vehicle-based search.
+  def product_payload(fitment)
+    {
+      product_id: fitment.product_id,
+      product_handle: fitment.product_handle,
+      product_title: fitment.product_title,
+      sku: fitment.sku,
+      brand: fitment.brand,
+      category: fitment.category,
+      price_cents: fitment.price_cents,
+      short_description: fitment.short_description,
+      universal: fitment.universal_fit?,
+      image: fitment.product_image.presence || DemoProductImages.image_for(fitment.sku, fitment.category),
+      fitment_notes: fitment.fitment_notes,
+      position: fitment.position,
+      confidence_score: fitment.confidence_score.to_f
+    }
+  end
+
   private
 
   def resolve_target_vehicle(vehicle_id: nil, year: nil, make: nil, model: nil, trim: nil, engine: nil)
@@ -231,26 +251,6 @@ class FitmentSearchService
     fitments = @shop.vehicle_product_fitments.where(product_id: paged_ids).order(:product_id)
     by_product = fitments.to_a.group_by(&:product_id)
     paged_ids.filter_map { |pid| by_product[pid]&.first }.map { |fitment| product_payload(fitment) }
-  end
-
-  # Public so the app proxy's OE-number search can reuse the exact same product
-  # payload shape as vehicle-based search.
-  def product_payload(fitment)
-    {
-      product_id: fitment.product_id,
-      product_handle: fitment.product_handle,
-      product_title: fitment.product_title,
-      sku: fitment.sku,
-      brand: fitment.brand,
-      category: fitment.category,
-      price_cents: fitment.price_cents,
-      short_description: fitment.short_description,
-      universal: fitment.universal_fit?,
-      image: fitment.product_image.presence || DemoProductImages.image_for(fitment.sku, fitment.category),
-      fitment_notes: fitment.fitment_notes,
-      position: fitment.position,
-      confidence_score: fitment.confidence_score.to_f
-    }
   end
 
   def cache_fetch(key, &)

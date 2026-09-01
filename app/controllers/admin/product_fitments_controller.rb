@@ -68,7 +68,6 @@ module Admin
     end
 
     def destroy
-      @fitment.product_id
       @fitment.destroy
       redirect_to admin_product_fitments_path, notice: t("admin.product_fitments.removed")
     end

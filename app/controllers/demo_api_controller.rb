@@ -88,18 +88,24 @@ class DemoApiController < ApplicationController
     render json: { success: true, data: result }
   end
 
-  # GET /demo/api/products?page=1&limit=24[&category=X][&token=year|make|model|trim|engine]
+  # GET /demo/api/products?page=1&limit=24[&category=X][&token=year|make|model|trim|engine][&featured=1]
   #
   # Backs the dynamically-loaded featured grid and the infinite-scroll
   # collection: returns one page of product cards with enough metadata to know
   # when to stop (has_more) so the client can keep fetching until the catalog
   # is fully loaded. Mirrors how a real Shopify storefront paginates a
-  # collection (limit/page + a filtered product set).
+  # collection (limit/page + a filtered product set). With featured=1 the set
+  # is narrowed to the curated FEATURED_SKUS bestsellers, so the shop page's
+  # grid is a fixed hand-picked storefront while the collection page streams
+  # the whole catalog.
+  # rubocop:disable-next Metrics/AbcSize -- single flat action branching between vehicle-token and
+  # distinct-catalog pagination; splitting it would hide the two paths from the reader
   def products
     per = params[:limit].to_i.clamp(1, 100)
     page = [params[:page].to_i, 1].max
     offset = (page - 1) * per
     category = params[:category].presence
+    featured = params[:featured].present?
 
     year, make, model, trim, engine = params[:token].to_s.split("|")
     if year.present? && make.present? && model.present?
@@ -113,6 +119,10 @@ class DemoApiController < ApplicationController
     else
       all = distinct_products
       all = all.select { |p| p[:category] == category } if category
+      if featured
+        all = all.select { |p| FEATURED_SKUS.include?(p[:sku]) }
+                 .sort_by { |p| FEATURED_SKUS.index(p[:sku]) }
+      end
       total = all.size
       products = all.drop(offset).first(per).map { |p| card_payload(p) }
     end

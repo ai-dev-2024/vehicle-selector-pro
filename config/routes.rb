@@ -12,8 +12,6 @@ Rails.application.routes.draw do
     resources :product_fitments, only: %i[index new create edit update destroy] do
       collection do
         post :bulk_assign
-        post :bulk_delete
-        get :search_products
       end
     end
 
@@ -120,9 +118,6 @@ Rails.application.routes.draw do
   get "demo/admin/vehicles", to: "storefront_preview#admin_vehicles"
   get "demo/admin/settings", to: "storefront_preview#admin_settings"
   get "demo/admin/imports", to: "storefront_preview#admin_imports"
-  get "demo/admin/analytics", to: "storefront_preview#admin_analytics"
-  get "demo/admin/billing", to: "storefront_preview#admin_billing"
-  get "demo/admin/oe-numbers", to: "storefront_preview#admin_oe_numbers"
   get "demo/admin/analytics", to: "storefront_preview#admin_analytics"
   get "demo/admin/billing", to: "storefront_preview#admin_billing"
   get "demo/admin/oe-numbers", to: "storefront_preview#admin_oe_numbers"

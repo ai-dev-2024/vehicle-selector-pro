@@ -126,17 +126,22 @@ module AppProxy
     private
 
     def render_oe_search(oe_term)
-      product_ids = OeNumber.product_ids_for(current_shop, oe_term)
+      matched_ids = OeNumber.product_ids_for(current_shop, oe_term)
+      # A product can be mapped to many vehicles, so the fitment rows must be
+      # collapsed to one card per product; and the id lists have to describe
+      # exactly the page we return, hence the same sort + cap on both.
+      product_ids = matched_ids.sort.first(FitmentSearchService::MAX_PAGE_SIZE)
       products = current_shop.vehicle_product_fitments
                              .where(product_id: product_ids)
                              .includes(:vehicle)
                              .order(:product_id)
+                             .uniq(&:product_id)
                              .map { |f| fitment_search_service.product_payload(f) }
       render json: {
         success: true,
         data: {
           vehicle: { oe: oe_term },
-          total_count: product_ids.size,
+          total_count: matched_ids.size,
           product_ids: product_ids,
           numeric_product_ids: product_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") },
           products: products

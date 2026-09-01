@@ -52,9 +52,9 @@ module VehicleSelectorPro
       end
     end
 
-    # Shopify embedded app: allow framing by Shopify admin
+    # Shopify embedded app: allow framing by Shopify admin. The real value is
+    # set per-response by the SecurityHeaders concern.
     config.action_dispatch.default_headers.delete("X-Frame-Options")
-    config.action_dispatch.default_headers["X-Frame-Options"] = ""
     config.content_security_policy do |policy|
       policy.frame_ancestors :self, "https://*.myshopify.com", "https://admin.shopify.com"
     end

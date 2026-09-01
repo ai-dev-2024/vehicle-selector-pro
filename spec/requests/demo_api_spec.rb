@@ -60,4 +60,21 @@ RSpec.describe "Demo API product pagination", type: :request do
     expect(body["total"]).to eq(1)
     expect(body["products"].first["sku"]).to eq("APX-CAI")
   end
+
+  it "featured=1 returns exactly the curated bestsellers in curated order" do
+    # The curated order must survive the response: the shop page grid is a
+    # hand-picked storefront, so sorting by DB scan order would reshuffle it.
+    DemoCatalog::FEATURED_SKUS.each_with_index do |sku, i|
+      create(:vehicle_product_fitment, shop: shop, sku: sku, category: "Part #{i}",
+                                       product_title: "Curated #{i}", price_cents: 1000 + i)
+    end
+    # A non-curated product in the catalog must never leak into the featured grid.
+    create(:vehicle_product_fitment, shop: shop, sku: "APX-POD-999", category: "Lighting",
+                                     product_title: "Not featured")
+
+    body = products_for("/demo/api/products?page=1&limit=100&featured=1")
+    expect(body["total"]).to eq(DemoCatalog::FEATURED_SKUS.size)
+    expect(body["has_more"]).to be false
+    expect(body["products"].pluck("sku")).to eq(DemoCatalog::FEATURED_SKUS)
+  end
 end
