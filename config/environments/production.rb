@@ -14,6 +14,10 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # solid_cache_entries table). The solid_cache_store default means cache
   # invalidation stays correct even if a deployment forgets the Redis secret,
   # instead of silently degrading to a per-machine memory store.
+  #
+  # The fallback depends on the solid_cache migrations being part of the repo
+  # (db/migrate/*.solid_cache.rb, run by the Fly release_command) — pinned by
+  # spec/config/production_cache_fallback_spec.rb.
   config.cache_store = if ENV["REDIS_URL"].present?
                          [:redis_cache_store, {
                            url: ENV["REDIS_URL"],
