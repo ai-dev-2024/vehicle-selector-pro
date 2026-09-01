@@ -50,13 +50,13 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 **▶ The two narrated walkthroughs play inline, right on this page — just press play:**
 
-<video src="https://github.com/user-attachments/assets/8966a45d-d46b-4b19-84c3-0cfe4d6282fa" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" width="100%"></video>
+<video src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" width="100%"></video>
 
 <sup>**Merchant walkthrough**</sup>
 
 <br>
 
-<video src="https://github.com/user-attachments/assets/545171d8-a8f4-49f8-894b-f82f353bcc1f" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" width="100%"></video>
+<video src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4" controls preload="metadata" poster="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" width="100%"></video>
 
 <sup>**Shopper walkthrough**</sup>
 

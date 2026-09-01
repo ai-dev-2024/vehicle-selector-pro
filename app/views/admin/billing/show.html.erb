@@ -1,11 +1,32 @@
 <div style="max-width: 960px; margin: 0 auto;">
   <div style="margin-bottom: 24px;">
-    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Plans &amp; billing</h2>
+    <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">
+      Plans &amp; billing
+      <% if @demo_mode %><span style="vertical-align: middle; margin-left: 10px; background: #ffb189; color: #5c2c00; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.04em;">DEMO PREVIEW</span><% end %>
+    </h2>
     <p style="margin: 0; color: #6d7175;">
       Choose a plan to unlock larger bulk imports and higher fitment limits. Billing is handled securely by Shopify.
     </p>
+    <% if @demo_mode %>
+      <p style="margin: 8px 0 0 0; font-size: 13px; color: #6d7175;">
+        This page mirrors the real billing screen. On a live store, <strong>Upgrade</strong> opens Shopify's native
+        plan-confirmation checkout; here it walks you through what to expect instead.
+      </p>
+    <% end %>
   </div>
 
+  <% if @demo_mode %>
+    <% if @simulated_plan %>
+      <div style="margin-bottom: 16px; padding: 12px 16px; border-radius: 8px; background: #e3f1ed; border: 1px solid #008060; color: #004c3f; font-size: 14px; font-weight: 600;">
+        <%= @simulated_plan.name %> plan activated — <strong>simulated for this demo</strong>; no Shopify billing call was made. On a live store, this state follows the merchant's real Shopify subscription.
+        <%= link_to "Reset to the store's actual plan", demo_admin_billing_path, style: "color: #004c3f;" %>
+      </div>
+    <% else %>
+      <div style="margin-bottom: 16px; padding: 12px 16px; border-radius: 8px; background: #fff4e5; border: 1px solid #ffb189; color: #5c2c00; font-size: 13px;">
+        <strong>Demo preview:</strong> plan buttons open a walkthrough of the real Shopify checkout flow — nothing is billed from this page.
+      </div>
+    <% end %>
+  <% end %>
   <% if flash[:alert].present? %>
     <div class="polaris-banner polaris-banner-alert" style="display: block; margin-bottom: 16px;"><%= flash[:alert] %></div>
   <% end %>
@@ -17,7 +38,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
       <div>
         <strong style="font-size: 15px;">Current plan:</strong>
-        <span style="font-weight: 700; color: #008060; margin-left: 6px;"><%= BillingPlan.find(@current_plan)&.name.to_s %></span>
+        <span id="demo-current-plan-name" style="font-weight: 700; color: #008060; margin-left: 6px;"><%= BillingPlan.find(@current_plan)&.name.to_s %></span>
         <span style="font-size: 13px; color: #6d7175; margin-left: 8px;">
           up to <%= number_with_delimiter(@current_plan_obj&.max_fitments.to_i) %> fitments per bulk import
         </span>
@@ -29,7 +50,7 @@
     <% @plans.each do |plan| %>
       <div class="cc-card" style="display: flex; flex-direction: column; border: 2px solid <%= plan.key == @current_plan ? '#008060' : '#e1e3e5' %>; position: relative;">
         <% if plan.key == @current_plan %>
-          <div style="position: absolute; top: 14px; right: 14px; background: #008060; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">CURRENT</div>
+          <div class="demo-current-badge" style="position: absolute; top: 14px; right: 14px; background: #008060; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">CURRENT</div>
         <% end %>
         <h3 style="margin: 0 0 4px 0; font-size: 18px; font-weight: 700; padding-right: 84px;"><%= plan.name %></h3>
         <div style="font-size: 22px; font-weight: 800; margin-bottom: 12px;"><%= plan.monthly_price_s %></div>
@@ -46,9 +67,9 @@
         </ul>
 
         <% if plan.key == @current_plan %>
-          <div style="text-align: center; background: #f1f2f3; color: #6d7175; padding: 10px; border-radius: 6px; font-weight: 600;">Active plan</div>
+          <div class="demo-active-row" style="text-align: center; background: #f1f2f3; color: #6d7175; padding: 10px; border-radius: 6px; font-weight: 600;">Active plan</div>
         <% else %>
-          <%= form_with url: admin_billing_path, method: :post, local: true do |f| %>
+          <%= form_with url: admin_billing_path, method: :post, local: true, html: { class: "demo-submit-row" } do |f| %>
             <%= hidden_field_tag :plan, plan.key %>
             <%= f.submit plan.price.to_f.zero? ? "Downgrade to #{plan.name}" : "Upgrade to #{plan.name}", class: "btn btn-primary", style: "width: 100%;" %>
           <% end %>
@@ -61,3 +82,51 @@
     Payments are processed and billed through your Shopify admin under <strong>Settings → Billing</strong>. You can cancel any time there.
   </p>
 </div>
+
+<% if @demo_mode %>
+  <div id="demo-billing-overlay" style="display: none; position: fixed; inset: 0; background: rgba(32,34,35,0.55); z-index: 999; align-items: center; justify-content: center; padding: 24px;" role="dialog" aria-modal="true" aria-labelledby="demo-billing-title">
+    <div class="cc-card" style="max-width: 460px; width: 100%;">
+      <h3 id="demo-billing-title" style="margin: 0 0 10px 0; font-size: 18px; font-weight: 700;">Live demo — billing is simulated</h3>
+      <p id="demo-billing-copy" style="margin: 0 0 16px 0; font-size: 14px; color: #202223; line-height: 1.5;">
+        On your store, this button opens <strong>Shopify's secure plan-confirmation page</strong>. After you approve,
+        the subscription starts with a 14-day free trial and this screen shows the plan as current. This public demo
+        has no Shopify admin session, so the checkout step is described here instead of running.
+      </p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button type="button" id="demo-billing-simulate" class="btn btn-primary" style="flex: 1;">Simulate plan change</button>
+        <button type="button" id="demo-billing-cancel" class="btn" style="flex: 1;">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var overlay = document.getElementById("demo-billing-overlay");
+      var pendingPlan = null;
+      function openFor(form) {
+        pendingPlan = form.querySelector('input[name="plan"]');
+        var label = pendingPlan ? pendingPlan.value.toUpperCase() : "";
+        var copy = document.getElementById("demo-billing-copy");
+        if (copy && label) {
+          copy.innerHTML = "On your store, this button opens <strong>Shopify's secure plan-confirmation page</strong> for the " +
+            label + " plan. After you approve, the subscription starts with a 14-day free trial and this screen shows " +
+            label + " as current. This public demo has no Shopify admin session, so the checkout step is described here instead of running.";
+        }
+        overlay.style.display = "flex";
+      }
+      document.querySelectorAll("form[action='<%= admin_billing_path %>']").forEach(function (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          openFor(form);
+        });
+      });
+      function close() { overlay.style.display = "none"; }
+      document.getElementById("demo-billing-cancel").addEventListener("click", close);
+      overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+      document.getElementById("demo-billing-simulate").addEventListener("click", function () {
+        var label = pendingPlan ? pendingPlan.value : "";
+        if (label) window.location.href = "<%= demo_admin_billing_path %>?simulated_plan=" + encodeURIComponent(label);
+      });
+    })();
+  </script>
+<% end %>

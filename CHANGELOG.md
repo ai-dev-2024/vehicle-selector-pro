@@ -2,6 +2,37 @@
 
 All notable changes to Vehicle Selector Pro are documented here.
 
+## [1.3.2] — 2026-09-01
+
+Presentation and demo-experience polish; catalog wave 4.
+
+### Added
+- **Catalog wave 4**: 20 new products (54 total) across Maintenance, Electrical, Wipers,
+  Filters, Interior, Exterior, Armor, Towing, Chassis and Lighting — each with full
+  descriptions, vehicle fitment mappings (318 fitments total) and manufacturer-style
+  spec sheets on the product page. 19 freely-licensed photos fetched from Wikimedia
+  Commons with curated picks and attribution in `public/demo-products/CREDITS.md`.
+- **Demo billing walkthrough** (`/demo/admin/billing`): plan buttons now open an overlay
+  explaining exactly what happens on a real store (Shopify's native plan-confirmation
+  checkout, 14-day trial) and offer a clearly-labeled **simulated plan switch** so the
+  CURRENT badge and import limits can be demonstrated without a Shopify session.
+  A "DEMO PREVIEW" pill marks the page everywhere it appears.
+
+### Fixed
+- **README videos**: the inline players pointed at stale `user-attachments` uploads that
+  no longer matched the final renders. Both videos now stream from GitHub Pages
+  (`video/mp4`, byte-identical to the current renders, faststart for instant playback).
+- **Seed bug**: the Mustang 2.3L intake matched `engine LIKE '%EcoBoost%'` (the trim, not
+  the engine), leaving the product with zero fitments and invisible on the storefront.
+
+### Changed
+- **Merchant UI motion polish**: shared easing curve, hover/focus/active transitions on
+  buttons, nav, cards, stat tiles and table rows, a soft page-entrance animation and a
+  breathing live-status dot — all disabled under `prefers-reduced-motion`.
+
+### Verification
+- 103 RSpec examples, 0 failures · RuboCop clean (134 files) · zeitwerk green.
+
 ## [1.3.1] — 2026-09-01
 
 Rails 7.1.6 → 7.2.3.2 security upgrade.

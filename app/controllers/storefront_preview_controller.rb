@@ -191,8 +191,12 @@ class StorefrontPreviewController < ApplicationController
 
   def admin_billing
     @current_shop = shop
+    @demo_mode = true # the public demo has no Shopify admin session for real checkout
     @plans = BillingPlan.all
-    @current_plan = shop.billing_plan_key
+    # Demo-only simulated plan switch: mirrors what a real plan change looks like
+    # (badge moves, limits update) without touching the shop's actual billing.
+    @simulated_plan = BillingPlan.find(params[:simulated_plan]) if params[:simulated_plan].present?
+    @current_plan = @simulated_plan&.key || shop.billing_plan_key
     @current_plan_obj = BillingPlan.find(@current_plan)
     render template: "admin/billing/show", layout: "embedded_app"
   end
