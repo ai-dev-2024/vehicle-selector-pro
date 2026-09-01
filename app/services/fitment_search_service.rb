@@ -83,10 +83,11 @@ class FitmentSearchService
 
   # Search results are paginated with a hard cap so a page request never loads
   # the whole catalog into memory. Matching product IDs are computed with a
-  # single SQL UNION (specific + universal fitments), the total is a cheap
-  # COUNT, and full fitment rows are fetched only for the products on the
-  # requested page. The full sorted ID list is still returned so the storefront
-  # Liquid integration can filter the collection in one pass.
+  # single SQL UNION (specific + universal fitments) and the LIMIT/OFFSET are
+  # applied at the database level, so only the requested page of IDs is ever
+  # materialized. total_count reflects the full match set, while product_ids /
+  # numeric_product_ids mirror exactly the products on the requested page — a
+  # client can safely treat those three as one consistent page of results.
   MAX_PAGE_SIZE = 100
 
   def search_products(year:, make:, model:, trim: nil, engine: nil, limit: 50, page: 1)
@@ -95,11 +96,11 @@ class FitmentSearchService
     offset = (page - 1) * limit
 
     vehicle_ids = matching_vehicle_ids(year: year, make: make, model: model, trim: trim, engine: engine)
-    product_ids = matching_product_ids(vehicle_ids)
-
+    total_ids = matching_product_ids(vehicle_ids)
     paged_ids = matching_product_ids(vehicle_ids, limit: limit, offset: offset)
+
     products = build_products(paged_ids)
-    numeric_ids = product_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") }
+    numeric_ids = paged_ids.map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") }
 
     # Metafield filter tokens for storefront Liquid integration
     filter_tag = "#{year}|#{make.to_s.downcase}|#{model.to_s.downcase}"
@@ -113,10 +114,10 @@ class FitmentSearchService
         engine: engine,
         display_name: [year, make, model, trim, engine].compact_blank.join(" ")
       },
-      total_count: product_ids.size,
+      total_count: total_ids.size,
       page: page,
       page_size: limit,
-      product_ids: product_ids,
+      product_ids: paged_ids,
       numeric_product_ids: numeric_ids,
       filter_token: filter_tag,
       products: products

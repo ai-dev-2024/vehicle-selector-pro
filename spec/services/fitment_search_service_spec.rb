@@ -76,6 +76,76 @@ RSpec.describe FitmentSearchService do
       result = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 50, page: 1)
       expect(result[:products].first[:image]).to eq("https://cdn.shopify.com/s/files/1/0000/files/merchant.jpg")
     end
+
+    describe "pagination (DB-level limit/offset)" do
+      let(:vehicle) { create(:vehicle, year: 2024, make: "Ford", model: "F-150") }
+
+      # Five specific fitments, distinct product ids, deterministic ordering.
+      let!(:fitments) do
+        5.times.map do |i|
+          create(:vehicle_product_fitment, shop: shop, vehicle: vehicle,
+                                           product_id: "gid://shopify/Product/#{100 + i}",
+                                           product_title: "Product #{i}")
+        end
+      end
+
+      it "returns different, non-overlapping pages for page=1 and page=2" do
+        page1 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 1)
+        page2 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 2)
+
+        expect(page1[:products].pluck(:product_id)).to eq(fitments[0..1].map(&:product_id))
+        expect(page2[:products].pluck(:product_id)).to eq(fitments[2..3].map(&:product_id))
+        expect(page1[:product_ids]).not_to eq(page2[:product_ids])
+        expect(page1[:product_ids] & page2[:product_ids]).to be_empty
+      end
+
+      it "keeps product_ids and numeric_product_ids consistent with the paged products" do
+        page1 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 1)
+        page2 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 2)
+
+        [page1, page2].each do |result|
+          expect(result[:products].size).to eq(2)
+          expect(result[:product_ids]).to eq(result[:products].map { |p| p[:product_id] })
+          expect(result[:numeric_product_ids]).to eq(result[:product_ids].map { |pid| pid.to_s.gsub("gid://shopify/Product/", "") })
+        end
+      end
+
+      it "reports the full match count as total_count on every page" do
+        page1 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 1)
+        page2 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 2)
+        page3 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 3)
+
+        expect(page1[:total_count]).to eq(5)
+        expect(page2[:total_count]).to eq(5)
+        # The final page holds the remaining product and reports the same total.
+        expect(page3[:total_count]).to eq(5)
+        expect(page3[:products].size).to eq(1)
+        expect(page3[:product_ids].size).to eq(1)
+      end
+
+      it "returns an empty page past the end of the result set" do
+        page4 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 4)
+        expect(page4[:products]).to be_empty
+        expect(page4[:product_ids]).to be_empty
+        expect(page4[:numeric_product_ids]).to be_empty
+        expect(page4[:total_count]).to eq(5)
+      end
+
+      it "dedupes a product that fits multiple matching vehicles (one row per product)" do
+        other_trim = create(:vehicle, year: 2024, make: "Ford", model: "F-150", trim: "Lariat")
+        # Same product listed for two vehicles of the searched model.
+        create(:vehicle_product_fitment, shop: shop, vehicle: other_trim,
+                                         product_id: fitments.first.product_id,
+                                         product_title: fitments.first.product_title)
+        Rails.cache.clear
+
+        page1 = service.search_products(year: 2024, make: "Ford", model: "F-150", limit: 2, page: 1)
+        expect(page1[:product_ids].uniq).to eq(page1[:product_ids])
+        expect(page1[:product_ids]).to eq(page1[:products].pluck(:product_id))
+        expect(page1[:products].pluck(:product_id)).to eq(fitments[0..1].map(&:product_id))
+        expect(page1[:total_count]).to eq(5)
+      end
+    end
   end
 
   describe ".invalidate_shop_cache" do

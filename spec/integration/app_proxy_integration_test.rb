@@ -124,7 +124,7 @@ class AppProxyIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "search pagination returns disjoint pages with the full id list" do
+  test "search pagination returns disjoint pages with page-consistent id lists" do
     5.times do |i|
       VehicleProductFitment.create!(
         shop: @shop,
@@ -145,13 +145,17 @@ class AppProxyIntegrationTest < ActionDispatch::IntegrationTest
 
     # 5 new fitments + the setup fitment = 6 matching products.
     assert_equal 6, page1["total_count"]
-    assert_equal 6, page1["product_ids"].size, "product_ids should list every match, not just the page"
+    assert_equal 2, page1["product_ids"].size, "product_ids must mirror the requested page"
     assert_equal page1["product_ids"], page1["product_ids"].sort, "product_ids must be deterministically ordered"
     assert_equal 2, page1["products"].size
     assert_equal 2, page2["products"].size
     ids1 = page1["products"].map { |p| p["product_id"] } # rubocop:disable Rails/Pluck -- plain hashes, not AR
     ids2 = page2["products"].map { |p| p["product_id"] } # rubocop:disable Rails/Pluck -- plain hashes, not AR
+    assert_equal page1["product_ids"], ids1, "product_ids must match the products returned on the page"
+    assert_equal page2["product_ids"], ids2, "product_ids must match the products returned on the page"
     assert_empty ids1 & ids2, "page 1 and page 2 must not overlap"
+    assert_equal page1["numeric_product_ids"], ids1.map { |id| id.to_s.gsub("gid://shopify/Product/", "") },
+                 "numeric_product_ids must mirror the page ids"
   end
 
   test "shop/redact webhook erases all shop-scoped data" do
