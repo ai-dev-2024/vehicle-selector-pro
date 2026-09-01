@@ -59,3 +59,5 @@ Real product photography for the demo storefront catalog. All images are freely 
 | `winch.jpg` | [File:Jeep CJ-5 brown with winch SOP.jpg](https://commons.wikimedia.org/wiki/File:Jeep_CJ-5_brown_with_winch_SOP.jpg) | CZmarlin  — Christopher Ziemnowicz, releases all rights but a photo credit would | Public domain |
 | `trailer-wiring.jpg` | [File:Class III tow hitch with 7-pin blade connector.jpg](https://commons.wikimedia.org/wiki/File:Class_III_tow_hitch_with_7-pin_blade_connector.jpg) | User:McChizzle | Public domain |
 | `fog-lights.jpg` | [File:Car with fog lights on (5371001885).jpg](https://commons.wikimedia.org/wiki/File:Car_with_fog_lights_on_(5371001885).jpg) | Oregon Department of Transportation | CC BY 2.0 |
+| `tonneau.jpg` | [File:Tonneau on pickup truck.JPG](https://commons.wikimedia.org/wiki/File:Tonneau_on_pickup_truck.JPG) | See source page | CC BY 3.0 |
+| `tail-light.jpg` | [File:Red car tail light (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Red_car_tail_light_(Unsplash).jpg) | Unsplash | CC0 |

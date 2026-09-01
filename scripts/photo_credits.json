@@ -339,5 +339,19 @@
     "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Class_III_tow_hitch_with_7-pin_blade_connector.jpg/1280px-Class_III_tow_hitch_with_7-pin_blade_connector.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
     "artist": "User:McChizzle",
     "license": "Public domain"
+  },
+  "tonneau.jpg": {
+    "title": "File:Tonneau on pickup truck.JPG",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Tonneau_on_pickup_truck.JPG",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Tonneau_on_pickup_truck.JPG/1280px-Tonneau_on_pickup_truck.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "artist": "Dwight Burdette",
+    "license": "CC BY 3.0"
+  },
+  "tail-light.jpg": {
+    "title": "File:Red car tail light (Unsplash).jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Red_car_tail_light_(Unsplash).jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Red_car_tail_light_%28Unsplash%29.jpg/1280px-Red_car_tail_light_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "artist": "chuttersnap chuttersnap",
+    "license": "CC0"
   }
 }

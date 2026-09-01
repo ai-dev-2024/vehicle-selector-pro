@@ -818,6 +818,306 @@ module DemoProductSpecs
         ["Fitment", "Silverado 1500 2019+ bumper openings"],
         ["Warranty", "5 years"]
       ]
+    },
+    "APX-BED-CVR-TAC" => {
+      features: [
+        "Fiberglass-reinforced hard panels with a durable matte finish",
+        "Aluminum side rails clamp on without drilling the bed",
+        "Tri-fold design folds to the cab for full bed access",
+        "Locks in three positions; supports 400 lb distributed load on top"
+      ],
+      specs: [
+        ["Panels", "Fiberglass-reinforced, matte black"],
+        ["Rails", "Anodized aluminum, clamp-on"],
+        ["Top load", "400 lb distributed"],
+        ["Fitment", "Tacoma 5-ft / 6-ft bed 2016+"],
+        ["Warranty", "5 years"]
+      ]
+    },
+    "APX-LGT-TL-MST" => {
+      features: [
+        "Full-LED lighting: tail, stop, turn and reverse in one assembly",
+        "Sequential turn signal animation with smoked lenses",
+        "Plug-and-play connectors — no cutting or load resistors",
+        "DOT/SAE compliant with OEM-grade seals against moisture"
+      ],
+      specs: [
+        ["Type", "Full-LED, smoked lens"],
+        ["Signal", "Sequential turn animation"],
+        ["Install", "Plug-and-play, no resistors"],
+        ["Fitment", "Mustang 2015+"],
+        ["Warranty", "3 years"]
+      ]
+    },
+    "APX-BRK-ROT-SLV" => {
+      features: [
+        "Directional slots wipe gas and water from the friction zone",
+        "G3000 cast iron resists heat checking under tow loads",
+        "Precision-balanced and micro-machined for zero runout",
+        "Silver zinc-coated hats resist corrosion"
+      ],
+      specs: [
+        ["Material", "G3000 cast iron"],
+        ["Finish", "Silver zinc-coated hat"],
+        ["Sold as", "Front pair"],
+        ["Fitment", "Silverado 1500 2019+ 6-lug"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-SUSP-LFT-F150-25" => {
+      features: [
+        "Billet 6061-T6 strut spacers level the factory rake",
+        "Retains factory shocks and springs — no harshness added",
+        "Clears up to 33-inch tires with the right wheel offset",
+        "Anodized finish; includes all hardware and torque specs"
+      ],
+      specs: [
+        ["Lift", "2.5 in front"],
+        ["Material", "6061-T6 billet, anodized"],
+        ["Tire clearance", "Up to 33 in"],
+        ["Fitment", "F-150 4WD 2015+"],
+        ["Warranty", "5 years"]
+      ]
+    },
+    "APX-CAB-AIR-RAM" => {
+      features: [
+        "Activated-charcoal layer traps diesel exhaust odors",
+        "Multilayer media catches pollen, dust and road grime",
+        "Drop-in OEM replacement — 10-minute glovebox install",
+        "Framed edge seals tight against bypass leakage"
+      ],
+      specs: [
+        ["Media", "Activated charcoal + synthetic"],
+        ["Install", "Glovebox, 10 min"],
+        ["Service", "12 months / 12k mi"],
+        ["Fitment", "RAM 1500 2019+"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-AIR-FIL-CIV" => {
+      features: [
+        "Cotton-gauze media flows more air than paper",
+        "Drop-in fit for the stock airbox — no tools required",
+        "Washable and reusable up to 100k miles",
+        "Dyno-verified +6 hp on the 1.5T"
+      ],
+      specs: [
+        ["Type", "Cotton-gauze, oiled"],
+        ["Gain", "+6 hp on 1.5T"],
+        ["Service", "Washable, 100k mi"],
+        ["Fitment", "Civic 1.5T 2016+"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-OIL-FLT-BMW" => {
+      features: [
+        "Synthetic-blend media captures 99% down to 19 microns",
+        "Bypass valve tuned for turbocharged oil pressure",
+        "OEM-spec thread and seal geometry",
+        "O-ring included for a proper crush-washer-free swap"
+      ],
+      specs: [
+        ["Media", "Synthetic-blend"],
+        ["Efficiency", "99% @ 19 microns"],
+        ["Includes", "O-ring"],
+        ["Fitment", "3 Series B48/B58 2019+"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-SPK-IR-BMW" => {
+      features: [
+        "0.6mm iridium center electrode for a strong, consistent spark",
+        "Pre-gapped to OEM specification — install straight out of the box",
+        "Resistor construction suppresses radio interference",
+        "Smoother idle and crisper throttle response"
+      ],
+      specs: [
+        ["Electrode", "0.6mm iridium"],
+        ["Gap", "Pre-set to OEM"],
+        ["Qty", "4 plugs"],
+        ["Fitment", "3 Series B48/B58 2019+"],
+        ["Warranty", "2 years"]
+      ]
+    },
+    "APX-WIP-BLD-OUT" => {
+      features: [
+        "Beam-blade design hugs the Outback's curved windshield",
+        "Graphite-coated rubber sweeps silently in all weather",
+        "Exact lengths: 26-inch driver, 17-inch passenger",
+        "Multi-adapter arms fit the factory wiper mounts"
+      ],
+      specs: [
+        ["Sizes", "26 in / 17 in pair"],
+        ["Type", "Beam blade"],
+        ["Coating", "Graphite rubber"],
+        ["Fitment", "Outback 2020+"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-BAT-AGM-BRN" => {
+      features: [
+        "AGM construction is vibration-resistant for trail duty",
+        "850 cold-crank amps for confident starts",
+        "Start-stop ready with high cyclic durability",
+        "Sealed, maintenance-free with vent tube kit"
+      ],
+      specs: [
+        ["Group", "94R"],
+        ["CCA", "850"],
+        ["Type", "AGM, sealed"],
+        ["Fitment", "Bronco 2021+"],
+        ["Warranty", "4 years"]
+      ]
+    },
+    "APX-ALT-240A-SLV" => {
+      features: [
+        "240-amp peak output feeds accessories at idle",
+        "High-temp diodes handle sustained work loads",
+        "Direct-fit pulley and bracket alignment",
+        "Bench-tested before shipping"
+      ],
+      specs: [
+        ["Output", "240 A peak"],
+        ["Voltage", "12V, negative ground"],
+        ["Includes", "Pulley"],
+        ["Fitment", "Silverado 1500 V8 2019+"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-STA-GR-JL" => {
+      features: [
+        "Gear-reduction motor spins faster with less current draw",
+        "Copper-wound armature for long service life",
+        "Sealed solenoid keeps moisture and grit out",
+        "New unit — not remanufactured"
+      ],
+      specs: [
+        ["Type", "Gear-reduction"],
+        ["Construction", "New, copper-wound"],
+        ["Voltage", "12V"],
+        ["Fitment", "Wrangler 3.6L 2018+"],
+        ["Warranty", "2 years"]
+      ]
+    },
+    "APX-THRB-CLN-1GL" => {
+      features: [
+        "Sensor-safe formula won't harm MAF or O2 sensors",
+        "Dissolves carbon and varnish from throttle plates",
+        "Restores idle quality and throttle response",
+        "Gallon size covers multiple services"
+      ],
+      specs: [
+        ["Size", "1 gallon"],
+        ["Safe for", "MAF, O2 sensors"],
+        ["Use", "Throttle body, intake"],
+        ["Fitment", "Universal gas engines"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-CLT-RMX-SLV" => {
+      features: [
+        "OAT formula compatible with Dex-Cool spec",
+        "Pre-mixed 50/50 — pour straight from the jug",
+        "Protects to -34°F and against corrosion",
+        "Safe for aluminum, brass and copper systems"
+      ],
+      specs: [
+        ["Type", "OAT, Dex-Cool compatible"],
+        ["Mix", "50/50 pre-mixed"],
+        ["Protection", "-34°F"],
+        ["Fitment", "Silverado 1500 V8 2019+"],
+        ["Warranty", "5 years / 150k mi"]
+      ]
+    },
+    "APX-SEAT-CVR-4RN" => {
+      features: [
+        "4mm padded neoprene repels water, mud and pet hair",
+        "Custom-tailored to 4Runner front seats",
+        "Side-airbag compatible stitching",
+        "Wetsuit-style closures for a snug fit"
+      ],
+      specs: [
+        ["Material", "4mm neoprene"],
+        ["Coverage", "Front row"],
+        ["Airbag", "Side-airbag compatible"],
+        ["Fitment", "4Runner 2010+"],
+        ["Warranty", "3 years"]
+      ]
+    },
+    "APX-MUD-FLP-TAC" => {
+      features: [
+        "Weighted rubber flaps stay put at highway speed",
+        "Stainless brackets resist corrosion",
+        "No-drill install at factory mounting points",
+        "Shields paint and rockers from gravel and slush"
+      ],
+      specs: [
+        ["Qty", "4 flaps"],
+        ["Material", "Rubber + stainless bracket"],
+        ["Install", "No-drill"],
+        ["Fitment", "Tacoma 2016+"],
+        ["Warranty", "2 years"]
+      ]
+    },
+    "APX-TOW-WIRE-JL" => {
+      features: [
+        "T-connector taps into the factory harness without splicing",
+        "4-pin flat output for trailers and utility lights",
+        "Corrosion-resistant sealed connector",
+        "Coiled cable keeps the trail clean"
+      ],
+      specs: [
+        ["Output", "4-pin flat"],
+        ["Install", "Plug-and-play, no splice"],
+        ["Connector", "Sealed T-connector"],
+        ["Fitment", "Wrangler JL 2018+ w/ tow pkg"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-CV-AXLE-4RN" => {
+      features: [
+        "Over-center plunge joints tolerate lifted angles",
+        "Heavy-duty boots resist trail abrasion",
+        "Greased and sealed at the factory",
+        "Rated for lifts up to 3 inches"
+      ],
+      specs: [
+        ["Type", "Over-center plunge CV"],
+        ["Rated", "Up to 3-in lift"],
+        ["Position", "Front axle"],
+        ["Fitment", "4Runner 2010+"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-SWAY-BAR-MST" => {
+      features: [
+        "34mm hollow bar cuts body roll without harshness",
+        "Two stiffness settings tune the balance",
+        "Polyurethane bushings included — no squeaks",
+        "Direct-fit brackets use factory mounts"
+      ],
+      specs: [
+        ["Diameter", "34mm hollow"],
+        ["Settings", "2 stiffness positions"],
+        ["Includes", "Bushings + end links"],
+        ["Fitment", "Mustang GT/Mach 1 2015+"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-CAL-RBLD-BMW" => {
+      features: [
+        "Complete seal kit restores clamping pressure",
+        "EPDM seals resist brake fluid and heat",
+        "High-temp grease included for slides and pins",
+        "Bleed screws included for a clean flush"
+      ],
+      specs: [
+        ["Kit", "Seals + boots + bleed screws"],
+        ["Material", "EPDM, high-temp"],
+        ["Position", "Front axle"],
+        ["Fitment", "3 Series G20 2019+"],
+        ["Warranty", "1 year"]
+      ]
     }
   }.freeze
 end

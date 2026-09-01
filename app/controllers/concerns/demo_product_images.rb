@@ -60,7 +60,28 @@ module DemoProductImages
     "APX-MUD-FLP-4RN" => "/demo-products/mud-flaps.jpg",
     "APX-WINCH-12K" => "/demo-products/winch.jpg",
     "APX-TOW-WIRE-7" => "/demo-products/trailer-wiring.jpg",
-    "APX-FOG-KIT-SLV" => "/demo-products/fog-lights.jpg"
+    "APX-FOG-KIT-SLV" => "/demo-products/fog-lights.jpg",
+    # Catalog wave 5
+    "APX-BED-CVR-TAC" => "/demo-products/tonneau.jpg",
+    "APX-LGT-TL-MST" => "/demo-products/tail-light.jpg",
+    "APX-BRK-ROT-SLV" => "/demo-products/rotors-mustang.jpg",
+    "APX-SUSP-LFT-F150-25" => "/demo-products/leveling-kit.jpg",
+    "APX-CAB-AIR-RAM" => "/demo-products/cabin-filter.jpg",
+    "APX-AIR-FIL-CIV" => "/demo-products/air-filter.jpg",
+    "APX-OIL-FLT-BMW" => "/demo-products/oil-filter.jpg",
+    "APX-SPK-IR-BMW" => "/demo-products/spark-plugs.jpg",
+    "APX-WIP-BLD-OUT" => "/demo-products/wiper-pair.jpg",
+    "APX-BAT-AGM-BRN" => "/demo-products/battery.jpg",
+    "APX-ALT-240A-SLV" => "/demo-products/alternator.jpg",
+    "APX-STA-GR-JL" => "/demo-products/starter-motor.jpg",
+    "APX-THRB-CLN-1GL" => "/demo-products/throttle-body.jpg",
+    "APX-CLT-RMX-SLV" => "/demo-products/coolant.jpg",
+    "APX-SEAT-CVR-4RN" => "/demo-products/seat-covers.jpg",
+    "APX-MUD-FLP-TAC" => "/demo-products/mud-flaps.jpg",
+    "APX-TOW-WIRE-JL" => "/demo-products/trailer-wiring.jpg",
+    "APX-CV-AXLE-4RN" => "/demo-products/cv-axle.jpg",
+    "APX-SWAY-BAR-MST" => "/demo-products/sway-bar.jpg",
+    "APX-CAL-RBLD-BMW" => "/demo-products/brake-caliper.jpg"
   }.freeze
 
   # Real category photos as the fallback for SKUs without a dedicated image
