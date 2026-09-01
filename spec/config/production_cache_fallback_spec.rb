@@ -8,9 +8,9 @@ require "rails_helper"
 # the no-REDIS_URL deployment path.
 RSpec.describe "production cache fallback (Solid Cache without REDIS_URL)" do
   it "ships the solid_cache migrations in the schema" do
-    expect(ActiveRecord::Base.connection.table_exists?("solid_cache_entries")).to be(true),
-      "solid_cache_entries is missing — run the solid_cache migrations " \
-      "(db:migrate) so the production fallback branch has its table"
+    table_present = ActiveRecord::Base.connection.data_source_exists?("solid_cache_entries")
+    expect(table_present).to be(true),
+                             "run the solid_cache migrations (db:migrate)"
   end
 
   it "resolves the stores referenced by production.rb" do
