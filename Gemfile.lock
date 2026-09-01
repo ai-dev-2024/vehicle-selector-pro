@@ -159,7 +159,7 @@ GEM
       reline (>= 0.4.2)
     json (2.21.2)
     jsonapi-renderer (0.2.2)
-    jwt (2.10.3)
+    jwt (3.2.0)
       base64
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
@@ -443,7 +443,7 @@ DEPENDENCIES
   faker (~> 3.3)
   faraday (~> 2.9)
   faraday-retry (~> 2.0)
-  jwt (~> 2.8)
+  jwt (~> 3.2)
   listen (~> 3.9)
   lograge (~> 0.14)
   oj (~> 3.16)
