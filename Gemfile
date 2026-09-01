@@ -26,7 +26,7 @@ gem "dotenv-rails", "~> 3.1"
 gem "sqlite3", "~> 2.6"
 
 # Background Processing & Queuing
-gem "redis", "~> 5.1"
+gem "redis", "~> 6.0"
 gem "sidekiq", "~> 7.2"
 # Rails 7.1's redis_cache_store requires the connection_pool 2.x constructor
 # signature; 3.x removed it and breaks production boot when REDIS_URL is set.
