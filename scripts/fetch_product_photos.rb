@@ -41,7 +41,27 @@ TARGETS = {
   "floor-liners.jpg" => "car floor mat",
   "bed-mat.jpg" => "pickup truck bed",
   "trailer-hitch.jpg" => "trailer hitch",
-  "roof-racks.jpg" => "roof rack car"
+  "roof-racks.jpg" => "roof rack car",
+  # Catalog wave 4: maintenance, electrical, filtration, interior, armor
+  "alternator.jpg" => "car alternator",
+  "starter-motor.jpg" => "Automobile starter",
+  "dual-battery.jpg" => "Auxiliary Battery CTEK charger",
+  "wiper-pair.jpg" => "windshield wiper blades pair",
+  "cabin-filter-charcoal.jpg" => "activated carbon filter",
+  "spark-plugs.jpg" => "spark plug",
+  "ignition-coil.jpg" => "ignition coils",
+  "serpentine-belt.jpg" => "serpentine belt engine",
+  "throttle-body.jpg" => "throttle body car",
+  "oil-filter.jpg" => "oil filter car",
+  "coolant.jpg" => "antifreeze radiator",
+  "cv-axle.jpg" => "cv joint axle",
+  "sway-bar.jpg" => "anti-roll bar car",
+  "brake-caliper.jpg" => "disc brake caliper CAD",
+  "seat-covers.jpg" => "car seat cover",
+  "mud-flaps.jpg" => "mud flaps car",
+  "winch.jpg" => "jeep winch",
+  "trailer-wiring.jpg" => "trailer hitch 7-pin connector",
+  "fog-lights.jpg" => "car fog lights"
 }.freeze
 
 UA = "VehicleSelectorPro-demo/1.0 (contact: support@vehicleselectorpro.example)".freeze

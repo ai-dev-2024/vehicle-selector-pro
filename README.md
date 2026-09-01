@@ -26,7 +26,7 @@ Automotive merchants assign **Year / Make / Model / Trim / Engine** fitment data
 
 | | | | |
 |---|---|---|---|
-| **48** YMMTE configurations | **169** verified fitments | **34** mapped products | **8** brands represented |
+| **48** YMMTE configurations | **318** verified fitments | **54** mapped products | **25** brands represented |
 
 </div>
 
@@ -115,11 +115,11 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 **Vehicle library — the YMMTE database with cascading filters**
 
-<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Admin vehicle library with 33 Year/Make/Model/Trim/Engine configurations across Ford, Toyota, BMW, Chevrolet, and Jeep" width="100%">
+<img src="demo/autoplay/frames_live/02_vehicles.png" alt="Admin vehicle library with 48 Year/Make/Model/Trim/Engine configurations across Ford, Chevrolet, Toyota, Jeep, BMW, RAM, Honda and Subaru" width="100%">
 
 **Product fitment matrix — every product-to-vehicle mapping with sync status**
 
-<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Product fitment matrix with 143 product-to-vehicle mappings, direct-fit and universal fits, sync badges, and edit controls" width="100%">
+<img src="demo/autoplay/frames_live/03_fitment_rules.png" alt="Product fitment matrix with 318 product-to-vehicle mappings, direct-fit and universal fits, sync badges, and edit controls" width="100%">
 
 **Widget & Garage configuration**
 
@@ -251,20 +251,21 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 ---
 
-## Roadmap & future development
+## Roadmap
 
-Shipped as a production-grade foundation, the following are on the roadmap — each is feasible on the current architecture without a rewrite. **Every item sits beyond the original spec's requirement — it is an optional growth path, not part of the agreed scope.** Several roadmap foundations (billing columns, OE cross-reference, confidence scoring, analytics aggregates) already shipped in v1.1.0–v1.3.0; the items below are the remaining growth path built on top of them:
+**Shipped recently** — full history in [CHANGELOG.md](CHANGELOG.md):
+
+- **v1.3.1 — Rails 7.1.6 → 7.2.3.2 security upgrade** — resolves GHSA-v55j-83pf-r9cq, GHSA-89vf-4333-qx8v and GHSA-2j26-frm8-cmj9 (now removed from the audit whitelist). Plan retained for reference: [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
+- **v1.3.0 — Storefront analytics** — daily checks, fit rate, and checks-by-make dashboard with 7/30/90-day ranges
+- **v1.2.0 — Shopify Billing** — Free / Pro / Pro Plus tiers with 14-day trials, plan-gated bulk imports
+- **v1.1.0 — Production hardening** — Solid Cache, webhook dedup, sync resilience, OE-number cross-reference, fitment confidence scoring, security headers, Sentry
+
+**Planned:**
 
 - **Full billing rollout** — the Shopify Billing API flow (Free / Pro / Pro Plus tiers, 14-day trials, plan-gated imports) is implemented and tested; what remains is flipping `SHOPIFY_BILLING_TEST=false` on a production Partner app and App Store listing approval
 - **Supersession chains** — a richer part-catalog engine on top of the shipped OE-number cross-reference
 - **Deeper analytics** — per make+model and per-product rollups, conversion lift and drop-off reports on top of the shipped daily aggregates
 - **White-label theming** — storefront theming, translation support, deeper widget controls
-
-Completed roadmap items (previously listed as growth path):
-
-- **Rails 7.1.6 → 7.2.3.2 security upgrade** — done 2026-09-01; resolves GHSA-v55j-83pf-r9cq, GHSA-89vf-4333-qx8v and GHSA-2j26-frm8-cmj9 (now removed from the audit whitelist). Plan retained for reference: [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
-
-Because the entire project was built with free AI tooling on a single consumer-class laptop, each of these represents meaningful headroom — the same foundation accelerates dramatically once proper development hardware and paid frontier models are applied.
 
 ---
 

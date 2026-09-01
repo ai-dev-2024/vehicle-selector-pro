@@ -40,7 +40,27 @@ module DemoProductImages
     "APX-LGT-POD-BRN" => "/demo-products/pod-kit-bronco.jpg",
     "APX-TOW-HITCH-SLV" => "/demo-products/trailer-hitch.jpg",
     "APX-BRK-ROT-MST" => "/demo-products/rotors-mustang.jpg",
-    "APX-SUSP-SHCK-TAC" => "/demo-products/shocks.jpg"
+    "APX-SUSP-SHCK-TAC" => "/demo-products/shocks.jpg",
+    # Catalog wave 4: maintenance, electrical, filtration & hardware
+    "APX-OIL-FLT-TRK" => "/demo-products/oil-filter.jpg",
+    "APX-CLT-LLC-1GL" => "/demo-products/coolant.jpg",
+    "APX-SPK-IR-V8" => "/demo-products/spark-plugs.jpg",
+    "APX-IGN-COIL-GRF6" => "/demo-products/ignition-coil.jpg",
+    "APX-SERP-BLT-F150" => "/demo-products/serpentine-belt.jpg",
+    "APX-THRB-CLN-KIT" => "/demo-products/throttle-body.jpg",
+    "APX-ALT-240A-WRK" => "/demo-products/alternator.jpg",
+    "APX-STA-GR-4RN" => "/demo-products/starter-motor.jpg",
+    "APX-DUAL-BAT-KIT" => "/demo-products/dual-battery.jpg",
+    "APX-WIP-BLD-22PR" => "/demo-products/wiper-pair.jpg",
+    "APX-CAB-AIR-BMW" => "/demo-products/cabin-filter-charcoal.jpg",
+    "APX-SWAY-BAR-CIV" => "/demo-products/sway-bar.jpg",
+    "APX-CV-AXLE-TAC" => "/demo-products/cv-axle.jpg",
+    "APX-CAL-RBLD-TRK" => "/demo-products/brake-caliper.jpg",
+    "APX-SEAT-CVR-TAC" => "/demo-products/seat-covers.jpg",
+    "APX-MUD-FLP-4RN" => "/demo-products/mud-flaps.jpg",
+    "APX-WINCH-12K" => "/demo-products/winch.jpg",
+    "APX-TOW-WIRE-7" => "/demo-products/trailer-wiring.jpg",
+    "APX-FOG-KIT-SLV" => "/demo-products/fog-lights.jpg"
   }.freeze
 
   # Real category photos as the fallback for SKUs without a dedicated image

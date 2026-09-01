@@ -35,3 +35,27 @@ Real product photography for the demo storefront catalog. All images are freely 
 | `bumper.jpg` | Bundled demo photography (original demo build) | ? | bundled with app |
 | `led-pods.jpg` | Bundled demo photography (original demo build) | ? | bundled with app |
 | `strut-brace.jpg` | Bundled demo photography (original demo build) | ? | bundled with app |
+
+## Catalog wave 4 additions
+
+| File | Subject / Source | Author | License |
+|---|---|---|---|
+| `alternator.jpg` | [File:Alternator voltage regulator.jpg](https://commons.wikimedia.org/wiki/File:Alternator_voltage_regulator.jpg) | Milicevic01 | CC BY-SA 4.0 |
+| `starter-motor.jpg` | [File:Remy charg-o-matic car battery.jpg](https://commons.wikimedia.org/wiki/File:Remy_charg-o-matic_car_battery.jpg) | The ed17 | CC BY-SA 4.0 |
+| `dual-battery.jpg` | [File:NOCO 12-Volt Car Battery Clips - Car Jumper Cable (42059511091).jpg](https://commons.wikimedia.org/wiki/File:NOCO_12-Volt_Car_Battery_Clips_-_Car_Jumper_Cable_(42059511091).jpg) | Tony Webster from Minneapolis, Minnesota, United States | CC BY 2.0 |
+| `wiper-pair.jpg` | [File:Used Michelin 8019 windshield wiper blade tip.jpg](https://commons.wikimedia.org/wiki/File:Used_Michelin_8019_windshield_wiper_blade_tip.jpg) | Jacek Rużyczka | CC BY-SA 4.0 |
+| `cabin-filter-charcoal.jpg` | [File:Circular HEPA air filter & activated carbon filter (1).jpg](https://commons.wikimedia.org/wiki/File:Circular_HEPA_air_filter_%26_activated_carbon_filter_(1).jpg) | Home Air Quality Guides | CC BY-SA 2.0 |
+| `spark-plugs.jpg` | [File:Spark plug 2.jpg](https://commons.wikimedia.org/wiki/File:Spark_plug_2.jpg) | ProjectManhattan | CC BY-SA 3.0 |
+| `ignition-coil.jpg` | [File:Ignition coils.jpg](https://commons.wikimedia.org/wiki/File:Ignition_coils.jpg) | Honda CB77 Restoration | CC BY 2.0 |
+| `serpentine-belt.jpg` | [File:Front of engine, serpentine belt, turbos, waste gates and air ducts, (7996565681).jpg](https://commons.wikimedia.org/wiki/File:Front_of_engine,_serpentine_belt,_turbos,_waste_gates_and_air_ducts,_(7996565681).jpg) | Bill Abbott | CC BY-SA 2.0 |
+| `throttle-body.jpg` | [File:Car engine part shows details of throttle body and surrounding components during a repair in a garage.jpg](https://commons.wikimedia.org/wiki/File:Car_engine_part_shows_details_of_throttle_body_and_surrounding_components_during_a_repair_in_a_garage.jpg) | Shixart1985 | CC BY 2.0 |
+| `oil-filter.jpg` | [File:Bosch Oil Filter.JPG](https://commons.wikimedia.org/wiki/File:Bosch_Oil_Filter.JPG) | Schumi4ever | CC BY-SA 4.0 |
+| `coolant.jpg` | [File:Antifreeze in the radiator.jpg](https://commons.wikimedia.org/wiki/File:Antifreeze_in_the_radiator.jpg) | EvelynGiggles | CC BY 2.0 |
+| `cv-axle.jpg` | [File:CV joint half axle.jpg](https://commons.wikimedia.org/wiki/File:CV_joint_half_axle.jpg) | BiH | Public domain |
+| `sway-bar.jpg` | [File:Caterham Roadsport building - 141 - Anti-roll bar link bracket LH side - Flickr - exfordy.jpg](https://commons.wikimedia.org/wiki/File:Caterham_Roadsport_building_-_141_-_Anti-roll_bar_link_bracket_LH_side_-_Flickr_-_exfordy.jpg) | Brian Snelson from Hockley, Essex, England | CC BY 2.0 |
+| `brake-caliper.jpg` | [File:CAD Model of Disc Brake.jpg](https://commons.wikimedia.org/wiki/File:CAD_Model_of_Disc_Brake.jpg) | Atharv Chandel | CC BY 4.0 |
+| `seat-covers.jpg` | [File:Colorful bamboo car seat cushions.jpg](https://commons.wikimedia.org/wiki/File:Colorful_bamboo_car_seat_cushions.jpg) | Fumikas Sagisavas | CC0 |
+| `mud-flaps.jpg` | [File:Rear tire and mud guard (4490200207).jpg](https://commons.wikimedia.org/wiki/File:Rear_tire_and_mud_guard_(4490200207).jpg) | jimmyweee | CC BY 2.0 |
+| `winch.jpg` | [File:Jeep CJ-5 brown with winch SOP.jpg](https://commons.wikimedia.org/wiki/File:Jeep_CJ-5_brown_with_winch_SOP.jpg) | CZmarlin  — Christopher Ziemnowicz, releases all rights but a photo credit would | Public domain |
+| `trailer-wiring.jpg` | [File:Class III tow hitch with 7-pin blade connector.jpg](https://commons.wikimedia.org/wiki/File:Class_III_tow_hitch_with_7-pin_blade_connector.jpg) | User:McChizzle | Public domain |
+| `fog-lights.jpg` | [File:Car with fog lights on (5371001885).jpg](https://commons.wikimedia.org/wiki/File:Car_with_fog_lights_on_(5371001885).jpg) | Oregon Department of Transportation | CC BY 2.0 |

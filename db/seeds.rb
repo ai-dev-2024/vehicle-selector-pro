@@ -442,7 +442,7 @@ catalog_products = [
     universal: false,
     fitment_notes: "Fits Mustang 2.3L EcoBoost (2015+). CARB-pending; keeps stock ECU calibration.",
     position: "Engine Bay",
-    matching_vehicles: Vehicle.where(make: "Ford", model: "Mustang").where("engine LIKE ?", "%EcoBoost%")
+    matching_vehicles: Vehicle.where(make: "Ford", model: "Mustang").where("engine LIKE ?", "%2.3L%")
   },
   {
     product_id: "gid://shopify/Product/10358754214013",
@@ -655,6 +655,297 @@ catalog_products = [
     fitment_notes: "Rear pair, Tacoma 4WD (2016+). Fits stock or lifted ride heights 0–3 in.",
     position: "Rear Suspension",
     matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma", drivetrain: "4WD")
+  },
+
+  # ---- Catalog wave 4: maintenance, electrical, filtration & hardware ----
+  {
+    product_id: "gid://shopify/Product/10358754214028",
+    product_handle: "apexflow-premium-oil-filter-pair-full-size-trucks",
+    product_title: "ApexFlow Premium Oil Filter, Pair (Full-Size Trucks)",
+    sku: "APX-OIL-FLT-TRK",
+    brand: "ApexFlow",
+    category: "Maintenance",
+    price_cents: 2_900,
+    short_description: "Synthetic-blend media captures 99% of contaminants down to 19 microns — sold as a pair for two services.",
+    universal: false,
+    fitment_notes: "Fits Ford F-150 5.0L V8, Chevrolet Silverado 1500 V8 and RAM 1500 5.7L HEMI. Pair covers two oil changes.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150").where("engine LIKE ?", "%5.0L%")
+                              .or(Vehicle.where(make: "Chevrolet", model: "Silverado 1500").where("engine LIKE ?", "%V8%"))
+                              .or(Vehicle.where(make: "RAM", model: "1500").where("engine LIKE ?", "%HEMI%"))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214029",
+    product_handle: "apexcool-long-life-coolant-concentrate-1-gallon",
+    product_title: "ApexCool Long-Life Coolant Concentrate, 1 Gallon",
+    sku: "APX-CLT-LLC-1GL",
+    brand: "ApexCool",
+    category: "Maintenance",
+    price_cents: 2_400,
+    short_description: "OAT organic-acid coolant concentrate.",
+    universal: true,
+    fitment_notes: "Universal — mix 50/50 with distilled water. Compatible with all gasoline and turbo-diesel engines.",
+    position: "Cooling System"
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214030",
+    product_handle: "apexfire-iridium-spark-plug-set-8-piece-v8-trucks",
+    product_title: "ApexFire Iridium Spark Plug Set, 8-Piece (V8 Trucks)",
+    sku: "APX-SPK-IR-V8",
+    brand: "ApexFire",
+    category: "Maintenance",
+    price_cents: 6_800,
+    short_description: "0.6mm iridium center electrodes for a stronger, more consistent spark — smoother idle and easier cold starts.",
+    universal: false,
+    fitment_notes: "8-pc set for Ford F-150 5.0L V8, Chevrolet Silverado 1500 5.3L/6.2L V8 and RAM 1500 5.7L HEMI.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150").where("engine LIKE ?", "%5.0L%")
+                              .or(Vehicle.where(make: "Chevrolet", model: "Silverado 1500").where("engine LIKE ?", "%V8%"))
+                              .or(Vehicle.where(make: "RAM", model: "1500").where("engine LIKE ?", "%HEMI%"))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214031",
+    product_handle: "apexfire-ignition-coil-pack-6-piece-toyota-4-0l",
+    product_title: "ApexFire Ignition Coil Pack, 6-Piece (Toyota 4.0L 1GR-FE)",
+    sku: "APX-IGN-COIL-GRF6",
+    brand: "ApexFire",
+    category: "Maintenance",
+    price_cents: 14_700,
+    short_description: "High-output coil-on-plug set wound for faster rise times.",
+    universal: false,
+    fitment_notes: "6-pc set for Toyota 4.0L 1GR-FE V6: 4Runner (all trims) and Tacoma 3.5L V6.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "4Runner")
+                              .or(Vehicle.where(make: "Toyota", model: "Tacoma").where("engine LIKE ?", "%V6%"))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214032",
+    product_handle: "apexdrive-serpentine-belt-ford-f150-3-5l-ecoboost",
+    product_title: "ApexDrive Serpentine Belt (Ford F-150 3.5L EcoBoost)",
+    sku: "APX-SERP-BLT-F150",
+    brand: "ApexDrive",
+    category: "Maintenance",
+    price_cents: 4_500,
+    short_description: "EPDM construction with aramid-reinforced cords — quiet, crack-resistant and rated for 150k miles of turbo duty.",
+    universal: false,
+    fitment_notes: "Exact-fit belt for F-150 3.5L EcoBoost (2011+), including Raptor high-output.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150").where("engine LIKE ?", "%3.5L%")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214033",
+    product_handle: "apexflow-throttle-body-intake-valve-cleaner-kit",
+    product_title: "ApexFlow Throttle-Body & Intake Valve Cleaner Kit",
+    sku: "APX-THRB-CLN-KIT",
+    brand: "ApexFlow",
+    category: "Maintenance",
+    price_cents: 2_200,
+    short_description: "Two-step kit strips carbon from throttle plates and direct-injection intake valves.",
+    universal: true,
+    fitment_notes: "Universal — safe for port and direct injection, turbo and naturally-aspirated engines.",
+    position: "Engine Bay"
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214034",
+    product_handle: "apexvolt-240a-high-output-alternator-jeep-wrangler",
+    product_title: "ApexVolt 240A High-Output Alternator (Jeep Wrangler)",
+    sku: "APX-ALT-240A-WRK",
+    brand: "ApexVolt",
+    category: "Electrical",
+    price_cents: 36_900,
+    short_description: "240-amp output feeds light bars, winches and compressors without dimming the headlights at idle.",
+    universal: false,
+    fitment_notes: "Direct-fit for Jeep Wrangler JL/JLU 3.6L V6 and 2.0L turbo (2018+). Includes clutch pulley.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Jeep", model: "Wrangler")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214035",
+    product_handle: "apexvolt-gear-reduction-starter-toyota-4runner-4-0l",
+    product_title: "ApexVolt Gear-Reduction Starter Motor (Toyota 4Runner 4.0L)",
+    sku: "APX-STA-GR-4RN",
+    brand: "ApexVolt",
+    category: "Electrical",
+    price_cents: 16_800,
+    short_description: "Gear-reduction design spins harder while drawing less current — confident starts on cold mornings.",
+    universal: false,
+    fitment_notes: "Direct-fit for Toyota 4Runner 4.0L V6 (2010+). Copper-wound, new — not remanufactured.",
+    position: "Engine Bay",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "4Runner")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214036",
+    product_handle: "apexvolt-dual-battery-isolation-kit-smart-acr",
+    product_title: "ApexVolt Dual-Battery Isolation Kit with Smart ACR",
+    sku: "APX-DUAL-BAT-KIT",
+    brand: "ApexVolt",
+    category: "Electrical",
+    price_cents: 21_500,
+    short_description: "Voltage-sensing relay parallels batteries only when the alternator is charging.",
+    universal: true,
+    fitment_notes: "Universal — fits any 12V negative-ground vehicle. Includes ACR, cabling, lugs and mounting hardware.",
+    position: "Engine Bay"
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214037",
+    product_handle: "apexclear-all-season-beam-wiper-blades-22-pair",
+    product_title: "ApexClear All-Season Beam Wiper Blades, 22\"/22\" Pair",
+    sku: "APX-WIP-BLD-22PR",
+    brand: "ApexClear",
+    category: "Wipers & Visibility",
+    price_cents: 3_400,
+    short_description: "Beam-blade design hugs curved windshields with even pressure — silent, streak-free sweeps down to -40°.",
+    universal: true,
+    fitment_notes: "Universal 22\"/22\" pair with multi-adapter arm. Check the fitment widget for adapter type per vehicle.",
+    position: "Front Windshield"
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214038",
+    product_handle: "apexpure-activated-charcoal-cabin-filter-bmw-3-series",
+    product_title: "ApexPure Activated-Charcoal Cabin Filter (BMW 3 Series)",
+    sku: "APX-CAB-AIR-BMW",
+    brand: "ApexPure",
+    category: "Filters",
+    price_cents: 2_900,
+    short_description: "Activated-charcoal layer traps diesel soot, pollen and odors — restores that new-car cabin smell in minutes.",
+    universal: false,
+    fitment_notes: "Cabin-intake filter for BMW 3 Series G20 (2019+), all engines. 10-minute glovebox install.",
+    position: "Cabin",
+    matching_vehicles: Vehicle.where(make: "BMW", model: "3 Series")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214039",
+    product_handle: "apexstop-low-dust-ceramic-brake-pad-set-front-bmw-3-series",
+    product_title: "ApexStop Low-Dust Ceramic Brake Pad Set, Front (BMW 3 Series)",
+    sku: "APX-BRK-PAD-BMW",
+    brand: "ApexStop",
+    category: "Brakes",
+    price_cents: 9_900,
+    short_description: "Ceramic compound keeps wheels noticeably cleaner while delivering the progressive bite BMW brakes are known for.",
+    universal: false,
+    fitment_notes: "Front axle, BMW 3 Series G20 330i and M340i (2019+). Hardware kit included.",
+    position: "Front Axle",
+    matching_vehicles: Vehicle.where(make: "BMW", model: "3 Series")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214040",
+    product_handle: "apexgrip-front-sway-bar-26mm-honda-civic",
+    product_title: "ApexGrip Front Sway Bar, 26mm (Honda Civic)",
+    sku: "APX-SWAY-BAR-CIV",
+    brand: "ApexGrip",
+    category: "Chassis & Handling",
+    price_cents: 24_900,
+    short_description: "26mm hollow-formed bar with two adjustment positions — flattens body roll without punishing ride quality.",
+    universal: false,
+    fitment_notes: "Honda Civic FE (2022+), Sedan and Hatchback. Includes polyurethane bushings and end links.",
+    position: "Front Suspension",
+    matching_vehicles: Vehicle.where(make: "Honda", model: "Civic")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214041",
+    product_handle: "apexdrive-heavy-duty-cv-axle-assembly-toyota-tacoma-4wd",
+    product_title: "ApexDrive Heavy-Duty CV Axle Assembly, Front (Toyota Tacoma 4WD)",
+    sku: "APX-CV-AXLE-TAC",
+    brand: "ApexDrive",
+    category: "Chassis & Handling",
+    price_cents: 13_900,
+    short_description: "Over-center plunge CV joints tolerate lifted angles stock axles can't.",
+    universal: false,
+    fitment_notes: "Front axle, Tacoma 4WD (2016+). Rated for lifts up to 3 inches.",
+    position: "Front Drivetrain",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma", drivetrain: "4WD")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214042",
+    product_handle: "apexstop-front-brake-caliper-rebuild-kit-full-size-trucks",
+    product_title: "ApexStop Front Brake Caliper Rebuild Kit (Full-Size Trucks)",
+    sku: "APX-CAL-RBLD-TRK",
+    brand: "ApexStop",
+    category: "Brakes",
+    price_cents: 3_600,
+    short_description: "Seals, dust boots and bleed screws bring tired calipers back to like-new clamping — one kit per axle.",
+    universal: false,
+    fitment_notes: "Front calipers on F-150, Silverado 1500 and RAM 1500 (2019+). EPDM seals, high-temp grease included.",
+    position: "Front Axle",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150")
+                              .or(Vehicle.where(make: "Chevrolet", model: "Silverado 1500"))
+                              .or(Vehicle.where(make: "RAM", model: "1500"))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214043",
+    product_handle: "apexcomfort-neoprene-seat-covers-front-row-toyota-tacoma",
+    product_title: "ApexComfort Neoprene Seat Covers, Front Row (Toyota Tacoma)",
+    sku: "APX-SEAT-CVR-TAC",
+    brand: "ApexComfort",
+    category: "Interior & Comfort",
+    price_cents: 18_900,
+    short_description: "4mm padded neoprene shrugs off wet swimsuits, mud and dog claws — custom-tailored for Tacoma seats, airbag-safe.",
+    universal: false,
+    fitment_notes: "Front row, Tacoma Double Cab and Access Cab (2016+). Side-airbag compatible stitching.",
+    position: "Cabin",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "Tacoma")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214044",
+    product_handle: "apexshield-mud-flap-set-front-rear-toyota-4runner",
+    product_title: "ApexShield Mud Flap Set, Front & Rear (Toyota 4Runner)",
+    sku: "APX-MUD-FLP-4RN",
+    brand: "ApexShield",
+    category: "Exterior & Racks",
+    price_cents: 7_400,
+    short_description: "Weighted rubber flaps with stainless brackets stop gravel rash on paint, rockers and whatever's towing behind you.",
+    universal: false,
+    fitment_notes: "4-Piece set, Toyota 4Runner (2010+). No-drill, bolts to factory mounting points.",
+    position: "Exterior",
+    matching_vehicles: Vehicle.where(make: "Toyota", model: "4Runner")
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214045",
+    product_handle: "apexarmor-12000-lb-electric-winch-synthetic-rope",
+    product_title: "ApexArmor 12,000-lb Electric Winch with Synthetic Rope",
+    sku: "APX-WINCH-12K",
+    brand: "ApexArmor",
+    category: "Bumpers & Armor",
+    price_cents: 49_900,
+    short_description: "12,000-lb pull, 94 ft of plasma rope and a wireless remote — self-recovery strength in a sealed IP68 housing.",
+    universal: false,
+    fitment_notes: "Fits standard 10x4.5 winch-mount bumpers: Jeep Wrangler, F-150, Silverado 1500, RAM 1500, Tacoma, 4Runner.",
+    position: "Front Bumper",
+    matching_vehicles: Vehicle.where(make: "Jeep", model: "Wrangler")
+                              .or(Vehicle.where(make: "Ford", model: %w[F-150 Bronco]))
+                              .or(Vehicle.where(make: "Chevrolet", model: "Silverado 1500"))
+                              .or(Vehicle.where(make: "RAM", model: "1500"))
+                              .or(Vehicle.where(make: "Toyota", model: %w[Tacoma 4Runner]))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214046",
+    product_handle: "apextow-7-pin-trailer-wiring-harness-full-size-trucks",
+    product_title: "ApexTow 7-Pin Trailer Wiring Harness (Full-Size Trucks)",
+    sku: "APX-TOW-WIRE-7",
+    brand: "ApexTow",
+    category: "Towing",
+    price_cents: 4_900,
+    short_description: "OEM-connectortail harness with LED-ready 7-blade plug.",
+    universal: false,
+    fitment_notes: "F-150, Silverado 1500 and RAM 1500 with factory tow package. Includes brake-controller pass-through.",
+    position: "Rear Bumper",
+    matching_vehicles: Vehicle.where(make: "Ford", model: "F-150")
+                              .or(Vehicle.where(make: "Chevrolet", model: "Silverado 1500"))
+                              .or(Vehicle.where(make: "RAM", model: "1500"))
+  },
+  {
+    product_id: "gid://shopify/Product/10358754214047",
+    product_handle: "apexbeam-led-fog-light-kit-chevrolet-silverado",
+    product_title: "ApexBeam LED Fog Light Kit (Chevrolet Silverado)",
+    sku: "APX-FOG-KIT-SLV",
+    brand: "ApexBeam",
+    category: "Lighting",
+    price_cents: 13_400,
+    short_description: "5,000-lumen SAE-compliant LED pods with a wide flat beam that lights the shoulder line, not the fog bank.",
+    universal: false,
+    fitment_notes: "Bumper-opening fit for Silverado 1500 (2019+). Plug-and-play harness with dash switch.",
+    position: "Front Bumper",
+    matching_vehicles: Vehicle.where(make: "Chevrolet", model: "Silverado 1500")
   }
 ]
 

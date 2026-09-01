@@ -516,6 +516,308 @@ module DemoProductSpecs
         ["Valving", "Load-tuned, velocity sensitive"],
         ["Warranty", "Limited lifetime (1 yr seal)"]
       ]
+    },
+
+    # ---- Catalog wave 4: maintenance, electrical, filtration & hardware ----
+    "APX-OIL-FLT-TRK" => {
+      features: [
+        "Synthetic-blend micro-glass media captures 99% of particles down to 19 microns",
+        "Silicone anti-drainback valve prevents dry-start wear",
+        "Pressed-steel canister burst-rated to 491 psi",
+        "Sold as a pair — covers two oil-change services"
+      ],
+      specs: [
+        ["Media", "Synthetic-blend micro-glass"],
+        ["Filtration", "99% @ 19 microns"],
+        ["Anti-drainback", "Silicone valve"],
+        ["Included", "2 filters + pre-lube O-rings"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-CLT-LLC-1GL" => {
+      features: [
+        "OAT organic-acid formulation protects all engine metals including aluminum",
+        "10-year / 150,000-mile service interval after initial fill",
+        "Pre-mixed defoamer and scale inhibitors — no additive needed",
+        "Concentrate: mix 50/50 with distilled water"
+      ],
+      specs: [
+        ["Chemistry", "OAT organic acid (silicate-free)"],
+        ["Service life", "10 years / 150,000 miles"],
+        ["Freeze protection", "-34°F at 50/50 mix"],
+        ["Volume", "1 gallon concentrate"],
+        ["Warranty", "Satisfaction guarantee"]
+      ]
+    },
+    "APX-SPK-IR-V8" => {
+      features: [
+        "0.6mm iridium center electrode for a stronger, more consistent spark",
+        "Platinum ground electrode resists erosion under towing loads",
+        "Tapered V-cut center electrode focuses the spark kernel",
+        "Pre-gapped at the factory — no adjustment needed"
+      ],
+      specs: [
+        ["Center electrode", "0.6mm iridium"],
+        ["Ground electrode", "Platinum-tipped"],
+        ["Gap", "Factory pre-set"],
+        ["Included", "8 plugs + anti-seize packets"],
+        ["Warranty", "3 years / 50,000 miles"]
+      ]
+    },
+    "APX-IGN-COIL-GRF6" => {
+      features: [
+        "High-output windings deliver faster voltage rise for complete combustion",
+        "Epoxy-potted primary resists vibration and heat soak",
+        "Cures the misfire-under-load these V6s develop with age",
+        "Sold as a complete 6-cylinder set — replace all at once"
+      ],
+      specs: [
+        ["Type", "Coil-on-plug, high output"],
+        ["Primary resistance", "0.7 Ω ±10%"],
+        ["Output energy", "+15% over OE"],
+        ["Included", "6 coils + dielectric grease"],
+        ["Warranty", "3 years"]
+      ]
+    },
+    "APX-SERP-BLT-F150" => {
+      features: [
+        "EPDM construction stays quiet and crack-free for 150k miles",
+        "Aramid-reinforced cords resist stretch under turbo accessory loads",
+        "OEM-profile ribs eliminate the chirp common with generic belts",
+        "Exact-fit — installs with the factory tensioner, no shims"
+      ],
+      specs: [
+        ["Material", "EPDM with aramid cords"],
+        ["Rib profile", "OEM 6-rib"],
+        ["Service life", "150,000 miles"],
+        ["Fitment", "F-150 3.5L EcoBoost 2011+"],
+        ["Warranty", "5 years"]
+      ]
+    },
+    "APX-THRB-CLN-KIT" => {
+      features: [
+        "Step 1 foam dissolves throttle-plate and bore deposits in 10 minutes",
+        "Step 2 liquid strips carbon from direct-injection intake valves",
+        "Safe for catalytic converters, turbochargers and O2 sensors",
+        "Restores lost throttle response and smoothed cold-start idle"
+      ],
+      specs: [
+        ["Contents", "Throttle foam + valve cleaner + brush"],
+        ["Engine type", "Port & direct injection"],
+        ["Safe for", "Turbo, cat-converters, sensors"],
+        ["Treatment time", "~30 minutes total"],
+        ["Warranty", "Satisfaction guarantee"]
+      ]
+    },
+    "APX-ALT-240A-WRK" => {
+      features: [
+        "240 amps at road speed, 160 amps at idle — accessories stay live",
+        "Oversized rectifier bridge runs cooler under sustained winch load",
+        "Clutch pulley decouples accessory-belt shock loads",
+        "Internal regulator is preset for smart-charging systems"
+      ],
+      specs: [
+        ["Output", "240A @ 6,000 rpm / 160A @ idle"],
+        ["Regulator", "Internal, LIN smart-charge"],
+        ["Pulley", "Overrunning clutch type"],
+        ["Fitment", "Wrangler JL/JLU 2018+"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-STA-GR-4RN" => {
+      features: [
+        "Gear-reduction drive spins 30% faster while drawing less current",
+        "All-new copper windings — not a remanufactured unit",
+        "Sealed solenoid housing shrugs off road salt and trail spray",
+        "Confident cold-weather starts down to -30°F"
+      ],
+      specs: [
+        ["Type", "Gear-reduction, permanent-magnet field"],
+        ["Torque", "1.8 kW equivalent"],
+        ["Construction", "All-new, copper-wound"],
+        ["Fitment", "4Runner 4.0L 2010+"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-DUAL-BAT-KIT" => {
+      features: [
+        "Voltage-sensing ACR parallels batteries only while the alternator charges",
+        "A winch or compressor session can never drain your starting battery",
+        "Fully sealed relay — mounts in the engine bay or under the seat",
+        "Complete kit: ACR, 2 AWG cabling, marine lugs and breakers"
+      ],
+      specs: [
+        ["Relay", "Voltage-sensing auto-combining, 500A"],
+        ["Combine / isolate", "13.2V / 12.8V thresholds"],
+        ["Cabling", "2 AWG tinned copper, 20 ft"],
+        ["Fitment", "Universal 12V negative ground"],
+        ["Warranty", "3 years"]
+      ]
+    },
+    "APX-WIP-BLD-22PR" => {
+      features: [
+        "Beam-blade chassis applies even pressure across curved windshields",
+        "Silent, streak-free sweeps in rain, sleet and snow down to -40°F",
+        "Graphite-coated natural rubber edges glide without chatter",
+        "Universal multi-adapter fits J-hook, pin and bayonet arms"
+      ],
+      specs: [
+        ["Type", "Beam blade, winter-rated"],
+        ["Lengths", '22" driver + 22" passenger'],
+        ["Temperature range", "-40°F to +180°F"],
+        ["Included", "Pair + adapter set"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-CAB-AIR-BMW" => {
+      features: [
+        "Activated-charcoal layer traps diesel soot, pollen and odors",
+        "Media pleats maintain low pressure drop for full blower flow",
+        "Anti-allergen construction — filters particulates to PM2.5",
+        "Tool-free glovebox installation in about 10 minutes"
+      ],
+      specs: [
+        ["Media", "Activated charcoal, 3-layer"],
+        ["Filtration", "PM2.5, pollen, soot"],
+        ["Fitment", "BMW 3 Series G20 2019+"],
+        ["Install time", "~10 minutes, no tools"],
+        ["Warranty", "1 year"]
+      ]
+    },
+    "APX-BRK-PAD-BMW" => {
+      features: [
+        "Ceramic compound keeps wheels noticeably cleaner than semi-metallic pads",
+        "Progressive, linear bite preserves the stock pedal feel",
+        "Shimmed and chamfered to eliminate brake squeal",
+        "Bedding-in coating speeds proper pad transfer on install"
+      ],
+      specs: [
+        ["Compound", "Ceramic, low-dust"],
+        ["Finish", "Shimmed + chamfered"],
+        ["Included", "Hardware kit + grease"],
+        ["Fitment", "BMW 3 Series G20 front"],
+        ["Warranty", "2 years / 24,000 miles"]
+      ]
+    },
+    "APX-SWAY-BAR-CIV" => {
+      features: [
+        "26mm hollow-formed bar cuts body roll without harshness",
+        "Two end-link positions for street or autocross tuning",
+        "Fluro-polyurethane bushings outlast rubber 3-to-1",
+        "Bolts to stock brackets — no drilling or cutting"
+      ],
+      specs: [
+        ["Bar diameter", "26mm hollow-formed"],
+        ["Adjustment", "2 position end links"],
+        ["Bushings", "Fluro-polyurethane"],
+        ["Fitment", "Civic FE 2022+ Sedan/Hatch"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-CV-AXLE-TAC" => {
+      features: [
+        "Over-center plunge CV joints tolerate lifted angles stock axles can't",
+        "Cold-forged shafts exceed OE torsional strength by 25%",
+        "Neoprene boots with stainless clamps resist trail abrasion",
+        "ABS ring pre-installed — no sensor troubleshooting"
+      ],
+      specs: [
+        ["Shaft", "Cold-forged steel, +25% strength"],
+        ["Joints", "Over-center plunge CV"],
+        ["Boot", "Neoprene, stainless clamps"],
+        ["Fitment", "Tacoma 4WD 2016+, lifts to 3in"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-CAL-RBLD-TRK" => {
+      features: [
+        "EPDM square-cut seals restore consistent clamping force",
+        "High-temp dust boots keep grit out of the bore",
+        "Includes bleed screws, pins, shims and high-temp grease",
+        "One kit rebuilds both front calipers on one axle"
+      ],
+      specs: [
+        ["Seals", "EPDM, OE-spec"],
+        ["Contents", "Seals, boots, pins, grease"],
+        ["Coverage", "Both front calipers"],
+        ["Fitment", "F-150 / Silverado 1500 / RAM 1500 2019+"],
+        ["Warranty", "2 years"]
+      ]
+    },
+    "APX-SEAT-CVR-TAC" => {
+      features: [
+        "4mm padded neoprene shrugs off water, mud and pet claws",
+        "Custom-tailored panels keep side airbags deployable",
+        "Breathable backing eliminates the sweaty-polyester problem",
+        "Machine washable — air dry overnight"
+      ],
+      specs: [
+        ["Material", "4mm padded neoprene"],
+        ["Airbag-safe", "Side-airbag stitch panels"],
+        ["Care", "Machine wash, air dry"],
+        ["Fitment", "Tacoma Double/Access Cab 2016+"],
+        ["Warranty", "2 years"]
+      ]
+    },
+    "APX-MUD-FLP-4RN" => {
+      features: [
+        "Weighted rubber flaps hang straight at highway speed",
+        "Stainless brackets bolt to factory mounting points — no drilling",
+        "Stops gravel rash on paint, rockers and trailers",
+        "4-piece set covers front and rear wheel wells"
+      ],
+      specs: [
+        ["Material", "Weighted natural rubber"],
+        ["Brackets", "304 stainless steel"],
+        ["Install", "No-drill, factory points"],
+        ["Fitment", "4Runner 2010+"],
+        ["Warranty", "Limited lifetime"]
+      ]
+    },
+    "APX-WINCH-12K" => {
+      features: [
+        "12,000-lb rated pull with a 6.6 hp series-wound motor",
+        "94 ft of plasma synthetic rope — safer than cable if it snaps",
+        "IP68-sealed control pack survives full submersion",
+        "Wireless handheld remote plus wired dash plug included"
+      ],
+      specs: [
+        ["Rated pull", "12,000 lb single line"],
+        ["Motor", "6.6 hp series-wound 12V"],
+        ["Rope", "94 ft plasma synthetic, 3/8in"],
+        ["Rating", "IP68 sealed"],
+        ["Warranty", "Lifetime mechanical / 3 yr electrical"]
+      ]
+    },
+    "APX-TOW-WIRE-7" => {
+      features: [
+        "Plugs into the factory connector behind the bumper — zero wire cutting",
+        "LED-ready 7-blade plug runs trailer running lights correctly",
+        "Brake-controller pass-through pre-wired",
+        "Weather-pak sealed joints resist corrosion"
+      ],
+      specs: [
+        ["Connector", "7-blade, LED-compatible"],
+        ["Install", "Plug-in, no cutting"],
+        ["Controller", "Pass-through pre-wired"],
+        ["Fitment", "F-150 / Silverado / RAM w/ tow pkg"],
+        ["Warranty", "Lifetime limited"]
+      ]
+    },
+    "APX-FOG-KIT-SLV" => {
+      features: [
+        "5,000-lumen LED pods with a wide, flat beam that lights the shoulder line",
+        "SAE-compliant cutoff — safe to run on public roads",
+        "Plug-and-play harness with an illuminated dash switch",
+        "IP67 housings and polycarbonate lenses shrug off rock impacts"
+      ],
+      specs: [
+        ["Output", "5,000 lm per pod pair"],
+        ["Beam", "Wide flat, SAE cutoff"],
+        ["Rating", "IP67, poly lens"],
+        ["Fitment", "Silverado 1500 2019+ bumper openings"],
+        ["Warranty", "5 years"]
+      ]
     }
   }.freeze
 end
