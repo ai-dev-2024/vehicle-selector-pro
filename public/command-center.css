@@ -96,22 +96,29 @@ body.cc-body {
 }
 .cc-crumb { font-size: 13px; color: var(--muted); }
 .cc-crumb strong { color: var(--ink); }
-.cc-live {
+.cc-live { 
   display: flex; align-items: center; gap: 8px;
   font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
   color: var(--live);
+  cursor: default;
 }
+.cc-live.degraded { color: var(--danger); }
 .cc-live i {
   width: 8px; height: 8px; border-radius: 50%; background: var(--live);
   box-shadow: 0 0 0 4px rgba(31,122,82,0.18);
   display: inline-block;
 }
+.cc-live.degraded i { background: var(--danger); box-shadow: 0 0 0 4px rgba(180,35,24,0.18); }
 .cc-banner {
   margin: 14px 28px 0; background: #e8f1fb; color: #1d4a7a;
   border-radius: 8px; padding: 9px 14px; font-size: 13px;
   display: flex; justify-content: space-between; align-items: center;
 }
 .cc-banner a { color: #1d4a7a; font-weight: 650; text-decoration: none; }
+.cc-banner-ok { background: #e4f4ea; color: #14603e; }
+.cc-banner-ok a { color: #14603e; }
+.cc-banner-degraded { background: #fde8e6; color: var(--danger); }
+.cc-banner-degraded a { color: var(--danger); }
 .cc-page { padding: 22px 28px 40px; }
 .cc-page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
 .cc-page-head h2 {
@@ -169,23 +176,21 @@ body.cc-body {
 
 .cc-card {
   background: var(--paper); border: 1px solid var(--line);
-  border-radius: 16px; overflow: auto;
+  border-radius: 16px; overflow: hidden;
   /* Default inner padding: card content never touches the border. Views
-     that need the flush full-bleed look (tables, rule/log rows) opt out
-     via the negative-margin rules below. */
+     that want a tighter inset set their own padding inline. */
   padding: 20px;
 }
-/* Header strips that sit above full-bleed tables keep their edge-to-edge
-   rhythm: cancel the card padding, then apply their own inset. */
-.cc-card > .cc-card-pad { margin: -20px -20px 0; padding: 18px 20px 12px; }
-/* Full-bleed components (data tables, fitment rules, sync log rows)
-   stretch back to the card edges so divider lines run border to border. */
-.cc-card > .cc-table,
-.cc-card > .cc-rule,
-.cc-card > .cc-log { margin-left: -20px; margin-right: -20px; }
-.cc-card > .cc-table { width: calc(100% + 40px); }
+/* Header strip above a table: a normal in-flow section header inside the
+   padded card (no full-bleed negative-margin tricks). */
+.cc-card > .cc-card-pad { margin: 0 0 14px; padding: 0 0 12px; border-bottom: 1px solid var(--line); }
 .cc-card-pad { padding: 18px 18px 8px; }
-.cc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.cc-table {
+  width: 100%; border-collapse: collapse; font-size: 13.5px;
+  /* Responsive: a wide table scrolls horizontally INSIDE its card instead
+     of escaping the card and getting clipped at the page edges. */
+  display: block; overflow-x: auto;
+}
 .cc-table th {
   text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line);

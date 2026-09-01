@@ -59,10 +59,15 @@
     <main class="cc-main">
       <div class="cc-topbar">
         <div class="cc-crumb"><%= current_shop&.name.presence || "Store" %> &nbsp;›&nbsp; <strong><%= controller_name.humanize %></strong></div>
-        <div class="cc-live"><i></i> LIVE CONNECTION</div>
+        <div class="cc-live" id="live-connection" data-health-url="/health/deep" title="Live system health — checks database and cache every 30 seconds">
+          <i></i> <span id="live-connection-text">LIVE CONNECTION</span>
+        </div>
       </div>
-      <div class="cc-banner">
-        <% if @pending_sync_count.to_i > 0 %>
+      <div class="cc-banner <%= @pending_sync_count.to_i > 0 ? "" : "cc-banner-ok" %>">
+        <% if !systems_healthy? %>
+          Some systems are degraded — the database is unreachable. Contact support if this persists.
+          <a href="/health/deep" target="_blank" rel="noopener">View status ↗</a>
+        <% elsif @pending_sync_count.to_i > 0 %>
           <%= @pending_sync_count %> fitment changes are waiting for metafield sync.
           <a href="<%= admin_sync_path %>">View status ↗</a>
         <% else %>
@@ -76,5 +81,38 @@
       </section>
     </main>
   </div>
+
+  <script>
+    // LIVE CONNECTION is a real indicator: it polls /health/deep (database +
+    // cache checks) every 30s and flips the label and dot when degraded.
+    (function () {
+      var el = document.getElementById("live-connection");
+      if (!el) return;
+      var text = document.getElementById("live-connection-text");
+      var url = el.getAttribute("data-health-url");
+
+      function setDegraded(label) {
+        el.classList.add("degraded");
+        text.textContent = label;
+      }
+      function setHealthy() {
+        el.classList.remove("degraded");
+        text.textContent = "LIVE CONNECTION";
+      }
+
+      function check() {
+        fetch(url, { headers: { Accept: "application/json" } })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data && data.status === "ok") { setHealthy(); }
+            else { setDegraded("DEGRADED"); }
+          })
+          .catch(function () { setDegraded("CONNECTION LOST"); });
+      }
+
+      check();
+      setInterval(check, 30000);
+    })();
+  </script>
 </body>
 </html>
