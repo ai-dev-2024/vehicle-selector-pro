@@ -2,6 +2,23 @@
 
 All notable changes to Vehicle Selector Pro are documented here.
 
+## [1.3.1] — 2026-09-01
+
+Rails 7.1.6 → 7.2.3.2 security upgrade.
+
+### Changed
+- **Rails 7.1.6 → 7.2.3.2**: resolves GHSA-v55j-83pf-r9cq (actionview XSS),
+  GHSA-89vf-4333-qx8v (activesupport ReDoS) and GHSA-2j26-frm8-cmj9
+  (activesupport SafeBuffer#% XSS) — removed from the bundler-audit whitelist.
+  Framework defaults bumped to 7.2; the app's custom config (Sidekiq adapter,
+  Active Record encryption, CSP, Solid Cache) preserved and verified.
+- **Branch protection**: `main` now requires the CI check to pass and forbids
+  force-pushes/deletions.
+
+### Verification
+- 101 RSpec examples, 0 failures · 12 integration runs · zeitwerk green ·
+  RuboCop clean · bundler-audit: no vulnerabilities.
+
 ## [1.3.0] — 2026-09-01
 
 Storefront analytics dashboard.

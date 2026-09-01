@@ -7,7 +7,7 @@ ruby ">= 3.2.0"
 # the standalone openssl gem from source on Windows / machines without headers)
 gem "openssl", "3.1.0"
 
-gem "rails", "~> 7.1.3"
+gem "rails", "~> 7.2.2"
 
 # Shopify App Integration
 gem "shopify_api", "~> 14.0"
