@@ -14,7 +14,7 @@ gem "shopify_api", "~> 14.0"
 gem "shopify_app", "~> 22.0"
 
 # Multi-tenant and Identity
-gem "jwt", "~> 2.8"
+gem "jwt", "~> 3.2"
 
 # Timezone data (required on Windows & JRuby; Linux uses system zoneinfo)
 gem "tzinfo-data", platforms: %i[windows jruby]
