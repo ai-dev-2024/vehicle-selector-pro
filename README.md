@@ -133,6 +133,18 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 <img src="demo/autoplay/frames_live/10_admin_sync.png" alt="Sync monitor showing background metafield synchronization progress" width="100%">
 
+**Storefront analytics — daily checks, fit rate, and checks-by-make**
+
+<img src="demo/autoplay/frames_live/11_admin_analytics.png" alt="Analytics dashboard with fitment checks, fit rate, no-fit counts, daily bar chart, and checks-by-make table" width="100%">
+
+**Plans & billing — Free / Pro / Pro Plus tiers with 14-day trials**
+
+<img src="demo/autoplay/frames_live/12_admin_billing.png" alt="Plans and billing page comparing Free, Pro and Pro Plus tiers with trial buttons" width="100%">
+
+**OE part numbers — per-product factory part-number cross-reference**
+
+<img src="demo/autoplay/frames_live/13_admin_oe_numbers.png" alt="OE numbers page listing factory part numbers per product with CSV import" width="100%">
+
 </div>
 
 Every screenshot above is a live capture of the running app — see the **[live storefront demo](https://vehicle-selector-pro.fly.dev/demo)** and the **[live admin preview](https://vehicle-selector-pro.fly.dev/demo/admin)**.
