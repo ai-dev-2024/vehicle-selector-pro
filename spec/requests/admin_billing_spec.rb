@@ -48,10 +48,18 @@ RSpec.describe "Admin billing", type: :request do
       allow(Shopify::BillingService).to receive(:new).and_return(service)
       allow(service).to receive(:create_subscription).and_return(nil)
 
-      post admin_billing_path, params: { plan: "pro" }
-      # request.base_url in a request spec is the test host (localhost:3000);
-      # the point is that the app's own origin is used, never a hardcoded fallback.
-      expect(service).to have_received(:create_subscription).with("pro", return_host: "http://localhost:3000")
+      # Pin the request origin so the assertion is deterministic across
+      # environments, and clear any developer-local HOST override.
+      old_host = ENV.fetch("HOST", nil)
+      ENV.delete("HOST")
+      begin
+        host! "billing-test.example.com"
+        post admin_billing_path, params: { plan: "pro" }
+        expect(service).to have_received(:create_subscription)
+          .with("pro", return_host: "http://billing-test.example.com")
+      ensure
+        ENV["HOST"] = old_host
+      end
     end
 
     it "still redirects back with a notice when the shop is already subscribed" do
