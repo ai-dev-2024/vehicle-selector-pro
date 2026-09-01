@@ -52,7 +52,7 @@ Two narrated walkthroughs — a merchant command-center tour and the shopper exp
 
 | | |
 |---|---|
-| <a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-merchant.mp4"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-merchant-poster.jpg" alt="Merchant walkthrough video — click to play" width="100%"></a><sup>**▶ Merchant walkthrough** — 1:29, male voiceover</sup> | <a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" alt="Shopper walkthrough video — click to play" width="100%"></a><sup>**▶ Shopper walkthrough** — 1:35, female voiceover</sup> |
+| ![Merchant walkthrough — click to play](demo/vehicle-selector-pro-merchant.mp4)<sup>**▶ Merchant walkthrough** — 1:29, male voiceover</sup> | <a href="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-pro-shopper.mp4"><img src="https://ai-dev-2024.github.io/vehicle-selector-pro/demo/vehicle-selector-shopper-poster.jpg" alt="Shopper walkthrough video — click to play" width="100%"></a><sup>**▶ Shopper walkthrough** — 1:35, female voiceover</sup> |
 
 [Video gallery page](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/videos.html) · [Narration script](docs/DEMO_SCRIPT.md) · [Interactive walkthrough](https://ai-dev-2024.github.io/vehicle-selector-pro/demo/index.html) · [Live storefront demo](https://vehicle-selector-pro.fly.dev/demo)
 
@@ -249,6 +249,7 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 **Shipped recently** — full history in [CHANGELOG.md](CHANGELOG.md):
 
+- **v1.3.2 — Catalog wave 4 + demo experience** — 20 new products (54 total, 318 fitments) with real photography, a demo billing walkthrough with simulated plan switching, and smoother merchant UI motion
 - **v1.3.1 — Rails 7.1.6 → 7.2.3.2 security upgrade** — resolves GHSA-v55j-83pf-r9cq, GHSA-89vf-4333-qx8v and GHSA-2j26-frm8-cmj9 (now removed from the audit whitelist). Plan retained for reference: [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
 - **v1.3.0 — Storefront analytics** — daily checks, fit rate, and checks-by-make dashboard with 7/30/90-day ranges
 - **v1.2.0 — Shopify Billing** — Free / Pro / Pro Plus tiers with 14-day trials, plan-gated bulk imports
