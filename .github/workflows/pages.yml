@@ -38,6 +38,13 @@ jobs:
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pdf _site/
           cp report/Vehicle_Selector_Pro_Pitch_Deck.pptx _site/
           cp report/site/index.html _site/index.html
+          # Review copies (v2) — same deliverables with the latest stats, published
+          # at a separate /report-v2/ path so the stable client URLs never change.
+          mkdir -p _site/report-v2
+          cp report-v2/Vehicle_Selector_Pro_Project_Report.pdf _site/report-v2/
+          cp report-v2/Vehicle_Selector_Pro_Project_Report.docx _site/report-v2/
+          cp report-v2/Vehicle_Selector_Pro_Pitch_Deck.pdf _site/report-v2/
+          cp report-v2/Vehicle_Selector_Pro_Pitch_Deck.pptx _site/report-v2/
           # Demo videos + interactive walkthrough served from the same Pages site
           cp demo/videos.html _site/demo/videos.html
           cp demo/index.html _site/demo/index.html

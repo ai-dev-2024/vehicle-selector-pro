@@ -130,8 +130,8 @@ SOLUTION_AND_WHY = (
 
 PILLARS = [
     ("Normalized local cache",
-     "Fitments live in structured ActiveRecord tables (48 YMMTE configurations, 318 verified "
-     "fitments, 54 products, 25 brands in the demo), so filtering is instant and never pounds "
+     "Fitments live in structured ActiveRecord tables (48 YMMTE configurations, 402 verified "
+     "fitments, 74 products, 25 brands in the demo), so filtering is instant and never pounds "
      "Shopify's API."),
     ("Shopify Metafield sync",
      "Fitment data is written to the custom.vehicle_fitment product metafield via the GraphQL "
@@ -239,8 +239,8 @@ VIDEO_LINKS = [
 
 METRICS = [
     ("48", "YMMTE configurations", "Vehicles in the demo catalog"),
-    ("204", "verified fitments", "Part ↔ vehicle matches"),
-    ("40", "mapped products", "Parts carrying fitment data"),
+    ("402", "verified fitments", "Part ↔ vehicle matches"),
+    ("74", "mapped products", "Parts carrying fitment data"),
     ("8", "brands represented", "Ford, BMW, Chevrolet, Toyota, RAM & more"),
 ]
 
@@ -300,6 +300,7 @@ INSTALL_STEPS = [
 ]
 
 SHIPPED = [
+    "v1.3.3 — Catalog wave 5 (74 products, 402 fitments): 20 more parts balancing Towing, Electrical, Wipers and Lighting coverage.",
     "v1.3.2 — Catalog wave 4 (54 products, 318 fitments), demo billing walkthrough with simulated plan switching, merchant UI motion polish.",
     "v1.3.1 — Rails 7.1.6 → 7.2.3.2 security upgrade (three advisories closed).",
     "v1.3.0 — Storefront analytics dashboard: daily checks, fit rate, per-make breakdown.",

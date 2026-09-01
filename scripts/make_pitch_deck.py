@@ -58,8 +58,8 @@ SLIDES = [
         "kind": "metrics",
         "kicker": "THE SOLUTION · ONE DATASET, SYNCED EVERYWHERE",
         "title": "A real, browsable demo catalog already in production",
-        "metrics": [("48", "YMMTE configurations"), ("318", "verified fitments"),
-                    ("54", "mapped products"), ("25", "brands represented")],
+        "metrics": [("48", "YMMTE configurations"), ("402", "verified fitments"),
+                    ("74", "mapped products"), ("25", "brands represented")],
         "foot": "Fitments entered once into a normalized cache, pushed to Shopify metafields, and served to shoppers behind an HMAC-signed App Proxy — Guaranteed Exact / Does-NOT-Fit / Universal badges on every product page.",
     },
     {
