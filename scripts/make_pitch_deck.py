@@ -12,7 +12,9 @@ from __future__ import annotations
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "out")
+# Override with REPORT_OUT=<dir> to generate a separate review copy without
+# touching the published deliverables (which live in report/ and out/).
+OUT = os.environ.get("REPORT_OUT", os.path.join(ROOT, "out"))
 FRAMES = os.path.join(ROOT, "demo", "autoplay", "frames_live")
 os.makedirs(OUT, exist_ok=True)
 
@@ -47,6 +49,7 @@ SLIDES = [
             "Dense compatibility tables bury the answer",
             "Per-product manual rules rot and cost hours",
             "Paid fitment feeds lock merchants into contracts",
+            "Built end-to-end with free AI tooling on a 2018 ASUS ZenBook — proof of the headroom ahead",
         ],
         "shots": [("04_storefront_home.png", "Cascading vehicle selector — storefront"),
                   ("01_dashboard.png", "Polaris merchant command center")],
@@ -55,8 +58,8 @@ SLIDES = [
         "kind": "metrics",
         "kicker": "THE SOLUTION · ONE DATASET, SYNCED EVERYWHERE",
         "title": "A real, browsable demo catalog already in production",
-        "metrics": [("48", "YMMTE configurations"), ("204", "verified fitments"),
-                    ("40", "mapped products"), ("8", "brands represented")],
+        "metrics": [("48", "YMMTE configurations"), ("318", "verified fitments"),
+                    ("54", "mapped products"), ("25", "brands represented")],
         "foot": "Fitments entered once into a normalized cache, pushed to Shopify metafields, and served to shoppers behind an HMAC-signed App Proxy — Guaranteed Exact / Does-NOT-Fit / Universal badges on every product page.",
     },
     {

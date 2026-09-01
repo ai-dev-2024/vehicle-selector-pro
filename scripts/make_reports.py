@@ -14,7 +14,9 @@ from __future__ import annotations
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "out")
+# Override with REPORT_OUT=<dir> to generate a separate review copy without
+# touching the published deliverables (which live in report/ and out/).
+OUT = os.environ.get("REPORT_OUT", os.path.join(ROOT, "out"))
 FRAMES = os.path.join(ROOT, "demo", "autoplay", "frames_live")
 os.makedirs(OUT, exist_ok=True)
 
@@ -128,8 +130,8 @@ SOLUTION_AND_WHY = (
 
 PILLARS = [
     ("Normalized local cache",
-     "Fitments live in structured ActiveRecord tables (48 YMMTE configurations, 204 verified "
-     "fitments, 40 products, 8 brands in the demo), so filtering is instant and never pounds "
+     "Fitments live in structured ActiveRecord tables (48 YMMTE configurations, 318 verified "
+     "fitments, 54 products, 25 brands in the demo), so filtering is instant and never pounds "
      "Shopify's API."),
     ("Shopify Metafield sync",
      "Fitment data is written to the custom.vehicle_fitment product metafield via the GraphQL "
@@ -297,12 +299,19 @@ INSTALL_STEPS = [
      " PDP badges and collection filters appear. Support and My Garage are enabled by default."),
 ]
 
+SHIPPED = [
+    "v1.3.2 — Catalog wave 4 (54 products, 318 fitments), demo billing walkthrough with simulated plan switching, merchant UI motion polish.",
+    "v1.3.1 — Rails 7.1.6 → 7.2.3.2 security upgrade (three advisories closed).",
+    "v1.3.0 — Storefront analytics dashboard: daily checks, fit rate, per-make breakdown.",
+    "v1.2.0 — Shopify Billing API flows: Free / Pro / Pro Plus tiers, 14-day trials, plan-gated bulk imports.",
+    "v1.1.0 — Production hardening: Solid Cache, webhook dedup, OE-number cross-reference, fitment confidence scoring, security headers, Sentry.",
+]
+
 ROADMAP = [
-    "Shopify Billing API — recurring and one-time plans with managed merchant billing.",
-    "Supersession & OE-number matching for a richer part-catalog engine.",
-    "Fitment confidence scoring and a smarter universal/exact priority model.",
+    "Full billing rollout — flip SHOPIFY_BILLING_TEST=false on a production Partner app and complete App Store listing approval (the only non-code step left).",
+    "Supersession chains — a richer part-catalog engine on top of the shipped OE-number cross-reference.",
+    "Deeper analytics — per make+model and per-product rollups, conversion lift and drop-off reports on top of the shipped daily aggregates.",
     "White-label storefront theming, translation support, and deeper widget controls.",
-    "Merchant analytics: widget conversion lift, per-fitment demand, and drop-off reports.",
 ]
 
 SHOT_LABELS = [
@@ -316,6 +325,9 @@ SHOT_LABELS = [
     ("06_bulk_imports.png", "Bulk import — CSV fitment loader"),
     ("10_admin_sync.png", "Sync monitor — metafield sync progress"),
     ("02_vehicles.png", "Vehicle library — the YMMTE catalogue"),
+    ("11_admin_analytics.png", "Analytics dashboard — checks, fit rate, per-make breakdown"),
+    ("12_admin_billing.png", "Plans & billing — Free / Pro / Pro Plus tiers with demo walkthrough"),
+    ("13_admin_oe_numbers.png", "OE part-number manager — the cross-reference engine"),
 ]
 
 
@@ -611,6 +623,9 @@ def build_pdf() -> None:
             P(linkify(d)),
         ]))
     dep.append(Spacer(1, 8))
+    dep.append(H2("Shipped since the original build"))
+    dep += [BL(p) for p in SHIPPED]
+    dep.append(Spacer(1, 6))
     dep.append(H2("Where it grows next — roadmap"))
     dep.append(P("Every item below sits <b>beyond the original spec's requirement</b> — it is an "
                  "optional growth path, not part of the agreed scope."))
