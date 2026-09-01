@@ -160,28 +160,43 @@ body.cc-body {
 .cc-stat {
   background: var(--paper); border: 1px solid var(--line);
   border-radius: 14px; padding: 16px 16px 14px;
+  min-width: 0; /* let the tile shrink inside auto-fit grids */
 }
 .cc-stat label { display: block; font-size: 12px; color: var(--muted); }
-.cc-stat b { display: block; font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.03em; }
-.cc-stat em { font-style: normal; font-size: 12px; color: var(--live); }
+.cc-stat b { display: block; font-size: 28px; margin: 6px 0 4px; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+.cc-stat em { font-style: normal; font-size: 12px; color: var(--live); overflow-wrap: anywhere; }
 .cc-stat em.warn { color: var(--review); }
 
 .cc-card {
   background: var(--paper); border: 1px solid var(--line);
-  border-radius: 16px; overflow: hidden;
+  border-radius: 16px; overflow: auto;
+  /* Default inner padding: card content never touches the border. Views
+     that need the flush full-bleed look (tables, rule/log rows) opt out
+     via the negative-margin rules below. */
+  padding: 20px;
 }
+/* Header strips that sit above full-bleed tables keep their edge-to-edge
+   rhythm: cancel the card padding, then apply their own inset. */
+.cc-card > .cc-card-pad { margin: -20px -20px 0; padding: 18px 20px 12px; }
+/* Full-bleed components (data tables, fitment rules, sync log rows)
+   stretch back to the card edges so divider lines run border to border. */
+.cc-card > .cc-table,
+.cc-card > .cc-rule,
+.cc-card > .cc-log { margin-left: -20px; margin-right: -20px; }
+.cc-card > .cc-table { width: calc(100% + 40px); }
 .cc-card-pad { padding: 18px 18px 8px; }
 .cc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .cc-table th {
   text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line);
 }
-.cc-table td { padding: 14px 16px; border-bottom: 1px solid #efe7d8; vertical-align: top; }
+.cc-table td { padding: 14px 16px; border-bottom: 1px solid #efe7d8; vertical-align: top; overflow-wrap: break-word; }
 .cc-table tr:last-child td { border-bottom: 0; }
 
 .badge {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 2px 8px; font-size: 11px; font-weight: 700;
+  white-space: nowrap; /* percent labels like "100% fit" never wrap or escape */
 }
 .badge-live { background: #e4f4ea; color: var(--live); }
 .badge-review { background: #f8ead8; color: var(--review); }

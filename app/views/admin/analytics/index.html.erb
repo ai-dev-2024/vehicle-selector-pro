@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="cc-metrics" style="grid-template-columns: repeat(5, 1fr);">
+  <div class="cc-metrics" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
     <div class="cc-stat">
       <label>Fitment checks</label>
       <b><%= number_with_delimiter(@checks) %></b>
@@ -97,7 +97,7 @@
                     <span style="font-size:12px; color:#6d7175;"><%= number_with_delimiter(row[:value]) %></span>
                   </div>
                 </td>
-                <td style="width:18%; text-align:right;">
+                <td style="width:18%; text-align:right; white-space:nowrap;">
                   <% fits_count = @make_fits.fetch(row[:make], 0)
                      rate = row[:value].positive? ? ((fits_count.to_f / row[:value]) * 100).round(0) : 0 %>
                   <span class="badge <%= rate >= 50 ? 'badge-live' : 'badge-info' %>"><%= rate %>% fit</span>
