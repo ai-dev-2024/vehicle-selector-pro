@@ -38,13 +38,7 @@ ignore:
   # requires shopify_app 23.x (major bump) — tracked upgrade.
   - GHSA-6j52-38f8-qhxr   # shopify_app token-exchange shop context confusion
 
-  # --- Tracked upgrade: Rails 7.1.6 is the final 7.1.x ---------------------
-  # Patches for these only exist in Rails 7.2.3.1+/8.x. Rails 7.1 is still
-  # receiving security backports where feasible, but these specific fixes
-  # were not backported. Upgrading to Rails 7.2 is scheduled work; until it
-  # lands, keep these documented. The app escapes output in views and does
-  # not pass user input to the flagged helpers (SafeBuffer#%, tag helpers
-  # render merchant-supplied strings through standard ERB escaping).
-  - GHSA-v55j-83pf-r9cq   # actionview XSS in tag helpers (7.2.3.1+)
-  - GHSA-89vf-4333-qx8v   # activesupport ReDoS in number_to_delimited (7.2+)
-  - GHSA-2j26-frm8-cmj9   # activesupport XSS in SafeBuffer#% (7.2+)
+  # --- Resolved by the Rails 7.2.3.2 upgrade (2026-09-01) -------------------
+  # GHSA-v55j-83pf-r9cq (actionview XSS), GHSA-89vf-4333-qx8v (activesupport
+  # ReDoS) and GHSA-2j26-frm8-cmj9 (activesupport SafeBuffer#% XSS) are all
+  # patched in 7.2.3.2 - removed from the ignore list.
