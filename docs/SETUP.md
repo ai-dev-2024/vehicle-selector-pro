@@ -4,7 +4,7 @@
 
 ### Required Software
 - **Ruby**: 3.2.0 or newer
-- **Rails**: 7.1.x+
+- **Rails**: 7.2.x+
 - **Database**: SQLite3 (development) or PostgreSQL (production)
 - **Redis**: 5.0+ (for Sidekiq and caching)
 

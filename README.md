@@ -11,7 +11,7 @@
 [![CI](https://github.com/ai-dev-2024/vehicle-selector-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-dev-2024/vehicle-selector-pro/actions/workflows/ci.yml)
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/ai-dev-2024/vehicle-selector-pro)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-[![Rails](https://img.shields.io/badge/Rails-7.1-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
+[![Rails](https://img.shields.io/badge/Rails-7.2-CC0000?style=flat-square&logo=rubyonrails&logoColor=white)](https://rubyonrails.org/)
 [![Buy me a coffee](https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?style=flat-square&logo=kofi&logoColor=white)](https://ko-fi.com/ai_dev_2024)
 
 </div>
@@ -230,7 +230,7 @@ Then open `http://localhost:3000/demo` for the public storefront preview, or `ht
 
 | Layer | Technology |
 |---|---|
-| Framework | Ruby on Rails 7.1 |
+| Framework | Ruby on Rails 7.2 |
 | Database | PostgreSQL (production) / SQLite (dev) |
 | Background jobs | Sidekiq + Redis |
 | Shopify integration | Theme App Extension (OS 2.0), App Proxy, GraphQL Admin API (`metafieldsSet`) |
@@ -247,7 +247,10 @@ Shipped as a production-grade foundation, the following are on the roadmap — e
 - **Supersession chains** — a richer part-catalog engine on top of the shipped OE-number cross-reference
 - **Deeper analytics** — per make+model and per-product rollups, conversion lift and drop-off reports on top of the shipped daily aggregates
 - **White-label theming** — storefront theming, translation support, deeper widget controls
-- **Rails 7.1 → 7.2 upgrade** — resolves the remaining (non-applicable here) dependency-audit advisories; plan in [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
+
+Completed roadmap items (previously listed as growth path):
+
+- **Rails 7.1.6 → 7.2.3.2 security upgrade** — done 2026-09-01; resolves GHSA-v55j-83pf-r9cq, GHSA-89vf-4333-qx8v and GHSA-2j26-frm8-cmj9 (now removed from the audit whitelist). Plan retained for reference: [docs/RAILS_7_2_UPGRADE_PLAN.md](docs/RAILS_7_2_UPGRADE_PLAN.md)
 
 Because the entire project was built with free AI tooling on a single consumer-class laptop, each of these represents meaningful headroom — the same foundation accelerates dramatically once proper development hardware and paid frontier models are applied.
 
