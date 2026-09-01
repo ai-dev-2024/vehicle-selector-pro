@@ -1,8 +1,8 @@
 # Requirements Verification Report
 
-**Date:** 2026-09-01 (refreshed) · **Environment:** production (Fly.io) + live Shopify dev store
+**Date:** 2026-09-02 (refreshed) · **Environment:** production (Fly.io) + live Shopify dev store
 **App:** https://vehicle-selector-pro.fly.dev · **Store:** vehicle-selector-pro.myshopify.com
-**Current version:** 1.3.0 (see CHANGELOG.md)
+**Current version:** 1.3.2 (see CHANGELOG.md)
 
 This report maps every requirement from the client brief to verified evidence.
 "Verified" means exercised against the deployed app, the live store, or the
@@ -12,7 +12,7 @@ current automated test suite — not just present in code.
 
 | # | Requirement | Status | Evidence |
 |---|---|---|---|
-| 1 | Rails engine/application, latest stable (7.x+) | ✅ Verified | Rails 7.1.6 boots on Fly; `rails zeitwerk:check` passes (eager-load safe) |
+| 1 | Rails engine/application, latest stable (7.x+) | ✅ Verified | Rails 7.2.3.2 boots on Fly (upgraded from 7.1.6 in v1.3.1); `rails zeitwerk:check` passes (eager-load safe) |
 | 2 | OAuth via `shopify_app`, secure isolated per-shop storage | ✅ Verified | Real OAuth install on dev store; token stored encrypted; all queries shop-scoped (`ShopScoped`) |
 | 3 | Admin dashboard, Rails views styled with Polaris | ✅ Verified | `Admin::` controllers + ERB views; Polaris token styling in `public/command-center.css` |
 | 4 | Data in Shopify Metafields + normalized local PostgreSQL cache | ✅ Verified | `metafieldsSet` wrote fitment JSON to 7 real products (35 records, read-back confirmed); Postgres cache with indexed YMMTE queries |
@@ -24,7 +24,7 @@ current automated test suite — not just present in code.
 | 10 | README with setup instructions | ✅ Verified | `README.md` + `docs/SETUP.md` + `docs/DEPLOYMENT.md` |
 | 11 | 2–3 minute screen recording | ✅ Verified | Two narrated walkthroughs (`demo/vehicle-selector-pro-merchant.mp4` 1:29, `demo/vehicle-selector-pro-shopper.mp4` 1:35) playable directly from the repo home page |
 
-## Post-spec feature verification (v1.1.0 – v1.3.0)
+## Post-spec feature verification (v1.1.0 – v1.3.2)
 
 These features go beyond the original brief; each is verified by the current
 automated suite and, where noted, against the live deployment.
@@ -69,20 +69,30 @@ automated suite and, where noted, against the live deployment.
 | Per-make breakdown | ✅ Verified | `dimension_value` column (migration `20260901000007`); per-make rows recorded from the check path; `spec/models/fitment_analytic_spec.rb` |
 | Async, hot-path-safe recording | ✅ Verified | `Vehicles::RecordFitmentAnalyticJob` on the `low_priority` queue; no synchronous analytics writes in the proxy path |
 
-## Test evidence (2026-09-01)
+### Search correctness & dead-code audit (v1.3.2)
+
+| Feature | Status | Evidence |
+|---|---|---|
+| OE-number search dedupe + page cap | ✅ Verified | `render_oe_search` collapses multi-vehicle fitments to one card per product and caps at `FitmentSearchService::MAX_PAGE_SIZE`; `product_payload` made public for reuse; covered by a new integration test (product fitted to two vehicles renders once) |
+| Page-consistent `product_ids` on vehicle search | ✅ Verified | Sort + cap applied to the id list so `product_ids` / `numeric_product_ids` / `products` describe the same page (DB-level pagination, `f707ac2`) |
+| Dead routes / code removed | ✅ Verified | Removed no-op `bulk_delete`/`search_products` admin routes, duplicate `demo/admin/*` routes, orphaned `spec/spec_helper.rb` and `bulk_import_job.rb`, non-halting 304 short-circuit, dead `extract_restore_rate` |
+| Featured demo grid ordering | ✅ Verified | `featured=1` returns curated SKUs in `FEATURED_SKUS` order; RSpec example pins exact set/order/count |
+
+## Test evidence (2026-09-02)
 
 ```text
-RSpec:            101 examples, 0 failures  (bundle exec rspec)
+RSpec:            112 examples, 0 failures  (ruby spec/test_runner.rb)
   - Billing (service + request):        13 examples
   - Analytics (model + request):        11 examples
   - OE numbers (model + request):       7 request specs + model specs
   - Webhook dedup + security headers:   covered in feature specs
-RuboCop:          130 files inspected, no offenses detected
+  - App Proxy integration:             13 runs, 52 assertions, 0 failures
+RuboCop:          133 files inspected, no offenses detected
 Zeitwerk:         eager-load check passes
-CI (GitHub Actions): success on 804ec7c (CI + Pages — Report + Deploy)
+CI (GitHub Actions): success (CI + Pages — Report + Deploy)
 ```
 
-Live deployment checks (2026-09-01):
+Live deployment checks (2026-09-02):
 
 ```text
 GET /up                  → 200
