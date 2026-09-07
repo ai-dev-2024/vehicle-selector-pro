@@ -40,7 +40,7 @@ gem "oj", "~> 3.16"
 # SolidCache (Postgres-backed) is the production default cache store so
 # FitmentSearchService caching works across machines even without Redis.
 # When REDIS_URL is set (Fly private Redis), redis_cache_store is preferred.
-gem "solid_cache", "~> 0.4"
+gem "solid_cache", "~> 1.0"
 
 # HTTP Client for Shopify GraphQL & REST
 gem "faraday", "~> 2.9"
