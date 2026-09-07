@@ -10,8 +10,8 @@ gem "openssl", "3.1.0"
 gem "rails", "~> 7.2.2"
 
 # Shopify App Integration
-gem "shopify_api", "~> 14.0"
-gem "shopify_app", "~> 22.0"
+gem "shopify_api", "~> 16.3"
+gem "shopify_app", "~> 23.0"
 
 # Multi-tenant and Identity
 gem "jwt", "~> 3.2"
