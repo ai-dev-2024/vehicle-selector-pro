@@ -61,9 +61,9 @@ gem "sprockets-rails", ">= 3.0.0"
 gem "lograge", "~> 0.14"
 
 # Error tracking (Sentry free tier); no-op without SENTRY_DSN
-gem "sentry-rails", "~> 5.18"
-gem "sentry-ruby", "~> 5.18"
-gem "sentry-sidekiq", "~> 5.18"
+gem "sentry-rails", "~> 7.0"
+gem "sentry-ruby", "~> 7.0"
+gem "sentry-sidekiq", "~> 7.0"
 group :production do
   # PostgreSQL driver (production database; dev/test use SQLite3)
   gem "pg", "~> 1.5"
