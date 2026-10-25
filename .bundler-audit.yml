@@ -9,6 +9,7 @@
 # When the tracked upgrades land, remove the corresponding entries:
 #   - shopify_app 22.5 -> 23.0.3+
 #   - puma 6.6 -> 7.2.1+ (or 8.0.2+)
+#   - polaris_view_components 2.x -> a release that allows view_component 4.14+
 ignore:
   # --- Not exploitable: Puma PROXY protocol is not enabled ------------------
   # Both advisories only affect `set_remote_address proxy_protocol: :v1`,
@@ -24,6 +25,17 @@ ignore:
   # never calls current_shopify_domain/authenticated_shopify_domain. Fix
   # requires shopify_app 23.x (major bump) — tracked upgrade.
   - GHSA-6j52-38f8-qhxr   # shopify_app token-exchange shop context confusion
+
+  # --- Not exploitable: no ViewComponent is ever rendered (2026-10-26) ------
+  # The advisory is about slot/with_content state leaking between REUSED
+  # component instances. view_component 3.27.0 is only here as a dependency
+  # of polaris_view_components, which pins view_component < 4.0; the fix is
+  # 4.14.0+. The app renders no ViewComponent at all (no ViewComponent::Base
+  # subclass, no Polaris:: component, no polaris_* helper in app/, config/
+  # or lib/ - verified with grep); the admin UI uses the Polaris CDN.
+  # Tracked upgrade: polaris_view_components release allowing view_component 4.14+
+  # (or drop the unused gem).
+  - GHSA-8qw7-6phv-7q6p   # view_component slot/with_content state leak (incomplete fix for CVE-2026-54497)
 
   # --- Resolved by the Rails 7.2.3.2 upgrade (2026-09-01) -------------------
   # The seven Active Storage advisories that used to be listed here no longer
