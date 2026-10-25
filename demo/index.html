@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VehicleSelectorPro — Fitment command center</title>
+  <title>VehicleSelectorPro — Fitment command center (demo · sample data)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,560&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="command-center.css">
@@ -38,7 +38,7 @@
         <div class="cc-store-badge">NR</div>
         <div>
           <strong>North Ridge Supply</strong>
-          <span>Shopify store</span>
+          <span>Sample store · demo data</span>
         </div>
       </div>
       <div class="cc-nav-label">Workspace</div>
@@ -55,7 +55,7 @@
         <a href="https://github.com/muhib-karim/vehicle-selector-pro" target="_blank" rel="noreferrer">Help center</a>
       </nav>
       <div class="cc-sidebar-foot">
-        <div class="cc-status"><span class="cc-dot"></span><div>Shopify connected<br><span style="color:var(--muted)">Last sync 8 min ago</span></div></div>
+        <div class="cc-status" data-demo-mode="true"><span class="cc-dot cc-dot-demo"></span><div>Demo mode — not connected to Shopify<br><span style="color:var(--muted)">Seeded sample data, no live sync</span></div></div>
         <div class="cc-user"><div class="cc-avatar">AM</div><div>Alex Morgan<br><span style="color:var(--muted)">Administrator</span></div></div>
       </div>
     </aside>
@@ -66,10 +66,10 @@
         <div style="display:flex;gap:10px;align-items:center">
           <button class="btn" id="btn-record-demo" onclick="recordAndPlayDemo()">Record &amp; download video</button>
           <button class="btn btn-primary" id="btn-start-video" onclick="startAutomatedDemo()">Play 2.5-min walkthrough</button>
-          <div class="cc-live"><i></i> LIVE CONNECTION</div>
+          <div class="cc-live cc-demo-pill" title="This demo runs on seeded sample data in your browser. It is not connected to any Shopify store."><i></i> DEMO · SIMULATED DATA</div>
         </div>
       </div>
-      <div class="cc-banner">All systems are operating normally. <a href="#" onclick="showPage('sync');return false;">View status ↗</a></div>
+      <div class="cc-banner cc-banner-demo" role="note"><span><strong>Demo mode:</strong> this page runs on seeded sample data in your browser. It is not connected to a Shopify store, and every metric, status and log entry shown here is simulated.</span> <a href="#" onclick="showPage('sync');return false;">See the sample sync log ↗</a></div>
 
       <!-- OVERVIEW -->
       <section class="cc-page" id="page-overview">
@@ -88,17 +88,18 @@
           <div class="cc-hero-photo"></div>
           <div class="cc-hero-copy">
             <div>
-              <div class="cc-kicker" style="color:#9bb6d4">Sync status / 08:42</div>
+              <div class="cc-kicker" style="color:#9bb6d4">Sample sync status · demo data</div>
               <h3>Good fitment is quiet confidence.</h3>
-              <p>One clean vehicle selection can turn a browse into a buy. Your catalog is currently serving a verified fitment experience.</p>
+              <p>One clean vehicle selection can turn a browse into a buy. In a connected store this panel shows coverage from the latest catalog sync; the figures here are sample values.</p>
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;font-size:12px"><span>Catalog coverage</span><strong>94.6%</span></div>
               <div class="cc-bar"><span style="width:94.6%"></span></div>
-              <div style="margin-top:8px;font-size:12px;color:#9bb6d4">+2.8% from last sync</div>
+              <div style="margin-top:8px;font-size:12px;color:#9bb6d4">Sample figure · not from a live store</div>
             </div>
           </div>
         </div>
+        <div class="cc-kicker cc-demo-note" style="margin:0 0 10px">Sample metrics · seeded demo data, not live store totals</div>
         <div class="cc-metrics">
           <div class="cc-stat"><label>Mapped products</label><b>1,248</b><em>+8.4% products with vehicle data</em></div>
           <div class="cc-stat"><label>Vehicle coverage</label><b>94.6%</b><em>+2.8% of active catalog</em></div>
@@ -181,11 +182,11 @@
           <button class="btn btn-primary" id="btn-admin-sync" onclick="simulateSync()">Run sync</button>
         </div>
         <div class="cc-navy-note" style="margin-top:0">
-          <div><h4>Everything is up to date</h4><p>The last complete sync finished 8 minutes ago with no errors.</p></div>
+          <div><h4>Simulated sync log</h4><p>Example entries showing what a connected store's sync log looks like. No sync has run from this demo.</p></div>
           <div style="text-align:right"><div style="font-size:22px;color:#fff;font-weight:700">0</div><div style="font-size:11px;letter-spacing:.12em">ERRORS</div></div>
         </div>
         <div class="cc-card" style="margin-top:16px">
-          <div class="cc-card-pad" style="display:flex;justify-content:space-between"><h3 style="margin:0">Activity log</h3><span class="badge badge-live">Healthy</span></div>
+          <div class="cc-card-pad" style="display:flex;justify-content:space-between"><h3 style="margin:0">Activity log (sample)</h3><span class="badge badge-review">Simulated</span></div>
           <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Product metafields refreshed</strong><div style="font-size:12px;color:var(--muted)">1,248 products checked · custom.vehicle_fitment via metafieldsSet</div></div></div>
           <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Vehicle cache rebuilt</strong><div style="font-size:12px;color:var(--muted)">86 fitment rules indexed for App Proxy lookups</div></div></div>
           <div class="cc-log"><span class="badge badge-live">OK</span><div><strong>Webhook received</strong><div style="font-size:12px;color:var(--muted)">products/update · HTTP 204 · HMAC verified</div></div></div>
@@ -434,7 +435,7 @@
         `<div class="cc-rule"><div class="cc-idx">${String(i+4).padStart(2,"0")}</div><div><h3 style="margin:0 0 4px;font-size:15px">${p.title}</h3><div style="font-size:12px;color:var(--muted)">${p.sku} · ${p.universal ? "Universal" : p.matching_vehicle_ids.length + " configurations"}</div></div><span class="badge badge-live">Synced</span></div>`
       ).join("");
     }
-    function simulateSync() { alert("Shopify GraphQL metafieldsSet queued via Sidekiq. custom.vehicle_fitment is being written in batches."); }
+    function simulateSync() { alert("Demo mode: nothing is sent and no store is connected. In a connected store, this queues Shopify GraphQL metafieldsSet via Sidekiq and writes custom.vehicle_fitment in batches."); }
     function inspectApiEndpoint() {
       const sel = document.getElementById("api-endpoint-select").value;
       const payloads = {
@@ -450,7 +451,7 @@
     let demoTimer = null, demoSeconds = 0, mediaRecorder = null, recordedChunks = [];
     const totalDemoSeconds = 150;
     const demoScript = [
-      { time: 0, caption: "Welcome to Vehicle Selector Pro — a production Rails 7 Shopify app with a Theme App Extension.", action: () => showPage("overview") },
+      { time: 0, caption: "Welcome to Vehicle Selector Pro — a Rails 7 Shopify app with a Theme App Extension. This walkthrough runs on seeded sample data.", action: () => showPage("overview") },
       { time: 12, caption: "The command center shows catalog coverage, mapped products, and rules that still need review.", action: () => showPage("overview") },
       { time: 24, caption: "On the storefront, Year cascades into Make, Model, and Trim through the HMAC-signed App Proxy.", action: () => { showPage("overview"); document.getElementById("sel-year").value = "2024"; onYearChange(); moveCursorTo("sel-year"); } },
       { time: 36, caption: "Selecting Ford, then F-150, then Lariat — the same tree the merchant maintains in the vehicle library.", action: () => { document.getElementById("sel-make").value = "Ford"; onMakeChange(); document.getElementById("sel-model").value = "F-150"; onModelChange(); document.getElementById("sel-trim").value = "Lariat"; moveCursorTo("sel-trim"); } },

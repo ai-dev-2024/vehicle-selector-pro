@@ -315,3 +315,10 @@ body.cc-body {
 .cc-nav a, .cc-nav button { min-width: 0; overflow-wrap: anywhere; }
 .cc-nav a .cc-count, .cc-nav button .cc-count { flex: none; margin-left: 8px; }
 .cc-sidebar { min-width: 0; }
+
+/* Demo mode (GitHub Pages demo only): seeded sample data, never a live store. */
+.cc-dot.cc-dot-demo { background: #b7791f; }
+.cc-live.cc-demo-pill { color: #8a5a00; background: #fff4db; border: 1px solid #f0d28a; border-radius: 999px; padding: 5px 10px; }
+.cc-live.cc-demo-pill i { background: #b7791f; box-shadow: 0 0 0 4px rgba(183,121,31,0.18); animation: none; }
+.cc-banner.cc-banner-demo { background: #fff4db; color: #6b4600; border: 1px solid #f0d28a; }
+.cc-banner.cc-banner-demo a { color: #6b4600; }
