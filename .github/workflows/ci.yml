@@ -26,7 +26,7 @@ jobs:
       SHOPIFY_API_KEY: ci-dummy-api-key
       SHOPIFY_API_SECRET: ci-dummy-api-secret
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
@@ -42,7 +42,7 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage/
@@ -55,7 +55,7 @@ jobs:
     name: RuboCop
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
@@ -70,7 +70,7 @@ jobs:
     name: Dependency audit (bundler-audit + Brakeman)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
@@ -94,7 +94,7 @@ jobs:
     name: Secret scan (gitleaks)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -113,7 +113,7 @@ jobs:
     name: Docker image build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Same image fly deploy builds; catches Dockerfile/Gemfile drift
       # (e.g. .ruby-version missing from the gem layer) before a deploy does.
@@ -124,7 +124,7 @@ jobs:
     name: Docs + storefront JS checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Verify README + docs links
         run: python3 scripts/check_links.py
