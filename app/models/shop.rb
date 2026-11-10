@@ -3,10 +3,13 @@ class Shop < ApplicationRecord
 
   encrypts :shopify_token, deterministic: false if respond_to?(:encrypts)
 
-  # Associations
-  has_many :vehicle_product_fitments, dependent: :destroy
-  has_many :oe_numbers, dependent: :destroy
-  has_many :metafield_sync_logs, dependent: :destroy
+  # Associations. delete_all, not destroy: a shop is only destroyed by the
+  # shop/redact webhook, which must answer within seconds. Destroying row by
+  # row would also run each fitment's callbacks and enqueue a metafield sync
+  # for a store that no longer has the app.
+  has_many :vehicle_product_fitments, dependent: :delete_all
+  has_many :oe_numbers, dependent: :delete_all
+  has_many :metafield_sync_logs, dependent: :delete_all
   has_one :app_setting, dependent: :destroy
   has_many :vehicles, -> { distinct }, through: :vehicle_product_fitments
 

@@ -122,5 +122,39 @@ RSpec.describe "Webhook endpoints", type: :request do
       post_webhook "/webhooks/shop_redact", { shop_domain: "unknown.myshopify.com" }
       expect(response).to have_http_status(:ok)
     end
+
+    # Destroying row by row would run each fitment's callbacks, enqueueing a
+    # metafield sync per product for a store that has just removed the app.
+    it "erases the shop's rows in bulk without enqueueing sync jobs for them" do
+      create(:vehicle_product_fitment, shop: shop)
+      create(:oe_number, shop: shop)
+      sync_calls = 0
+      allow(Metafields::ProductMetafieldSyncJob).to(receive(:perform_later) { sync_calls += 1 })
+
+      post_webhook "/webhooks/shop_redact", { shop_domain: shop.shopify_domain }
+
+      expect(VehicleProductFitment.where(shop_id: shop.id)).to be_empty
+      expect(OeNumber.where(shop_id: shop.id)).to be_empty
+      expect(sync_calls).to eq(0)
+    end
+  end
+
+  describe "customer privacy webhooks (GDPR)" do
+    let(:payload) do
+      { shop_domain: shop.shopify_domain, customer: { id: 42, email: "jane@example.com", phone: "555-0100" } }
+    end
+
+    %w[customers_data_request customers_redact].each do |endpoint|
+      it "acknowledges #{endpoint} and logs the customer id without their email or phone" do
+        allow(Rails.logger).to receive(:info)
+
+        post_webhook "/webhooks/#{endpoint}", payload
+
+        expect(response).to have_http_status(:ok)
+        expect(Rails.logger).to have_received(:info).with(a_string_including("customer_id=42"))
+        expect(Rails.logger).not_to have_received(:info).with(a_string_including("jane@example.com"))
+        expect(Rails.logger).not_to have_received(:info).with(a_string_including("555-0100"))
+      end
+    end
   end
 end
