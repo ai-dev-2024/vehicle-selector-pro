@@ -8,7 +8,9 @@ RSpec.describe "Sidekiq queue configuration" do
     Rails.application.eager_load!
     config = YAML.safe_load_file(Rails.root.join("config/sidekiq.yml"), permitted_classes: [Symbol])
     configured = config.fetch(:queues).map { |name, _weight| name.to_s }
-    used = ApplicationJob.descendants.map { |job| job.queue_name.to_s }.uniq
+    # The class-level queue_name is a lambda for jobs without queue_as (it
+    # resolves to the default queue); an instance returns the resolved name.
+    used = ApplicationJob.descendants.map { |job| job.new.queue_name.to_s }.uniq
 
     expect(used - configured).to be_empty
   end
