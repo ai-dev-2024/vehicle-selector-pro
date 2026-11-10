@@ -6,6 +6,12 @@
 (function() {
   'use strict';
 
+  // A page can load this file more than once (two app blocks, or a theme that
+  // also includes it by hand). A second run would attach every listener and
+  // send every fitment request twice.
+  if (window.__vspLoaded) return;
+  window.__vspLoaded = true;
+
   const STORAGE_KEY_ACTIVE = 'vsp_active_vehicle';
   const STORAGE_KEY_GARAGE = 'vsp_customer_garage';
   // On a real storefront, Shopify's App Proxy signs requests to
@@ -137,8 +143,7 @@
       // Populate Years
       const yearsData = await this.fetchApi('years');
       if (yearsData.success && yearsData.years) {
-        yearSelect.innerHTML = `<option value="">Select Year</option>` +
-          yearsData.years.map(y => `<option value="${y}">${y}</option>`).join('');
+        yearSelect.innerHTML = optionsHtml('Select Year', yearsData.years);
       }
 
       // Year Change Listener
@@ -157,8 +162,7 @@
         makeSelect.disabled = false;
 
         if (res.success && res.makes) {
-          makeSelect.innerHTML = `<option value="">Select Make</option>` +
-            res.makes.map(m => `<option value="${m}">${m}</option>`).join('');
+          makeSelect.innerHTML = optionsHtml('Select Make', res.makes);
         }
       });
 
@@ -178,8 +182,7 @@
         modelSelect.disabled = false;
 
         if (res.success && res.models) {
-          modelSelect.innerHTML = `<option value="">Select Model</option>` +
-            res.models.map(m => `<option value="${m}">${m}</option>`).join('');
+          modelSelect.innerHTML = optionsHtml('Select Model', res.models);
         }
       });
 
@@ -203,8 +206,7 @@
           const res = await this.fetchApi('trims', { year, make, model });
           trimSelect.disabled = false;
           if (res.success && res.trims && res.trims.length > 0) {
-            trimSelect.innerHTML = `<option value="">All Trims</option>` +
-              res.trims.map(t => `<option value="${t}">${t}</option>`).join('');
+            trimSelect.innerHTML = optionsHtml('All Trims', res.trims);
           } else {
             trimSelect.innerHTML = `<option value="">Standard</option>`;
           }
@@ -224,8 +226,7 @@
             const res = await this.fetchApi('engines', { year, make, model, trim });
             engineSelect.disabled = false;
             if (res.success && res.engines && res.engines.length > 0) {
-              engineSelect.innerHTML = `<option value="">All Engines</option>` +
-                res.engines.map(e => `<option value="${e}">${e}</option>`).join('');
+              engineSelect.innerHTML = optionsHtml('All Engines', res.engines);
             } else {
               engineSelect.innerHTML = `<option value="">Standard Engine</option>`;
             }
@@ -306,10 +307,10 @@
           ${this.garage.map((veh, idx) => `
             <div class="vsp-garage-item ${this.activeVehicle && this.activeVehicle.display_name === veh.display_name ? 'active' : ''}" data-index="${idx}">
               <div>
-                <strong>${veh.year} ${veh.make} ${veh.model}</strong>
-                ${veh.trim || veh.engine ? `<div style="font-size: 11px; color: #888;">${compactBlank([veh.trim, veh.engine]).join(' • ')}</div>` : ''}
+                <strong>${esc(veh.year)} ${esc(veh.make)} ${esc(veh.model)}</strong>
+                ${veh.trim || veh.engine ? `<div style="font-size: 11px; color: #888;">${compactBlank([veh.trim, veh.engine]).map(esc).join(' • ')}</div>` : ''}
               </div>
-              <button class="vsp-garage-remove" data-remove-index="${idx}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 16px;">×</button>
+              <button type="button" class="vsp-garage-remove" data-remove-index="${idx}" aria-label="Remove ${esc(veh.year)} ${esc(veh.make)} ${esc(veh.model)} from garage" style="background: none; border: none; color: #999; cursor: pointer; font-size: 16px;">×</button>
             </div>
           `).join('')}
         `;
@@ -393,7 +394,7 @@
               <div class="vsp-badge-icon">🌐</div>
               <div class="vsp-badge-content">
                 <div class="vsp-badge-title">Universal Fitment</div>
-                <div class="vsp-badge-description">${fit.notes || 'This product is designed to fit all vehicle configurations.'}</div>
+                <div class="vsp-badge-description">${esc(fit.notes || 'This product is designed to fit all vehicle configurations.')}</div>
               </div>
             `;
           } else if (fit.fits) {
@@ -401,8 +402,8 @@
             badge.innerHTML = `
               <div class="vsp-badge-icon">✔</div>
               <div class="vsp-badge-content">
-                <div class="vsp-badge-title">Guaranteed Exact Fit for ${this.activeVehicle.display_name}</div>
-                <div class="vsp-badge-description">${fit.notes || '100% Fitment Guarantee. Ready for installation.'}</div>
+                <div class="vsp-badge-title">Guaranteed Exact Fit for ${esc(this.activeVehicle.display_name)}</div>
+                <div class="vsp-badge-description">${esc(fit.notes || '100% Fitment Guarantee. Ready for installation.')}</div>
               </div>
             `;
           } else {
@@ -410,8 +411,8 @@
             badge.innerHTML = `
               <div class="vsp-badge-icon">✕</div>
               <div class="vsp-badge-content">
-                <div class="vsp-badge-title">Does NOT Fit ${this.activeVehicle.display_name}</div>
-                <div class="vsp-badge-description">${fit.notes || 'This product is not compatible with your active vehicle.'}</div>
+                <div class="vsp-badge-title">Does NOT Fit ${esc(this.activeVehicle.display_name)}</div>
+                <div class="vsp-badge-description">${esc(fit.notes || 'This product is not compatible with your active vehicle.')}</div>
               </div>
             `;
           }
@@ -437,6 +438,19 @@
   // could collide with the merchant theme or other apps on the storefront).
   function compactBlank(arr) {
     return arr.filter(item => item !== null && item !== undefined && item !== '');
+  }
+
+  // Escape text before it is written into innerHTML. Vehicle names and
+  // fitment notes come from merchant CSV imports (often supplier files) and
+  // garage entries from localStorage, so none of it is trusted markup.
+  const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => HTML_ESCAPES[ch]);
+  }
+
+  function optionsHtml(placeholder, values) {
+    return `<option value="">${placeholder}</option>` +
+      values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
   }
 
   // Auto-init on DOMContentLoaded

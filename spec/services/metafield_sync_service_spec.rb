@@ -38,6 +38,31 @@ RSpec.describe Shopify::MetafieldSyncService do
       expect(fitment.reload.synced_to_metafield).to be(true)
     end
 
+    # CSV imports store bare numeric ids while the metafield owner is a GID.
+    it "marks fitments stored under a numeric product id as synced" do
+      fitment = create(:vehicle_product_fitment, shop: shop, product_id: "8192019283001",
+                                                 vehicle: create(:vehicle, year: 2024, make: "Ford", model: "F-150"))
+
+      service.sync_products([fitment.product_id])
+
+      expect(client).to have_received(:mutate) do |_mutation, vars|
+        expect(vars[:metafields].first[:ownerId]).to eq("gid://shopify/Product/8192019283001")
+      end
+      expect(fitment.reload.synced_to_metafield).to be(true)
+    end
+
+    # Removing a product's last fitment must clear what Shopify still shows.
+    it "writes an empty value when the product has no fitments left" do
+      service.sync_products(["gid://shopify/Product/77"])
+
+      expect(client).to have_received(:mutate) do |_mutation, vars|
+        payload = JSON.parse(vars[:metafields].first[:value])
+        expect(payload["fitments"]).to eq([])
+        expect(payload["ymm_keys"]).to eq([])
+        expect(payload["total_vehicles"]).to eq(0)
+      end
+    end
+
     it "no-ops on an empty product list" do
       expect(service.sync_products([])).to eq(success: true, count: 0)
       expect(client).not_to have_received(:mutate)

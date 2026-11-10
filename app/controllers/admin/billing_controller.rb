@@ -6,7 +6,13 @@ module Admin
   class BillingController < BaseController
     # GET /admin/billing
     def show
-      refresh_plan_from_shopify
+      begin
+        refresh_plan_from_shopify
+      rescue Shopify::GraphQLError => e
+        # Shopify throttled or unreachable: render from the last known plan
+        # instead of failing the whole page.
+        flash.now[:alert] = t("admin.billing.error", message: e.message)
+      end
 
       @plans = BillingPlan.all
       @current_plan = current_shop.billing_plan_key

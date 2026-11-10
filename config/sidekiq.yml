@@ -2,6 +2,6 @@
 :max_retries: 5
 :queues:
   - [webhooks, 3]
-  - [metafields, 2]
+  - [sync, 2]
   - [default, 1]
   - [low_priority, 1]

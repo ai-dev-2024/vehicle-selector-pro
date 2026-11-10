@@ -38,10 +38,10 @@ Run `shopify app deploy --allow-updates` after reviewing the extension changes. 
 
 ### 3. Give the merchant the install URL
 
-For a store domain such as `client-store.myshopify.com`, send:
+For a store domain such as `your-store.myshopify.com`, send:
 
 ```text
-https://vehicle-selector-pro.fly.dev/login?shop=client-store.myshopify.com
+https://vehicle-selector-pro.fly.dev/login?shop=your-store.myshopify.com
 ```
 
 The merchant opens the URL, signs in to Shopify themselves, reviews the requested permissions, and clicks Install/Approve. No Shopify password needs to be sent to the developer.

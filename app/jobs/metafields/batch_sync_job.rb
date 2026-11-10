@@ -3,6 +3,8 @@ module Metafields
     queue_as :sync
 
     retry_on Shopify::ThrottledError, wait: :polynomially_longer, attempts: 5
+    # Revoked or placeholder token: a retry cannot succeed.
+    discard_on Shopify::AuthenticationError
 
     def perform(shop_id, product_ids = nil, log_id = nil)
       shop = Shop.find_by(id: shop_id)

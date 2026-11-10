@@ -78,3 +78,66 @@ RSpec.describe "Demo API product pagination", type: :request do
     expect(body["products"].pluck("sku")).to eq(DemoCatalog::FEATURED_SKUS)
   end
 end
+
+# /demo and /demo/api are public and unauthenticated, so the shop behind them
+# must never be a real tenant.
+RSpec.describe "Public demo tenant isolation", type: :request do
+  # The test database can already hold the real demo-domain shop: CI runs
+  # db:prepare, which seeds a fresh database. Point the resolver at a domain
+  # nothing else creates, so these examples control whether the demo shop
+  # exists instead of depending on the seeds.
+  let(:demo_domain) { "demo-shop-under-test.example" }
+  let!(:merchant) { create(:shop, name: "Private Merchant Parts") }
+
+  before do
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with("SHOPIFY_STORE_DOMAIN", anything).and_return(demo_domain)
+    create(:vehicle_product_fitment, shop: merchant, product_title: "Private Merchant Part")
+  end
+
+  it "resolves the demo-domain shop even when another shop has more data" do
+    demo = create(:shop, shopify_domain: demo_domain)
+    expect(DemoShopResolver.resolve).to eq(demo)
+  end
+
+  it "falls back to some existing shop in local development when the demo shop is missing" do
+    resolved = DemoShopResolver.resolve
+
+    expect(resolved).to be_a(Shop)
+    expect(resolved.shopify_domain).not_to eq(demo_domain)
+  end
+
+  context "outside local development" do
+    before { allow(Rails.env).to receive(:local?).and_return(false) }
+
+    it "does not fall back to another tenant when the demo shop is missing" do
+      expect(Shop.count).to be >= 1
+      expect(DemoShopResolver.resolve).to be_nil
+    end
+
+    it "serves the demo shop, and only the demo shop, when it exists" do
+      demo = create(:shop, shopify_domain: demo_domain)
+      create(:vehicle_product_fitment, shop: demo, product_title: "Demo Catalog Part")
+
+      get "/demo/api/products?page=1&limit=100"
+
+      expect(response).to have_http_status(:ok)
+      titles = response.parsed_body["products"].pluck("title")
+      expect(titles).to eq(["Demo Catalog Part"])
+    end
+
+    it "makes the demo API unavailable instead of serving a merchant's catalog" do
+      get "/demo/api/products?page=1&limit=10"
+
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response.body).not_to include("Private Merchant Part")
+    end
+
+    it "makes the demo admin unavailable instead of rendering a merchant's dashboard" do
+      get "/demo/admin"
+
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response.body).not_to include("Private Merchant Parts")
+    end
+  end
+end

@@ -18,18 +18,16 @@ COPY . .
 RUN mkdir -p tmp/pids log storage
 
 # Dummy credentials so the Rails environment can boot for asset precompilation.
-# Real values are injected at runtime via Fly secrets — never baked into the image.
+# They stay build ARGs on purpose: an ARG is visible to the RUN below but is
+# not persisted into the image. Promoting them to ENV would let a deployment
+# with a missing Fly secret boot on these public values instead of failing.
 ARG SECRET_KEY_BASE=dummy_secret_key_base_for_image_build_only_000
 ARG SHOPIFY_API_KEY=dummy_api_key_for_build
 ARG SHOPIFY_API_SECRET=dummy_api_secret_for_build
 ARG DATABASE_URL=postgres://build:build@localhost/build_dummy
 ARG GIT_SHA=local
 ENV RAILS_ENV=production \
-    GIT_SHA=$GIT_SHA \
-    SECRET_KEY_BASE=${SECRET_KEY_BASE} \
-    SHOPIFY_API_KEY=${SHOPIFY_API_KEY} \
-    SHOPIFY_API_SECRET=${SHOPIFY_API_SECRET} \
-    DATABASE_URL=${DATABASE_URL}
+    GIT_SHA=$GIT_SHA
 
 RUN bundle exec rails assets:precompile
 

@@ -3,10 +3,13 @@ class Shop < ApplicationRecord
 
   encrypts :shopify_token, deterministic: false if respond_to?(:encrypts)
 
-  # Associations
-  has_many :vehicle_product_fitments, dependent: :destroy
-  has_many :oe_numbers, dependent: :destroy
-  has_many :metafield_sync_logs, dependent: :destroy
+  # Associations. delete_all, not destroy: a shop is only destroyed by the
+  # shop/redact webhook, which must answer within seconds. Destroying row by
+  # row would also run each fitment's callbacks and enqueue a metafield sync
+  # for a store that no longer has the app.
+  has_many :vehicle_product_fitments, dependent: :delete_all
+  has_many :oe_numbers, dependent: :delete_all
+  has_many :metafield_sync_logs, dependent: :delete_all
   has_one :app_setting, dependent: :destroy
   has_many :vehicles, -> { distinct }, through: :vehicle_product_fitments
 
@@ -28,7 +31,12 @@ class Shop < ApplicationRecord
     update!(
       active: false,
       uninstalled_at: Time.current,
-      shopify_token: "revoked_#{SecureRandom.hex(8)}"
+      shopify_token: "revoked_#{SecureRandom.hex(8)}",
+      # Shopify cancels the subscription on uninstall; a reinstall must not
+      # inherit the old paid limits.
+      billing_plan: BillingPlan::FREE,
+      billing_activated_at: nil,
+      billing_expires_at: nil
     )
   end
 

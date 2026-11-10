@@ -19,6 +19,7 @@ jobs:
   test:
     name: Tests (unit + integration)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Dummy Shopify credentials so the app environment can boot — the same
     # approach the Dockerfile uses at image-build time. Real values are never
     # needed in CI: tests HMAC-sign with whatever secret the app booted with.
@@ -26,11 +27,13 @@ jobs:
       SHOPIFY_API_KEY: ci-dummy-api-key
       SHOPIFY_API_SECRET: ci-dummy-api-secret
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
           bundler-cache: true
 
@@ -40,13 +43,17 @@ jobs:
       - name: Full test suite (RSpec + App Proxy integration)
         run: ruby spec/test_runner.rb
 
+      # Never fatal: an upload problem (storage quota, flaky network) must not
+      # turn a passing test run red. Kept for a week, long enough to inspect.
       - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: coverage-report
           path: coverage/
           if-no-files-found: warn
+          retention-days: 7
 
       - name: Eager-load check (zeitwerk)
         run: bundle exec rails zeitwerk:check
@@ -54,12 +61,15 @@ jobs:
   lint:
     name: RuboCop
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
           bundler-cache: true
 
@@ -69,12 +79,15 @@ jobs:
   security:
     name: Dependency audit (bundler-audit + Brakeman)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       # No ruby-version input: setup-ruby reads .ruby-version, the same file
       # the Gemfile, Dockerfile and Dependabot resolve against.
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
           bundler-cache: true
 
@@ -93,10 +106,12 @@ jobs:
   secrets:
     name: Secret scan (gitleaks)
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: gitleaks (full history)
         env:
@@ -112,8 +127,11 @@ jobs:
   docker:
     name: Docker image build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       # Same image fly deploy builds; catches Dockerfile/Gemfile drift
       # (e.g. .ruby-version missing from the gem layer) before a deploy does.
@@ -123,8 +141,11 @@ jobs:
   docs-links:
     name: Docs + storefront JS checks
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Verify README + docs links
         run: python3 scripts/check_links.py
@@ -134,4 +155,8 @@ jobs:
 
       - name: Theme extension JS syntax check
         run: node --check extensions/vehicle-selector-pro-extension/assets/vehicle-selector.js
+
+      # Output escaping and single initialisation, against a fake DOM (no deps).
+      - name: Theme extension JS behaviour check
+        run: node scripts/check_vehicle_selector.js
 

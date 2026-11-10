@@ -32,11 +32,17 @@ module Admin
       # rubocop:disable Naming/MemoizedInstanceVariableName -- @current_shop is the conventional name read by every action
       @current_shop = Shop.active.first || Shop.first
       @current_shop ||= Shop.create!(
-        shopify_domain: "apex-performance-parts.myshopify.com",
+        shopify_domain: "vehicle-selector-pro.myshopify.com",
         shopify_token: "dev_token_placeholder",
-        name: "Apex Performance Auto"
+        name: "Vehicle Selector Pro Demo"
       )
       # rubocop:enable Naming/MemoizedInstanceVariableName
+    end
+
+    # 1-based page number for the list screens. Clamps ?page=0 and negatives,
+    # which would otherwise become a negative OFFSET (an error on Postgres).
+    def page_param
+      [params[:page].to_i, 1].max
     end
   end
 end

@@ -12,3 +12,6 @@ eb01307a35b49b8c69430b3b89e07a1c49944e90:spec/spec_helper.rb:generic-api-key:46
 3b08721d028883cc18e905ad123a6cfab1f0aef0:spec/spec_helper.rb:generic-api-key:48
 cde975f66f903ca1b9fb1780cd966aa00ba550ae:spec/spec_helper.rb:generic-api-key:48
 cde975f66f903ca1b9fb1780cd966aa00ba550ae:config/initializers/shopify_app.rb:generic-api-key:23
+# Same dummy value in one more commit. gitleaks 8.21 reports it, while the CI
+# run on 8.28 passes without this entry; listed so every version agrees.
+9cdff1c57aff3ca89dcead8250420cc82c365b5c:spec/spec_helper.rb:generic-api-key:47

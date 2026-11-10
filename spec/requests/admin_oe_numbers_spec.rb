@@ -22,6 +22,18 @@ RSpec.describe "Admin OE numbers", type: :request do
       expect(response.body).to include("51372-TG7-A01")
     end
 
+    # A negative OFFSET is tolerated by SQLite but is an error on Postgres.
+    it "clamps a zero or negative page to the first page" do
+      create_list(:oe_number, 26, shop: shop)
+
+      get admin_oe_numbers_path, params: { page: 0 }
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Page 1 of 2")
+
+      get admin_oe_numbers_path, params: { page: -3 }
+      expect(response.body).to include("Page 1 of 2")
+    end
+
     it "filters by search query" do
       create(:oe_number, shop: shop, oe_number: "ABC-123")
       create(:oe_number, shop: shop, oe_number: "XYZ-999")

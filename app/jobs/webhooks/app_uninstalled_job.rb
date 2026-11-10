@@ -2,7 +2,9 @@ module Webhooks
   class AppUninstalledJob < ApplicationJob
     queue_as :webhooks
 
-    def perform(shop_domain:, _webhook:)
+    # The controller enqueues `shop_domain:` and `webhook:`; the payload is not
+    # needed here, so it is accepted and ignored.
+    def perform(shop_domain:, **)
       shop = Shop.find_by(shopify_domain: shop_domain)
       return unless shop
 

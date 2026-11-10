@@ -34,6 +34,15 @@ RSpec.describe Webhooks::ProductsUpdateJob, type: :job do
     expect(fitment.reload.product_image).to eq("https://cdn.shopify.com/s/files/1/0000/files/alt.jpg")
   end
 
+  # The webhook carries a GID; CSV imports store the bare numeric id.
+  it "updates fitments stored under the numeric product id" do
+    numeric = create(:vehicle_product_fitment, shop: shop, vehicle: vehicle, product_id: "200", product_title: "Old")
+
+    described_class.perform_now(shop_domain: shop.shopify_domain, webhook: { "id" => 200, "title" => "New" })
+
+    expect(numeric.reload.product_title).to eq("New")
+  end
+
   it "does nothing when the shop is unknown" do
     expect do
       described_class.perform_now(shop_domain: "ghost.myshopify.com", webhook: { "id" => 100 })

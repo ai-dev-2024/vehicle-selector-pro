@@ -11,7 +11,7 @@ module Admin
         @oe_numbers = @oe_numbers.where("oe_number LIKE :q OR UPPER(product_id) LIKE :q", q: q)
       end
 
-      @page = (params[:page] || 1).to_i
+      @page = page_param
       @per_page = 25
       @total_count = @oe_numbers.count
       @oe_numbers = @oe_numbers.order(created_at: :desc).offset((@page - 1) * @per_page).limit(@per_page)

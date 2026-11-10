@@ -34,6 +34,38 @@ RSpec.describe BulkFitmentImporter do
     result = described_class.new(shop, "a,b\n1,2\n").import!
     expect(result[:errors].first).to include("CSV must contain at least one of")
     expect(result[:success_count]).to eq(0)
+    expect(result[:error_count]).to eq(1)
+  end
+
+  it "counts a malformed file as an error instead of a clean import" do
+    result = described_class.new(shop, "product_id,year,make,model\n\"1001,2024,Ford,F-150\n").import!
+    expect(result[:errors].first).to include("Malformed CSV")
+    expect(result[:error_count]).to eq(1)
+  end
+
+  # Excel's "CSV UTF-8" export starts with a byte-order mark, and uploads are
+  # read as binary strings.
+  it "imports a spreadsheet export that starts with a UTF-8 byte-order mark" do
+    csv = "#{BulkFitmentImporter::BYTE_ORDER_MARK}product_id,year,make,model\n1001,2024,Ford,F-150\n".b
+
+    result = described_class.new(shop, csv).import!
+
+    expect(result[:success_count]).to eq(1)
+    expect(shop.vehicle_product_fitments.find_by(product_id: "1001")).to be_present
+  end
+
+  it "keeps a previously synced product image when the CSV has no image column" do
+    csv = <<~CSV
+      product_id,year,make,model
+      1001,2024,Ford,F-150
+    CSV
+    described_class.new(shop, csv).import!
+    shop.vehicle_product_fitments.find_by(product_id: "1001").update!(product_image: "https://cdn.shopify.com/intake.jpg")
+
+    described_class.new(shop, csv).import!
+
+    expect(shop.vehicle_product_fitments.find_by(product_id: "1001").product_image)
+      .to eq("https://cdn.shopify.com/intake.jpg")
   end
 
   it "stores the product image when the CSV includes an image column" do

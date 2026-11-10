@@ -26,15 +26,34 @@ RSpec.describe Shopify::BillingService do
       expect(url).to eq("https://checkout.example/confirm")
     end
 
-    it "returns nil when the shop already has a billable subscription" do
-      allow(client).to receive(:query).and_return(
-        "currentAppInstallation" => {
-          "activeSubscriptions" => [{ "id" => "1", "name" => "Vehicle Selector Pro — Pro", "test" => true }]
-        }
-      )
+    context "when the shop is already on Pro" do
+      before do
+        allow(client).to receive(:query).and_return(
+          "currentAppInstallation" => {
+            "activeSubscriptions" => [{ "id" => "1", "name" => "Vehicle Selector Pro — Pro", "test" => true }]
+          }
+        )
+      end
 
+      it "returns nil for the same plan instead of creating a second charge" do
+        expect(client).not_to receive(:mutate)
+        expect(described_class.new(shop).create_subscription("pro")).to be_nil
+      end
+
+      # Shopify replaces the active subscription when the new one is approved,
+      # so an upgrade must reach the confirmation URL.
+      it "lets the merchant switch to Pro Plus" do
+        expect(client).to receive(:mutate).and_return(
+          "appSubscriptionCreate" => { "confirmationUrl" => "https://checkout.example/upgrade", "userErrors" => [] }
+        )
+
+        expect(described_class.new(shop).create_subscription("plus")).to eq("https://checkout.example/upgrade")
+      end
+    end
+
+    it "returns nil for the free tier, which has no subscription to create" do
       expect(client).not_to receive(:mutate)
-      expect(described_class.new(shop).create_subscription("plus")).to be_nil
+      expect(described_class.new(shop).create_subscription("free")).to be_nil
     end
 
     it "returns nil for an unknown plan" do
