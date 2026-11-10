@@ -32,9 +32,9 @@ module Admin
       # rubocop:disable Naming/MemoizedInstanceVariableName -- @current_shop is the conventional name read by every action
       @current_shop = Shop.active.first || Shop.first
       @current_shop ||= Shop.create!(
-        shopify_domain: "apex-performance-parts.myshopify.com",
+        shopify_domain: "vehicle-selector-pro.myshopify.com",
         shopify_token: "dev_token_placeholder",
-        name: "Apex Performance Auto"
+        name: "Vehicle Selector Pro Demo"
       )
       # rubocop:enable Naming/MemoizedInstanceVariableName
     end

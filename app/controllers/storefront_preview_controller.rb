@@ -11,6 +11,10 @@ class StorefrontPreviewController < ApplicationController
 
   attr_reader :current_shop
 
+  before_action :require_demo_shop,
+                only: %i[collection admin_dashboard admin_sync admin_fitments admin_vehicles admin_settings
+                         admin_imports admin_analytics admin_billing admin_oe_numbers]
+
   def index
     # Featured Parts loads dynamically via /demo/api/products (see
     # _dynamic_catalog), so no catalog is passed to the template here.
@@ -209,5 +213,13 @@ class StorefrontPreviewController < ApplicationController
     @total_count = @oe_numbers.count
     @oe_numbers = @oe_numbers.limit(@per_page)
     render template: "admin/oe_numbers/index", layout: "embedded_app"
+  end
+
+  private
+
+  # These pages read the demo shop's data. With no demo shop there is nothing
+  # to show (DemoShopResolver never substitutes another tenant in production).
+  def require_demo_shop
+    render plain: "Demo catalog unavailable", status: :service_unavailable unless shop
   end
 end
