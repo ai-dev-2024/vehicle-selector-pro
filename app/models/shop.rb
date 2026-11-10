@@ -28,7 +28,12 @@ class Shop < ApplicationRecord
     update!(
       active: false,
       uninstalled_at: Time.current,
-      shopify_token: "revoked_#{SecureRandom.hex(8)}"
+      shopify_token: "revoked_#{SecureRandom.hex(8)}",
+      # Shopify cancels the subscription on uninstall; a reinstall must not
+      # inherit the old paid limits.
+      billing_plan: BillingPlan::FREE,
+      billing_activated_at: nil,
+      billing_expires_at: nil
     )
   end
 
