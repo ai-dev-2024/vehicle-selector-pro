@@ -27,6 +27,19 @@ RSpec.describe "Admin billing", type: :request do
       expect(shop.reload.billing_plan).to eq("pro")
       expect(shop.reload.on_paid_plan?).to be(true)
     end
+
+    it "still renders from the last known plan when Shopify cannot be reached" do
+      shop.update!(billing_plan: "pro")
+      failing = instance_double(Shopify::BillingService)
+      allow(failing).to receive(:active_plan_key).and_raise(Shopify::ThrottledError, "rate limited")
+      allow(Shopify::BillingService).to receive(:new).and_return(failing)
+
+      get admin_billing_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("rate limited")
+      expect(shop.reload.billing_plan).to eq("pro")
+    end
   end
 
   describe "POST /admin/billing" do

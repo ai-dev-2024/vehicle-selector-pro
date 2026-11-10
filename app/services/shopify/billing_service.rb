@@ -55,15 +55,18 @@ module Shopify
     end
 
     # Creates a recurring subscription for the given plan key and returns the
-    # native Shopify confirmation URL, or nil if the shop already has one of
-    # the paid charts active.
+    # native Shopify confirmation URL, or nil if the shop is already on that
+    # plan (or the plan is the free tier).
     def create_subscription(plan_key, return_host: default_return_host, test: billing_test?)
       plan = BillingPlan.find(plan_key)
-      return nil unless plan
+      # The free tier has no Shopify subscription to create.
+      return nil if plan.nil? || plan.free?
 
-      if (names = active_chart_names).any?
-        # Already subscribed to a billable plan — don't stack another chart.
-        Rails.logger.info("[BillingService] #{shop.shopify_domain} already active on: #{names.join(', ')}")
+      if active_chart_names.include?(plan.chart_name)
+        # Already on this plan — don't create a second charge for it. A
+        # different paid plan goes through: Shopify replaces the current
+        # subscription once the merchant approves the new one.
+        Rails.logger.info("[BillingService] #{shop.shopify_domain} already active on: #{plan.chart_name}")
         return nil
       end
 
