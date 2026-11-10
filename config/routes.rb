@@ -68,22 +68,6 @@ Rails.application.routes.draw do
     get "garage", to: "garage#index"
   end
 
-  # Headless fallback API - requires HMAC signature same as App Proxy (do not expose unauthenticated)
-  # Kept for internal use only; secured via AppProxySignatureVerifier
-  namespace :api do
-    namespace :v1 do
-      namespace :storefront do
-        get "years", to: "app_proxy/vehicle_filters#years"
-        get "makes", to: "app_proxy/vehicle_filters#makes"
-        get "models", to: "app_proxy/vehicle_filters#models"
-        get "trims", to: "app_proxy/vehicle_filters#trims"
-        get "engines", to: "app_proxy/vehicle_filters#engines"
-        get "search", to: "app_proxy/vehicle_filters#search"
-        get "check_fitment", to: "app_proxy/fitments#check"
-      end
-    end
-  end
-
   # Webhook Ingestion Endpoints
   namespace :webhooks do
     post "products_create", to: "products#create"
