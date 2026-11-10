@@ -133,7 +133,6 @@ module AppProxy
       product_ids = matched_ids.sort.first(FitmentSearchService::MAX_PAGE_SIZE)
       products = current_shop.vehicle_product_fitments
                              .where(product_id: product_ids)
-                             .includes(:vehicle)
                              .order(:product_id)
                              .uniq(&:product_id)
                              .map { |f| fitment_search_service.product_payload(f) }

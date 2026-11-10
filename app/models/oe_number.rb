@@ -8,15 +8,25 @@ class OeNumber < ApplicationRecord
   validates :product_id, presence: true
   validates :oe_number, presence: true, uniqueness: { scope: :shop_id, case_sensitive: false }
 
-  before_save { self.oe_number = oe_number.to_s.strip.upcase }
+  # Shorter terms match most of the catalog and cannot use an index.
+  MIN_SEARCH_LENGTH = 3
+
+  # Normalise before validation, not before save: the uniqueness check has to
+  # see the stored form, or "ABC " passes validation and then violates the
+  # unique index.
+  before_validation { self.oe_number = oe_number.to_s.strip.upcase }
 
   scope :for_product, ->(product_id) { where(product_id: product_id.to_s) }
-  scope :matching, ->(term) { where("oe_number LIKE ?", "%#{term.to_s.strip.upcase}%") }
+  # The term comes from storefront visitors, so % and _ are matched literally.
+  # The explicit ESCAPE keeps SQLite (dev/test) and Postgres in agreement.
+  scope :matching, lambda { |term|
+    where("oe_number LIKE ? ESCAPE '\\'", "%#{sanitize_sql_like(term.to_s.strip.upcase)}%")
+  }
 
   # Returns product IDs whose OE cross-reference matches the search term.
   # Used by the app proxy search to resolve an OE-number query to products.
   def self.product_ids_for(shop, term)
-    return [] if term.blank?
+    return [] if term.to_s.strip.length < MIN_SEARCH_LENGTH
 
     shop.oe_numbers.matching(term).distinct.pluck(:product_id)
   end
