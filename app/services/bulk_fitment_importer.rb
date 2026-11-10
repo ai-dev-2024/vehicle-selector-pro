@@ -2,8 +2,16 @@ require "csv"
 
 class BulkFitmentImporter
   REQUIRED_HEADERS = %w[product_id year make model].freeze
+  BYTE_ORDER_MARK = [0xFEFF].pack("U").freeze
 
   attr_reader :shop, :file_content, :results
+
+  # Uploads arrive as binary strings, and spreadsheet exports ("CSV UTF-8" in
+  # Excel) start with a byte-order mark that would otherwise become part of
+  # the first header name and hide the product_id column.
+  def self.normalize(content)
+    content.to_s.dup.force_encoding(Encoding::UTF_8).scrub.delete_prefix(BYTE_ORDER_MARK)
+  end
 
   def initialize(shop, file_content)
     @shop = if defined?(Shop) && shop.is_a?(String)
@@ -11,7 +19,7 @@ class BulkFitmentImporter
             else
               shop
             end
-    @file_content = file_content
+    @file_content = self.class.normalize(file_content)
     @results = { success_count: 0, error_count: 0, errors: [], product_ids: Set.new }
   end
 
@@ -21,8 +29,7 @@ class BulkFitmentImporter
     # Validate minimal headers
     headers = csv.headers.compact
     unless headers.intersect?(%w[product_id product_handle sku])
-      @results[:errors] << "CSV must contain at least one of: 'product_id', 'product_handle', or 'sku'"
-      return @results
+      return fail_import("CSV must contain at least one of: 'product_id', 'product_handle', or 'sku'")
     end
 
     csv.each_with_index do |row, index|
@@ -37,14 +44,20 @@ class BulkFitmentImporter
 
     @results
   rescue CSV::MalformedCSVError => e
-    @results[:errors] << "Malformed CSV: #{e.message}"
-    @results
+    fail_import("Malformed CSV: #{e.message}")
   rescue StandardError => e
-    @results[:errors] << "Unexpected error: #{e.message}"
-    @results
+    fail_import("Unexpected error: #{e.message}")
   end
 
   private
+
+  # A whole-file failure counts as an error like a bad row does, so callers
+  # that check error_count never report a rejected file as a clean import.
+  def fail_import(message)
+    @results[:errors] << message
+    @results[:error_count] += 1
+    @results
+  end
 
   # rubocop:disable-next Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity -- legacy row parser; covered by bulk_fitment_importer_spec, refactor deferred
   def process_row(row, line_num)
@@ -65,7 +78,8 @@ class BulkFitmentImporter
       fitment.product_handle = row["product_handle"] if row["product_handle"].present?
       fitment.product_title = row["product_title"] if row["product_title"].present?
       fitment.sku = row["sku"] if row["sku"].present?
-      fitment.product_image = row["image"].presence || row["image_url"].presence
+      # Keep the image already synced from Shopify when the CSV has no image column.
+      fitment.product_image = row["image"].presence || row["image_url"].presence || fitment.product_image
       fitment.fitment_notes = row["notes"] || row["fitment_notes"]
       fitment.position = row["position"]
       fitment.save!
@@ -104,7 +118,8 @@ class BulkFitmentImporter
     fitment.product_handle = row["product_handle"] if row["product_handle"].present?
     fitment.product_title = row["product_title"] if row["product_title"].present?
     fitment.sku = row["sku"] if row["sku"].present?
-    fitment.product_image = row["image"].presence || row["image_url"].presence
+    # Keep the image already synced from Shopify when the CSV has no image column.
+    fitment.product_image = row["image"].presence || row["image_url"].presence || fitment.product_image
     fitment.universal_fit = false
     fitment.fitment_type = row["fitment_type"].presence || "direct_fit"
     fitment.fitment_notes = row["notes"] || row["fitment_notes"]
