@@ -131,11 +131,15 @@ class FitmentSearchService
     universal = @shop.vehicle_product_fitments.universal.find_by(product_id: pid_variants)
     return universal_fit_response(universal, product_id) if universal.present?
 
-    target_vehicle = resolve_target_vehicle(vehicle_id: vehicle_id, year: year, make: make,
-                                            model: model, trim: trim, engine: engine)
+    # A Year/Make/Model selection without a trim or engine matches several
+    # vehicle rows. The part fits if it is mapped to any of them, which is the
+    # same rule search_products applies.
+    vehicle_ids = target_vehicle_ids(vehicle_id: vehicle_id, year: year, make: make,
+                                     model: model, trim: trim, engine: engine)
+    fitment = @shop.vehicle_product_fitments.find_by(product_id: pid_variants, vehicle_id: vehicle_ids)
+    target_vehicle = fitment&.vehicle || Vehicle.find_by(id: vehicle_ids.min)
     return vehicle_not_specified_response if target_vehicle.nil?
 
-    fitment = @shop.vehicle_product_fitments.find_by(product_id: pid_variants, vehicle_id: target_vehicle.id)
     if fitment.present?
       exact_fit_response(fitment, target_vehicle, product_id)
     else
@@ -165,14 +169,11 @@ class FitmentSearchService
 
   private
 
-  def resolve_target_vehicle(vehicle_id: nil, year: nil, make: nil, model: nil, trim: nil, engine: nil)
-    return Vehicle.find_by(id: vehicle_id) if vehicle_id.present?
-    return nil unless year.present? && make.present? && model.present?
+  def target_vehicle_ids(vehicle_id: nil, year: nil, make: nil, model: nil, trim: nil, engine: nil)
+    return [vehicle_id.to_i] if vehicle_id.present?
+    return [] unless year.present? && make.present? && model.present?
 
-    query = Vehicle.by_year(year).by_make(make).by_model(model)
-    query = query.by_trim(trim) if trim.present?
-    query = query.by_engine(engine) if engine.present?
-    query.first
+    matching_vehicle_ids(year: year, make: make, model: model, trim: trim, engine: engine)
   end
 
   def universal_fit_response(universal, product_id)

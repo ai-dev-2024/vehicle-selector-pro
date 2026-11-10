@@ -148,6 +148,41 @@ RSpec.describe FitmentSearchService do
     end
   end
 
+  describe "#check_fitment" do
+    let(:product_id) { "gid://shopify/Product/500" }
+    let(:lariat) { create(:vehicle, year: 2024, make: "Ford", model: "F-150", trim: "Lariat") }
+
+    before do
+      # Created first, so it is the lowest-id row for this Year/Make/Model.
+      create(:vehicle, year: 2024, make: "Ford", model: "F-150", trim: "XL")
+      create(:vehicle_product_fitment, shop: shop, vehicle: lariat, product_id: product_id)
+    end
+
+    it "fits a Year/Make/Model selection when the part is mapped to any trim of it" do
+      result = service.check_fitment(product_id: product_id, year: 2024, make: "Ford", model: "F-150")
+
+      expect(result[:fits]).to be(true)
+      expect(result[:vehicle][:trim]).to eq("Lariat")
+    end
+
+    it "still reports no fit for a trim the part is not mapped to" do
+      result = service.check_fitment(product_id: product_id, year: 2024, make: "Ford", model: "F-150", trim: "XL")
+
+      expect(result[:fits]).to be(false)
+      expect(result[:fitment_type]).to eq("none")
+    end
+
+    it "resolves an explicit vehicle id" do
+      expect(service.check_fitment(product_id: product_id, vehicle_id: lariat.id)[:fits]).to be(true)
+    end
+
+    it "asks for a vehicle when none is given or none matches" do
+      expect(service.check_fitment(product_id: product_id)[:status]).to eq("vehicle_not_specified")
+      expect(service.check_fitment(product_id: product_id, year: 1999, make: "Saab", model: "900")[:status])
+        .to eq("vehicle_not_specified")
+    end
+  end
+
   describe ".invalidate_shop_cache" do
     it "bumps the shop version so cached results are rebuilt" do
       make_fitment(2025, "Ford", "F-150")
