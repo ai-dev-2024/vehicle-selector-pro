@@ -9,7 +9,7 @@ ruby file: ".ruby-version"
 # Bundler reuses it instead of compiling (slim Docker image, Windows).
 gem "openssl", "3.3.3"
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 7.2.4"
 
 # Shopify App Integration
 gem "shopify_api", "~> 14.0"
@@ -29,14 +29,14 @@ gem "sqlite3", "~> 2.6"
 
 # Background Processing & Queuing
 gem "redis", "~> 5.1"
-gem "sidekiq", "~> 7.2"
+gem "sidekiq", "~> 7.3"
 # Rails 7.1's redis_cache_store requires the connection_pool 2.x constructor
 # signature; 3.x removed it and breaks production boot when REDIS_URL is set.
 gem "connection_pool", "~> 2.4"
 
 # Fast JSON Serialization
 gem "active_model_serializers", "~> 0.10.14"
-gem "oj", "~> 3.16"
+gem "oj", "~> 3.17"
 
 # Caching & Performance
 # SolidCache (Postgres-backed) is the production default cache store so
@@ -60,7 +60,7 @@ gem "rack-attack", "~> 6.7"
 gem "sprockets-rails", ">= 3.0.0"
 
 # Structured JSON request logging (production)
-gem "lograge", "~> 0.14"
+gem "lograge", "~> 0.15"
 
 # Error tracking (Sentry free tier); no-op without SENTRY_DSN
 gem "sentry-rails", "~> 5.18"
@@ -82,7 +82,7 @@ end
 
 group :development do
   gem "bullet", "~> 7.1"
-  gem "listen", "~> 3.9"
+  gem "listen", "~> 3.10"
   gem "rubocop", "~> 1.62", require: false
   gem "rubocop-rails", "~> 2.24", require: false
   gem "rubocop-rspec", "~> 2.27", require: false
