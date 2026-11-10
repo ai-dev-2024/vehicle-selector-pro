@@ -49,4 +49,15 @@ RSpec.describe "Ruby toolchain consistency" do
     expect(copy).not_to be_nil
     expect(copy).to be < install
   end
+
+  # The precompile step boots Rails on dummy credentials. As ARGs they exist
+  # only during the build; as ENV they would persist into the runtime image,
+  # where a missing Fly secret would silently fall back to a public value.
+  it "keeps the build-time dummy credentials out of the runtime environment" do
+    dockerfile = Rails.root.join("Dockerfile").read.gsub(/\\\r?\n/, " ")
+    env_instructions = dockerfile.lines.grep(/\AENV\b/).join
+
+    expect(env_instructions).to include("RAILS_ENV=production")
+    expect(env_instructions).not_to match(/SECRET_KEY_BASE|SHOPIFY_API_KEY|SHOPIFY_API_SECRET|DATABASE_URL/)
+  end
 end
