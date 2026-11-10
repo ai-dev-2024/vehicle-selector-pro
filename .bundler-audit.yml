@@ -36,6 +36,15 @@ ignore:
   # Tracked upgrade: polaris_view_components release allowing view_component 4.14+
   # (or drop the unused gem).
   - GHSA-8qw7-6phv-7q6p   # view_component slot/with_content state leak (incomplete fix for CVE-2026-54497)
+  #
+  # Not listed above because bundler-audit does not report them (checked
+  # 2026-11-10 against OSV): GHSA-7f3r-gwc9-2995 (preview route) and
+  # GHSA-hg3h-g7xc-f7vp (system-test entry point), both fixed in view_component
+  # 4.9.0. They concern the preview and system-test routes, which
+  # view_component mounts only in development and test by default, and the app
+  # renders no ViewComponent. If ruby-advisory-db picks them up and this job
+  # turns red, that reasoning is the starting point; dropping the unused
+  # polaris_view_components gem removes all three.
 
   # --- Resolved by the Rails 7.2.3.2 upgrade (2026-09-01) -------------------
   # The seven Active Storage advisories that used to be listed here no longer

@@ -4,7 +4,8 @@
 
 **Year / Make / Model / Trim / Engine fitment for Shopify stores**
 
-[![CI](https://github.com/muhib-karim/vehicle-selector-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/muhib-karim/vehicle-selector-pro/actions/workflows/ci.yml)
+[![CI](https://github.com/muhib-karim/vehicle-selector-pro/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/muhib-karim/vehicle-selector-pro/actions/workflows/ci.yml?query=branch%3Amain)
+[![Security scans](https://img.shields.io/badge/security-brakeman%20%C2%B7%20bundler--audit%20%C2%B7%20gitleaks-blue)](.github/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/muhib-karim/vehicle-selector-pro?color=brightgreen)](https://github.com/muhib-karim/vehicle-selector-pro/releases)
 [![Ruby 3.4.11](https://img.shields.io/badge/ruby-3.4.11-CC342D?logo=ruby&logoColor=white)](.ruby-version)
 [![Rails 7.2](https://img.shields.io/badge/rails-7.2-D30001?logo=rubyonrails&logoColor=white)](Gemfile)
@@ -98,6 +99,25 @@ Then open:
 | `http://localhost:3000/demo/admin` | Read-only merchant admin preview |
 | `http://localhost:3000/up` | Liveness check |
 
+Background jobs (webhooks, metafield sync, analytics) need Redis and a worker:
+
+```bash
+bundle exec sidekiq -C config/sidekiq.yml
+```
+
+Environment variables. Local values go in `.env` (see [`.env.example`](.env.example)); production values are Fly secrets.
+
+| Variable | Needed | Purpose |
+|---|---|---|
+| `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET` | Always | App credentials. The secret also verifies webhook and App Proxy signatures |
+| `SHOPIFY_STORE_DOMAIN` | Optional | Shop used by the seeds and the public `/demo` pages (defaults to the bundled demo store) |
+| `HOST` | Real installs | Public URL of the app, used for OAuth and billing return URLs |
+| `DATABASE_URL`, `SECRET_KEY_BASE` | Production | Postgres connection and Rails secret. The app does not boot without them |
+| `ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY`, `ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY`, `ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT` | Production | Encrypt Shopify access tokens at rest |
+| `REDIS_URL` | Production | Sidekiq queues, and the cache store when set (Solid Cache otherwise) |
+| `SHOPIFY_BILLING_TEST` | Production | Only the literal `true` creates test charges. Unset or any other value creates real charges |
+| `SENTRY_DSN` | Optional | Error tracking; dormant when unset |
+
 To install on a real store, see the [setup guide](docs/SETUP.md) and [merchant installation](docs/MERCHANT_INSTALL.md). This is a custom (unlisted) app, so it installs through a Shopify Partners distribution link.
 
 ## Usage
@@ -123,6 +143,41 @@ Every box in the diagram cites the source lines it came from: open the [interact
 - **Merchant path:** admin controllers write fitments, then enqueue Sidekiq jobs. `MetafieldSyncService` pushes `custom.vehicle_fitment` through `metafieldsSet` in batches of 25.
 - **Webhooks:** HMAC-verified, de-duplicated by `WebhookDelivery`, processed asynchronously.
 
+```mermaid
+flowchart LR
+  shopper([Shopper]) --> ext[Theme app extension]
+  ext -->|/apps/vehicle-selector| proxy[Shopify App Proxy]
+  proxy -->|signed query| storefront[AppProxy controllers]
+  merchant([Merchant]) -->|embedded admin| admin[Admin controllers]
+  shopify[Shopify] -->|HMAC-signed webhooks| hooks[Webhooks controllers]
+  storefront --> search[FitmentSearchService]
+  search --> cache[(Rails.cache)]
+  search --> db[(Postgres)]
+  admin --> db
+  admin --> jobs[Sidekiq]
+  hooks --> jobs
+  jobs -->|metafieldsSet| shopify
+```
+
+**Tenant isolation.** Every merchant-owned table carries `shop_id` and is reached through the shop's associations. The shop is never taken from input a caller controls:
+
+| Entry point | The shop comes from |
+|---|---|
+| Embedded admin | The verified Shopify session (`Admin::BaseController`) |
+| Storefront (App Proxy) | The `shop` parameter inside the query string Shopify signs |
+| Webhooks | `X-Shopify-Shop-Domain`, once the body HMAC verifies |
+| Public demo | The demo shop only (`DemoShopResolver`); never another shop outside local development |
+
+The `vehicles` table is the exception: it is a catalog shared by all shops.
+
+**Queues** (`config/sidekiq.yml`; a spec fails if a job uses a queue that is not listed):
+
+| Queue | Jobs |
+|---|---|
+| `webhooks` | Product and uninstall webhooks |
+| `sync` | Metafield sync, product backfill |
+| `low_priority` | Fitment analytics, webhook-delivery pruning |
+
 Deeper diagrams, the data model, and request lifecycles are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 | Layer | Technology |
@@ -136,7 +191,7 @@ Deeper diagrams, the data model, and request lifecycles are in [docs/ARCHITECTUR
 
 ## Testing
 
-The suite has 119 RSpec examples in 23 spec files (models, services, jobs, requests, config) plus 13 Minitest App Proxy integration tests. `spec/config/toolchain_consistency_spec.rb` fails if the Gemfile, lockfile, Dockerfile or CI drift from `.ruby-version`.
+The suite is RSpec (models, services, jobs, requests, config) plus Minitest App Proxy integration tests; `ruby spec/test_runner.rb` prints the current counts. `spec/config/toolchain_consistency_spec.rb` fails if the Gemfile, lockfile, Dockerfile or CI drift from `.ruby-version`.
 
 ```bash
 bundle exec rails db:prepare RAILS_ENV=test
@@ -152,6 +207,7 @@ Checks that need no Ruby:
 ```bash
 python3 scripts/check_links.py    # README/docs links; fails on missing local files/anchors
 node --check extensions/vehicle-selector-pro-extension/assets/vehicle-selector.js
+node scripts/check_vehicle_selector.js   # widget escapes its output and initialises once
 gitleaks git .                    # secret scan over full history
 ```
 
@@ -159,13 +215,14 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs on pushes to `main`, `upgrade/**`
 
 | Job | What it checks |
 |---|---|
-| Tests (unit + integration) | Full suite on Ruby 3.4.11 and zeitwerk; uploads the `coverage-report` artifact (line + branch) |
+| Tests (unit + integration) | Full suite on Ruby 3.4.11 and zeitwerk; uploads the `coverage-report` artifact (line + branch, kept 7 days) |
 | RuboCop | Lint, Ruby 3.4 target |
 | Dependency audit | bundler-audit and Brakeman; accepted risks are listed with reasons in [`.bundler-audit.yml`](.bundler-audit.yml) and [`config/brakeman.ignore`](config/brakeman.ignore) |
 | Secret scan | gitleaks over full history; pinned historical false positives in [`.gitleaksignore`](.gitleaksignore) |
-| Docs + storefront JS | Link check, banner SVG, theme-extension JS syntax |
+| Docker image build | The image Fly deploys builds from the Dockerfile |
+| Docs + storefront JS | Link check, banner SVG, theme-extension JS syntax and behaviour check |
 
-Tests use dummy Shopify credentials, so no secrets are needed. Dependabot ([`dependabot.yml`](.github/dependabot.yml)) opens weekly grouped updates for gems and GitHub Actions, and resolves gems against `.ruby-version`.
+All six jobs are required on `main`, and every action is pinned to a commit SHA. Tests use dummy Shopify credentials, so no secrets are needed. Dependabot ([`dependabot.yml`](.github/dependabot.yml)) opens weekly patch and minor groups for gems plus GitHub Actions updates, resolving gems against `.ruby-version`; major upgrades are planned work and are not opened automatically.
 
 ## Project structure
 
@@ -188,8 +245,12 @@ See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md) for the full tree.
 
 ## Roadmap and limitations
 
-- **Billing in production.** The Billing API flow is implemented and tested in test mode. Going live means setting `SHOPIFY_BILLING_TEST=false` on a production Partner app and passing App Store review.
+- **Billing in production.** The Billing API flow is implemented and tested in test mode. In production, charges are real unless `SHOPIFY_BILLING_TEST=true`; going live also needs a production Partner app and App Store review.
 - **Not listed on the Shopify App Store.** It installs as a custom app.
+- **Embedded admin sessions.** The admin layout does not load App Bridge yet, so after the first page the session relies on a cookie inside the Shopify admin iframe. Browsers that block third-party cookies send the merchant back to login. Session-token auth is needed before an App Store submission.
+- **Collection filtering on a real theme.** "Find Parts" redirects to a collection with a filter on the JSON fitment metafield, which Shopify's collection filters cannot read. Vehicle-filtered results are rendered by the app on the `/demo` storefront; a real theme needs a results block or a list-type metafield.
+- **Shared vehicle catalog.** A CSV import can add rows to the `vehicles` table, which every shop sees in its vehicle library.
+- **Billing changes made in Shopify.** A cancelled or changed subscription is picked up when the merchant next opens the billing page; there is no `app_subscriptions/update` webhook yet.
 - **Planned:** supersession chains on top of the OE-number cross-reference, per-model/per-product analytics rollups, and white-label theming with translations.
 
 - **Rails 8 upgrade.** Rails 7.2 left security support on 2026-08-09. No advisories are open against 7.2.3.2, but the Rails 8 upgrade is the next tracked dependency change.

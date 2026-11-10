@@ -40,7 +40,7 @@
       "cwe_id": [
         1104
       ],
-      "note": "Accepted risk, tracked: Rails 7.2 left security support on 2026-08-09. bundler-audit reports no open Rails advisories against 7.2.3.2; the Rails 8.x upgrade is the next tracked dependency upgrade (see TASKS.md). Remove this entry when it lands."
+      "note": "Accepted risk, tracked: Rails 7.2 left security support on 2026-08-09. bundler-audit reports no open Rails advisories against 7.2.3.2; the Rails 8.x upgrade is the next tracked dependency upgrade (see README, Roadmap and limitations). Remove this entry when it lands."
     }
   ],
   "brakeman_version": "8.1.0"
