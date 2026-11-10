@@ -57,8 +57,11 @@ module Shopify
       # instead of replaying the whole catalog.
       metafields_payload.each_slice(BATCH_SIZE) do |batch|
         execute_batch(batch)
+        # Fitments may store the product id as a bare number or as a GID;
+        # mark both forms, or numeric-id rows stay "pending" forever.
+        synced_ids = batch.flat_map { |m| FitmentSearchService.product_id_variants(m[:ownerId]) }
         # rubocop:disable-next Rails/SkipsModelValidations -- sync status bookkeeping; must skip callbacks
-        @shop.vehicle_product_fitments.where(product_id: batch.map { |m| m[:ownerId] }).update_all(
+        @shop.vehicle_product_fitments.where(product_id: synced_ids).update_all(
           synced_to_metafield: true,
           last_synced_at: Time.current
         )
@@ -95,8 +98,9 @@ module Shopify
 
     # rubocop:disable-next Metrics/MethodLength -- payload assembly mirrors the Shopify JSON schema section by section
     def build_metafield_payload_for_product(product_id)
-      fitments = @shop.vehicle_product_fitments.where(product_id: product_id).includes(:vehicle)
-      return nil if fitments.empty?
+      # No early return when the product has no fitments left: the empty value
+      # must still be written, or Shopify keeps advertising the old fitments.
+      fitments = @shop.vehicle_product_fitments.for_product(product_id).includes(:vehicle)
 
       universal = fitments.any?(&:universal_fit?)
 

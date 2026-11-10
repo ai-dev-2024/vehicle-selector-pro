@@ -24,7 +24,9 @@ class VehicleProductFitment < ApplicationRecord
   scope :specific, -> { where(universal_fit: false) }
   scope :synced, -> { where(synced_to_metafield: true) }
   scope :pending_sync, -> { where(synced_to_metafield: false) }
-  scope :for_product, ->(product_id) { where(product_id: product_id.to_s) }
+  # Matches a product whether its id was stored as a bare number or as a GID
+  # (CSV imports and themes use numbers; webhooks and the Admin API use GIDs).
+  scope :for_product, ->(product_id) { where(product_id: FitmentSearchService.product_id_variants(product_id)) }
   scope :for_vehicle, ->(vehicle_id) { where(vehicle_id: vehicle_id) }
 
   # Confidence score per fitment type. Universal fitments are the least

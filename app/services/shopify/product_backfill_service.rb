@@ -66,7 +66,7 @@ module Shopify
 
       # Cache rows mirror Shopify data; skip callbacks like the webhooks do.
       # rubocop:disable-next Rails/SkipsModelValidations -- cached metadata
-      report[:fitments_updated] += @shop.vehicle_product_fitments.where(product_id: pid).update_all(attrs)
+      report[:fitments_updated] += @shop.vehicle_product_fitments.for_product(pid).update_all(attrs)
     rescue StandardError => e
       report[:errors] << "#{pid}: #{e.message}"
     end

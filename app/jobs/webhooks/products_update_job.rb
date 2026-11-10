@@ -22,7 +22,7 @@ module Webhooks
 
       # Update cached product metadata (title, handle, image) in existing fitments
       # rubocop:disable-next Rails/SkipsModelValidations -- cache rows mirror Shopify data; no validations to run
-      shop.vehicle_product_fitments.where(product_id: product_id).update_all(
+      shop.vehicle_product_fitments.for_product(product_id).update_all(
         product_title: title,
         product_handle: handle,
         product_image: image_src.presence
