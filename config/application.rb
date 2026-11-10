@@ -1,14 +1,19 @@
 require_relative "boot"
 
 require "rails"
-# Pick the frameworks you want:
+# Only the frameworks the app uses. Action Cable, Active Storage, Action
+# Mailbox and Action Text are left out on purpose: the app has no channels,
+# attachments or inbound mail, and each of them adds endpoints or file
+# handling that would be reachable by anyone. Action Cable alone mounts an
+# unauthenticated /cable WebSocket endpoint by default. The advisories
+# accepted in .bundler-audit.yml rely on these staying unloaded, which
+# spec/config/framework_surface_spec.rb enforces.
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
-require "action_cable/engine"
 require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
