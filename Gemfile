@@ -16,7 +16,7 @@ gem "shopify_api", "~> 14.0"
 gem "shopify_app", "~> 22.0"
 
 # Multi-tenant and Identity
-gem "jwt", "~> 3.2"
+gem "jwt", "~> 3.3"
 
 # Timezone data (required on Windows & JRuby; Linux uses system zoneinfo)
 gem "tzinfo-data", platforms: %i[windows jruby]
@@ -45,7 +45,7 @@ gem "oj", "~> 3.16"
 gem "solid_cache", "~> 0.4"
 
 # HTTP Client for Shopify GraphQL & REST
-gem "faraday", "~> 2.9"
+gem "faraday", "~> 2.15"
 gem "faraday-retry", "~> 2.0"
 
 # CSV parsing for ACES/PIES/Bulk fitment data
@@ -68,7 +68,7 @@ gem "sentry-ruby", "~> 5.18"
 gem "sentry-sidekiq", "~> 5.18"
 group :production do
   # PostgreSQL driver (production database; dev/test use SQLite3)
-  gem "pg", "~> 1.5"
+  gem "pg", "~> 1.7"
 end
 
 group :development, :test do
@@ -77,14 +77,14 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.3"
   gem "rspec-rails", "~> 7.0"
-  gem "webmock", "~> 3.23"
+  gem "webmock", "~> 3.34"
 end
 
 group :development do
   gem "bullet", "~> 7.1"
   gem "listen", "~> 3.9"
-  gem "rubocop", "~> 1.62", require: false
-  gem "rubocop-rails", "~> 2.24", require: false
+  gem "rubocop", "~> 1.92", require: false
+  gem "rubocop-rails", "~> 2.38", require: false
   gem "rubocop-rspec", "~> 2.27", require: false
 end
 
