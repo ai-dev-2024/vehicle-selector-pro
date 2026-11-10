@@ -12,10 +12,23 @@ updates:
       # Pinned to the default gem of the Ruby in .ruby-version (see Gemfile);
       # bump it together with .ruby-version, never on its own.
       - dependency-name: "openssl"
+      # Major upgrades (Rails 8, shopify_app 23, puma 7+) are planned work,
+      # not routine bumps. Grouped with everything else they kept the weekly
+      # PR red, which also blocked the safe updates inside it.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
-      bundler-dependencies:
+      # Patch releases on their own, so this PR is the one that stays green.
+      bundler-patch:
         patterns:
           - "*"
+        update-types:
+          - "patch"
+      bundler-minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
 
   - package-ecosystem: "github-actions"
     directory: "/"
