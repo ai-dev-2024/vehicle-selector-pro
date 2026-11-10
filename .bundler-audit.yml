@@ -10,6 +10,7 @@
 #   - shopify_app 22.5 -> 23.0.3+
 #   - puma 6.6 -> 7.2.1+ (or 8.0.2+)
 #   - polaris_view_components 2.x -> a release that allows view_component 4.14+
+#   - rails 7.2 -> 8.0.5.2+ (REQUIRED; every entry in the "Rails 7.2" block)
 ignore:
   # --- Not exploitable: Puma PROXY protocol is not enabled ------------------
   # Both advisories only affect `set_remote_address proxy_protocol: :v1`,
@@ -45,6 +46,70 @@ ignore:
   # renders no ViewComponent. If ruby-advisory-db picks them up and this job
   # turns red, that reasoning is the starting point; dropping the unused
   # polaris_view_components gem removes all three.
+
+  # --- Rails 7.2: fixed only in Rails 8.0.5.2 / 8.1.4.1 (published 2026-11-09) ---
+  # Rails 7.2 left security support on 2026-08-09, so these 18 advisories will
+  # never get a 7.2 patch. The Rails 8.0.5.2+ upgrade is REQUIRED and is the
+  # only real fix. Until it lands, each advisory is accepted with the reason it
+  # cannot be reached in this app today. Those reasons are enforced by
+  # spec/config/framework_surface_spec.rb. Remove this whole block with the
+  # upgrade, and re-read an entry before adding the feature it names.
+  #
+  # Action Mailbox
+  #   Not exposed: action_mailbox/engine is not loaded (config/application.rb) and no ingress route exists.
+  - GHSA-5957-c7qm-m469   # Low: signature replay in the Mailgun ingress
+  #
+  # Action Pack
+  #   Not exposed: no config.session_store is set, so sessions use CookieStore, which this advisory excludes.
+  - GHSA-2586-8ghr-69fj   # Medium: Session::CacheStore restores destroyed sessions
+  #   Not exposed: CookieStore, the store in use, already applies the configured SameSite policy.
+  - GHSA-gmj8-hvj3-49mw   # Low: no SameSite on cookies from non-cookie session stores
+  #   Not exposed: the only public responses (AppProxy::BaseController, DemoApiController) always render
+  #   JSON, so nothing is negotiated from Accept; no Rack::Cache or Thruster is in the bundle.
+  - GHSA-r9jg-fmfx-2gv6   # Medium: cache poisoning through content negotiation
+  #   Not exposed: no controller includes ActionController::Live or calls send_stream.
+  - GHSA-rwvh-fw6r-pwvp   # Medium: DoS in ActionController::Live streaming
+  #   Not exposed: app/ never calls each_key on params; mass assignment only receives
+  #   params.require(...).permit(...) or explicitly named attributes.
+  - GHSA-wm3x-v3qw-4jh3   # High: Strong Parameters bypass via Parameters#each_key
+  #   Not exposed: Active Storage is not loaded, and no cookie rotation or hybrid serializer is configured.
+  - GHSA-x6mj-8jx9-qhqv   # Medium: session cookie leak in Active Storage proxy mode
+  #
+  # Action View
+  #   Not exposed: highlight and simple_format are not used in app/. The serializer bug behind this one is
+  #   also fixed by nokogiri >= 1.19.5 (locked at 1.19.7).
+  - GHSA-2p2f-4rq4-gjwc   # Medium: XSS in highlight / simple_format with the HTML5 sanitizer
+  #   Not exposed: attribute names given to tag and form helpers are literals in the templates; request
+  #   input only ever supplies attribute values.
+  - GHSA-68p9-83h6-5wpj   # Medium: XSS via whitespace attribute names in tag helpers
+  #   Not exposed: strip_tags is not used in app/.
+  - GHSA-rq8q-p985-fjq7   # Medium: XSS when strip_tags output is placed in an attribute
+  #   Not exposed: highlight is not used in app/.
+  - GHSA-v6rj-xm57-3p59   # Medium: XSS in highlight with a custom :highlighter
+  #
+  # Active Storage. Not loaded: no active_storage/engine, no config/storage.yml, no attachments and no
+  # active_storage tables in db/schema.rb. The gem is installed only as a dependency of `rails`.
+  #   Not exposed: nothing is analysed with ImageMagick; mini_magick, image_processing and ruby-vips are
+  #   not in the bundle.
+  - GHSA-f3w6-w445-fwh9   # Critical: arbitrary file write and read in image analysis
+  #   Not exposed: no blob is ever created, so nothing is handed to ffmpeg, ffprobe or ImageMagick.
+  - GHSA-v924-7rp8-4mxh   # High: file read / RCE through the tempfile extension in previews and analysis
+  #   Not exposed: no video or audio previews or analysis. The only uploads are CSVs, parsed in memory
+  #   and never stored.
+  - GHSA-3f4q-8x5m-76v8   # Low: local file disclosure in video previews and analysis
+  #   Not exposed: no GCS service is configured and there are no direct uploads.
+  - GHSA-3w93-6hmw-whh4   # Medium: unsigned Content-Type in GCS direct uploads with cache_control
+  #   Not exposed: no GCS service is configured and there are no direct uploads.
+  - GHSA-hfr4-8rjc-97m2   # Medium: file size limit bypass in GCS direct uploads
+  #   Not exposed: no ActiveStorage::Filename is ever built (no blobs). Production also runs on
+  #   PostgreSQL, which the advisory excludes.
+  - GHSA-p2pm-g2h6-7j5j   # Medium: DoS through NUL bytes in stored filenames
+  #
+  # Active Support
+  #   WAS exposed until 2026-11-10: action_cable/engine was loaded, which mounts an unauthenticated
+  #   /cable endpoint whose subscribe command reaches safe_constantize. Action Cable is no longer loaded
+  #   (config/application.rb), and app/ never passes request input to constantize or safe_constantize.
+  - GHSA-8474-xrp6-wh69   # High: DoS via safe_constantize, reachable through Action Cable subscribe
 
   # --- Resolved by the Rails 7.2.3.2 upgrade (2026-09-01) -------------------
   # The seven Active Storage advisories that used to be listed here no longer

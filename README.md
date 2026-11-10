@@ -253,7 +253,7 @@ See [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md) for the full tree.
 - **Billing changes made in Shopify.** A cancelled or changed subscription is picked up when the merchant next opens the billing page; there is no `app_subscriptions/update` webhook yet.
 - **Planned:** supersession chains on top of the OE-number cross-reference, per-model/per-product analytics rollups, and white-label theming with translations.
 
-- **Rails 8 upgrade.** Rails 7.2 left security support on 2026-08-09. No advisories are open against 7.2.3.2, but the Rails 8 upgrade is the next tracked dependency change.
+- **Rails 8.0.5.2+ upgrade required.** Rails 7.2 left security support on 2026-08-09. Eighteen advisories published on 2026-11-09 against Rails 7.2.3.2 are fixed only in 8.0.5.2 and 8.1.4.1; there is no 7.2 patch. None is reachable in this app today, and [`.bundler-audit.yml`](.bundler-audit.yml) gives the reason for each. Those reasons hold only while the app does not load Active Storage, Action Mailbox, Action Text or Action Cable, keeps sessions in the cookie store, and avoids the affected helpers; `spec/config/framework_surface_spec.rb` fails if that changes. This is accepted risk with a deadline, not a fix.
 
 
 ## Documentation
