@@ -38,5 +38,11 @@ module Admin
       )
       # rubocop:enable Naming/MemoizedInstanceVariableName
     end
+
+    # 1-based page number for the list screens. Clamps ?page=0 and negatives,
+    # which would otherwise become a negative OFFSET (an error on Postgres).
+    def page_param
+      [params[:page].to_i, 1].max
+    end
   end
 end

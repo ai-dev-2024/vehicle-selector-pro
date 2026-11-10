@@ -21,7 +21,7 @@ module Admin
                     end
       end
 
-      @page = (params[:page] || 1).to_i
+      @page = page_param
       @per_page = 20
       @total_count = @fitments.count
       @fitments = @fitments.order(created_at: :desc).offset((@page - 1) * @per_page).limit(@per_page)

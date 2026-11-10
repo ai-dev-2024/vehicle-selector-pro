@@ -16,7 +16,7 @@ module Admin
         )
       end
 
-      @page = (params[:page] || 1).to_i
+      @page = page_param
       @per_page = 25
       @total_count = @vehicles.count
       @vehicles = @vehicles.order(year: :desc, make: :asc, model: :asc).offset((@page - 1) * @per_page).limit(@per_page)
